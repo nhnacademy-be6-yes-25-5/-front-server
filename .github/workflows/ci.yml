@@ -46,7 +46,7 @@ jobs:
         env:
           # SSH_PRIVATE_KEY : 원격서버에서 만든 개인키(github_rsa). (github_rsa.pub 아닙니다!)
           # SSH_USER : 원격서버 로그인 아이디 (nhnacademy)
-          # SSH_HOST : 원격서버 IP 주소 (133.186....)
+          # SSH_HOST : 원격서버 IP 주소 (133.186....) 
           # REMOTE_DIR : 배포할 jar 파일 위치 (없다면 mkdir로 만드시면 될 것 같아요.)
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REMOTE_USER: ${{ secrets.SSH_USER }}

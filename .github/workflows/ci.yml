@@ -42,7 +42,7 @@ jobs:
 #          check_name: 'Maven Test Results'
 #          junit_files: target/surefire-reports/**/*.xml
 
-      - name: Upload JAR to Remote Server
+      - name: Upload JAR to Remote Server 
         env:
           # SSH_PRIVATE_KEY : 원격서버에서 만든 개인키(github_rsa). (github_rsa.pub 아닙니다!)
           # SSH_USER : 원격서버 로그인 아이디 (nhnacademy)

@@ -103,7 +103,7 @@ jobs:
             const payload = {
               botName: "프론트1 서버 Bot",
               botIconImage: "https://www.tistory.com/favicon.ico",
-              text: "프론트2 서버의 Pull Request가 실패했어요...",
+              text: "프론트1 서버의 Pull Request가 실패했어요...",
               attachments: [
                 {
                   title: "Pull Request URL",

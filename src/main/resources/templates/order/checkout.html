@@ -382,7 +382,8 @@
                         <label>주문자명</label>
                         <div class="row">
                           <div class="col-md-6 form-input form">
-                            <input type="text" placeholder="주문자명">
+                            <input type="text" name="orderName" id="orderName" placeholder="주문자명"
+                                   required>
                           </div>
                         </div>
                       </div>
@@ -391,31 +392,25 @@
                       <div class="single-form form-default">
                         <label>주문자 이메일</label>
                         <div class="form-input form">
-                          <input type="text" placeholder="이메일">
+                          <input type="text" name="orderEmail" id="orderEmail" placeholder="이메일"
+                                 required>
                         </div>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="single-form form-default">
-                        <label>핸드폰 번호</label>
+                        <label>주문자 핸드폰 번호</label>
                         <div class="form-input form">
-                          <input type="text" placeholder="핸드폰 번호">
+                          <input type="text" id="orderPhoneNumber" name="orderPhoneNumber"
+                                 placeholder="주문자 핸드폰 번호" required>
                         </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="single-checkbox checkbox-style-3">
-                        <input type="checkbox" id="checkbox-3">
-                        <label for="checkbox-3"><span></span></label>
-                        <p>주문자 정보와 배송 정보가 동일합니다.</p>
                       </div>
                     </div>
                     <div class="col-md-12">
                       <div class="single-form button">
                         <button class="btn" data-bs-toggle="collapse"
                                 data-bs-target="#collapseFour" aria-expanded="false"
-                                aria-controls="collapseFour">next
-                          step
+                                aria-controls="collapseFour">다음 단계
                         </button>
                       </div>
                     </div>
@@ -428,13 +423,21 @@
                   aria-expanded="false" aria-controls="collapseFour">배송정보</h6>
               <section class="checkout-steps-form-content collapse" id="collapseFour"
                        aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                <div class="col-md-12">
+                  <div class="single-checkbox checkbox-style-3">
+                    <input type="checkbox" id="checkbox-3" onclick="copyOrderInfo()">
+                    <label for="checkbox-3"><span></span></label>
+                    <p>주문자 정보와 배송 정보가 동일합니다.</p>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="col-md-12">
                     <div class="single-form form-default">
                       <label>배송받는 사람</label>
                       <div class="row">
                         <div class="col-md-6 form-input form">
-                          <input type="text" name="name" placeholder="주문자명">
+                          <input type="text" name="receiveName" id="receiveName"
+                                 placeholder="배송받는 사람" required>
                         </div>
                       </div>
                     </div>
@@ -443,7 +446,8 @@
                     <div class="single-form form-default">
                       <label>배송받는 사람 이메일</label>
                       <div class="form-input form">
-                        <input type="text" name="email" placeholder="이메일">
+                        <input type="text" name="receiveEmail" id="receiveEmail" placeholder="이메일"
+                               required>
                       </div>
                     </div>
                   </div>
@@ -451,7 +455,8 @@
                     <div class="single-form form-default">
                       <label>배송받는 사람 핸드폰 번호</label>
                       <div class="form-input form">
-                        <input type="text" name="phoneNumber" placeholder="핸드폰 번호">
+                        <input type="text" name="receivePhoneNumber" id="receivePhoneNumber"
+                               placeholder="핸드폰 번호" required>
                       </div>
                     </div>
                   </div>
@@ -459,11 +464,11 @@
                     <div class="single-form form-default">
                       <label>주소</label>
                       <div class="form-input form">
-                        <input type="text" id="postcode" placeholder="우편번호">
+                        <input type="text" id="postcode" placeholder="우편번호" required>
                         <input type="button" onclick="daumPost()" value="우편번호 찾기"><br>
-                        <input type="text" id="addressRaw" placeholder="주소"><br>
-                        <input type="text" id="addressDetail" placeholder="상세주소">
-                        <input type="text" id="addressExtra" placeholder="참고항목">
+                        <input type="text" id="addressRaw" placeholder="주소" required><br>
+                        <input type="text" id="addressDetail" placeholder="상세주소" required>
+                        <input type="text" id="reference" placeholder="참고항목">
                       </div>
                     </div>
                   </div>
@@ -471,7 +476,7 @@
                     <div class="single-form form-default">
                       <label>포장 타입</label>
                       <div class="form-input form">
-                        <select name="takeoutType" id="takeoutType">
+                        <select name="takeoutType" id="takeoutType" required>
                           <option value="NONE">NONE</option>
                           <option value="CARD_BOARD">CARD_BOARD</option>
                           <option value="PAPER">PAPER</option>
@@ -483,9 +488,9 @@
 
                   <div class="col-md-12">
                     <div class="single-form form-default">
-                      <label>배송 날짜</label>
+                      <label>배송 받길 원하는 날짜</label>
                       <div class="form-input form">
-                        <input type="date" id="deliveryDate">
+                        <input type="date" id="deliveryDate" required>
                       </div>
                     </div>
                   </div>
@@ -496,9 +501,18 @@
                     </div>
                     <input type="hidden" name="addressRaw" id="hiddenAddressRaw">
                     <input type="hidden" name="addressDetail" id="hiddenAddressDetail">
+                    <input type="hidden" name="reference" id="hiddenReference">
                     <input type="hidden" name="zipcode" id="hiddenZipcode">
                     <input type="hidden" name="takeoutType" id="hiddenTakeoutType">
                     <input type="hidden" name="deliveryDate" id="hiddenDeliveryDate">
+                    <input type="hidden" name="orderName" id="hiddenOrderName">
+                    <input type="hidden" name="orderEmail" id="hiddenOrderEmail">
+                    <input type="hidden" name="orderPhoneNumber" id="hiddenOrderPhoneNumber">
+                    <input type="hidden" name="receiveName" id="hiddenReceiveOrderName">
+                    <input type="hidden" name="receiveEmail" id="hiddenReceiveOrderEmail">
+                    <input type="hidden" name="receivePhoneNumber"
+                           id="hiddenReceiveOrderPhoneNumber">
+
                     <input type="hidden" name="orderTotalAmount" id="hiddenTotalPrice">
 
                     <div class="col-md-12">
@@ -768,7 +782,7 @@
           if (extraAddr !== '') {
             extraAddr = ' (' + extraAddr + ')';
           }
-          document.getElementById("addressExtra").value = extraAddr;
+          document.getElementById("reference").value = extraAddr;
 
         } else {
           document.getElementById("addressExtra").value = '';
@@ -781,13 +795,39 @@
     }).open();
   }
 
+  function copyOrderInfo() {
+    const checkbox = document.getElementById('checkbox-3');
+    if (checkbox.checked) {
+      document.getElementById('receiveName').value = document.getElementById('orderName').value;
+      document.getElementById('receiveEmail').value = document.getElementById('orderEmail').value;
+      document.getElementById('receivePhoneNumber').value = document.getElementById(
+          'orderPhoneNumber').value;
+    } else {
+      document.getElementById('receiveName').value = '';
+      document.getElementById('receiveEmail').value = '';
+      document.getElementById('receivePhoneNumber').value = '';
+    }
+  }
+
   function submitOrder() {
     const deliveryDateValue = document.getElementById('deliveryDate').value;
     document.getElementById('hiddenDeliveryDate').value = deliveryDateValue + "T00:00:00";
     document.getElementById('hiddenAddressRaw').value = document.getElementById('addressRaw').value;
-    document.getElementById('hiddenAddressDetail').value = document.getElementById('addressDetail').value;
+    document.getElementById('hiddenReference').value = document.getElementById('reference').value;
+    document.getElementById('hiddenOrderName').value = document.getElementById('orderName').value;
+    document.getElementById('hiddenOrderEmail').value = document.getElementById('orderEmail').value;
+    document.getElementById('hiddenOrderPhoneNumber').value = document.getElementById(
+        'orderPhoneNumber').value;
+    document.getElementById('hiddenReceiveOrderName').value = document.getElementById('receiveName').value;
+    document.getElementById('hiddenReceiveOrderEmail').value = document.getElementById(
+        'receiveEmail').value;
+    document.getElementById('hiddenReceiveOrderPhoneNumber').value = document.getElementById(
+        'receivePhoneNumber').value;
+    document.getElementById('hiddenAddressDetail').value = document.getElementById(
+        'addressDetail').value;
     document.getElementById('hiddenZipcode').value = document.getElementById('postcode').value;
-    document.getElementById('hiddenTakeoutType').value = document.getElementById('takeoutType').value;
+    document.getElementById('hiddenTakeoutType').value = document.getElementById(
+        'takeoutType').value;
 
     const totalPrice = document.getElementById('totalPriceValue').textContent;
     document.getElementById('hiddenTotalPrice').value = totalPrice.replace('$', '').trim();

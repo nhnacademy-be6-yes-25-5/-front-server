@@ -1,8 +1,11 @@
 package com.nhnacademy.frontserver1.presentation.controller;
 
+import com.nhnacademy.frontserver1.application.service.OrderService;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.request.CreateOrderRequest;
-import java.time.LocalDateTime;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/orders")
+@Slf4j
+@RequiredArgsConstructor
 public class OrderController {
+
+    private final OrderService orderService;
 
     @GetMapping("checkout")
     public String checkout(Model model) {
@@ -23,11 +30,13 @@ public class OrderController {
         return "order/checkout";
     }
 
-    // todo. 주문 정보 다시 맞추기. 주문자명, 이메일, 번호, 쿠폰 타입 추가
+    // todo. 쿠폰 및 배송비 받기 추가
     @PostMapping
-    public String createOrders(@ModelAttribute CreateOrderRequest createOrderRequest,
+    public String createOrders(@ModelAttribute CreateOrderRequest request,
         @RequestParam List<Long> productIds) {
-        System.out.println(createOrderRequest.toString());
+        log.info("주문 요청이 들어왔습니다. {} {}", request.toString(), productIds);
+        Long userId = 1L;
+        CreateOrderResponse response = orderService.createPreOrder(request, userId);
 
         return "redirect:/payments";
     }

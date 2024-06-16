@@ -5,11 +5,18 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record CreateOrderRequest(BigDecimal orderTotalAmount,
+public record CreateOrderRequest(Long userId,
+                                 BigDecimal orderTotalAmount,
                                  TakeoutType takeoutType,
                                  String addressRaw,
                                  String addressDetail,
                                  String zipcode,
-                                 LocalDateTime deliveryDate) {
-
+                                 String reference,
+                                 LocalDateTime deliveryDate,
+                                 String orderName,
+                                 String orderEmail,
+                                 String orderPhoneNumber,
+                                 String receiveName,
+                                 String receiveEmail,
+                                 String receivePhoneNumber) {
 }

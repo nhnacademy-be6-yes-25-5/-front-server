@@ -1,0 +1,181 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<body>
+<div th:fragment="content">
+
+    <!-- Start Breadcrumbs Component -->
+    <div th:replace="~{fragments/breadcrumbs :: breadcrumbs}"></div>
+    <!-- End Breadcrumbs Component -->
+
+    <!-- Start Order History Area -->
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="sidebar">
+                        <div class="user-info">
+                            <div class="user-grade">
+                                <span>회원 등급:</span>
+                                <span class="grade">일반회원</span>
+                            </div>
+                            <div class="user-points">
+                                <span>잔여 포인트:</span>
+                                <span class="points">1,000P</span>
+                            </div>
+                        </div>
+                        <ul class="nav nav-tabs flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">주문 내역</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">쿠폰함</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">정보 수정</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">나의 리뷰</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">배송지 정보</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-10">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="coupon-wrapper">
+                                    <div class="title">
+                                        <h3>쿠폰함</h3>
+                                        <p>쿠폰 관련 정보를 확인할 수 있습니다.</p>
+                                    </div>
+                                    <ul class="nav nav-tabs" id="couponTab" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="available-tab" data-toggle="tab" href="#available" role="tab" aria-controls="available" aria-selected="true">사용 가능한 쿠폰</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="used-tab" data-toggle="tab" href="#used" role="tab" aria-controls="used" aria-selected="false">사용한 쿠폰</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="history-tab" data-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="false">발급 내역</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" id="couponTabContent">
+                                        <!-- tab 메뉴 누르면 아래 class에 show active 추가해 주시면 됩니다!-->
+                                        <div class="tab-pane fade show active" id="available" role="tabpanel" aria-labelledby="available-tab">
+                                            <div class="coupon-list">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>쿠폰명</th>
+                                                        <th>사용 조건 및 사용기간</th>
+                                                        <th>할인 혜택</th>
+                                                        <th>등록일</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>10% 할인 쿠폰</td>
+                                                        <td>전체 상품 / 2023-07-31까지</td>
+                                                        <td>10% 할인</td>
+                                                        <td>2023-05-01</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>무료 배송 쿠폰</td>
+                                                        <td>상품 5만원 이상 / 2023-06-30까지</td>
+                                                        <td>무료 배송</td>
+                                                        <td>2023-04-15</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <!-- tab 메뉴 누르면 아래 class에 show active 추가해 주시면 됩니다!-->
+                                        <div class="tab-pane fade" id="used" role="tabpanel" aria-labelledby="used-tab">
+                                            <div class="coupon-list">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>쿠폰명</th>
+                                                        <th>사용 조건 및 사용기간</th>
+                                                        <th>할인 혜택</th>
+                                                        <th>사용일</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>20% 할인 쿠폰</td>
+                                                        <td>전체 상품 / 2023-06-15까지</td>
+                                                        <td>20% 할인</td>
+                                                        <td>2023-05-15</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <!-- tab 메뉴 누르면 아래 class에 show active 추가해 주시면 됩니다!-->
+                                        <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+                                            <div class="coupon-list">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>쿠폰명</th>
+                                                        <th>사용 조건 및 사용기간</th>
+                                                        <th>할인 혜택</th>
+                                                        <th>등록일</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>신규 회원 가입 쿠폰</td>
+                                                        <td>전체 상품 / 2023-06-30까지</td>
+                                                        <td>5% 할인</td>
+                                                        <td>2023-04-01</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>생일 쿠폰</td>
+                                                        <td>전체 상품 / 2023-04-30까지</td>
+                                                        <td>10% 할인</td>
+                                                        <td>2023-03-15</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Order History Area -->
+    <script>
+        // 비밀번호 확인하는 JS
+        const newPasswordInput = document.getElementById('new-password');
+        const confirmPasswordInput = document.getElementById('confirm-password');
+        const pwConfirmElement = document.getElementById('pwConfirm');
+        const setPasswordBtn = document.getElementById('update-btn');
+
+        function pwCheck() {
+            if (newPasswordInput.value === confirmPasswordInput.value) {
+                pwConfirmElement.textContent = '비밀번호 일치';
+                pwConfirmElement.style.color = 'green';
+            } else {
+                pwConfirmElement.textContent = '비밀번호 불일치';
+                pwConfirmElement.style.color = 'red';
+            }
+
+            setPasswordBtn.disabled = (newPasswordInput.value !== confirmPasswordInput.value);
+        }
+
+        newPasswordInput.addEventListener('input', pwCheck);
+        confirmPasswordInput.addEventListener('input', pwCheck);
+    </script>
+
+</div>>
+</body>
+</html>

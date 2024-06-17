@@ -1642,6 +1642,7 @@ ol {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  justify-content: flex-end;
 }
 
 @media (max-width: 767px) {
@@ -1733,6 +1734,32 @@ ol {
   font-size: 18px;
   text-align: center;
   position: relative;
+}
+
+/*add by chae*/
+.header .navbar-cart .myPage {
+  margin-right: 12px;
+}
+
+/*add by chae*/
+.header .navbar-cart .myPage a {
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  display: inline-block;
+  border-radius: 50%;
+  border: 1px solid #eee;
+  color: #555;
+  font-size: 18px;
+  text-align: center;
+  position: relative;
+}
+
+/*add by chae*/
+.header .navbar-cart .myPage a:hover {
+  color: #fff;
+  background-color: #0167F3;
+  border-color: transparent;
 }
 
 .header .navbar-cart .wishlist a:hover {
@@ -6965,6 +6992,22 @@ blockquote span {
           box-shadow: 0px 5px 40px #00000008;
 }
 
+.user-info-wrapper .login-form {
+  padding: 42px;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  background-color: #fff;
+  -webkit-box-shadow: 0px 5px 40px #00000008;
+  box-shadow: 0px 5px 40px #00000008;
+} .login-form {
+  padding: 42px;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  background-color: #fff;
+  -webkit-box-shadow: 0px 5px 40px #00000008;
+  box-shadow: 0px 5px 40px #00000008;
+}
+
 @media (max-width: 767px) {
   .account-login .login-form {
     padding: 30px;
@@ -7084,7 +7127,17 @@ blockquote span {
   margin-bottom: 15px;
 }
 
+.user-info-wrapper .form-group {
+  margin-bottom: 15px;
+}
+
 .account-login .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.user-info-wrapper .form-group label {
   display: block;
   margin-bottom: 8px;
   width: 100%;
@@ -7113,6 +7166,7 @@ blockquote span {
 
 .account-login .lost-pass {
   color: #888;
+  margin-left: 15px;
 }
 
 .account-login .lost-pass:hover {
@@ -7250,7 +7304,7 @@ blockquote span {
   position: relative;
   -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
-  text-align: left;
+  text-align: center;
 }
 
 .contact-us .contact-info .single-info:last-child {
@@ -8143,4 +8197,224 @@ blockquote span {
   .footer .footer-bottom .socila li span {
     display: none;
   }
+}
+
+/*add by chae*/
+/*mypage > orderHistory > grade*/
+.age-range {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+  padding: 30px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.range-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.range-item {
+  text-align: center;
+  margin-right: 20px;
+  position: relative;
+  width: 250px;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.range-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.label {
+  font-weight: bold;
+  color: #333;
+  font-size: 25px;
+  margin-bottom: 10px;
+}
+
+.description {
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.amount-text {
+  font-size: 16px;
+  color: #333;
+  background-color: #f0f0f0;
+  padding: 10px 15px;
+  border-radius: 5px;
+  display: none;
+}
+
+.range-item.active {
+  background-color: #0066cc;
+  color: #fff;
+}
+
+.range-item.active .label {
+  color: #fff;
+}
+
+.range-item.active .description {
+  color: #e0e0e0;
+}
+
+.range-item.active .amount-text {
+  display: block;
+  background-color: #fff;
+  color: #0066cc;
+  font-weight: bold;
+}
+
+.title {
+  margin-bottom: 20px;
+}
+
+tr {
+  text-align: center;
+}
+
+.order-history-filter {
+  margin-bottom: 30px;
+}
+.sidebar {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 5px;
+  position: sticky;
+  top: 60px; /* 스크롤 시작 지점 */
+}
+
+.nav-tabs {
+  border-bottom: none;
+}
+
+.nav-link {
+  border-radius: 5px;
+  color: #333;
+  padding: 10px 15px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-link.active {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.nav-link:not(.active):hover {
+  background-color: #e9ecef;
+}
+
+.user-info {
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.user-grade,
+.user-points {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.user-grade span:first-child,
+.user-points span:first-child {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.grade,
+.points {
+  font-weight: bold;
+  color: #007bff;
+}
+
+
+.coupon-wrapper {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.nav-tabs {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.nav-tabs .nav-link {
+  border: none;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: #f8f9fa;
+  border-color: #dee2e6 #dee2e6 #f8f9fa;
+}
+
+.coupon-wrapper .nav-tabs .nav-link {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.coupon-wrapper .nav-tabs .nav-link.active {
+  background-color: #007bff;
+  border-bottom: transparent;
+  color: #fff;
+  border-radius: 10px 10px 0 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.coupon-wrapper .nav-tabs .nav-link.active:hover {
+  background-color: #0069d9;
+  color: #fff;
+}
+
+.tab-content {
+  padding-top: 20px;
+}
+
+.coupon-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.coupon-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.coupon-name {
+  font-weight: bold;
+}
+
+.coupon-expiry {
+  font-size: 0.9em;
+  color: #6c757d;
+}
+
+.coupon-list table {
+  margin-bottom: 0;
+}
+
+.coupon-list th,
+.coupon-list td {
+  vertical-align: middle;
 }

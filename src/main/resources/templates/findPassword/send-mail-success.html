@@ -1,0 +1,41 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<body>
+<div th:fragment="content">
+
+  <!-- Start Breadcrumbs Component -->
+  <div th:replace="~{fragments/breadcrumbs :: breadcrumbs}"></div>
+  <!-- End Breadcrumbs Component -->
+
+  <!-- Start Error Area -->
+  <div class="maill-success">
+    <div class="d-table">
+      <div class="d-table-cell">
+        <div class="container">
+          <div class="success-content">
+            <i class="lni lni-envelope"></i>
+            <h2>메일이 성공적으로 전송되었습니다</h2>
+            <p>메일로 보내드린 링크를 통해 비밀번호를 재설정해 주세요!</p>
+            <div class="button">
+              <a href="index.html" class="btn">홈으로 돌아가기</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Error Area -->
+
+  <!-- ========================= JS here ========================= -->
+  <script>
+    window.onload = function () {
+      window.setTimeout(fadeout, 500);
+    }
+
+    function fadeout() {
+      document.querySelector('.preloader').style.opacity = '0';
+      document.querySelector('.preloader').style.display = 'none';
+    }
+  </script>
+</div>
+</body>
+</html>

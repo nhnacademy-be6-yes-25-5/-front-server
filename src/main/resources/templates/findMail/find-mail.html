@@ -1,0 +1,46 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<body>
+<div th:fragment="content">
+
+    <!-- Start Breadcrumbs Component -->
+    <div th:replace="~{fragments/breadcrumbs :: breadcrumbs}"></div>
+    <!-- End Breadcrumbs Component -->
+
+    <!-- Start Find Email Area -->
+    <div class="account-login section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-12">
+                    <div class="register-form">
+                        <div class="title">
+                            <h3>Find Your Email</h3>
+                            <p>Enter your name and phone number associated with your account, and we'll help you find your registered email.</p>
+                        </div>
+                        <form class="row" method="post">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input class="form-control" type="text" id="name" required>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input class="form-control" type="tel" id="phone" required>
+                                </div>
+                            </div>
+                            <div class="button">
+                                <button class="btn" type="submit">Find Email</button>
+                            </div>
+                            <p class="outer-link">Remember your email? <a href="#">Login Now</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Find Email Area -->
+</div>
+</body>
+</html>

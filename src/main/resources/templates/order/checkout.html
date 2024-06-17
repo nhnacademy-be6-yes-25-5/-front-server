@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html class="no-js" lang="zxx">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+  <title>Checkout - ShopGrids Bootstrap 5 eCommerce HTML Template.</title>
+  <meta name="description" content=""/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="/images/favicon.svg">
+
+  <!-- ========================= CSS here ========================= -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/LineIcons.3.0.css">
+  <link rel="stylesheet" href="/css/tiny-slider.css">
+  <link rel="stylesheet" href="/css/glightbox.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+
+</head>
+
+<body>
+<!--[if lte IE 9]>
+<p class="browserupgrade">
+  You are using an <strong>outdated</strong> browser. Please
+  <a href="https://browsehappy.com/">upgrade your browser</a> to improve
+  your experience and security.
+</p>
+<![endif]-->
+
+<!-- Preloader -->
+<div class="preloader">
+  <div class="preloader-inner">
+    <div class="preloader-icon">
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</div>
+<!-- /End Preloader -->
+
+<!-- Start Header Area -->
+<header class="header navbar-area">
+  <!-- Start Topbar -->
+  <div class="topbar">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-4 col-md-4 col-12">
+          <div class="top-left">
+            <ul class="menu-top-link">
+              <li>
+                <div class="select-position">
+                  <select id="select4">
+                    <option value="0" selected>$ USD</option>
+                    <option value="1">€ EURO</option>
+                    <option value="2">$ CAD</option>
+                    <option value="3">₹ INR</option>
+                    <option value="4">¥ CNY</option>
+                    <option value="5">৳ BDT</option>
+                  </select>
+                </div>
+              </li>
+              <li>
+                <div class="select-position">
+                  <select id="select5">
+                    <option value="0" selected>English</option>
+                    <option value="1">Español</option>
+                    <option value="2">Filipino</option>
+                    <option value="3">Français</option>
+                    <option value="4">العربية</option>
+                    <option value="5">हिन्दी</option>
+                    <option value="6">বাংলা</option>
+                  </select>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-12">
+          <div class="top-middle">
+            <ul class="useful-links">
+              <li><a href="#">Home</a></li>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Contact Us</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-12">
+          <div class="top-end">
+            <div class="user">
+              <i class="lni lni-user"></i>
+              Hello
+            </div>
+            <ul class="user-login">
+              <li>
+                <a href="#">Sign In</a>
+              </li>
+              <li>
+                <a href="#">Register</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Topbar -->
+  <!-- Start Header Middle -->
+  <div class="header-middle">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-3 col-md-3 col-7">
+          <!-- Start Header Logo -->
+          <a class="navbar-brand" href="#">
+            <img src="/images/logo/logo.svg" alt="Logo">
+          </a>
+          <!-- End Header Logo -->
+        </div>
+        <div class="col-lg-5 col-md-7 d-xs-none">
+          <!-- Start Main Menu Search -->
+          <div class="main-menu-search">
+            <!-- navbar search start -->
+            <div class="navbar-search search-style-5">
+              <div class="search-select">
+                <div class="select-position">
+                  <select id="select1">
+                    <option selected>All</option>
+                    <option value="1">option 01</option>
+                    <option value="2">option 02</option>
+                    <option value="3">option 03</option>
+                    <option value="4">option 04</option>
+                    <option value="5">option 05</option>
+                  </select>
+                </div>
+              </div>
+              <div class="search-input">
+                <input type="text" placeholder="Search">
+              </div>
+              <div class="search-btn">
+                <button><i class="lni lni-search-alt"></i></button>
+              </div>
+            </div>
+            <!-- navbar search Ends -->
+          </div>
+          <!-- End Main Menu Search -->
+        </div>
+        <div class="col-lg-4 col-md-2 col-5">
+          <div class="middle-right-area">
+            <div class="nav-hotline">
+              <i class="lni lni-phone"></i>
+              <h3>Hotline:
+                <span>(+100) 123 456 7890</span>
+              </h3>
+            </div>
+            <div class="navbar-cart">
+              <div class="wishlist">
+                <a href="javascript:void(0)">
+                  <i class="lni lni-heart"></i>
+                  <span class="total-items">0</span>
+                </a>
+              </div>
+              <div class="cart-items">
+                <a href="javascript:void(0)" class="main-btn">
+                  <i class="lni lni-cart"></i>
+                  <span class="total-items">2</span>
+                </a>
+                <!-- Shopping Item -->
+                <div class="shopping-item">
+                  <div class="dropdown-cart-header">
+                    <span>2 Items</span>
+                    <a href="#">View Cart</a>
+                  </div>
+                  <ul class="shopping-list">
+                    <li>
+                      <a href="javascript:void(0)" class="remove" title="Remove this item"><i
+                          class="lni lni-close"></i></a>
+                      <div class="cart-img-head">
+                        <a class="cart-img" href="#"><img
+                            src="assets/images/header/cart-items/item1.jpg" alt="#"></a>
+                      </div>
+
+                      <div class="content">
+                        <h4><a href="#">
+                          Apple Watch Series 6</a></h4>
+                        <p class="quantity">1x - <span class="amount">$99.00</span></p>
+                      </div>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0)" class="remove" title="Remove this item"><i
+                          class="lni lni-close"></i></a>
+                      <div class="cart-img-head">
+                        <a class="cart-img" href="#"><img
+                            src="assets/images/header/cart-items/item2.jpg" alt="#"></a>
+                      </div>
+                      <div class="content">
+                        <h4><a href="#">Wi-Fi Smart Camera</a></h4>
+                        <p class="quantity">1x - <span class="amount">$35.00</span></p>
+                      </div>
+                    </li>
+                  </ul>
+                  <div class="bottom">
+                    <div class="total">
+                      <span>Total</span>
+                      <span class="total-amount">$134.00</span>
+                    </div>
+                    <div class="button">
+                      <a href="#" class="btn animate">Checkout</a>
+                    </div>
+                  </div>
+                </div>
+                <!--/ End Shopping Item -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Header Middle -->
+  <!-- Start Header Bottom -->
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-8 col-md-6 col-12">
+        <div class="nav-inner">
+          <!-- Start Mega Category Menu -->
+          <div class="mega-category-menu">
+            <span class="cat-button"><i class="lni lni-menu"></i>All Categories</span>
+            <ul class="sub-category">
+              <li><a href="#">Electronics <i class="lni lni-chevron-right"></i></a>
+                <ul class="inner-sub-category">
+                  <li><a href="#">Digital Cameras</a></li>
+                  <li><a href="#">Camcorders</a></li>
+                  <li><a href="#">Camera Drones</a></li>
+                  <li><a href="#">Smart Watches</a></li>
+                  <li><a href="#">Headphones</a></li>
+                  <li><a href="#">MP3 Players</a></li>
+                  <li><a href="#">Microphones</a></li>
+                  <li><a href="#">Chargers</a></li>
+                  <li><a href="#">Batteries</a></li>
+                  <li><a href="#">Cables & Adapters</a></li>
+                </ul>
+              </li>
+              <li><a href="#">accessories</a></li>
+              <li><a href="#">Televisions</a></li>
+              <li><a href="#">best selling</a></li>
+              <li><a href="#">top 100 offer</a></li>
+              <li><a href="#">sunglass</a></li>
+              <li><a href="#">watch</a></li>
+              <li><a href="#">man’s product</a></li>
+              <li><a href="#">Home Audio & Theater</a></li>
+              <li><a href="#">Computers & Tablets </a></li>
+              <li><a href="#">Video Games </a></li>
+              <li><a href="#">Home Appliances </a></li>
+            </ul>
+          </div>
+          <!-- End Mega Category Menu -->
+          <!-- Start Navbar -->
+          <nav class="navbar navbar-expand-lg">
+            <button class="navbar-toggler mobile-menu-btn" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+              <span class="toggler-icon"></span>
+              <span class="toggler-icon"></span>
+              <span class="toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
+              <ul id="nav" class="navbar-nav ms-auto">
+                <li class="nav-item">
+                  <a href="#" aria-label="Toggle navigation">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="dd-menu collapsed" href="javascript:void(0)" data-bs-toggle="collapse"
+                     data-bs-target="#submenu-1-2" aria-controls="navbarSupportedContent"
+                     aria-expanded="false" aria-label="Toggle navigation">Pages</a>
+                  <ul class="sub-menu collapse" id="submenu-1-2">
+                    <li class="nav-item"><a href="#">About Us</a></li>
+                    <li class="nav-item"><a href="#">Faq</a></li>
+                    <li class="nav-item"><a href="#">Login</a></li>
+                    <li class="nav-item"><a href="#">Register</a></li>
+                    <li class="nav-item"><a href="#">Mail Success</a></li>
+                    <li class="nav-item"><a href="#">404 Error</a></li>
+                  </ul>
+                </li>
+                <li class="nav-item">
+                  <a class="dd-menu active collapsed" href="javascript:void(0)"
+                     data-bs-toggle="collapse" data-bs-target="#submenu-1-3"
+                     aria-controls="navbarSupportedContent" aria-expanded="false"
+                     aria-label="Toggle navigation">Shop</a>
+                  <ul class="sub-menu collapse" id="submenu-1-3">
+                    <li class="nav-item"><a href="#">Shop Grid</a></li>
+                    <li class="nav-item"><a href="#">Shop List</a></li>
+                    <li class="nav-item"><a href="#">shop Single</a></li>
+                    <li class="nav-item"><a href="#">Cart</a></li>
+                    <li class="nav-item active"><a href="#">Checkout</a></li>
+                  </ul>
+                </li>
+                <li class="nav-item">
+                  <a class="dd-menu collapsed" href="javascript:void(0)" data-bs-toggle="collapse"
+                     data-bs-target="#submenu-1-4" aria-controls="navbarSupportedContent"
+                     aria-expanded="false" aria-label="Toggle navigation">Blog</a>
+                  <ul class="sub-menu collapse" id="submenu-1-4">
+                    <li class="nav-item"><a href="#">Blog Grid Sidebar</a>
+                    </li>
+                    <li class="nav-item"><a href="#">Blog Single</a></li>
+                    <li class="nav-item"><a href="#">Blog Single
+                      Sibebar</a></li>
+                  </ul>
+                </li>
+                <li class="nav-item">
+                  <a href="#" aria-label="Toggle navigation">Contact Us</a>
+                </li>
+              </ul>
+            </div> <!-- navbar collapse -->
+          </nav>
+          <!-- End Navbar -->
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 col-12">
+        <!-- Start Nav Social -->
+        <div class="nav-social">
+          <h5 class="title">Follow Us:</h5>
+          <ul>
+            <li>
+              <a href="javascript:void(0)"><i class="lni lni-facebook-filled"></i></a>
+            </li>
+            <li>
+              <a href="javascript:void(0)"><i class="lni lni-twitter-original"></i></a>
+            </li>
+            <li>
+              <a href="javascript:void(0)"><i class="lni lni-instagram"></i></a>
+            </li>
+            <li>
+              <a href="javascript:void(0)"><i class="lni lni-skype"></i></a>
+            </li>
+          </ul>
+        </div>
+        <!-- End Nav Social -->
+      </div>
+    </div>
+  </div>
+  <!-- Start Header Bottom -->
+</header>
+<!-- End Header Area -->
+
+<!-- Start Breadcrumbs -->
+<div class="breadcrumbs">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 col-md-6 col-12">
+        <div class="breadcrumbs-content">
+          <h1 class="page-title">checkout</h1>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-6 col-12">
+        <ul class="breadcrumb-nav">
+          <li><a href="#"><i class="lni lni-home"></i> Home</a></li>
+          <li><a href="#">Shop</a></li>
+          <li>checkout</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Breadcrumbs -->
+
+<!--====== Checkout Form Steps Part Start ======-->
+
+<section class="checkout-wrapper section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="checkout-steps-form-style-1">
+          <ul id="accordionExample">
+            <li>
+              <h6 class="title" data-bs-toggle="collapse" data-bs-target="#collapseThree"
+                  aria-expanded="true" aria-controls="collapseThree">주문자 정보</h6>
+              <section class="checkout-steps-form-content collapse show" id="collapseThree"
+                       aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                <div class="row">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="single-form form-default">
+                        <label>주문자명</label>
+                        <div class="row">
+                          <div class="col-md-6 form-input form">
+                            <input type="text" name="orderName" id="orderName" placeholder="주문자명"
+                                   required>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="single-form form-default">
+                        <label>주문자 이메일</label>
+                        <div class="form-input form">
+                          <input type="text" name="orderEmail" id="orderEmail" placeholder="이메일"
+                                 required>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="single-form form-default">
+                        <label>주문자 핸드폰 번호</label>
+                        <div class="form-input form">
+                          <input type="text" id="orderPhoneNumber" name="orderPhoneNumber"
+                                 placeholder="주문자 핸드폰 번호" required>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="single-form button">
+                        <button class="btn" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFour" aria-expanded="false"
+                                aria-controls="collapseFour">다음 단계
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </li>
+            <li>
+              <h6 class="title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFour"
+                  aria-expanded="false" aria-controls="collapseFour">배송정보</h6>
+              <section class="checkout-steps-form-content collapse" id="collapseFour"
+                       aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                <div class="col-md-12">
+                  <div class="single-checkbox checkbox-style-3">
+                    <input type="checkbox" id="checkbox-3" onclick="copyOrderInfo()">
+                    <label for="checkbox-3"><span></span></label>
+                    <p>주문자 정보와 배송 정보가 동일합니다.</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="single-form form-default">
+                      <label>배송받는 사람</label>
+                      <div class="row">
+                        <div class="col-md-6 form-input form">
+                          <input type="text" name="receiveName" id="receiveName"
+                                 placeholder="배송받는 사람" required>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="single-form form-default">
+                      <label>배송받는 사람 이메일</label>
+                      <div class="form-input form">
+                        <input type="text" name="receiveEmail" id="receiveEmail" placeholder="이메일"
+                               required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="single-form form-default">
+                      <label>배송받는 사람 핸드폰 번호</label>
+                      <div class="form-input form">
+                        <input type="text" name="receivePhoneNumber" id="receivePhoneNumber"
+                               placeholder="핸드폰 번호" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="single-form form-default">
+                      <label>주소</label>
+                      <div class="form-input form">
+                        <input type="text" id="postcode" placeholder="우편번호" required>
+                        <input type="button" onclick="daumPost()" value="우편번호 찾기"><br>
+                        <input type="text" id="addressRaw" placeholder="주소" required><br>
+                        <input type="text" id="addressDetail" placeholder="상세주소" required>
+                        <input type="text" id="reference" placeholder="참고항목">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="single-form form-default">
+                      <label>포장 타입</label>
+                      <div class="form-input form">
+                        <select name="takeoutType" id="takeoutType" required>
+                          <option value="NONE">NONE</option>
+                          <option value="CARD_BOARD">CARD_BOARD</option>
+                          <option value="PAPER">PAPER</option>
+                          <option value="VINYL">VINYL</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-12">
+                    <div class="single-form form-default">
+                      <label>배송 받길 원하는 날짜</label>
+                      <div class="form-input form">
+                        <input type="date" id="deliveryDate" required>
+                      </div>
+                    </div>
+                  </div>
+
+                  <form id="orderForm" action="/orders" method="POST">
+                    <div th:each="productId : ${productIds}">
+                      <input type="hidden" name="productIds" th:value="${productId}">
+                    </div>
+                    <input type="hidden" name="addressRaw" id="hiddenAddressRaw">
+                    <input type="hidden" name="addressDetail" id="hiddenAddressDetail">
+                    <input type="hidden" name="reference" id="hiddenReference">
+                    <input type="hidden" name="zipcode" id="hiddenZipcode">
+                    <input type="hidden" name="takeoutType" id="hiddenTakeoutType">
+                    <input type="hidden" name="deliveryDate" id="hiddenDeliveryDate">
+                    <input type="hidden" name="orderName" id="hiddenOrderName">
+                    <input type="hidden" name="orderEmail" id="hiddenOrderEmail">
+                    <input type="hidden" name="orderPhoneNumber" id="hiddenOrderPhoneNumber">
+                    <input type="hidden" name="receiveName" id="hiddenReceiveOrderName">
+                    <input type="hidden" name="receiveEmail" id="hiddenReceiveOrderEmail">
+                    <input type="hidden" name="receivePhoneNumber"
+                           id="hiddenReceiveOrderPhoneNumber">
+
+                    <input type="hidden" name="orderTotalAmount" id="hiddenTotalPrice">
+
+                    <div class="col-md-12">
+                      <div class="checkout-payment-option">
+                        <h6 class="heading-6 font-weight-400 payment-title">Select Delivery
+                          Option</h6>
+                        <div class="payment-option-wrapper">
+                          <div class="single-payment-option">
+                            <input type="radio" name="shipping" checked id="shipping-1">
+                            <label for="shipping-1">
+                              <img src="https://via.placeholder.com/60x32" alt="Shipping">
+                              <p>Standard Shipping</p>
+                              <span class="price">$10.50</span>
+                            </label>
+                          </div>
+                          <div class="single-payment-option">
+                            <input type="radio" name="shipping" id="shipping-2">
+                            <label for="shipping-2">
+                              <img src="https://via.placeholder.com/60x32" alt="Shipping">
+                              <p>Standard Shipping</p>
+                              <span class="price">$10.50</span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </section>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="checkout-sidebar">
+          <div class="checkout-sidebar-coupon">
+            <p>Appy Coupon to get discount!</p>
+            <form action="#">
+              <div class="single-form form-default">
+                <div class="form-input form">
+                  <input type="text" placeholder="Coupon Code">
+                </div>
+                <div class="button">
+                  <button class="btn">apply</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="checkout-sidebar-price-table mt-30">
+            <h5 class="title">Pricing Table</h5>
+            <div class="sub-total-price">
+              <div class="total-price">
+                <p class="value">Subtotal Price:</p>
+                <p class="price">$144.00</p>
+              </div>
+              <div class="total-price shipping">
+                <p class="value">Shipping Price:</p>
+                <p class="price">$10.50</p>
+              </div>
+              <div class="total-price discount">
+                <p class="value">Discount:</p>
+                <p class="price">$10.00</p>
+              </div>
+            </div>
+
+            <div class="total-payable">
+              <div class="payable-price">
+                <p class="value">Total Price:</p>
+                <p class="price" id="totalPriceValue">$164.50</p>
+              </div>
+            </div>
+            <div class="price-table-btn button">
+              <button type="button" class="btn btn-alt" onclick="submitOrder()">Checkout</button>
+            </div>
+          </div>
+
+          <div class="checkout-sidebar-banner mt-30">
+            <a href="#">
+              <img src="https://via.placeholder.com/400x330" alt="#">
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--====== Checkout Form Steps Part Ends ======-->
+
+<!-- Start Footer Area -->
+<footer class="footer">
+  <!-- Start Footer Top -->
+  <div class="footer-top">
+    <div class="container">
+      <div class="inner-content">
+        <div class="row">
+          <div class="col-lg-3 col-md-4 col-12">
+            <div class="footer-logo">
+              <a href="#">
+                <img src="/images/logo/white-logo.svg" alt="#">
+              </a>
+            </div>
+          </div>
+          <div class="col-lg-9 col-md-8 col-12">
+            <div class="footer-newsletter">
+              <h4 class="title">
+                Subscribe to our Newsletter
+                <span>Get all the latest information, Sales and Offers.</span>
+              </h4>
+              <div class="newsletter-form-head">
+                <form action="#" method="get" target="_blank" class="newsletter-form">
+                  <input name="EMAIL" placeholder="Email address here..." type="email">
+                  <div class="button">
+                    <button class="btn">Subscribe<span class="dir-part"></span></button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Footer Top -->
+  <!-- Start Footer Middle -->
+  <div class="footer-middle">
+    <div class="container">
+      <div class="bottom-inner">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 col-12">
+            <!-- Single Widget -->
+            <div class="single-footer f-contact">
+              <h3>Get In Touch With Us</h3>
+              <p class="phone">Phone: +1 (900) 33 169 7720</p>
+              <ul>
+                <li><span>Monday-Friday: </span> 9.00 am - 8.00 pm</li>
+                <li><span>Saturday: </span> 10.00 am - 6.00 pm</li>
+              </ul>
+              <p class="mail">
+                <a href="mailto:support@shopgrids.com">support@shopgrids.com</a>
+              </p>
+            </div>
+            <!-- End Single Widget -->
+          </div>
+          <div class="col-lg-3 col-md-6 col-12">
+            <!-- Single Widget -->
+            <div class="single-footer our-app">
+              <h3>Our Mobile App</h3>
+              <ul class="app-btn">
+                <li>
+                  <a href="javascript:void(0)">
+                    <i class="lni lni-apple"></i>
+                    <span class="small-title">Download on the</span>
+                    <span class="big-title">App Store</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)">
+                    <i class="lni lni-play-store"></i>
+                    <span class="small-title">Download on the</span>
+                    <span class="big-title">Google Play</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <!-- End Single Widget -->
+          </div>
+          <div class="col-lg-3 col-md-6 col-12">
+            <!-- Single Widget -->
+            <div class="single-footer f-link">
+              <h3>Information</h3>
+              <ul>
+                <li><a href="javascript:void(0)">About Us</a></li>
+                <li><a href="javascript:void(0)">Contact Us</a></li>
+                <li><a href="javascript:void(0)">Downloads</a></li>
+                <li><a href="javascript:void(0)">Sitemap</a></li>
+                <li><a href="javascript:void(0)">FAQs Page</a></li>
+              </ul>
+            </div>
+            <!-- End Single Widget -->
+          </div>
+          <div class="col-lg-3 col-md-6 col-12">
+            <!-- Single Widget -->
+            <div class="single-footer f-link">
+              <h3>Shop Departments</h3>
+              <ul>
+                <li><a href="javascript:void(0)">Computers & Accessories</a></li>
+                <li><a href="javascript:void(0)">Smartphones & Tablets</a></li>
+                <li><a href="javascript:void(0)">TV, Video & Audio</a></li>
+                <li><a href="javascript:void(0)">Cameras, Photo & Video</a></li>
+                <li><a href="javascript:void(0)">Headphones</a></li>
+              </ul>
+            </div>
+            <!-- End Single Widget -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Footer Middle -->
+  <!-- Start Footer Bottom -->
+  <div class="footer-bottom">
+    <div class="container">
+      <div class="inner-content">
+        <div class="row align-items-center">
+          <div class="col-lg-4 col-12">
+            <div class="payment-gateway">
+              <span>We Accept:</span>
+              <img src="/images/footer/credit-cards-footer.png" alt="#">
+            </div>
+          </div>
+          <div class="col-lg-4 col-12">
+            <div class="copyright">
+              <p>Designed and Developed by<a href="https://graygrids.com/" rel="nofollow"
+                                             target="_blank">GrayGrids</a></p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-12">
+            <ul class="socila">
+              <li>
+                <span>Follow Us On:</span>
+              </li>
+              <li><a href="javascript:void(0)"><i class="lni lni-facebook-filled"></i></a></li>
+              <li><a href="javascript:void(0)"><i class="lni lni-twitter-original"></i></a></li>
+              <li><a href="javascript:void(0)"><i class="lni lni-instagram"></i></a></li>
+              <li><a href="javascript:void(0)"><i class="lni lni-google"></i></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Footer Bottom -->
+</footer>
+<!--/ End Footer Area -->
+
+<!-- ========================= scroll-top ========================= -->
+<a href="#" class="scroll-top">
+  <i class="lni lni-chevron-up"></i>
+</a>
+
+<!-- ========================= JS here ========================= -->
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/tiny-slider.js"></script>
+<script src="/js/glightbox.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+  function daumPost() {
+    new daum.Postcode({
+      oncomplete: function (data) {
+        var addr = '';
+        var extraAddr = '';
+
+        if (data.userSelectedType === 'R') {
+          addr = data.roadAddress;
+        } else {
+          addr = data.jibunAddress;
+        }
+
+        if (data.userSelectedType === 'R') {
+          if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+            extraAddr += data.bname;
+          }
+          if (data.buildingName !== '' && data.apartment === 'Y') {
+            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+          }
+          if (extraAddr !== '') {
+            extraAddr = ' (' + extraAddr + ')';
+          }
+          document.getElementById("reference").value = extraAddr;
+
+        } else {
+          document.getElementById("addressExtra").value = '';
+        }
+
+        document.getElementById('postcode').value = data.zonecode;
+        document.getElementById("addressRaw").value = addr;
+        document.getElementById("addressDetail").focus();
+      }
+    }).open();
+  }
+
+  function copyOrderInfo() {
+    const checkbox = document.getElementById('checkbox-3');
+    if (checkbox.checked) {
+      document.getElementById('receiveName').value = document.getElementById('orderName').value;
+      document.getElementById('receiveEmail').value = document.getElementById('orderEmail').value;
+      document.getElementById('receivePhoneNumber').value = document.getElementById(
+          'orderPhoneNumber').value;
+    } else {
+      document.getElementById('receiveName').value = '';
+      document.getElementById('receiveEmail').value = '';
+      document.getElementById('receivePhoneNumber').value = '';
+    }
+  }
+
+  function submitOrder() {
+    const deliveryDateValue = document.getElementById('deliveryDate').value;
+    document.getElementById('hiddenDeliveryDate').value = deliveryDateValue + "T00:00:00";
+    document.getElementById('hiddenAddressRaw').value = document.getElementById('addressRaw').value;
+    document.getElementById('hiddenReference').value = document.getElementById('reference').value;
+    document.getElementById('hiddenOrderName').value = document.getElementById('orderName').value;
+    document.getElementById('hiddenOrderEmail').value = document.getElementById('orderEmail').value;
+    document.getElementById('hiddenOrderPhoneNumber').value = document.getElementById(
+        'orderPhoneNumber').value;
+    document.getElementById('hiddenReceiveOrderName').value = document.getElementById('receiveName').value;
+    document.getElementById('hiddenReceiveOrderEmail').value = document.getElementById(
+        'receiveEmail').value;
+    document.getElementById('hiddenReceiveOrderPhoneNumber').value = document.getElementById(
+        'receivePhoneNumber').value;
+    document.getElementById('hiddenAddressDetail').value = document.getElementById(
+        'addressDetail').value;
+    document.getElementById('hiddenZipcode').value = document.getElementById('postcode').value;
+    document.getElementById('hiddenTakeoutType').value = document.getElementById(
+        'takeoutType').value;
+
+    const totalPrice = document.getElementById('totalPriceValue').textContent;
+    document.getElementById('hiddenTotalPrice').value = totalPrice.replace('$', '').trim();
+
+    document.getElementById('orderForm').submit();
+  }
+</script>
+</body>
+
+</html>

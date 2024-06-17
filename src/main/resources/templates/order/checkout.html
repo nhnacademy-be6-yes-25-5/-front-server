@@ -496,9 +496,12 @@
                   </div>
 
                   <form id="orderForm" action="/orders" method="POST">
-                    <div th:each="productId : ${productIds}">
-                      <input type="hidden" name="productIds" th:value="${productId}">
+                    <div th:each="request, index : ${requests}">
+                      <input type="hidden" name="productIds" th:value="${request.productId}">
+                      <input type="hidden" name="quantities" th:value="${request.quantity}">
+                      <input type="hidden" name="prices" th:value="${request.price}">
                     </div>
+                    <input type="hidden" name="orderId" id="hiddenOrderId">
                     <input type="hidden" name="addressRaw" id="hiddenAddressRaw">
                     <input type="hidden" name="addressDetail" id="hiddenAddressDetail">
                     <input type="hidden" name="reference" id="hiddenReference">
@@ -548,19 +551,21 @@
       </div>
       <div class="col-lg-4">
         <div class="checkout-sidebar">
-          <div class="checkout-sidebar-coupon">
-            <p>Appy Coupon to get discount!</p>
-            <form action="#">
-              <div class="single-form form-default">
-                <div class="form-input form">
-                  <input type="text" placeholder="Coupon Code">
-                </div>
-                <div class="button">
-                  <button class="btn">apply</button>
-                </div>
-              </div>
-            </form>
-          </div>
+<!--          <div class="checkout-sidebar-coupon">-->
+<!--            <p>Appy Coupon to get discount!</p>-->
+<!--            <form action="#">-->
+<!--              <div class="single-form form-default">-->
+<!--                <div class="form-input form">-->
+<!--                  <input type="text" placeholder="Coupon Code">-->
+<!--                </div>-->
+<!--                <div class="button">-->
+<!--                  <button class="btn">apply</button>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </form>-->
+<!--          </div>-->
+          <button onclick="openCouponPopup()">쿠폰 목록 보기</button>
+          <input type="text" id="selectedCoupon" readonly>
           <div class="checkout-sidebar-price-table mt-30">
             <h5 class="title">Pricing Table</h5>
             <div class="sub-total-price">
@@ -811,6 +816,10 @@
 
   function submitOrder() {
     const deliveryDateValue = document.getElementById('deliveryDate').value;
+    const orderId = `order-${Date.now()}`;
+    const totalPrice = document.getElementById('totalPriceValue').textContent;
+
+    document.getElementById('hiddenOrderId').value = orderId;
     document.getElementById('hiddenDeliveryDate').value = deliveryDateValue + "T00:00:00";
     document.getElementById('hiddenAddressRaw').value = document.getElementById('addressRaw').value;
     document.getElementById('hiddenReference').value = document.getElementById('reference').value;
@@ -829,10 +838,18 @@
     document.getElementById('hiddenTakeoutType').value = document.getElementById(
         'takeoutType').value;
 
-    const totalPrice = document.getElementById('totalPriceValue').textContent;
     document.getElementById('hiddenTotalPrice').value = totalPrice.replace('$', '').trim();
 
     document.getElementById('orderForm').submit();
+  }
+
+  function openCouponPopup() {
+    const popup = window.open('couponPopup.html', '쿠폰 목록', 'width=600,height=400');
+    popup.onunload = function() {
+      if (popup.selectedCoupon) {
+        document.getElementById('selectedCoupon').value = popup.selectedCoupon;
+      }
+    };
   }
 </script>
 </body>

@@ -17,17 +17,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentAdaptor paymentAdaptor;
 
-    // todo. 요청을 dto로 받도록 수정
     @Override
     public CreatePaymentResponse createPayment(CreatePaymentRequest request) {
-
-        try {
-            String requestBody = new ObjectMapper().writeValueAsString(request);
-
-            return paymentAdaptor.createPayment(requestBody);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        return paymentAdaptor.createPayment(request);
     }
 
 }

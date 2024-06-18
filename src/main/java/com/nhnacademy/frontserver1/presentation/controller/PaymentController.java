@@ -27,13 +27,11 @@ public class PaymentController {
 
     @PostMapping("confirm")
     public String confirm(@RequestBody CreatePaymentRequest request) {
-        try {
-            paymentService.createPayment(request);
-        } catch (Exception e) {
-            return "order/fail";
+        if (paymentService.createPayment(request).status() == 200) {
+            return "order/success";
         }
 
-        return "order/success";
+        return "order/fail";
     }
 
     @GetMapping("success")

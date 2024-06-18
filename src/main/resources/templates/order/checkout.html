@@ -566,11 +566,20 @@
                 <p class="value">할인:</p>
                 <p class="price" id="discountAmount">0원</p>
               </div>
-              <div class="additional-info mt-30 progress-bar" th:if="${freeShippingAmount != null && freeShippingAmount > 0}">
-                <p th:text="'무료 배송까지 ' + ${freeShippingAmount} + '원'"></p>
+              <div class="additional-info mt-30" th:if="${freeShippingAmount != null}">
+                <p th:if="${freeShippingAmount > 0}" th:text="'무료 배송까지 ' + ${freeShippingAmount} + '원'"></p>
+                <p th:if="${freeShippingAmount <= 0}" th:text="'무료 배송 혜택 적용중!'"></p>
+                <input type="hidden" id="freeShippingAmount" th:value="${freeShippingAmount}"/>
+                <div class="progress">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" id="progress-bar"
+                       th:aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+                       style="width: 0%">
+                  </div>
+                </div>
               </div>
             </div>
 
+<!--            포장 금액 추가-->
             <div class="total-payable">
               <div class="payable-price">
                 <p class="value">총 금액:</p>
@@ -863,6 +872,56 @@
       updateTotalPrice();
     }
   });
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const totalAmountElement = document.getElementById('totalAmount');
+    const freeShippingAmountElement = document.getElementById('freeShippingAmount');
+
+    if (!totalAmountElement || !freeShippingAmountElement) {
+      console.error('필요한 요소가 존재하지 않습니다.');
+      return;
+    }
+
+    const totalAmountText = totalAmountElement.innerText.replace('원', '');
+    const totalAmount = parseInt(totalAmountText, 10);
+    const freeShippingAmount = parseInt(freeShippingAmountElement.value, 10);
+    const progressBar = document.getElementById("progress-bar");
+
+    console.log(totalAmount, freeShippingAmount);
+
+    let progress = 0;
+    if (freeShippingAmount <= 0) {
+      progress = 100;
+    } else {
+      progress = Math.min((totalAmount / (totalAmount + freeShippingAmount)) * 100, 100);
+    }
+
+    console.log('Calculated Progress:', progress);
+    animateProgressBar(progressBar, progress);
+  });
+
+  function animateProgressBar(progressBar, targetProgress) {
+    let currentProgress = 0;
+    const animationDuration = 1000; // Adjust the duration as needed (in milliseconds)
+    const frameRate = 30; // Number of frames per second
+
+    const increment = (targetProgress - currentProgress) / (animationDuration / (1000 / frameRate));
+
+    const intervalId = setInterval(function() {
+      currentProgress += increment;
+      if (currentProgress >= targetProgress) {
+        currentProgress = targetProgress;
+        clearInterval(intervalId);
+      }
+
+      progressBar.style.width = currentProgress + "%";
+      progressBar.setAttribute('aria-valuenow', currentProgress.toFixed(0));
+      progressBar.innerText = currentProgress.toFixed(0) + "%";
+      console.log('Current Progress:', currentProgress);
+    }, 1000 / frameRate);
+  }
+</script>
+
 
 </script>
 </body>

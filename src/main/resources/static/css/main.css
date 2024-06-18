@@ -8418,3 +8418,7 @@ tr {
 .coupon-list td {
   vertical-align: middle;
 }
+
+.shipping-address-actions {
+  text-align: right;
+}

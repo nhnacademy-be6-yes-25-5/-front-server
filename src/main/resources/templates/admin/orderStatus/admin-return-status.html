@@ -1,0 +1,80 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/admin-layout :: admin-layout(~{::content})}">
+<body>
+<div th:fragment="content">
+    <h1 class="mt-4">반품 주문 관리</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">반품 주문 관리</li>
+    </ol>
+
+    <div class="container-fluid">
+        <div class="card mb-4">
+            <div class="card-header">
+                반품 주문 목록
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>주문번호</th>
+                        <th>회원명</th>
+                        <th>주문 상품</th>
+                        <th>주문 금액</th>
+                        <th>반품 사유</th>
+                        <th>반품 신청일</th>
+                        <th>반품 승인</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>54321</td>
+                        <td>김철수</td>
+                        <td>상품B 외 1개</td>
+                        <td>120,000원</td>
+                        <td>불량</td>
+                        <td>2023-06-10</td>
+                        <td>
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>반품 승인</option>
+                                <option value="1">반품 거절</option>
+                            </select>
+                            <button type="button" class="btn btn-primary btn-sm mt-2">저장</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>54322</td>
+                        <td>홍길동</td>
+                        <td>상품A 외 1개</td>
+                        <td>90,000원</td>
+                        <td>변심</td>
+                        <td>2023-06-12</td>
+                        <td>
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>반품 승인</option>
+                                <option value="1">반품 거절</option>
+                            </select>
+                            <button type="button" class="btn btn-primary btn-sm mt-2">저장</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>54323</td>
+                        <td>강감찬</td>
+                        <td>상품C 외 1개</td>
+                        <td>150,000원</td>
+                        <td>오배송</td>
+                        <td>2023-06-15</td>
+                        <td>
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>반품 승인</option>
+                                <option value="1">반품 거절</option>
+                            </select>
+                            <button type="button" class="btn btn-primary btn-sm mt-2">저장</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

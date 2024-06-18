@@ -1,0 +1,69 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/admin-layout :: admin-layout(~{::content})}">
+<body>
+<div th:fragment="content">
+    <h1 class="mt-4">회원 주문 관리</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">회원 주문 관리</li>
+    </ol>
+
+    <div class="container-fluid">
+        <div class="card mb-4">
+            <div class="card-header">
+                주문 목록
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>주문번호</th>
+                        <th>회원명</th>
+                        <th>주문 상품</th>
+                        <th>주문 금액</th>
+                        <th>주문 상태</th>
+                        <th>주문 일자</th>
+                        <th>주문 상태 변경</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>12345</td>
+                        <td>홍길동</td>
+                        <td>상품A 외 2개</td>
+                        <td>150,000원</td>
+                        <td>결제 완료</td>
+                        <td>2023-06-01</td>
+                        <td>
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>결제 완료</option>
+                                <option value="1">상품준비중</option>
+                                <option value="2">배송중</option>
+                                <option value="3">배송 완료</option>
+                            </select>
+                            <button type="button" class="btn btn-primary btn-sm mt-2">변경</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>12345</td>
+                        <td>홍길동</td>
+                        <td>상품A 외 2개</td>
+                        <td>150,000원</td>
+                        <td>결제 완료</td>
+                        <td>2023-06-01</td>
+                        <td>
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>결제 완료</option>
+                                <option value="1">상품준비중</option>
+                                <option value="2">배송중</option>
+                                <option value="3">배송 완료</option>
+                            </select>
+                            <button type="button" class="btn btn-primary btn-sm mt-2">변경</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

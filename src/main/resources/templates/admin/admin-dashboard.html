@@ -1,0 +1,105 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/admin-layout :: admin-layout(~{::content})}">
+<body>
+<div th:fragment="content">
+    <h1 class="mt-4">Dashboard</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Dashboard</li>
+    </ol>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-6 pr-4">
+                <a href="#" class="text-decoration-none">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            주문 현황
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-4">
+                                    <h4>결제 완료</h4>
+                                    <h1>3건</h1>
+                                </div>
+                                <div class="col-4">
+                                    <h4>상품준비중</h4>
+                                    <h1>9건</h1>
+                                </div>
+                                <div class="col-4">
+                                    <h4>배송중</h4>
+                                    <h1>7건</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-xl-6 pl-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        취소 / 반품 / 정산
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-4">
+                                <a href="#">
+                                    <h4>취소 진행</h4>
+                                    <h1>1건</h1>
+                                </a>
+                            </div>
+                            <div class="col-4">
+                                <a href="#">
+                                    <h4>반품 진행</h4>
+                                    <h1>2건</h1>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        리뷰가 많은 상품 랭킹
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>순위</th>
+                                <th>상품명</th>
+                                <th>리뷰 수</th>
+                                <th>평점</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>상품A</td>
+                                <td>100개</td>
+                                <td>4.8점</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>상품B</td>
+                                <td>80개</td>
+                                <td>4.5점</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>상품C</td>
+                                <td>70개</td>
+                                <td>4.2점</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<body>
+<div th:fragment="content">
+
+    <!-- Start Breadcrumbs Component -->
+    <div th:replace="~{fragments/breadcrumbs :: breadcrumbs}"></div>
+    <!-- End Breadcrumbs Component -->
+
+    <!-- Start Order History Area -->
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="sidebar">
+                        <div class="user-info">
+                            <div class="user-grade">
+                                <span>회원 등급:</span>
+                                <span class="grade">일반회원</span>
+                            </div>
+                            <div class="user-points">
+                                <span>잔여 포인트:</span>
+                                <span class="points">1,000P</span>
+                            </div>
+                        </div>
+                        <ul class="nav nav-tabs flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">주문 내역</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">쿠폰함</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">정보 수정</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">나의 리뷰</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">배송지 정보</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-10">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="shipping-address-wrapper">
+                                    <div class="title">
+                                        <h3>배송지 관리</h3>
+                                        <p>배송지 정보 및 기본 배송지를 설정할 수 있습니다.</p>
+                                    </div>
+                                    <div class="shipping-address-actions">
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAddressModal">배송지 추가</button>
+                                    </div>
+                                    <ul class="nav nav-tabs" id="shippingAddressTab" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="my-addresses-tab" data-toggle="tab" href="#my-addresses" role="tab" aria-controls="my-addresses" aria-selected="true">나의 배송지</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="default-address-tab" data-toggle="tab" href="#default-address" role="tab" aria-controls="default-address" aria-selected="false">기본 배송지</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" id="shippingAddressTabContent">
+                                        <div class="tab-pane fade show active" id="my-addresses" role="tabpanel" aria-labelledby="my-addresses-tab">
+                                            <div class="shipping-address-list">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>이름</th>
+                                                        <th>주소</th>
+                                                        <th>연락처</th>
+                                                        <th>기본 배송지 설정</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>홍길동</td>
+                                                        <td>서울시 강남구 역삼동 123-45</td>
+                                                        <td>010-1234-5678</td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-primary btn-sm">기본 배송지로 설정</button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>김철수</td>
+                                                        <td>경기도 수원시 팔달구 매산로 123</td>
+                                                        <td>011-9876-5432</td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-primary btn-sm">기본 배송지로 설정</button>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="default-address" role="tabpanel" aria-labelledby="default-address-tab">
+                                            <div class="default-address-info">
+                                                <h4>기본 배송지</h4>
+                                                <p>홍길동 | 서울시 강남구 역삼동 123-45 | 010-1234-5678</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add Address Modal -->
+                <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addAddressModalLabel">새 배송지 추가</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="addressName" class="form-label">이름</label>
+                                        <input type="text" class="form-control" id="addressName" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="addressLine1" class="form-label">주소</label>
+                                        <input type="text" class="form-control" id="addressLine1" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="addressPhone" class="form-label">연락처</label>
+                                        <input type="tel" class="form-control" id="addressPhone" required>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="defaultAddressCheck">
+                                        <label class="form-check-label" for="defaultAddressCheck">
+                                            기본 배송지로 설정
+                                        </label>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                                <button type="button" class="btn btn-primary">저장</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Order History Area -->
+    <script>
+        // 비밀번호 확인하는 JS
+        const newPasswordInput = document.getElementById('new-password');
+        const confirmPasswordInput = document.getElementById('confirm-password');
+        const pwConfirmElement = document.getElementById('pwConfirm');
+        const setPasswordBtn = document.getElementById('update-btn');
+
+        function pwCheck() {
+            if (newPasswordInput.value === confirmPasswordInput.value) {
+                pwConfirmElement.textContent = '비밀번호 일치';
+                pwConfirmElement.style.color = 'green';
+            } else {
+                pwConfirmElement.textContent = '비밀번호 불일치';
+                pwConfirmElement.style.color = 'red';
+            }
+
+            setPasswordBtn.disabled = (newPasswordInput.value !== confirmPasswordInput.value);
+        }
+
+        newPasswordInput.addEventListener('input', pwCheck);
+        confirmPasswordInput.addEventListener('input', pwCheck);
+    </script>
+
+</div>>
+</body>
+</html>

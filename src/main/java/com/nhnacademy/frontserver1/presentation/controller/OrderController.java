@@ -31,7 +31,7 @@ public class OrderController {
     public String checkout(Model model, Pageable pageable) {
         List<FindProductRequest> requests = new ArrayList<>();
         requests.add(new FindProductRequest(1L, 1, BigDecimal.valueOf(1000)));
-        requests.add(new FindProductRequest(2L, 3, BigDecimal.valueOf(5000)));
+        requests.add(new FindProductRequest(2L, 1, BigDecimal.valueOf(5000)));
 
         Integer totalAmount = getTotalAmount(requests);
         ReadShippingPolicyResponse shippingPolicy = orderService.findAllOrderPolicy(pageable, totalAmount);

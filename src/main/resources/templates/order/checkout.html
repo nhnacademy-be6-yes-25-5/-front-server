@@ -15,7 +15,6 @@
   <link rel="stylesheet" href="/css/tiny-slider.css">
   <link rel="stylesheet" href="/css/glightbox.min.css">
   <link rel="stylesheet" href="/css/main.css">
-
 </head>
 
 <body>
@@ -567,11 +566,13 @@
                 <p class="price" id="discountAmount">0원</p>
               </div>
               <div class="additional-info mt-30" th:if="${freeShippingAmount != null}">
-                <p th:if="${freeShippingAmount > 0}" th:text="'무료 배송까지 ' + ${freeShippingAmount} + '원'"></p>
+                <p th:if="${freeShippingAmount > 0}"
+                   th:text="'무료 배송까지 ' + ${freeShippingAmount} + '원'"></p>
                 <p th:if="${freeShippingAmount <= 0}" th:text="'무료 배송 혜택 적용중!'"></p>
                 <input type="hidden" id="freeShippingAmount" th:value="${freeShippingAmount}"/>
                 <div class="progress">
-                  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" id="progress-bar"
+                  <div class="progress-bar progress-bar-striped progress-bar-animated"
+                       role="progressbar" id="progress-bar"
                        th:aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
                        style="width: 0%">
                   </div>
@@ -579,7 +580,7 @@
               </div>
             </div>
 
-<!--            포장 금액 추가-->
+            <!--            포장 금액 추가-->
             <div class="total-payable">
               <div class="payable-price">
                 <p class="value">총 금액:</p>
@@ -873,7 +874,7 @@
     }
   });
 
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     const totalAmountElement = document.getElementById('totalAmount');
     const freeShippingAmountElement = document.getElementById('freeShippingAmount');
 
@@ -907,7 +908,7 @@
 
     const increment = (targetProgress - currentProgress) / (animationDuration / (1000 / frameRate));
 
-    const intervalId = setInterval(function() {
+    const intervalId = setInterval(function () {
       currentProgress += increment;
       if (currentProgress >= targetProgress) {
         currentProgress = targetProgress;

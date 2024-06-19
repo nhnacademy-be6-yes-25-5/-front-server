@@ -6,6 +6,7 @@ import com.nhnacademy.frontserver1.presentation.dto.request.order.FindProductReq
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
+import jakarta.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +31,8 @@ public class OrderController {
     @GetMapping("checkout")
     public String findAllCheckout(Model model, Pageable pageable) {
         List<FindProductRequest> requests = new ArrayList<>();
-        requests.add(new FindProductRequest(1L, 1, BigDecimal.valueOf(1000)));
-        requests.add(new FindProductRequest(2L, 1, BigDecimal.valueOf(5000)));
+        requests.add(new FindProductRequest(3L, 1, BigDecimal.valueOf(1000)));
+        requests.add(new FindProductRequest(4L, 1, BigDecimal.valueOf(5000)));
 
         Integer totalAmount = getTotalAmount(requests);
         ReadShippingPolicyResponse shippingPolicy = orderService.findAllOrderPolicy(pageable, totalAmount);
@@ -58,12 +59,15 @@ public class OrderController {
     }
 
     @PostMapping
-    public String create(@ModelAttribute CreateOrderRequest request) {
+    public String create(@ModelAttribute CreateOrderRequest request, HttpSession session) {
         log.info("주문 요청이 들어왔습니다. {}", request.toString());
         Long userId = 1L;
         CreateOrderResponse response = orderService.createPreOrder(request, userId);
 
-        return "redirect:/payments/" + response.orderId();
+        session.setAttribute("orderId", response.orderId());
+        session.setAttribute("totalAmount", response.totalAmount());
+
+        return "redirect:/payments";
     }
 
 }

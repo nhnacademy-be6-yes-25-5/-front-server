@@ -2,7 +2,7 @@ package com.nhnacademy.frontserver1.application.service.dto.request;
 
 import com.nhnacademy.frontserver1.domain.TakeoutType;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
 
@@ -21,7 +21,7 @@ public record CreatePreOrderRequest(String orderId,
                                     String addressDetail,
                                     String zipcode,
                                     String reference,
-                                    LocalDateTime deliveryDate,
+                                    LocalDate deliveryDate,
                                     String orderName,
                                     String orderEmail,
                                     String orderPhoneNumber,

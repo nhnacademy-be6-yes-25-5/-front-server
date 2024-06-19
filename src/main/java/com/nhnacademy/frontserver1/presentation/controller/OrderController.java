@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,6 +67,8 @@ public class OrderController {
 
         session.setAttribute("orderId", response.orderId());
         session.setAttribute("totalAmount", response.totalAmount());
+        session.setAttribute("bookIds", response.bookIds());
+        session.setAttribute("quantities", response.quantities());
 
         return ResponseEntity.ok(response);
     }

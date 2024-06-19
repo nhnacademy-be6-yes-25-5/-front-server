@@ -1,8 +1,12 @@
 package com.nhnacademy.frontserver1.presentation.controller;
 
+import static com.nhnacademy.frontserver1.common.utils.SessionUtil.getIntegerListFromSession;
+import static com.nhnacademy.frontserver1.common.utils.SessionUtil.getLongListFromSession;
+
 import com.nhnacademy.frontserver1.application.service.PaymentService;
 import com.nhnacademy.frontserver1.presentation.dto.request.payment.CreatePaymentRequest;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -22,18 +26,22 @@ public class PaymentController {
     public String confirm(@RequestBody CreatePaymentRequest request, HttpSession session) {
         String orderId = (String) session.getAttribute("orderId");
         Integer totalAmount = (Integer) session.getAttribute("totalAmount");
+        List<Long> bookIds = getLongListFromSession(session.getAttribute("bookIds"));
+        List<Integer> quantities = getIntegerListFromSession(session.getAttribute("quantities"));
 
-        if (!Objects.equals(request.orderId(), orderId) || !Objects.equals(request.amount(), totalAmount)) {
+        if (!Objects.equals(request.orderId(), orderId)
+            || !Objects.equals(request.amount(), totalAmount)) {
             return "redirect:/payments/fail";
         }
 
-        if (paymentService.createPayment(request).status() != 200) {
-            return "order/fail";
+        if (paymentService.createPayment(request, bookIds, quantities).status() != 200) {
+            return "redirect:/payments/fail";
         }
 
         session.removeAttribute("orderId");
         session.removeAttribute("totalAmount");
-        session.removeAttribute("customerKey");
+        session.removeAttribute("bookIds");
+        session.removeAttribute("quantities");
 
         return "order/success";
     }

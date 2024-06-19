@@ -863,8 +863,6 @@
     const quantities = Array.from(document.querySelectorAll('input[name="quantities"]')).map(input => input.value);
     const prices = Array.from(document.querySelectorAll('input[name="prices"]')).map(input => input.value);
 
-    console.log(shippingFee, takeoutPrice, couponDiscount);
-
     fetch('/orders', {
       method: 'POST',
       headers: {

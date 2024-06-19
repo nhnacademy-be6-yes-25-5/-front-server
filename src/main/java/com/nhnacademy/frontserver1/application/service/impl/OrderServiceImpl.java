@@ -7,7 +7,9 @@ import com.nhnacademy.frontserver1.infrastructure.adaptor.PolicyAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
 import java.util.Comparator;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,5 +43,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ReadShippingPolicyResponse findFreePolicy() {
         return policyAdaptor.findFreePolicy().body();
+    }
+
+    @Override
+    public List<ReadTakeoutResponse> findAllTakeout() {
+        return policyAdaptor.findAllTakeoutPolicy().body();
     }
 }

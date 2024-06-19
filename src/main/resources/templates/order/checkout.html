@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js" lang="zxx">
+<html class="no-js" lang="zxx" xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="utf-8"/>
@@ -475,11 +475,13 @@
                     <div class="single-form form-default">
                       <label>포장 타입</label>
                       <div class="form-input form">
-                        <select name="takeoutType" id="takeoutType" required>
-                          <option value="NONE">NONE</option>
-                          <option value="CARD_BOARD">CARD_BOARD</option>
-                          <option value="PAPER">PAPER</option>
-                          <option value="VINYL">VINYL</option>
+                        <select id="takeoutType" name="takeoutType" onchange="updateTotalPrice()" required>
+                          <option value="" data-price="0">포장 타입을 선택하세요</option>
+                          <option th:each="takeout : ${takeouts}" th:value="${takeout.takeoutType}"
+                                  th:data-price="${takeout.takeoutPrice}"
+                                  th:data-description="${takeout.takeoutDescription}"
+                                  th:text="${takeout.takeoutDescription + ' - ' + takeout.takeoutPrice + '원'}">
+                          </option>
                         </select>
                       </div>
                     </div>
@@ -565,6 +567,10 @@
                 <p class="value">할인:</p>
                 <p class="price" id="discountAmount">0원</p>
               </div>
+              <div class="total-price takeout">
+                <p class="value">포장비:</p>
+                <p class="price" id="takeoutPrice">0원</p>
+              </div>
               <div class="additional-info mt-30" th:if="${freeShippingAmount != null}">
                 <p th:if="${freeShippingAmount > 0}"
                    th:text="'무료 배송까지 ' + ${freeShippingAmount} + '원'"></p>
@@ -579,8 +585,6 @@
                 </div>
               </div>
             </div>
-
-            <!--            포장 금액 추가-->
             <div class="total-payable">
               <div class="payable-price">
                 <p class="value">총 금액:</p>
@@ -812,9 +816,15 @@
     }
   }
 
+  function generateUUID() {
+    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+  }
+
   function submitOrder() {
     const deliveryDateValue = document.getElementById('deliveryDate').value;
-    const orderId = `order-${Date.now()}`;
+    const orderId = `order-${generateUUID()}`;
     const totalPrice = document.getElementById('totalPriceValue').textContent;
 
     document.getElementById('hiddenOrderId').value = orderId;
@@ -860,7 +870,13 @@
     const totalAmount = parseInt(document.getElementById('totalAmount').innerText.replace('원', ''));
     const shippingFee = parseInt(document.getElementById('shippingFee').innerText.replace('원', ''));
     const discountAmount = parseInt(document.getElementById('couponDiscount').value, 10);
-    const totalPrice = totalAmount + shippingFee - discountAmount;
+    const takeoutSelect = document.getElementById('takeoutType');
+    const selectedOption = takeoutSelect.options[takeoutSelect.selectedIndex];
+    const takeoutPrice = parseInt(selectedOption.getAttribute('data-price'), 10);
+    document.getElementById('takeoutPrice').textContent = takeoutPrice + '원';
+
+    const totalPrice = totalAmount + shippingFee - discountAmount + takeoutPrice;
+
     document.getElementById('discountAmount').innerText = discountAmount + '원';
     document.getElementById('totalPriceValue').innerText = totalPrice + '원';
   }

@@ -8,6 +8,7 @@
   <meta name="description" content=""/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <link rel="stylesheet" href="/images/favicon.svg">
+  <script src="https://js.tosspayments.com/v1/payment"></script>
 
   <!-- ========================= CSS here ========================= -->
   <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -15,6 +16,7 @@
   <link rel="stylesheet" href="/css/tiny-slider.css">
   <link rel="stylesheet" href="/css/glightbox.min.css">
   <link rel="stylesheet" href="/css/main.css">
+
 </head>
 
 <body>
@@ -832,36 +834,97 @@
   }
 
   function submitOrder() {
-    const deliveryDateValue = document.getElementById('deliveryDate').value;
     const orderId = `order-${generateUUID()}`;
+    const deliveryDateValue = document.getElementById('deliveryDate').value;
     const totalPrice = document.getElementById('totalPriceValue').textContent;
 
-    document.getElementById('hiddenOrderId').value = orderId;
-    document.getElementById('hiddenDeliveryDate').value = deliveryDateValue + "T00:00:00";
-    document.getElementById('hiddenTakeoutPrice').value = document.getElementById('takeoutPrice').innerText.replace('원', '');
-    document.getElementById('hiddenShippingFee').value = document.getElementById('shippingFee').innerText.replace('원', '');
-    document.getElementById('hiddenDiscountPrice').value = document.getElementById('couponDiscount').value;
-    document.getElementById('hiddenAddressRaw').value = document.getElementById('addressRaw').value;
-    document.getElementById('hiddenReference').value = document.getElementById('reference').value;
-    document.getElementById('hiddenOrderName').value = document.getElementById('orderName').value;
-    document.getElementById('hiddenOrderEmail').value = document.getElementById('orderEmail').value;
-    document.getElementById('hiddenOrderPhoneNumber').value = document.getElementById(
-        'orderPhoneNumber').value;
-    document.getElementById('hiddenReceiveOrderName').value = document.getElementById(
-        'receiveName').value;
-    document.getElementById('hiddenReceiveOrderEmail').value = document.getElementById(
-        'receiveEmail').value;
-    document.getElementById('hiddenReceiveOrderPhoneNumber').value = document.getElementById(
-        'receivePhoneNumber').value;
-    document.getElementById('hiddenAddressDetail').value = document.getElementById(
-        'addressDetail').value;
-    document.getElementById('hiddenZipcode').value = document.getElementById('postcode').value;
-    document.getElementById('hiddenTakeoutType').value = document.getElementById(
-        'takeoutType').value;
-    document.getElementById('hiddenTotalPrice').value = totalPrice.replace('원', '').trim();
-    document.getElementById('hiddenPointsUsed').value = document.getElementById('points').value;
+    const getNumberValue = (id) => {
+      const value = document.getElementById(id).textContent.replace('원', '').trim();
+      return value ? value : "0";
+    };
 
-    document.getElementById('orderForm').submit();
+    const totalPriceValue = totalPrice.replace('원', '').trim();
+    const takeoutPrice = document.getElementById('takeoutPrice').innerText.replace('원', '');
+    const shippingFee = document.getElementById('shippingFee').innerText.replace('원', '');
+    const couponDiscount = getNumberValue('discountAmount');
+    const orderName = document.getElementById('orderName').value;
+    const orderEmail = document.getElementById('orderEmail').value;
+    const orderPhoneNumber = document.getElementById('orderPhoneNumber').value;
+    const receiveName = document.getElementById('receiveName').value;
+    const receiveEmail = document.getElementById('receiveEmail').value;
+    const receivePhoneNumber = document.getElementById('receivePhoneNumber').value;
+    const addressRaw = document.getElementById('addressRaw').value;
+    const reference = document.getElementById('reference').value;
+    const addressDetail = document.getElementById('addressDetail').value;
+    const postcode = document.getElementById('postcode').value;
+    const takeoutType = document.getElementById('takeoutType').value;
+    const points = document.getElementById('points').value || "0";
+    const productIds = Array.from(document.querySelectorAll('input[name="productIds"]')).map(input => input.value);
+    const quantities = Array.from(document.querySelectorAll('input[name="quantities"]')).map(input => input.value);
+    const prices = Array.from(document.querySelectorAll('input[name="prices"]')).map(input => input.value);
+
+    console.log(shippingFee, takeoutPrice, couponDiscount);
+
+    fetch('/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        orderId: orderId,
+        deliveryDate: deliveryDateValue,
+        orderTotalAmount: totalPriceValue,
+        takeoutPrice: takeoutPrice,
+        shippingFee: shippingFee,
+        discountPrice: couponDiscount,
+        orderName: orderName,
+        orderEmail: orderEmail,
+        orderPhoneNumber: orderPhoneNumber,
+        receiveName: receiveName,
+        receiveEmail: receiveEmail,
+        receivePhoneNumber: receivePhoneNumber,
+        addressRaw: addressRaw,
+        reference: reference,
+        addressDetail: addressDetail,
+        zipcode: postcode,
+        takeoutType: takeoutType,
+        points: points,
+        productIds: productIds,
+        quantities: quantities,
+        prices: prices
+      }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      const { orderId, totalAmount } = data;
+      startPaymentProcess(orderId, totalAmount);
+    })
+    .catch(error => {
+      console.error('주문 생성 및 결제 요청 중 오류 발생:', error);
+    });
+  }
+
+  function startPaymentProcess(orderId, totalAmount) {
+    const customerKey = generateUUID();
+
+    const clientKey = 'test_ck_5OWRapdA8dJYOKZkAR06Vo1zEqZK';
+    const tossPayments = TossPayments(clientKey);
+
+    tossPayments.requestPayment('카드', {
+      amount: totalAmount,
+      orderId: orderId,
+      orderName: orderId,
+      customerName: customerKey,
+      successUrl: window.location.origin + "/payments/success",
+      failUrl: window.location.origin + "/payments/fail",
+    })
+    .catch(function(error) {
+      if (error.code === 'USER_CANCEL') {
+        console.error('사용자가 결제를 취소하였습니다.');
+      } else if (error.code === 'INVALID_CARD_COMPANY') {
+        console.error('유효하지 않은 카드 회사입니다.');
+      }
+    });
   }
 
   function openCouponPopup() {
@@ -886,7 +949,7 @@
     const selectedOption = takeoutSelect.options[takeoutSelect.selectedIndex];
     const takeoutPrice = parseInt(selectedOption.getAttribute('data-price'), 10) || 0;
     let pointsDiscount = parseInt(document.getElementById('points').value, 10) || 0;
-    
+
     const totalPriceBeforePoints = totalAmount - discountAmount + shippingFee + takeoutPrice;
 
     if (pointsDiscount > totalPriceBeforePoints) {

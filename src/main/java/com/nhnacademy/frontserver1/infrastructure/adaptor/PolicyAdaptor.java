@@ -14,11 +14,11 @@ public interface PolicyAdaptor {
 
     // todo. 추후 페이징이 아닌 리스트로 가져오게 바꿀 예정입니다.
     @GetMapping("/shipping")
-    ApiResponse<Page<ReadShippingPolicyResponse>> findAllDeliveryPolicy(Pageable pageable);
+    Page<ReadShippingPolicyResponse> findAllDeliveryPolicy(Pageable pageable);
 
     @GetMapping("/shipping/free")
-    ApiResponse<ReadShippingPolicyResponse> findFreePolicy();
+    ReadShippingPolicyResponse findFreePolicy();
 
     @GetMapping("/takeout")
-    ApiResponse<List<ReadTakeoutResponse>> findAllTakeoutPolicy();
+    List<ReadTakeoutResponse> findAllTakeoutPolicy();
 }

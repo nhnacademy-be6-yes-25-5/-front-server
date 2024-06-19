@@ -18,14 +18,14 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-    @GetMapping("{orderId}")
+    @GetMapping("/{orderId}")
     public String payment(@PathVariable String orderId, Model model){
         model.addAttribute("orderId", orderId);
 
         return "order/toss";
     }
 
-    @PostMapping("confirm")
+    @PostMapping("/confirm")
     public String confirm(@RequestBody CreatePaymentRequest request) {
         if (paymentService.createPayment(request).status() == 200) {
             return "order/success";
@@ -34,12 +34,12 @@ public class PaymentController {
         return "order/fail";
     }
 
-    @GetMapping("success")
+    @GetMapping("/success")
     public String success(){
         return "order/success";
     }
 
-    @GetMapping("fail")
+    @GetMapping("/fail")
     public String fail(){
         return "order/fail";
     }

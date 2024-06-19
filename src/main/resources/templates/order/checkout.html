@@ -502,7 +502,11 @@
                       <input type="hidden" name="quantities" th:value="${request.quantity}">
                       <input type="hidden" name="prices" th:value="${request.price}">
                     </div>
+                    <input type="hidden" name="shippingFee" id="hiddenShippingFee">
+                    <input type="hidden" name="points" id="hiddenPointsUsed" value="0">
+                    <input type="hidden" name="takeoutPrice" id="hiddenTakeoutPrice">
                     <input type="hidden" name="orderId" id="hiddenOrderId">
+                    <input type="hidden" name="discountPrice" id="hiddenDiscountPrice">
                     <input type="hidden" name="addressRaw" id="hiddenAddressRaw">
                     <input type="hidden" name="addressDetail" id="hiddenAddressDetail">
                     <input type="hidden" name="reference" id="hiddenReference">
@@ -570,6 +574,11 @@
               <div class="total-price takeout">
                 <p class="value">포장비:</p>
                 <p class="price" id="takeoutPrice">0원</p>
+              </div>
+              <div class="total-price points">
+                <p class="value">포인트 사용:</p>
+                <input type="number" id="points" value="0" min="0" oninput="updateTotalPrice()">
+                <p class="price" id="pointsDiscount">0원</p>
               </div>
               <div class="additional-info mt-30" th:if="${freeShippingAmount != null}">
                 <p th:if="${freeShippingAmount > 0}"
@@ -829,6 +838,9 @@
 
     document.getElementById('hiddenOrderId').value = orderId;
     document.getElementById('hiddenDeliveryDate').value = deliveryDateValue + "T00:00:00";
+    document.getElementById('hiddenTakeoutPrice').value = document.getElementById('takeoutPrice').innerText.replace('원', '');
+    document.getElementById('hiddenShippingFee').value = document.getElementById('shippingFee').innerText.replace('원', '');
+    document.getElementById('hiddenDiscountPrice').value = document.getElementById('couponDiscount').value;
     document.getElementById('hiddenAddressRaw').value = document.getElementById('addressRaw').value;
     document.getElementById('hiddenReference').value = document.getElementById('reference').value;
     document.getElementById('hiddenOrderName').value = document.getElementById('orderName').value;
@@ -846,8 +858,8 @@
     document.getElementById('hiddenZipcode').value = document.getElementById('postcode').value;
     document.getElementById('hiddenTakeoutType').value = document.getElementById(
         'takeoutType').value;
-
     document.getElementById('hiddenTotalPrice').value = totalPrice.replace('원', '').trim();
+    document.getElementById('hiddenPointsUsed').value = document.getElementById('points').value;
 
     document.getElementById('orderForm').submit();
   }
@@ -867,19 +879,31 @@
   }
 
   function updateTotalPrice() {
-    const totalAmount = parseInt(document.getElementById('totalAmount').innerText.replace('원', ''));
-    const shippingFee = parseInt(document.getElementById('shippingFee').innerText.replace('원', ''));
-    const discountAmount = parseInt(document.getElementById('couponDiscount').value, 10);
+    const totalAmount = parseInt(document.getElementById('totalAmount').innerText.replace('원', '')) || 0;
+    const shippingFee = parseInt(document.getElementById('shippingFee').innerText.replace('원', '')) || 0;
+    const discountAmount = parseInt(document.getElementById('couponDiscount').value, 10) || 0;
     const takeoutSelect = document.getElementById('takeoutType');
     const selectedOption = takeoutSelect.options[takeoutSelect.selectedIndex];
-    const takeoutPrice = parseInt(selectedOption.getAttribute('data-price'), 10);
-    document.getElementById('takeoutPrice').textContent = takeoutPrice + '원';
+    const takeoutPrice = parseInt(selectedOption.getAttribute('data-price'), 10) || 0;
+    let pointsDiscount = parseInt(document.getElementById('points').value, 10) || 0;
+    
+    const totalPriceBeforePoints = totalAmount - discountAmount + shippingFee + takeoutPrice;
 
-    const totalPrice = totalAmount + shippingFee - discountAmount + takeoutPrice;
+    if (pointsDiscount > totalPriceBeforePoints) {
+      pointsDiscount = totalPriceBeforePoints;
+      document.getElementById('points').value = totalPriceBeforePoints;
+    }
+
+    document.getElementById('takeoutPrice').textContent = takeoutPrice + '원';
+    document.getElementById('pointsDiscount').textContent = pointsDiscount + '원';
+
+    const totalPrice = totalPriceBeforePoints - pointsDiscount;
 
     document.getElementById('discountAmount').innerText = discountAmount + '원';
     document.getElementById('totalPriceValue').innerText = totalPrice + '원';
   }
+
+  document.getElementById('points').addEventListener('input', updateTotalPrice);
 
   document.addEventListener('DOMContentLoaded', function () {
     const firstShippingOption = document.querySelector('input[name="shipping"]:checked');
@@ -904,8 +928,6 @@
     const freeShippingAmount = parseInt(freeShippingAmountElement.value, 10);
     const progressBar = document.getElementById("progress-bar");
 
-    console.log(totalAmount, freeShippingAmount);
-
     let progress = 0;
     if (freeShippingAmount <= 0) {
       progress = 100;
@@ -913,7 +935,6 @@
       progress = Math.min((totalAmount / (totalAmount + freeShippingAmount)) * 100, 100);
     }
 
-    console.log('Calculated Progress:', progress);
     animateProgressBar(progressBar, progress);
   });
 
@@ -934,7 +955,6 @@
       progressBar.style.width = currentProgress + "%";
       progressBar.setAttribute('aria-valuenow', currentProgress.toFixed(0));
       progressBar.innerText = currentProgress.toFixed(0) + "%";
-      console.log('Current Progress:', currentProgress);
     }, 1000 / frameRate);
   }
 </script>

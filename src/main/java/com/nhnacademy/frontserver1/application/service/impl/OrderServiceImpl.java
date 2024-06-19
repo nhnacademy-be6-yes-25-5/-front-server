@@ -32,7 +32,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ReadShippingPolicyResponse findAllOrderPolicy(Pageable pageable,
         Integer totalAmount) {
-        Page<ReadShippingPolicyResponse> policyResponses = policyAdaptor.findAllDeliveryPolicy(pageable).body();
+        Page<ReadShippingPolicyResponse> policyResponses = policyAdaptor.findAllDeliveryPolicy(pageable);
 
         return policyResponses.getContent().stream()
             .filter(policy -> totalAmount >= policy.shippingPolicyMinAmount())
@@ -42,11 +42,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public ReadShippingPolicyResponse findFreePolicy() {
-        return policyAdaptor.findFreePolicy().body();
+        return policyAdaptor.findFreePolicy();
     }
 
     @Override
     public List<ReadTakeoutResponse> findAllTakeout() {
-        return policyAdaptor.findAllTakeoutPolicy().body();
+        return policyAdaptor.findAllTakeoutPolicy();
     }
 }

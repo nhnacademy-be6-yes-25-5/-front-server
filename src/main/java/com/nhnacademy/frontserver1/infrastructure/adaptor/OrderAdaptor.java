@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "orderAdaptor", url = "http://localhost:8081/orders")
+@FeignClient(name = "orderAdaptor", url = "http://localhost:8085/orders")
 public interface OrderAdaptor {
 
     @PostMapping

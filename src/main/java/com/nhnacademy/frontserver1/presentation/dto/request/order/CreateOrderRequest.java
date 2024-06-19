@@ -21,7 +21,10 @@ public record CreateOrderRequest(String orderId,
                                  String receiveEmail,
                                  String receivePhoneNumber,
                                  Long couponId,
+                                 BigDecimal shippingFee,
                                  BigDecimal points,
+                                 BigDecimal takeoutPrice,
+                                 BigDecimal discountPrice,
                                  List<Long> productIds,
                                  List<Integer> quantities,
                                  List<BigDecimal> prices) {
@@ -46,6 +49,8 @@ public record CreateOrderRequest(String orderId,
             .receiveName(receiveName)
             .receiveEmail(receiveEmail)
             .receivePhoneNumber(receivePhoneNumber)
+            .shippingFee(shippingFee)
+            .takeoutPrice(takeoutPrice)
             .couponId(couponId)
             .points(points)
             .build();

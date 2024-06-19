@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coupon List</title>
+  <link rel="stylesheet" href="/path/to/your/css/file.css">
+  <script>
+    function selectCoupon(couponCode) {
+      window.opener.document.getElementById('selectedCoupon').value = couponCode;
+      window.selectedCoupon = couponCode;
+      window.close();
+    }
+  </script>
+</head>
+<body>
+<h1>Coupon List</h1>
+<table>
+  <thead>
+  <tr>
+    <th>Coupon Name</th>
+    <th>Coupon Code</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <th:block th:each="coupon : ${coupons}">
+    <tr>
+      <td th:text="${coupon.getCouponName()}"></td>
+      <td th:text="${coupon.getCouponCode()}"></td>
+      <td><button>Select</button></td>
+    </tr>
+  </th:block>
+  </tbody>
+</table>
+</body>
+</html>

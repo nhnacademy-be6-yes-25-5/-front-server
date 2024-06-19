@@ -10,7 +10,6 @@
 <p id="amount"></p>
 
 <script>
-  // todo. 쿼리 파라미터 값이 결제 요청할 때 보낸 데이터와 동일한지 확인 추가
   const urlParams = new URLSearchParams(window.location.search);
   const paymentKey = urlParams.get("paymentKey");
   const orderId = urlParams.get("orderId");

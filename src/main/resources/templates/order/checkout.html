@@ -926,97 +926,100 @@
   }
 
   function openCouponPopup() {
-    const popup = window.open('http://localhost:8040/orders/couponPopup.html', '쿠폰 목록', 'width=600,height=400');
+    const userId = 4;
+    const popup = window.open(`/orders/couponPopup.html?userId=${userId}`, '쿠폰 목록', 'width=600,height=400');
     popup.onunload = function () {
       if (popup.selectedCoupon) {
         document.getElementById('selectedCoupon').value = popup.selectedCoupon;
+        document.getElementById('couponDiscount').value = popup.selectedCouponDiscount;
+        updateTotalPrice();
       }
-    };
-  }
-
-  function updateShippingFee(fee) {
-    document.getElementById('shippingFee').innerText = fee + '원';
-    updateTotalPrice();
-  }
-
-  function updateTotalPrice() {
-    const totalAmount = parseInt(document.getElementById('totalAmount').innerText.replace('원', '')) || 0;
-    const shippingFee = parseInt(document.getElementById('shippingFee').innerText.replace('원', '')) || 0;
-    const discountAmount = parseInt(document.getElementById('couponDiscount').value, 10) || 0;
-    const takeoutSelect = document.getElementById('takeoutType');
-    const selectedOption = takeoutSelect.options[takeoutSelect.selectedIndex];
-    const takeoutPrice = parseInt(selectedOption.getAttribute('data-price'), 10) || 0;
-    let pointsDiscount = parseInt(document.getElementById('points').value, 10) || 0;
-
-    const totalPriceBeforePoints = totalAmount - discountAmount + shippingFee + takeoutPrice;
-
-    if (pointsDiscount > totalPriceBeforePoints) {
-      pointsDiscount = totalPriceBeforePoints;
-      document.getElementById('points').value = totalPriceBeforePoints;
     }
 
-    document.getElementById('takeoutPrice').textContent = takeoutPrice + '원';
-    document.getElementById('pointsDiscount').textContent = pointsDiscount + '원';
-
-    const totalPrice = totalPriceBeforePoints - pointsDiscount;
-
-    document.getElementById('discountAmount').innerText = discountAmount + '원';
-    document.getElementById('totalPriceValue').innerText = totalPrice + '원';
-  }
-
-  document.getElementById('points').addEventListener('input', updateTotalPrice);
-
-  document.addEventListener('DOMContentLoaded', function () {
-    const firstShippingOption = document.querySelector('input[name="shipping"]:checked');
-    if (firstShippingOption) {
-      updateShippingFee(firstShippingOption.value);
-    } else {
+    function updateShippingFee(fee) {
+      document.getElementById('shippingFee').innerText = fee + '원';
       updateTotalPrice();
     }
-  });
 
-  document.addEventListener("DOMContentLoaded", function () {
-    const totalAmountElement = document.getElementById('totalAmount');
-    const freeShippingAmountElement = document.getElementById('freeShippingAmount');
+    function updateTotalPrice() {
+      const totalAmount = parseInt(document.getElementById('totalAmount').innerText.replace('원', '')) || 0;
+      const shippingFee = parseInt(document.getElementById('shippingFee').innerText.replace('원', '')) || 0;
+      const discountAmount = parseInt(document.getElementById('couponDiscount').value, 10) || 0;
+      const takeoutSelect = document.getElementById('takeoutType');
+      const selectedOption = takeoutSelect.options[takeoutSelect.selectedIndex];
+      const takeoutPrice = parseInt(selectedOption.getAttribute('data-price'), 10) || 0;
+      let pointsDiscount = parseInt(document.getElementById('points').value, 10) || 0;
 
-    if (!totalAmountElement || !freeShippingAmountElement) {
-      console.error('필요한 요소가 존재하지 않습니다.');
-      return;
-    }
+      const totalPriceBeforePoints = totalAmount - discountAmount + shippingFee + takeoutPrice;
 
-    const totalAmountText = totalAmountElement.innerText.replace('원', '');
-    const totalAmount = parseInt(totalAmountText, 10);
-    const freeShippingAmount = parseInt(freeShippingAmountElement.value, 10);
-    const progressBar = document.getElementById("progress-bar");
-
-    let progress = 0;
-    if (freeShippingAmount <= 0) {
-      progress = 100;
-    } else {
-      progress = Math.min((totalAmount / (totalAmount + freeShippingAmount)) * 100, 100);
-    }
-
-    animateProgressBar(progressBar, progress);
-  });
-
-  function animateProgressBar(progressBar, targetProgress) {
-    let currentProgress = 0;
-    const animationDuration = 1000;
-    const frameRate = 30;
-
-    const increment = (targetProgress - currentProgress) / (animationDuration / (1000 / frameRate));
-
-    const intervalId = setInterval(function () {
-      currentProgress += increment;
-      if (currentProgress >= targetProgress) {
-        currentProgress = targetProgress;
-        clearInterval(intervalId);
+      if (pointsDiscount > totalPriceBeforePoints) {
+        pointsDiscount = totalPriceBeforePoints;
+        document.getElementById('points').value = totalPriceBeforePoints;
       }
 
-      progressBar.style.width = currentProgress + "%";
-      progressBar.setAttribute('aria-valuenow', currentProgress.toFixed(0));
-      progressBar.innerText = currentProgress.toFixed(0) + "%";
-    }, 1000 / frameRate);
+      document.getElementById('takeoutPrice').textContent = takeoutPrice + '원';
+      document.getElementById('pointsDiscount').textContent = pointsDiscount + '원';
+
+      const totalPrice = totalPriceBeforePoints - pointsDiscount;
+
+      document.getElementById('discountAmount').innerText = discountAmount + '원';
+      document.getElementById('totalPriceValue').innerText = totalPrice + '원';
+    }
+
+    document.getElementById('points').addEventListener('input', updateTotalPrice);
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const firstShippingOption = document.querySelector('input[name="shipping"]:checked');
+      if (firstShippingOption) {
+        updateShippingFee(firstShippingOption.value);
+      } else {
+        updateTotalPrice();
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const totalAmountElement = document.getElementById('totalAmount');
+      const freeShippingAmountElement = document.getElementById('freeShippingAmount');
+
+      if (!totalAmountElement || !freeShippingAmountElement) {
+        console.error('필요한 요소가 존재하지 않습니다.');
+        return;
+      }
+
+      const totalAmountText = totalAmountElement.innerText.replace('원', '');
+      const totalAmount = parseInt(totalAmountText, 10);
+      const freeShippingAmount = parseInt(freeShippingAmountElement.value, 10);
+      const progressBar = document.getElementById("progress-bar");
+
+      let progress = 0;
+      if (freeShippingAmount <= 0) {
+        progress = 100;
+      } else {
+        progress = Math.min((totalAmount / (totalAmount + freeShippingAmount)) * 100, 100);
+      }
+
+      animateProgressBar(progressBar, progress);
+    });
+
+    function animateProgressBar(progressBar, targetProgress) {
+      let currentProgress = 0;
+      const animationDuration = 1000;
+      const frameRate = 30;
+
+      const increment = (targetProgress - currentProgress) / (animationDuration / (1000 / frameRate));
+
+      const intervalId = setInterval(function () {
+        currentProgress += increment;
+        if (currentProgress >= targetProgress) {
+          currentProgress = targetProgress;
+          clearInterval(intervalId);
+        }
+
+        progressBar.style.width = currentProgress + "%";
+        progressBar.setAttribute('aria-valuenow', currentProgress.toFixed(0));
+        progressBar.innerText = currentProgress.toFixed(0) + "%";
+      }, 1000 / frameRate);
+    }
   }
 </script>
 

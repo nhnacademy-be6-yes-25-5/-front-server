@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface CouponService {
     List<CouponUserListResponseDTO> findAllCoupons();
-//    CouponResponseDTO findCouponById(Long id);
+    //List<CouponUserListResponseDTO> findUserCouponsByUserId(Long userId);
+    List<CouponUserListResponseDTO> findUserCoupons(Long userId);
 }

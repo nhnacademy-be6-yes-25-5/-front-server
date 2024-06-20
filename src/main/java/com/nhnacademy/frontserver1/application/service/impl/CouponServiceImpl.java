@@ -1,6 +1,7 @@
 package com.nhnacademy.frontserver1.application.service.impl;
 
 import com.nhnacademy.frontserver1.application.service.CouponService;
+import com.nhnacademy.frontserver1.common.exception.FeignClientException;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.CouponAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponUserListResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -37,4 +38,18 @@ public class CouponServiceImpl implements CouponService {
             throw e;
         }
     }
+
+    @Override
+    public List<CouponUserListResponseDTO> findUserCoupons(Long userId) {
+        try {
+            return couponAdaptor.findUserCoupons(userId);
+        } catch (FeignClientException e) {
+            logger.error("Error occurred while fetching user coupons", e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Unexpected error occurred while fetching user coupons", e);
+            throw e;
+        }
+    }
+
 }

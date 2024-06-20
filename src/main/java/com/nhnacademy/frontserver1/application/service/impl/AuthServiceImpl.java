@@ -17,20 +17,17 @@ public class AuthServiceImpl implements AuthService {
     private final TokenService tokenService;
 
     @Override
-    public ResponseEntity<Void> loginUser(LoginUserRequest loginUserRequest) {
+    public String loginUser(LoginUserRequest loginUserRequest) {
         ResponseEntity<Void> response = authAdaptor.findLoginUserByEmail(loginUserRequest);
 
-        try {
-            String authorizationHeader = response.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-            if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
-                String token = authorizationHeader.substring("Bearer ".length());
-                tokenService.storeToken(token);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        String authorizationHeader = response.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+        if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
+            String token = authorizationHeader.substring("Bearer ".length());
+
+            return tokenService.storeToken(token);
         }
 
-        return response;
+        return authorizationHeader;
     }
 
 }

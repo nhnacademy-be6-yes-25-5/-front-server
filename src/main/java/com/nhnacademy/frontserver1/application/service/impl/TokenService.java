@@ -16,10 +16,11 @@ public class TokenService {
     private final String TOKEN_HASH_NAME = "Token:";
     private final long TOKEN_EXPIRATION_TIME = 1800; // 30 minutes in seconds
 
-    public void storeToken(String token) {
+    public String storeToken(String token) {
         String key = generateUuidKey();
         redisTemplate.opsForHash().put(TOKEN_HASH_NAME, key, token);
         redisTemplate.expire(TOKEN_HASH_NAME, TOKEN_EXPIRATION_TIME, TimeUnit.SECONDS);
+        return key;
     }
 
     public String getToken(String key) {

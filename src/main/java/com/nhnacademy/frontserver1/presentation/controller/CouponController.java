@@ -18,10 +18,15 @@ public class CouponController {
 
     private final CouponService couponService;
 
-    @GetMapping("/orders/couponPopup.html")
+    @GetMapping("/orders/couponPopup")
     public String getCouponPopup(@RequestParam("userId") Long userId, Model model) {
         List<CouponUserListResponseDTO> coupons = couponService.findUserCoupons(userId);
         model.addAttribute("coupons", coupons);
         return "coupon/popup";
+    }
+
+    @GetMapping("/admin/policy/admin-coupon-policy")
+    public String getAdminCouponPolicy() {
+        return "admin/policy/admin-policy-coupon";
     }
 }

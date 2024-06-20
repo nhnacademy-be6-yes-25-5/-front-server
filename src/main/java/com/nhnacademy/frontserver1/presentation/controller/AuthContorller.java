@@ -19,15 +19,14 @@ public class AuthContorller {
     private final AuthService authService;
 
     @GetMapping("/login")
-    public String admin() {
+    public String loginForm() {
         return "login";
     }
 
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password) {
 
-        log.info(authService.findLoginUserByEmail(LoginUserRequest.builder().email(username).password(password).build()).getHeaders() + "으아악");
-
+        authService.findLoginUserByEmail(LoginUserRequest.builder().email(username).password(password).build());
 
         return "index";
     }

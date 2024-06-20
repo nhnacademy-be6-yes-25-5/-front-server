@@ -20,9 +20,9 @@ public class CouponServiceImpl implements CouponService {
     private static final Logger logger = LoggerFactory.getLogger(CouponServiceImpl.class);
 
     @Override
-    public List<CouponUserListResponseDTO> findAllCoupons() {
+    public List<CouponUserListResponseDTO> findAllCoupons(Long userId) {
         try {
-            List<CouponUserListResponseDTO> coupons = couponAdaptor.findAllCoupons();
+            List<CouponUserListResponseDTO> coupons = couponAdaptor.findAllCoupons(userId);
             if (coupons == null) {
                 logger.warn("Received null response for coupons");
                 return Collections.emptyList();  // 빈 리스트 반환

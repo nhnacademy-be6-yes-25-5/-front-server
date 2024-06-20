@@ -17,7 +17,8 @@ public class CouponController {
 
     @GetMapping("/orders/couponPopup.html")
     public String getCouponPopup(Model model) {
-        List<CouponUserListResponseDTO> coupons = couponService.findAllCoupons();
+        Long userId = 1L;
+        List<CouponUserListResponseDTO> coupons = couponService.findAllCoupons(userId);
         model.addAttribute("coupons", coupons);
         return "coupon/popup";
         //todo: coupon policy : coupon 테이블과 매핑해서 하나의 객체로!!

@@ -32,7 +32,7 @@ public class OrderController {
     @GetMapping("checkout")
     public String findAllCheckout(Model model, Pageable pageable) {
         List<FindProductRequest> requests = new ArrayList<>();
-        requests.add(new FindProductRequest(3L, 1, BigDecimal.valueOf(1000)));
+        requests.add(new FindProductRequest(3L, 30, BigDecimal.valueOf(1000)));
         requests.add(new FindProductRequest(4L, 1, BigDecimal.valueOf(5000)));
 
         Integer totalAmount = getTotalAmount(requests);

@@ -10,5 +10,5 @@ import java.util.List;
 public interface CouponAdaptor {
 
     @GetMapping("/coupons")
-    List<CouponUserListResponseDTO> findAllCoupons();
+    List<CouponUserListResponseDTO> findAllCoupons(Long userId);
 }

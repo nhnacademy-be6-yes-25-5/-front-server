@@ -6,6 +6,6 @@ import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponUserLi
 import java.util.List;
 
 public interface CouponService {
-    List<CouponUserListResponseDTO> findAllCoupons();
+    List<CouponUserListResponseDTO> findAllCoupons(Long userId);
 //    CouponResponseDTO findCouponById(Long id);
 }

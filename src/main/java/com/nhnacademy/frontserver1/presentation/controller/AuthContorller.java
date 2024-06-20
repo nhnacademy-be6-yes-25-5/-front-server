@@ -26,7 +26,8 @@ public class AuthContorller {
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password) {
 
-        authService.findLoginUserByEmail(LoginUserRequest.builder().email(username).password(password).build());
+        log.info(authService.findLoginUserByEmail(LoginUserRequest.builder().email(username).password(password).build()).toString());
+
 
         return "index";
     }

@@ -1,136 +1,122 @@
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/admin-layout :: admin-layout(~{::content})}">
+<head>
+    <title>Admin Policy Coupon</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
 <body>
 <div th:fragment="content">
-    <h1 class="mt-4">Product</h1>
+    <h1 class="mt-4">Coupon Policies</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Product</li>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between mb-3">
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
-                                Add Product
-                            </button>
-                        </div>
-
-                        <table class="table table-striped table-hover">
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Price</th>
-                                <th>Description</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Product A</td>
-                                <td>$49.99</td>
-                                <td>This is a sample product description.</td>
-                                <td>
-                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProductModal" data-id="1">
-                                        Edit
-                                    </button>
-                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteProductModal" data-id="1">
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Product B</td>
-                                <td>$29.99</td>
-                                <td>This is another sample product description.</td>
-                                <td>
-                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProductModal" data-id="2">
-                                        Edit
-                                    </button>
-                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteProductModal" data-id="2">
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Product C</td>
-                                <td>$19.99</td>
-                                <td>This is a third sample product description.</td>
-                                <td>
-                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProductModal" data-id="3">
-                                        Edit
-                                    </button>
-                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteProductModal" data-id="3">
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+        <li class="breadcrumb-item active">Coupon Policies</li>
+    </ol>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCouponModal">
+                            쿠폰 정책 등록
+                        </button>
                     </div>
+
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>이름</th>
+                            <th>할인 값</th>
+                            <th>비율</th>
+                            <th>최소 주문 금액</th>
+                            <th>최대 금액</th>
+                            <th>할인 유형</th>
+                            <th>작업</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="coupon : ${coupons}">
+                            <td th:text="${coupon.couponPolicyId}"></td>
+                            <td th:text="${coupon.couponPolicyName}"></td>
+                            <td th:text="${coupon.couponPolicyDiscountValue}"></td>
+                            <td th:text="${coupon.couponPolicyRate}"></td>
+                            <td th:text="${coupon.couponPolicyMinOrderAmount}"></td>
+                            <td th:text="${coupon.couponPolicyMaxAmount}"></td>
+                            <td th:text="${coupon.couponPolicyDiscountType ? '비율' : '고정 금액'}"></td>
+                            <td>
+                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editCouponModal" th:data-id="${coupon.couponPolicyId}">
+                                    수정
+                                </button>
+                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteCouponModal" th:data-id="${coupon.couponPolicyId}">
+                                    삭제
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Pagination -->
+                    <nav>
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                <a class="page-link" th:href="@{/admin/policy/admin-coupon-policy(page=${currentPage - 1}, size=${pageSize})}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${pageNum == currentPage} ? 'active'">
+                                <a class="page-link" th:href="@{/admin/policy/admin-coupon-policy(page=${pageNum}, size=${pageSize})}" th:text="${pageNum + 1}">1</a>
+                            </li>
+                            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                <a class="page-link" th:href="@{/admin/policy/admin-coupon-policy(page=${currentPage + 1}, size=${pageSize})}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
-    </ol>
-    <!-- Add Product Modal -->
-    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    </div>
+
+
+    <!-- Add Coupon Modal -->
+    <div class="modal fade" id="addCouponModal" tabindex="-1" aria-labelledby="addCouponModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
+                    <h5 class="modal-title" id="addCouponModalLabel">Add Coupon Policy</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form th:object="${newProduct}" th:action="@{/admin/products}" method="post" enctype="multipart/form-data">
+                    <form id="addCouponForm" method="post" th:action="@{/admin-policy/coupon}">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Name</label>
-                                    <input type="text" class="form-control" required>
+                                    <label for="couponPolicyName" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="couponPolicyName" name="couponPolicyName" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="price" class="form-label">Price</label>
-                                    <input type="number" class="form-control" required>
+                                    <label for="couponPolicyDiscountValue" class="form-label">Discount Value</label>
+                                    <input type="number" class="form-control" id="couponPolicyDiscountValue" name="couponPolicyDiscountValue" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="description" class="form-label">Description</label>
-                                    <textarea class="form-control"  rows="3" required></textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Discount Type</label>
-                                    <div>
-                                        <label>
-                                            <input type="radio" name="discount-type" value="percent" checked>
-                                            Discount Percentage
-                                        </label>
-                                        <input type="number" id="discount-percent" placeholder="Enter discount percentage" class="form-control d-none">
-                                    </div>
-                                    <div>
-                                        <label>
-                                            <input type="radio" name="discount-type" value="amount">
-                                            Discount Amount
-                                        </label>
-                                        <input type="number" id="discount-amount" placeholder="Enter discount amount" class="form-control d-none">
-                                    </div>
+                                    <label for="couponPolicyRate" class="form-label">Rate</label>
+                                    <input type="number" class="form-control" id="couponPolicyRate" name="couponPolicyRate" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="image" class="form-label">Image</label>
-                                    <input type="file" class="form-control" name="image" required>
+                                    <label for="couponPolicyMinOrderAmount" class="form-label">Min Order Amount</label>
+                                    <input type="number" class="form-control" id="couponPolicyMinOrderAmount" name="couponPolicyMinOrderAmount" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="category" class="form-label">Category</label>
-                                    <select class="form-select"  required>
-                                        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
-                                    </select>
+                                    <label for="couponPolicyMaxAmount" class="form-label">Max Amount</label>
+                                    <input type="number" class="form-control" id="couponPolicyMaxAmount" name="couponPolicyMaxAmount" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="tags" class="form-label">Tags</label>
-                                    <select class="form-select"  multiple required>
-                                        <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}"></option>
+                                    <label for="couponPolicyDiscountType" class="form-label">Discount Type</label>
+                                    <select class="form-select" id="couponPolicyDiscountType" name="couponPolicyDiscountType" required>
+                                        <option value="true">Percentage</option>
+                                        <option value="false">Fixed Amount</option>
                                     </select>
                                 </div>
                             </div>
@@ -145,46 +131,45 @@
         </div>
     </div>
 
-    <!-- Edit Product Modal -->
-    <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+    <!-- Edit Coupon Modal -->
+    <div class="modal fade" id="editCouponModal" tabindex="-1" aria-labelledby="editCouponModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+                    <h5 class="modal-title" id="editCouponModalLabel">Edit Coupon Policy</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form th:object="${product}"  method="post" enctype="multipart/form-data">
+                    <form id="editCouponForm">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="name"  required>
+                                    <label for="couponPolicyNameEdit" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="couponPolicyNameEdit" name="couponPolicyName" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="price" class="form-label">Price</label>
-                                    <input type="number" class="form-control" id="price"  required>
+                                    <label for="couponPolicyDiscountValueEdit" class="form-label">Discount Value</label>
+                                    <input type="number" class="form-control" id="couponPolicyDiscountValueEdit" name="couponPolicyDiscountValue" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="description" class="form-label">Description</label>
-                                    <textarea class="form-control" id="description"  rows="3" required></textarea>
+                                    <label for="couponPolicyRateEdit" class="form-label">Rate</label>
+                                    <input type="number" class="form-control" id="couponPolicyRateEdit" name="couponPolicyRate" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="image" class="form-label">Image</label>
-                                    <input type="file" class="form-control" id="image" name="image">
+                                    <label for="couponPolicyMinOrderAmountEdit" class="form-label">Min Order Amount</label>
+                                    <input type="number" class="form-control" id="couponPolicyMinOrderAmountEdit" name="couponPolicyMinOrderAmount" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="category" class="form-label">Category</label>
-                                    <select class="form-select" id="category" required>
-                                        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
-                                    </select>
+                                    <label for="couponPolicyMaxAmountEdit" class="form-label">Max Amount</label>
+                                    <input type="number" class="form-control" id="couponPolicyMaxAmountEdit" name="couponPolicyMaxAmount" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="tags" class="form-label">Tags</label>
-                                    <select class="form-select" id="tags"  multiple required>
-                                        <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}"></option>
+                                    <label for="couponPolicyDiscountTypeEdit" class="form-label">Discount Type</label>
+                                    <select class="form-select" id="couponPolicyDiscountTypeEdit" name="couponPolicyDiscountType" required>
+                                        <option value="true">Percentage</option>
+                                        <option value="false">Fixed Amount</option>
                                     </select>
                                 </div>
                             </div>
@@ -199,24 +184,52 @@
         </div>
     </div>
 
-    <!-- Delete Product Modal -->
-    <div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
+    <!-- Delete Coupon Modal -->
+    <div class="modal fade" id="deleteCouponModal" tabindex="-1" aria-labelledby="deleteCouponModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteProductModalLabel">Delete Product</h5>
+                    <h5 class="modal-title" id="deleteCouponModalLabel">Delete Coupon Policy</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete this product?</p>
+                    <p>Are you sure you want to delete this coupon policy?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <a href="#" class="btn btn-danger" id="deleteProductBtn">Delete</a>
+                    <a href="#" class="btn btn-danger" id="deleteCouponBtn">Delete</a>
                 </div>
             </div>
         </div>
     </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('addCouponForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // 기본 폼 제출을 막음
+
+            const formData = new FormData(this);
+
+            fetch('/admin-policy/coupon', {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Coupon policy created successfully');
+                        window.location.href = '/admin/policy/admin-coupon-policy';
+                    } else {
+                        console.error('Failed to create coupon policy');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+
+        // Edit and Delete functionality...
+    });
+</script>
 </div>
 </body>
 </html>

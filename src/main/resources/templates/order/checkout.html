@@ -926,7 +926,7 @@
   }
 
   function openCouponPopup() {
-    const popup = window.open('couponPopup.html', '쿠폰 목록', 'width=600,height=400');
+    const popup = window.open('http://localhost:8040/orders/couponPopup.html', '쿠폰 목록', 'width=600,height=400');
     popup.onunload = function () {
       if (popup.selectedCoupon) {
         document.getElementById('selectedCoupon').value = popup.selectedCoupon;

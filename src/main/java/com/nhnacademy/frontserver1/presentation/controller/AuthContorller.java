@@ -1,6 +1,6 @@
 package com.nhnacademy.frontserver1.presentation.controller;
 
-import com.nhnacademy.frontserver1.application.service.AuthService;
+import com.nhnacademy.frontserver1.application.service.impl.AuthServiceImpl;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.LoginUserRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Slf4j
 public class AuthContorller {
 
-    private final AuthService authService;
+    private final AuthServiceImpl authService;
 
     @GetMapping("/login")
     public String loginForm() {
@@ -26,8 +26,7 @@ public class AuthContorller {
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password) {
 
-        log.info(authService.findLoginUserByEmail(LoginUserRequest.builder().email(username).password(password).build()).toString());
-
+        authService.loginUser(LoginUserRequest.builder().email(username).password(password).build()).toString();
 
         return "index";
     }

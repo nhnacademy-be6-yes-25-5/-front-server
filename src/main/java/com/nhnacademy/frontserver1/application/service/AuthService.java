@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 public interface AuthService {
 
-    ResponseEntity<Void> findLoginUserByEmail(@RequestBody LoginUserRequest loginUserRequest);
+    ResponseEntity<Void> loginUser(@RequestBody LoginUserRequest loginUserRequest);
 
 }

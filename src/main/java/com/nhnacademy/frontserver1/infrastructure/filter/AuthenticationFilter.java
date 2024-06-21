@@ -50,19 +50,16 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        // 1. /auth/login 엔드포인트는 필터링을 건너뜁니다.
         if (request.getRequestURI().equals("/auth/login")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 2. 리소스 요청 URI인 경우에는 필터링을 건너뜁니다.
         if (isResourceRequest(request.getRequestURI())) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 3. 그 외의 요청은 인증 검사를 수행합니다.
         String authHeader = request.getHeader("Authentication");
         if (authHeader != null) {
             String token = tokenService.getToken(authHeader);

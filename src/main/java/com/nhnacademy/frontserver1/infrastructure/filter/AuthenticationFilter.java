@@ -16,7 +16,7 @@ import java.io.IOException;
  * AuthenticationFilter 클래스는 사용자 인증 과정을 처리하는 Spring Security 필터입니다.
  * 이 필터는 요청 URI에 따라 인증 검사 여부를 결정하며, 인증이 필요한 경우 토큰을 검증합니다.
  *
- * @author NHN Academy
+ * @author lettuce82
  * @version 1.0
  */
 @Component

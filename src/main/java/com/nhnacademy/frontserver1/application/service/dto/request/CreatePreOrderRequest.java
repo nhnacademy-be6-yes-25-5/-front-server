@@ -29,6 +29,7 @@ public record CreatePreOrderRequest(String orderId,
                                     String receiveEmail,
                                     String receivePhoneNumber,
                                     Long couponId,
-                                    BigDecimal points) {
+                                    BigDecimal points,
+                                    List<Long> cartBookIds) {
 
 }

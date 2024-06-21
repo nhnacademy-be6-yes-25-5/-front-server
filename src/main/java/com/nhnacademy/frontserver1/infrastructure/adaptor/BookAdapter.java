@@ -5,6 +5,7 @@ import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookQuant
 import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,5 +29,5 @@ public interface BookAdapter {
     BookResponse updateBookQuantity(@RequestBody UpdateBookQuantityRequest request);
 
     @DeleteMapping("/{bookId}")
-    void deleteBook(@PathVariable("bookId") Long bookId);
+    ResponseEntity<Void> deleteBook(@PathVariable("bookId") Long bookId);
 }

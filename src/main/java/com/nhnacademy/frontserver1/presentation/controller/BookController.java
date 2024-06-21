@@ -1,10 +1,7 @@
 package com.nhnacademy.frontserver1.presentation.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.frontserver1.application.service.BookService;
 import com.nhnacademy.frontserver1.application.service.CategoryService;
-import com.nhnacademy.frontserver1.infrastructure.adaptor.BookAdapter;
 import com.nhnacademy.frontserver1.presentation.dto.request.book.CreateBookRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookAPIResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
@@ -60,11 +57,11 @@ public class BookController {
         return "admin/product/admin-book-search";
     }
 
-    @GetMapping("admin/product/{bookId}/delete")
-    public String adminDeleteBook(@PathVariable Long bookId, Model model) {
+    @GetMapping("/admin/product/{bookId}/delete")
+    public String adminDeleteBook(@PathVariable Long bookId) {
 
         bookService.deleteBook(bookId);
 
-        return "redirect:/admin/product/" + bookId;
+        return "redirect:/admin/product";
     }
 }

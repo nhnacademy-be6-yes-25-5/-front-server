@@ -34,7 +34,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     /**
      * 요청 URI에 따라 인증 검사를 처리합니다.
      *
-     * 1. /auth/login 엔드포인트로의 요청은 인증 검사를 건너뜁니다.
+     * 1. /auth/login, /index 엔드포인트로의 요청은 인증 검사를 건너뜁니다.
      * 2. 리소스 요청 URI(이미지, CSS, JavaScript 파일 등)인 경우에도 인증 검사를 건너뜁니다.
      * 3. 그 외의 요청에 대해서는 사용자 인증 토큰을 검증합니다.
      *    - 유효한 토큰이 있는 경우 요청을 계속 진행합니다.

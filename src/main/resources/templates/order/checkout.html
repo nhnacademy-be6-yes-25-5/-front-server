@@ -477,7 +477,8 @@
                     <div class="single-form form-default">
                       <label>포장 타입</label>
                       <div class="form-input form">
-                        <select id="takeoutType" name="takeoutType" onchange="updateTotalPrice()" required>
+                        <select id="takeoutType" name="takeoutType" onchange="updateTotalPrice()"
+                                required>
                           <option value="" data-price="0">포장 타입을 선택하세요</option>
                           <option th:each="takeout : ${takeouts}" th:value="${takeout.takeoutType}"
                                   th:data-price="${takeout.takeoutPrice}"
@@ -488,7 +489,6 @@
                       </div>
                     </div>
                   </div>
-
                   <div class="col-md-12">
                     <div class="single-form form-default">
                       <label>배송 받길 원하는 날짜</label>
@@ -499,10 +499,12 @@
                   </div>
 
                   <form id="orderForm" action="/orders" method="POST">
-                    <div th:each="request, index : ${requests}">
-                      <input type="hidden" name="productIds" th:value="${request.productId}">
-                      <input type="hidden" name="quantities" th:value="${request.quantity}">
-                      <input type="hidden" name="prices" th:value="${request.price}">
+                    <input type="hidden" name="userId" id="userId" th:value="${userId}">
+                    <div th:each="cartBook, index : ${cartBooks}">
+                      <input type="hidden" name="productIds" th:value="${cartBook.bookId}">
+                      <input type="hidden" name="cartBookIds" th:value="${cartBook.cartBookId}">
+                      <input type="hidden" name="quantities" th:value="${cartBook.cartBookQuantity}">
+                      <input type="hidden" name="prices" th:value="${cartBook.bookPrice}">
                     </div>
                     <input type="hidden" name="shippingFee" id="hiddenShippingFee">
                     <input type="hidden" name="points" id="hiddenPointsUsed" value="0">
@@ -778,6 +780,33 @@
 <script src="/js/main.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
+  function updateTotalPrice() {
+    const totalAmount = parseInt(document.getElementById('totalAmount').innerText.replace('원', ''))
+        || 0;
+    const shippingFee = parseInt(document.getElementById('shippingFee').innerText.replace('원', ''))
+        || 0;
+    const discountAmount = parseInt(document.getElementById('couponDiscount').value, 10) || 0;
+    const takeoutSelect = document.getElementById('takeoutType');
+    const selectedOption = takeoutSelect.options[takeoutSelect.selectedIndex];
+    const takeoutPrice = parseInt(selectedOption.getAttribute('data-price'), 10) || 0;
+    let pointsDiscount = parseInt(document.getElementById('points').value, 10) || 0;
+
+    const totalPriceBeforePoints = totalAmount - discountAmount + shippingFee + takeoutPrice;
+
+    if (pointsDiscount > totalPriceBeforePoints) {
+      pointsDiscount = totalPriceBeforePoints;
+      document.getElementById('points').value = totalPriceBeforePoints;
+    }
+
+    document.getElementById('takeoutPrice').textContent = takeoutPrice + '원';
+    document.getElementById('pointsDiscount').textContent = pointsDiscount + '원';
+
+    const totalPrice = totalPriceBeforePoints - pointsDiscount;
+
+    document.getElementById('discountAmount').innerText = discountAmount + '원';
+    document.getElementById('totalPriceValue').innerText = totalPrice + '원';
+  }
+
   function daumPost() {
     new daum.Postcode({
       oncomplete: function (data) {
@@ -843,6 +872,7 @@
       return value ? value : "0";
     };
 
+    const userId = document.getElementById('userId').value;
     const totalPriceValue = totalPrice.replace('원', '').trim();
     const takeoutPrice = document.getElementById('takeoutPrice').innerText.replace('원', '');
     const shippingFee = document.getElementById('shippingFee').innerText.replace('원', '');
@@ -859,9 +889,14 @@
     const postcode = document.getElementById('postcode').value;
     const takeoutType = document.getElementById('takeoutType').value;
     const points = document.getElementById('points').value || "0";
-    const productIds = Array.from(document.querySelectorAll('input[name="productIds"]')).map(input => input.value);
-    const quantities = Array.from(document.querySelectorAll('input[name="quantities"]')).map(input => input.value);
-    const prices = Array.from(document.querySelectorAll('input[name="prices"]')).map(input => input.value);
+    const productIds = Array.from(document.querySelectorAll('input[name="productIds"]')).map(
+        input => input.value);
+    const cartBookIds = Array.from(document.querySelectorAll('input[name="cartBookIds"]')).map(
+        input => input.value);
+    const quantities = Array.from(document.querySelectorAll('input[name="quantities"]')).map(
+        input => input.value);
+    const prices = Array.from(document.querySelectorAll('input[name="prices"]')).map(
+        input => input.value);
 
     fetch('/orders', {
       method: 'POST',
@@ -869,6 +904,7 @@
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        userId : userId,
         orderId: orderId,
         deliveryDate: deliveryDateValue,
         orderTotalAmount: totalPriceValue,
@@ -889,12 +925,13 @@
         points: points,
         productIds: productIds,
         quantities: quantities,
-        prices: prices
+        prices: prices,
+        cartBookIds: cartBookIds
       }),
     })
     .then(response => response.json())
     .then(data => {
-      const { orderId, totalAmount } = data;
+      const {orderId, totalAmount} = data;
       startPaymentProcess(orderId, totalAmount);
     })
     .catch(error => {
@@ -916,7 +953,7 @@
       successUrl: window.location.origin + "/payments/success",
       failUrl: window.location.origin + "/payments/fail",
     })
-    .catch(function(error) {
+    .catch(function (error) {
       if (error.code === 'USER_CANCEL') {
         console.error('사용자가 결제를 취소하였습니다.');
       } else if (error.code === 'INVALID_CARD_COMPANY') {
@@ -926,8 +963,10 @@
   }
 
   function openCouponPopup() {
+    // const userId = document.getElementById('userId').value;
     const userId = 4;
-    const popup = window.open(`/orders/couponPopup.html?userId=${userId}`, '쿠폰 목록', 'width=600,height=400');
+    const popup = window.open(`/orders/couponPopup?userId=${userId}`, '쿠폰 목록',
+        'width=600,height=400');
     popup.onunload = function () {
       if (popup.selectedCoupon) {
         document.getElementById('selectedCoupon').value = popup.selectedCoupon;
@@ -935,95 +974,67 @@
         updateTotalPrice();
       }
     }
+  }
 
-    function updateShippingFee(fee) {
-      document.getElementById('shippingFee').innerText = fee + '원';
+  function updateShippingFee(fee) {
+    document.getElementById('shippingFee').innerText = fee + '원';
+    updateTotalPrice();
+  }
+
+  document.getElementById('points').addEventListener('input', updateTotalPrice);
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const firstShippingOption = document.querySelector('input[name="shipping"]:checked');
+    if (firstShippingOption) {
+      updateShippingFee(firstShippingOption.value);
+    } else {
       updateTotalPrice();
     }
+  });
 
-    function updateTotalPrice() {
-      const totalAmount = parseInt(document.getElementById('totalAmount').innerText.replace('원', '')) || 0;
-      const shippingFee = parseInt(document.getElementById('shippingFee').innerText.replace('원', '')) || 0;
-      const discountAmount = parseInt(document.getElementById('couponDiscount').value, 10) || 0;
-      const takeoutSelect = document.getElementById('takeoutType');
-      const selectedOption = takeoutSelect.options[takeoutSelect.selectedIndex];
-      const takeoutPrice = parseInt(selectedOption.getAttribute('data-price'), 10) || 0;
-      let pointsDiscount = parseInt(document.getElementById('points').value, 10) || 0;
+  document.addEventListener("DOMContentLoaded", function () {
+    const totalAmountElement = document.getElementById('totalAmount');
+    const freeShippingAmountElement = document.getElementById('freeShippingAmount');
 
-      const totalPriceBeforePoints = totalAmount - discountAmount + shippingFee + takeoutPrice;
-
-      if (pointsDiscount > totalPriceBeforePoints) {
-        pointsDiscount = totalPriceBeforePoints;
-        document.getElementById('points').value = totalPriceBeforePoints;
-      }
-
-      document.getElementById('takeoutPrice').textContent = takeoutPrice + '원';
-      document.getElementById('pointsDiscount').textContent = pointsDiscount + '원';
-
-      const totalPrice = totalPriceBeforePoints - pointsDiscount;
-
-      document.getElementById('discountAmount').innerText = discountAmount + '원';
-      document.getElementById('totalPriceValue').innerText = totalPrice + '원';
+    if (!totalAmountElement || !freeShippingAmountElement) {
+      console.error('필요한 요소가 존재하지 않습니다.');
+      return;
     }
 
-    document.getElementById('points').addEventListener('input', updateTotalPrice);
+    const totalAmountText = totalAmountElement.innerText.replace('원', '');
+    const totalAmount = parseInt(totalAmountText, 10);
+    const freeShippingAmount = parseInt(freeShippingAmountElement.value, 10);
+    const progressBar = document.getElementById("progress-bar");
 
-    document.addEventListener('DOMContentLoaded', function () {
-      const firstShippingOption = document.querySelector('input[name="shipping"]:checked');
-      if (firstShippingOption) {
-        updateShippingFee(firstShippingOption.value);
-      } else {
-        updateTotalPrice();
-      }
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-      const totalAmountElement = document.getElementById('totalAmount');
-      const freeShippingAmountElement = document.getElementById('freeShippingAmount');
-
-      if (!totalAmountElement || !freeShippingAmountElement) {
-        console.error('필요한 요소가 존재하지 않습니다.');
-        return;
-      }
-
-      const totalAmountText = totalAmountElement.innerText.replace('원', '');
-      const totalAmount = parseInt(totalAmountText, 10);
-      const freeShippingAmount = parseInt(freeShippingAmountElement.value, 10);
-      const progressBar = document.getElementById("progress-bar");
-
-      let progress = 0;
-      if (freeShippingAmount <= 0) {
-        progress = 100;
-      } else {
-        progress = Math.min((totalAmount / (totalAmount + freeShippingAmount)) * 100, 100);
-      }
-
-      animateProgressBar(progressBar, progress);
-    });
-
-    function animateProgressBar(progressBar, targetProgress) {
-      let currentProgress = 0;
-      const animationDuration = 1000;
-      const frameRate = 30;
-
-      const increment = (targetProgress - currentProgress) / (animationDuration / (1000 / frameRate));
-
-      const intervalId = setInterval(function () {
-        currentProgress += increment;
-        if (currentProgress >= targetProgress) {
-          currentProgress = targetProgress;
-          clearInterval(intervalId);
-        }
-
-        progressBar.style.width = currentProgress + "%";
-        progressBar.setAttribute('aria-valuenow', currentProgress.toFixed(0));
-        progressBar.innerText = currentProgress.toFixed(0) + "%";
-      }, 1000 / frameRate);
+    let progress = 0;
+    if (freeShippingAmount <= 0) {
+      progress = 100;
+    } else {
+      progress = Math.min((totalAmount / (totalAmount + freeShippingAmount)) * 100, 100);
     }
+
+    animateProgressBar(progressBar, progress);
+  });
+
+  function animateProgressBar(progressBar, targetProgress) {
+    let currentProgress = 0;
+    const animationDuration = 1000;
+    const frameRate = 30;
+
+    const increment = (targetProgress - currentProgress) / (animationDuration / (1000 / frameRate));
+
+    const intervalId = setInterval(function () {
+      currentProgress += increment;
+      if (currentProgress >= targetProgress) {
+        currentProgress = targetProgress;
+        clearInterval(intervalId);
+      }
+
+      progressBar.style.width = currentProgress + "%";
+      progressBar.setAttribute('aria-valuenow', currentProgress.toFixed(0));
+      progressBar.innerText = currentProgress.toFixed(0) + "%";
+    }, 1000 / frameRate);
   }
-</script>
-
-
 </script>
 </body>
 

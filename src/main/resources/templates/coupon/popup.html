@@ -25,6 +25,13 @@
       background-color: #f9f9f9;
     }
   </style>
+  <script>
+    function selectCoupon(couponCode, discountValue) {
+      window.opener.document.getElementById('selectedCoupon').value = couponCode;
+      window.opener.document.getElementById('couponDiscount').value = discountValue;
+      window.close();
+    }
+  </script>
 </head>
 <body>
 <h1>Coupon List</h1>
@@ -45,7 +52,7 @@
   <tbody>
   <th:block th:each="coupon : ${coupons}">
     <tr>
-      <td th:text="${coupon.couponName}"></td>
+      <td th:text="${coupon.couponName()}"></td>
       <td th:text="${coupon.couponCode}"></td>
       <td th:text="${coupon.couponPolicyDiscountValue}"></td>
       <td th:text="${coupon.couponPolicyRate}"></td>
@@ -53,7 +60,7 @@
       <td th:text="${coupon.couponPolicyMaxAmount}"></td>
       <td th:text="${#dates.format(coupon.couponCreatedAt, 'yyyy-MM-dd')}"></td>
       <td th:text="${#dates.format(coupon.couponExpiredAt, 'yyyy-MM-dd')}"></td>
-      <td><button onclick="selectCoupon('[[${coupon.couponCode}]]', '[[${coupon.couponPolicyDiscountValue}]]')">Select</button></td>
+      <td><button></button></td>
     </tr>
   </th:block>
   </tbody>

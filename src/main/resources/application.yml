@@ -9,3 +9,7 @@ spring:
     url: jdbc:mysql://133.186.241.167:3306/be6_yes255_book
     username: be6_yes255
     password: ${YES25_5_MYSQL_PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect

@@ -6,7 +6,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-public record CreateOrderRequest(String orderId,
+public record CreateOrderRequest(Long userId,
+                                 String orderId,
                                  BigDecimal orderTotalAmount,
                                  TakeoutType takeoutType,
                                  String addressRaw,
@@ -27,9 +28,10 @@ public record CreateOrderRequest(String orderId,
                                  BigDecimal discountPrice,
                                  List<Long> productIds,
                                  List<Integer> quantities,
-                                 List<BigDecimal> prices) {
+                                 List<BigDecimal> prices,
+                                 List<Long> cartBookIds) {
 
-    public CreatePreOrderRequest toPreOrderRequest(Long userId) {
+    public CreatePreOrderRequest toPreOrderRequest() {
         return CreatePreOrderRequest.builder()
             .orderId(orderId)
             .userId(userId)
@@ -53,6 +55,7 @@ public record CreateOrderRequest(String orderId,
             .takeoutPrice(takeoutPrice)
             .couponId(couponId)
             .points(points)
+            .cartBookIds(cartBookIds)
             .build();
     }
 }

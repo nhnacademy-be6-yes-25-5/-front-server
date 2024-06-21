@@ -22,21 +22,28 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        // 1. 요청 URI가 /auth/login이면 필터링 건너뛰기
         if (request.getRequestURI().equals("/auth/login")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String authHeader = request.getHeader("Authentication");
-        if (authHeader != null) {
-            String token = tokenService.getToken(authHeader);
-            if (token != null && !token.isEmpty()) {
-                filterChain.doFilter(request, response);
+        // 2. 요청 URI가 /auth 하위 경로이면 인증 검사 수행
+        if (request.getRequestURI().startsWith("/auth/")) {
+            String authHeader = request.getHeader("Authentication");
+            if (authHeader != null) {
+                String token = tokenService.getToken(authHeader);
+                if (token != null && !token.isEmpty()) {
+                    filterChain.doFilter(request, response);
+                } else {
+                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                }
             } else {
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
             }
         } else {
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            // 3. 그 외의 요청은 모두 통과시키기
+            filterChain.doFilter(request, response);
         }
     }
 

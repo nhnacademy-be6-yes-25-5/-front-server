@@ -25,47 +25,37 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Product A</td>
-                                <td>$49.99</td>
-                                <td>This is a sample product description.</td>
+                            <tr th:each="product : ${productList}">
+                                <td th:text = "${product.bookId()}">1</td>
+                                <td th:text = "${product.bookName()}">Product A</td>
+                                <td th:text = "${product.bookPrice()}">$49.99</td>
+                                <td th:text = "${product.bookDescription()}">This is a sample product description.</td>
                                 <td>
                                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProductModal" data-id="1">
                                         Edit
                                     </button>
-                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteProductModal" data-id="1">
+                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteProductModal" th:data-id="${product.bookId()}">
                                         Delete
                                     </button>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Product B</td>
-                                <td>$29.99</td>
-                                <td>This is another sample product description.</td>
-                                <td>
-                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProductModal" data-id="2">
-                                        Edit
-                                    </button>
-                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteProductModal" data-id="2">
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Product C</td>
-                                <td>$19.99</td>
-                                <td>This is a third sample product description.</td>
-                                <td>
-                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProductModal" data-id="3">
-                                        Edit
-                                    </button>
-                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteProductModal" data-id="3">
-                                        Delete
-                                    </button>
-                                </td>
+                                <!-- Delete Product Modal -->
+                                <div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteProductModalLabel">Delete Product</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to delete this product?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <a th:href="'/admin/product/' + ${product.bookId()} + '/delete'" id="deleteProductBtn">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </tr>
                             </tbody>
                         </table>
@@ -83,40 +73,89 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form th:object="${newProduct}" th:action="@{/admin/products}" method="post" enctype="multipart/form-data">
+                    <button class="w-100 btn btn-dark btn-lg" onclick="openPopup()" type="button" style="margin-bottom: 15px;">검색</button>
+                    <script>
+                        function openPopup() {
+                            var popup = window.open("/admin/bookSearch", "도서 검색", "width=1000, height=800");
+                            popup.focus();
+                        }
+                    </script>
+
+                    <form th:object="${newProduct}" th:action="@{/admin/product}" id="productForm" method="post">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Name</label>
-                                    <input type="text" class="form-control" required>
+                                    <label for="addName" class="form-label">책 제목</label>
+                                    <input type="text" class="form-control" id="addName" name = "bookName"  required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="price" class="form-label">Price</label>
-                                    <input type="number" class="form-control" required>
+                                    <label for="addPrice" class="form-label">정가</label>
+                                    <input type="number" class="form-control" id="addPrice" name= "bookPrice"  required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="description" class="form-label">Description</label>
-                                    <textarea class="form-control"  rows="3" required></textarea>
+                                    <label for="addSellingPrice" class="form-label">판매 가격</label>
+                                    <input type="number" class="form-control" id="addSellingPrice" name ="bookSellingPrice"  required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="addPublisher" class="form-label">출판사</label>
+                                    <input type="text" class="form-control" id="addPublisher" name="bookPublisher" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="addQuantity" class="form-label">재고</label>
+                                    <input type="number" class="form-control" id="addQuantity" name ="quantity" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="addImageUrl" class="form-label">이미지 URL</label>
+                                    <input type="text" class="form-control" id="addImageUrl" name="bookImage" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="image" class="form-label">Image</label>
-                                    <input type="file" class="form-control" name="image" required>
+                                    <label for="addAuthor" class="form-label">작가</label>
+                                    <input type="text" class="form-control" id="addAuthor" name="bookAuthor" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="category" class="form-label">Category</label>
-                                    <select class="form-select"  required>
-                                        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                                    <label for="addCategory" class="form-label">카테고리</label>
+                                    <select name="categoryIdList" class="form-select" id="addCategory" required>
+                                        <option th:each="category : ${categoryList}" th:value="${category.categoryId()}" th:text="${category.categoryName()}"></option>
                                     </select>
                                 </div>
+<!--                                <div class="mb-3">-->
+<!--                                    <label for="addTags" class="form-label">태그</label>-->
+<!--                                    <select class="form-select" id="addTags"  multiple required>-->
+<!--                                        <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}"></option>-->
+<!--                                    </select>-->
+<!--                                </div>-->
                                 <div class="mb-3">
-                                    <label for="tags" class="form-label">Tags</label>
-                                    <select class="form-select"  multiple required>
-                                        <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}"></option>
-                                    </select>
+                                    <label for="addIsbn" class="form-label">ISBN</label>
+                                    <input type="text" class="form-control" id="addIsbn" name="bookIsbn" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="addPublishDate" class="form-label">출판 일시</label>
+                                    <input type="date" class="form-control" id="addPublishDate" name="bookPublishDate" required>
                                 </div>
                             </div>
+
+                            <div id="addContent"></div>
+
+                            <input type="hidden" id="addEditorContent" name="bookDescription">
+
+                            <!-- TUI 에디터 JS CDN -->
+                            <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+                            <script>
+                                const addEditor = new toastui.Editor({
+                                    el: document.querySelector('#addContent'), // 에디터를 적용할 요소 (컨테이너)
+                                    height: '500px',                        // 에디터 영역의 높이 값 (OOOpx || auto)
+                                    initialEditType: 'wysiwyg',            // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
+                                    initialValue: '내용을 입력해 주세요.',     // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
+                                    previewStyle: 'vertical'                // 마크다운 프리뷰 스타일 (tab || vertical)
+                                });
+
+                                document.getElementById('productForm').addEventListener('submit', function(event) {
+                                    console.log(addEditor.getHTML());
+                                    document.getElementById('addEditorContent').value = addEditor.getHTML();
+                                });
+                            </script>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -137,31 +176,39 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form th:object="${product}"  method="post" enctype="multipart/form-data">
+                    <form th:object="${product}" method="post" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Name</label>
+                                    <label for="name" class="form-label">책 제목</label>
                                     <input type="text" class="form-control" id="name"  required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="price" class="form-label">Price</label>
+                                    <label for="price" class="form-label">가격</label>
                                     <input type="number" class="form-control" id="price"  required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="description" class="form-label">Description</label>
+                                    <label for="description" class="form-label">책 목차</label>
                                     <textarea class="form-control" id="description"  rows="3" required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="publisher" class="form-label">출판사</label>
+                                    <input type="text" class="form-control" id="publisher"  required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="quantity" class="form-label">재고</label>
+                                    <input type="number" class="form-control" id="quantity"  required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="image" class="form-label">Image</label>
-                                    <input type="file" class="form-control" id="image" name="image">
+                                    <label for="author" class="form-label">작가</label>
+                                    <input type="text" class="form-control" id="author"  required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="category" class="form-label">Category</label>
                                     <select class="form-select" id="category" required>
-                                        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                                        <option th:each="category : ${categoryList}" th:value="${category.categoryId()}" th:text="${category.categoryName()}"></option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
@@ -170,7 +217,35 @@
                                         <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}"></option>
                                     </select>
                                 </div>
+                                <div class="mb-3">
+                                    <label for="publishDate" class="form-label">출판 일시</label>
+                                    <input type="date" class="form-control" id="publishDate"  required>
+                                </div>
                             </div>
+
+                            <!-- 에디터를 적용할 요소 (컨테이너) -->
+                            <div id="content">
+
+                            </div>
+
+                            <input type="hidden" id="editorContent" name="editorContent">
+
+                            <!-- TUI 에디터 JS CDN -->
+                            <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+                            <script>
+                                const editor = new toastui.Editor({
+                                    el: document.querySelector('#content'), // 에디터를 적용할 요소 (컨테이너)
+                                    height: '500px',                        // 에디터 영역의 높이 값 (OOOpx || auto)
+                                    initialEditType: 'markdown',            // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
+                                    initialValue: '내용을 입력해 주세요.',     // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
+                                    previewStyle: 'vertical'                // 마크다운 프리뷰 스타일 (tab || vertical)
+                                });
+
+                                document.getElementById('productForm').addEventListener('submit', function(event) {
+                                    const editorContent = editor.getMarkdown();
+                                    document.getElementById('editorContent').value = editorContent;
+                                });
+                            </script>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -182,24 +257,6 @@
         </div>
     </div>
 
-    <!-- Delete Product Modal -->
-    <div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteProductModalLabel">Delete Product</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete this product?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <a href="#" class="btn btn-danger" id="deleteProductBtn">Delete</a>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 </body>
 </html>

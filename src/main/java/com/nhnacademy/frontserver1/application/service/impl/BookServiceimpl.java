@@ -29,11 +29,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookServiceimpl implements BookService {
 
-    @Value("${book.client}")
-    private String CLIENT_ID;
+    private final String clientSecret = "mmnE38HTvttvM422Rk00";
 
-    @Value("${book.secret}")
-    private String CLIENT_SECRET;
+    private final String clientId = "4HfHyIX7Xd";
 
     private final BookAdapter bookAdapter;
 
@@ -48,8 +46,8 @@ public class BookServiceimpl implements BookService {
             URL url = new URL(apiURL);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
-            con.setRequestProperty("X-Naver-Client-Id", CLIENT_ID);
-            con.setRequestProperty("X-Naver-Client-Secret", CLIENT_SECRET);
+            con.setRequestProperty("X-Naver-Client-Id", clientId);
+            con.setRequestProperty("X-Naver-Client-Secret", clientSecret);
             int responseCode = con.getResponseCode();
             BufferedReader br;
             if (responseCode == 200) {

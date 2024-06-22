@@ -9,6 +9,7 @@ import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookReque
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookAPIResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -25,8 +26,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookServiceimpl implements BookService {
 
-    private final String CLIENT_ID = "mmnE38HTvttvM422Rk00";
-    private final String CLIENT_SECRET = "4HfHyIX7Xd";
+    @Value("${naver.clientid}")
+    private String CLIENT_ID;
+
+    @Value("${naver.secret}")
+    private String CLIENT_SECRET;
+
     private final BookAdapter bookAdapter;
 
     @Override

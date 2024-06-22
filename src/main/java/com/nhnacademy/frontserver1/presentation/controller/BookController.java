@@ -36,6 +36,7 @@ public class BookController {
 
     @PostMapping("/admin/product")
     public String adminProduct(@ModelAttribute @Valid CreateBookRequest request, @RequestParam(value = "categoryIdList") List<Long> categoryIdList, @RequestParam(value = "tagIdList", required = false) List<Long> tagIdList) {
+
         bookService.createBook(request, categoryIdList, tagIdList);
 
         return "redirect:/admin/product";
@@ -59,6 +60,7 @@ public class BookController {
 
     @GetMapping("/admin/bookSearch")
     public String adminBookSearch(Model model) {
+
         String keyword = "";
         model.addAttribute("keyword", keyword);
 

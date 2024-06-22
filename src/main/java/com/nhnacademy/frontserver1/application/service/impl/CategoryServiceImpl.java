@@ -38,16 +38,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponse createCategory(CreateCategoryRequest request) {
-        return null;
+        return categoryAdapter.createCategory(request);
     }
 
     @Override
     public CategoryResponse updateCategory(UpdateCategoryRequest request) {
-        return null;
+        return categoryAdapter.updateCategory(request);
     }
 
     @Override
     public void deleteCategory(Long categoryId) {
-
+        categoryAdapter.deleteCategory(categoryId);
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "tagAdapter", url = "http://localhost:8050/tags")
+@FeignClient(name = "tagAdapter", url = "http://localhost:8085/tags")
 public interface TagAdapter {
 
     @GetMapping
@@ -23,6 +23,6 @@ public interface TagAdapter {
     @PutMapping
     TagResponse updateTag(UpdateTagRequest request);
 
-    @DeleteMapping
+    @DeleteMapping("/{tagId}")
     void deleteTagById(@PathVariable("tagId") Long tagId);
 }

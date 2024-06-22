@@ -13,6 +13,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-naver:
-  clientid: ${NAVER_CLIENT_ID}
-  secret: ${NAVER_CLIENT_SECRET}
+book:
+  client: ${CLIENT_ID}
+  secret: ${CLIENT_SECRET}

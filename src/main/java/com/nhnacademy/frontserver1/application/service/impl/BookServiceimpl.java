@@ -3,6 +3,8 @@ package com.nhnacademy.frontserver1.application.service.impl;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.frontserver1.application.service.BookService;
+import com.nhnacademy.frontserver1.common.exception.ApplicationException;
+import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.BookAdapter;
 import com.nhnacademy.frontserver1.presentation.dto.request.book.CreateBookRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookRequest;
@@ -18,6 +20,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +29,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookServiceimpl implements BookService {
 
-    @Value("${naver.clientid}")
+    @Value("${book.client}")
     private String CLIENT_ID;
 
-    @Value("${naver.secret}")
+    @Value("${book.secret}")
     private String CLIENT_SECRET;
 
     private final BookAdapter bookAdapter;
@@ -79,7 +82,7 @@ public class BookServiceimpl implements BookService {
                 bookList.add(bookDto);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new ApplicationException(ErrorStatus.toErrorStatus("책 검색 중 알수없는 오류가 발생했습니다.", 500, LocalDateTime.now()));
         }
 
         return bookList;

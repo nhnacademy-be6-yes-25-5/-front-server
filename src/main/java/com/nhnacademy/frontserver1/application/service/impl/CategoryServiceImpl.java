@@ -6,6 +6,8 @@ import com.nhnacademy.frontserver1.presentation.dto.request.book.CreateCategoryR
 import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateCategoryRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.CategoryResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +17,11 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryAdapter categoryAdapter;
+
+    @Override
+    public Page<CategoryResponse> findAllCategories(Pageable pageable) {
+        return categoryAdapter.findAllCategories(pageable);
+    }
 
     @Override
     public List<CategoryResponse> findAllCategories() {

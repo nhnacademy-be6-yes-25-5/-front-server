@@ -6,6 +6,8 @@ import com.nhnacademy.frontserver1.presentation.dto.request.book.CreateTagReques
 import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateTagRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.TagResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +26,11 @@ public class TagServiceImpl implements TagService {
     @Override
     public TagResponse findTag(Long tagId) {
         return null;
+    }
+
+    @Override
+    public Page<TagResponse> findAllTags(Pageable pageable) {
+        return tagAdapter.findAllTags(pageable);
     }
 
     @Override

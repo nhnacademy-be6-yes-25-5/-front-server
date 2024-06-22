@@ -2,13 +2,18 @@ package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.BookService;
 import com.nhnacademy.frontserver1.application.service.CategoryService;
+import com.nhnacademy.frontserver1.application.service.TagService;
 import com.nhnacademy.frontserver1.presentation.dto.request.book.CreateBookRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookAPIResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.CategoryResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.book.TagResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,15 +26,25 @@ public class BookController {
 
     private final BookService bookService;
     private final CategoryService categoryService;
+    private final TagService tagService;
 
     @GetMapping("/admin/product")
-    public String adminProduct(Model model) {
+    public String adminProduct(Model model, @PageableDefault(page = 0, size = 10) Pageable pageable) {
 
         List<CategoryResponse> categoryList = categoryService.findAllCategories();
-        List<BookResponse> bookResponseList = bookService.findAllBooks();
+        List<TagResponse> tagList = tagService.findAllTags();
+        Page<BookResponse> bookResponseList = bookService.findAllBooks(pageable);
+
+        int nowPage = bookResponseList.getPageable().getPageNumber() + 1;
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(nowPage + 5, bookResponseList.getTotalPages());
 
         model.addAttribute("categoryList", categoryList);
+        model.addAttribute("tagList", tagList);
         model.addAttribute("productList", bookResponseList);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
 
         return "admin/product/admin-product";
     }

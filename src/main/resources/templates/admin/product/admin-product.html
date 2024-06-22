@@ -195,6 +195,24 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <li class="page-item">
+                                    <a class="page-link" th:href="@{/admin/product(page = ${nowPage - 1})}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <th:block th:each = "page : ${#numbers.sequence(startPage, endPage)}">
+                                    <li class="page-item"><a class="page-link" th:if="${page == nowPage}" th:text = "${page}">1</a></li>
+                                    <li class="page-item"><a th:if="${page != nowPage}" th:text = "${page}" class="page-link" th:href="@{/admin/product(page = ${page - 1})}">1</a></li>
+                                </th:block>
+                                <li class="page-item">
+                                    <a class="page-link" th:href="@{/admin/product(page = ${nowPage + 1})}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -260,7 +278,7 @@
                                 <div class="mb-3">
                                     <label for="addTags" class="form-label">태그</label>
                                     <select class="form-select" id="addTags"  multiple>
-                                        <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}"></option>
+                                        <option th:each="tag : ${tagList}" th:value="${tag.tagId()}" th:text="${tag.tagName()}"></option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
@@ -308,11 +326,6 @@
         </div>
     </div>
     </div>
-
-    <script>
-
-    </script>
-
 </div>
 </body>
 </html>

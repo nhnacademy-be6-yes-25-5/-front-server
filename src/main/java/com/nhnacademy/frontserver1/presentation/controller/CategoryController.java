@@ -5,6 +5,8 @@ import com.nhnacademy.frontserver1.presentation.dto.request.book.CreateCategoryR
 import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateCategoryRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.CategoryResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,11 +23,17 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/admin/category")
-    public String adminCategory(Model model) {
+    public String adminCategory(Model model, Pageable pageable) {
 
-        List<CategoryResponse> categoryList =  categoryService.findAllCategories();
+        Page<CategoryResponse> categoryList =  categoryService.findAllCategories(pageable);
+        int nowPage = categoryList.getPageable().getPageNumber() + 1;
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(nowPage + 5, categoryList.getTotalPages());
 
         model.addAttribute("categoryList", categoryList);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
 
         return "admin/category/admin-category";
     }

@@ -5,6 +5,8 @@ import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookQuant
 import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +14,9 @@ import java.util.List;
 
 @FeignClient(name = "bookAdapter", url = "http://localhost:8085/books")
 public interface BookAdapter {
+
+    @GetMapping("/page")
+    Page<BookResponse> findAllBooks(Pageable pageable);
 
     @GetMapping
     List<BookResponse> findAllBooks();

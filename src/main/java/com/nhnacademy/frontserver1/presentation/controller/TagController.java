@@ -6,6 +6,8 @@ import com.nhnacademy.frontserver1.presentation.dto.request.book.CreateTagReques
 import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateTagRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.TagResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,11 +24,17 @@ public class TagController {
     private final TagService tagService;
 
     @GetMapping("/admin/tag")
-    public String adminTag(Model model) {
+    public String adminTag(Model model, Pageable pageable) {
 
-        List<TagResponse> tagList = tagService.findAllTags();
+        Page<TagResponse> tagList = tagService.findAllTags(pageable);
+        int nowPage = tagList.getPageable().getPageNumber() + 1;
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(nowPage + 5, tagList.getTotalPages());
 
         model.addAttribute("tagList", tagList);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
 
         return "admin/tag/admin-tag";
     }

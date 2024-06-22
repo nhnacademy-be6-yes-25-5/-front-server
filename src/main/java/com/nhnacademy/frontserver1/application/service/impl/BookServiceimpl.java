@@ -12,6 +12,8 @@ import com.nhnacademy.frontserver1.presentation.dto.response.book.BookAPIRespons
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -92,8 +94,8 @@ public class BookServiceimpl implements BookService {
     }
 
     @Override
-    public List<BookResponse> findAllBooks() {
-        return bookAdapter.findAllBooks();
+    public Page<BookResponse> findAllBooks(Pageable pageable) {
+        return bookAdapter.findAllBooks(pageable);
     }
 
     @Override

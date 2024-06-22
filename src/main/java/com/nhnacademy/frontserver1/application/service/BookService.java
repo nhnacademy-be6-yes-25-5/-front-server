@@ -4,6 +4,8 @@ import com.nhnacademy.frontserver1.presentation.dto.request.book.CreateBookReque
 import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookAPIResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -13,7 +15,7 @@ public interface BookService {
 
     BookResponse createBook(CreateBookRequest createBookRequest, List<Long> categoryIdList, List<Long> tagIdList);
 
-    List<BookResponse> findAllBooks();
+    Page<BookResponse> findAllBooks(Pageable pageable);
 
     void deleteBook(Long id);
 

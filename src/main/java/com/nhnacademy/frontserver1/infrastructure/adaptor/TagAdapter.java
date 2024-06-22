@@ -4,6 +4,8 @@ import com.nhnacademy.frontserver1.presentation.dto.request.book.CreateTagReques
 import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateTagRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.TagResponse;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +15,9 @@ public interface TagAdapter {
 
     @GetMapping
     List<TagResponse> findAllTags();
+
+    @GetMapping("/page")
+    Page<TagResponse> findAllTags(Pageable pageable);
 
     @GetMapping("/{tagId}")
     TagResponse findTagById(@PathVariable("tagId") Long tagId);

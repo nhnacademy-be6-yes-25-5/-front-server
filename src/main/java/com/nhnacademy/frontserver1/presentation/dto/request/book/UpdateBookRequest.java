@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -30,6 +31,7 @@ public record UpdateBookRequest(
 
         String bookPublisher,
 
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
         @PastOrPresent(message = "책 출간일은 미래일 수 없습니다.")
         Date bookPublishDate,
 
@@ -42,12 +44,6 @@ public record UpdateBookRequest(
         String bookImage,
 
         @NotNull(message = "책 수량은 필수 입력 항목입니다.")
-        Integer quantity,
-
-        Integer reviewCount,
-
-        Integer hitsCount,
-
-        Integer searchCount
+        Integer quantity
 ) {
 }

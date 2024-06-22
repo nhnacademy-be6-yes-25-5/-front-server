@@ -1,6 +1,7 @@
 package com.nhnacademy.frontserver1.application.service;
 
 import com.nhnacademy.frontserver1.presentation.dto.request.book.CreateBookRequest;
+import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookAPIResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
 
@@ -15,4 +16,6 @@ public interface BookService {
     List<BookResponse> findAllBooks();
 
     void deleteBook(Long id);
+
+    BookResponse updateBook(UpdateBookRequest updateBookRequest, List<Long> categoryIdList, List<Long> tagIdList);
 }

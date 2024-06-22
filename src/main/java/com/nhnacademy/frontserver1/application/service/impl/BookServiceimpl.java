@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.frontserver1.application.service.BookService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.BookAdapter;
 import com.nhnacademy.frontserver1.presentation.dto.request.book.CreateBookRequest;
+import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookAPIResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
 import lombok.RequiredArgsConstructor;
@@ -92,5 +93,10 @@ public class BookServiceimpl implements BookService {
     @Override
     public void deleteBook(Long id) {
         bookAdapter.deleteBook(id);
+    }
+
+    @Override
+    public BookResponse updateBook(UpdateBookRequest updateBookRequest, List<Long> categoryIdList, List<Long> tagIdList) {
+        return bookAdapter.updateBook(updateBookRequest, categoryIdList, tagIdList);
     }
 }

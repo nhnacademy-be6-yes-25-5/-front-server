@@ -46,7 +46,11 @@
                 <script>
                     function selectElement(selectedElement) {
                         addDataToForm(selectedElement);
-                        window.close();
+                        try {
+                            window.close();
+                        } catch (e) {
+                            console.error("팝업 창을 닫는 데 실패했습니다:", e);
+                        }
                     }
 
                     function addDataToForm(ele) {
@@ -72,7 +76,7 @@
                         opener.document.getElementById("addPublisher").value = data.publisher;
                         opener.document.getElementById("addPublishDate").value = data.pubDate;
                         opener.document.getElementById("addIsbn").value = data.isbn;
-                        opener.document.getElementById("editorContent").value = data.description;
+                        opener.document.getElementById("addContent").value = data.description;
                     }
                 </script>
 

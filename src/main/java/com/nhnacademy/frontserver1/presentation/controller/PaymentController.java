@@ -3,17 +3,27 @@ package com.nhnacademy.frontserver1.presentation.controller;
 import static com.nhnacademy.frontserver1.common.utils.SessionUtil.getIntegerListFromSession;
 import static com.nhnacademy.frontserver1.common.utils.SessionUtil.getLongListFromSession;
 
+import com.nhnacademy.frontserver1.application.service.OrderService;
 import com.nhnacademy.frontserver1.application.service.PaymentService;
+import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
 import com.nhnacademy.frontserver1.presentation.dto.request.payment.CreatePaymentRequest;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadPaymentOrderResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.SuccessPaymentResponse;
 import jakarta.servlet.http.HttpSession;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/payments")
@@ -21,21 +31,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PaymentController {
 
     private final PaymentService paymentService;
+    private final OrderService orderService;
 
     @PostMapping("/confirm")
-    public String confirm(@RequestBody CreatePaymentRequest request, HttpSession session) {
+    public ResponseEntity<?> confirm(@RequestBody CreatePaymentRequest request, HttpSession session) {
         String orderId = (String) session.getAttribute("orderId");
         Integer totalAmount = (Integer) session.getAttribute("totalAmount");
         List<Long> bookIds = getLongListFromSession(session.getAttribute("bookIds"));
         List<Integer> quantities = getIntegerListFromSession(session.getAttribute("quantities"));
 
-        if (!Objects.equals(request.orderId(), orderId)
-            || !Objects.equals(request.amount(), totalAmount)) {
-            return "redirect:/payments/fail";
+        if (!Objects.equals(request.orderId(), orderId) || !Objects.equals(request.amount(), totalAmount)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ErrorStatus.toErrorStatus("결제 정보가 주문 정보와 일치하지 않습니다.", 400, LocalDateTime.now()));
         }
 
         if (paymentService.createPayment(request, bookIds, quantities).status() != 200) {
-            return "redirect:/payments/fail";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                ErrorStatus.toErrorStatus("결제에 실패했습니다.", 500, LocalDateTime.now()));
         }
 
         session.removeAttribute("orderId");
@@ -43,12 +55,24 @@ public class PaymentController {
         session.removeAttribute("bookIds");
         session.removeAttribute("quantities");
 
-        return "order/success";
+        return ResponseEntity.ok(SuccessPaymentResponse.from(orderId));
     }
+
 
     @GetMapping("/success")
     public String success(){
         return "order/success";
+    }
+
+    @GetMapping("/done/{orderId}")
+    public String paymentDone(@PathVariable String orderId, Model model, @RequestParam Integer amount) {
+        List<ReadPaymentOrderResponse> responses = orderService.findAllOrderByOrderId(orderId);
+
+        model.addAttribute("orders", responses);
+        model.addAttribute("orderId", orderId);
+        model.addAttribute("amount", amount);
+
+        return "order/done";
     }
 
     @GetMapping("/fail")

@@ -2,7 +2,7 @@ name: Java CI with Maven
 
 on:
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "develop", "main" ]
 
 permissions: write-all
 
@@ -13,32 +13,43 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up JDK 21
-        uses: actions/setup-java@v3
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: 'maven'
-      - name: Clean with Maven
-        run: mvn clean --batch-mode
-
-      - name: Execute SonarQube Analysis
+      - name: Verify Dockerfile exists
         run: |
-          mvn clean verify sonar:sonar \
+          if [ ! -f Dockerfile ]; then
+            echo "Dockerfile not found!"
+            exit 1
+          fi
+
+      - name: Build Docker image
+        run: |
+          docker build -t front-app .
+
+
+      - name: Run Maven tests in Docker
+        run: |
+          docker run --rm front-app mvn clean verify sonar:sonar \
           -Dsonar.projectKey=yes-25-5-order-front-server \
           -Dsonar.projectName='yes-25-5-order-front-server' \
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
           -Dsonar.token=${{ secrets.SONAR_TOKEN }}
 
-      - name: Build with Maven
-        run: mvn package --batch-mode
-#
-#      - name: Publish Unit Test Results
-#        uses: EnricoMi/publish-unit-test-result-action@v2
-#        if: always()
-#        with:
-#          check_name: 'Maven Test Results'
-#          junit_files: target/surefire-reports/**/*.xml
+      - name: Build Maven project in Docker
+        run: |
+          docker run --rm -v "$(pwd)":/app -w /app front-app mvn package
+
+      - name: Check if JAR file exists
+        run: |
+          if [ ! -f target/*.jar ]; then
+            echo "JAR file not found!"
+            exit 1
+          fi
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          check_name: 'Maven Test Results'
+          junit_files: target/surefire-reports/**/*.xml
 
       - name: Upload JAR to Remote Server
         env:
@@ -46,7 +57,7 @@ jobs:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
           REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
-        run: | 
+        run: |
           mkdir -p ~/.ssh
           echo "${SSH_PRIVATE_KEY}" > ~/.ssh/github_rsa
           chmod 400 ~/.ssh/github_rsa
@@ -64,9 +75,9 @@ jobs:
           script: |
             const webhookUrl = process.env.DOORAY_WEBHOOK_URL;
             const payload = {
-              botName: "프론트1 서버 Bot",
+              botName: "프론트 서버1 Bot",
               botIconImage: "https://www.tistory.com/favicon.ico",
-              text: "프론트1 서버의 Pull Request가 성공적으로 올라갔어요!",
+              text: "프론트 서버1의 Pull Request가 성공적으로 올라갔어요!",
               attachments: [
                 {
                   title: "Pull Request URL",
@@ -85,7 +96,7 @@ jobs:
               body: JSON.stringify(payload)
             });
 
-            if (!response.ok) { 
+            if (!response.ok) {
               throw new Error(`Failed to send webhook: ${response.statusText}`);
             }
 
@@ -101,9 +112,9 @@ jobs:
           script: |
             const webhookUrl = process.env.DOORAY_WEBHOOK_URL;
             const payload = {
-              botName: "프론트1 서버 Bot",
+              botName: "프론트 서버1 Bot",
               botIconImage: "https://www.tistory.com/favicon.ico",
-              text: "프론트1 서버의 Pull Request가 실패했어요...",
+              text: "프론트 서버1의 Pull Request가 실패했어요...",
               attachments: [
                 {
                   title: "Pull Request URL",

@@ -15,7 +15,3 @@ spring:
       host: 127.0.0.1
       password: ${YES25_5_REDIS_PASSWORD}
       database: 12
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect

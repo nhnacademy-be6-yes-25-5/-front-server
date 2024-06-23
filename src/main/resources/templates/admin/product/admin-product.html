@@ -328,4 +328,22 @@
     </div>
 </div>
 </body>
+
+<script>
+    const discountTypeRadios = document.querySelectorAll('input[name="discount-type"]');
+    const discountPercentInput = document.getElementById('discount-percent');
+    const discountAmountInput = document.getElementById('discount-amount');
+
+    discountTypeRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (radio.value === 'percent') {
+                discountPercentInput.style.display = 'inline';
+                discountAmountInput.style.display = 'none';
+            } else {
+                discountPercentInput.style.display = 'none';
+                discountAmountInput.style.display = 'inline';
+            }
+        });
+    });
+</script>
 </html>

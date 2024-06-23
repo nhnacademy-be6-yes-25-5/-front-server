@@ -22,13 +22,13 @@ jobs:
       - name: Clean with Maven
         run: mvn clean --batch-mode
 
-#      - name: Execute SonarQube Analysis
-#        run: |
-#          mvn clean verify sonar:sonar \
-#          -Dsonar.projectKey=yes25-5-order-payment \
-#          -Dsonar.projectName='yes25-5-order-payment' \
-#          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-#          -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+      - name: Execute SonarQube Analysis
+        run: |
+          mvn clean verify sonar:sonar \
+          -Dsonar.projectKey=yes-25-5-order-front-server \
+          -Dsonar.projectName='yes-25-5-order-front-server' \
+          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+          -Dsonar.token=${{ secrets.SONAR_TOKEN }}
 
       - name: Build with Maven
         run: mvn package --batch-mode

@@ -60,7 +60,7 @@ jobs:
             docker build -t front-app .
             docker stop front-app || true
             docker rm front-app || true
-            docker run -d -p 8071:8071 --name front-app front-app
+            docker run -d -p 8040:8040 --name front-app front-app
           EOF
 
       - name: Send Deployment Status to Dooray

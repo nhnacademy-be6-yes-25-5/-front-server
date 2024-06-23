@@ -19,3 +19,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+book:
+  client: ${CLIENT_ID}
+  secret: ${CLIENT_SECRET}

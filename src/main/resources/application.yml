@@ -13,5 +13,5 @@ spring:
     redis:
       port: 6379
       host: 127.0.0.1
-      password: "*N2vya7H@muDTwdNMR!"
+      password: ${YES25_5_REDIS_PASSWORD}
       database: 12

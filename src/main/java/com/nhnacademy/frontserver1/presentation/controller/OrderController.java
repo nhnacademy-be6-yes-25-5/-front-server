@@ -71,4 +71,9 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/fail")
+    public String getErrorPage() {
+        return "error/order-fail";
+    }
+
 }

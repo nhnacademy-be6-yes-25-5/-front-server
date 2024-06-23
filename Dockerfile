@@ -15,4 +15,5 @@ COPY . .
 RUN mvn package
 
 # Default command
+# prod 설정 추가
 CMD ["java", "-jar", "target/FrontServer1-0.0.1-SNAPSHOT.jar", "--spring.profiles.active=prod"]

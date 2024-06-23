@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface AuthAdaptor {
 
     @PostMapping("/auth/login")
-    ResponseEntity<Void> findLoginUserByEmail(@RequestBody LoginUserRequest loginUserRequest);
+    ResponseEntity<String> findLoginUserByEmail(@RequestBody LoginUserRequest loginUserRequest);
 
 }

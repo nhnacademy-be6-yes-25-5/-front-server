@@ -34,9 +34,10 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     /**
      * 요청 URI에 따라 인증 검사를 처리합니다.
      *
-     * 1. /auth/login, /index 엔드포인트로의 요청은 인증 검사를 건너뜁니다.
-     * 2. 리소스 요청 URI(이미지, CSS, JavaScript 파일 등)인 경우에도 인증 검사를 건너뜁니다.
-     * 3. 그 외의 요청에 대해서는 사용자 인증 토큰을 검증합니다.
+     * 1. /auth/login 엔드포인트로의 요청은 인증 헤더가 있으면 허용하지 않습니다.
+     * 2. /index 엔드포인트로의 요청은 인증 검사를 건너뜁니다.
+     * 3. 리소스 요청 URI(이미지, CSS, JavaScript 파일 등)인 경우에도 인증 검사를 건너뜁니다.
+     * 4. 그 외의 요청에 대해서는 사용자 인증 토큰을 검증합니다.
      *    - 유효한 토큰이 있는 경우 요청을 계속 진행합니다.
      *    - 유효한 토큰이 없는 경우 401 Unauthorized 응답을 반환합니다.
      *
@@ -51,6 +52,17 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         if (request.getRequestURI().equals("/auth/login")) {
+            String authHeader = request.getHeader("Authentication");
+            if (authHeader != null) {
+                // 인증 헤더가 있으면 /auth/login 엔드포인트 접근 불가
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            } else {
+                filterChain.doFilter(request, response);
+            }
+            return;
+        }
+
+        if (request.getRequestURI().equals("/index")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -69,7 +81,10 @@ public class AuthenticationFilter extends OncePerRequestFilter {
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
             }
         } else {
+            // 인증 헤더가 없는 경우, 로그인이 필요하다는 메시지 출력 후 로그인 페이지로 리다이렉트
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.getWriter().write("로그인이 필요한 기능입니다!");
+            response.sendRedirect("/auth/login");
         }
     }
 

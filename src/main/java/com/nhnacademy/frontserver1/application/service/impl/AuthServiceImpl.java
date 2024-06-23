@@ -3,6 +3,7 @@ package com.nhnacademy.frontserver1.application.service.impl;
 import com.nhnacademy.frontserver1.application.service.AuthService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.AuthAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.LoginUserRequest;
+import com.nhnacademy.frontserver1.presentation.dto.response.user.LoginUserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -31,16 +32,13 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public String loginUser(LoginUserRequest loginUserRequest) {
-        ResponseEntity<Void> response = authAdaptor.findLoginUserByEmail(loginUserRequest);
+        ResponseEntity<String> response = authAdaptor.findLoginUserByEmail(loginUserRequest);
 
-        String authorizationHeader = response.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-        if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
-            String token = authorizationHeader.substring("Bearer ".length());
+        String token = response.getBody();
 
-            return tokenService.storeToken(token);
-        }
+        tokenService.storeToken(token);
 
-        return authorizationHeader;
+        return token;
     }
 
 }

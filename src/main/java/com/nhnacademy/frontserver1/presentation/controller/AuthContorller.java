@@ -2,6 +2,7 @@ package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.impl.AuthServiceImpl;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.LoginUserRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -50,13 +51,9 @@ public class AuthContorller {
      * @return 메인 페이지로의 리다이렉트 경로
      */
     @PostMapping("/login")
-    public String login(@RequestParam String username, @RequestParam String password) {
-        String tokenKey = authService.loginUser(LoginUserRequest.builder().email(username).password(password).build());
-
-        HttpCookie cookie = new HttpCookie("tokenKey", tokenKey);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authentication", cookie.toString());
-
+    public String login(@RequestParam String username, @RequestParam String password, HttpServletResponse response) {
+        String token = authService.loginUser(LoginUserRequest.builder().email(username).password(password).build());
+        response.setHeader("Authorization", "Bearer " + token);
         return "index";
     }
 }

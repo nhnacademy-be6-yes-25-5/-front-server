@@ -12,6 +12,6 @@ public class ViewController {
 
     @GetMapping("view")
     public String index(){
-        return "admin/admin-dashboard";
+        return "/admin/product/admin-product";
     }
 }

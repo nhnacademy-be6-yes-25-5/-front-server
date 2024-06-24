@@ -41,4 +41,10 @@ public class AuthServiceImpl implements AuthService {
         return token;
     }
 
+    @Override
+    public String testToken(String testRequest) {
+        ResponseEntity<String> response = authAdaptor.tokenTest(testRequest);;
+        return response.getBody();
+    }
+
 }

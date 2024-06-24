@@ -2,21 +2,35 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
+  <!-- ========================= CSS here ========================= -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/LineIcons.3.0.css">
+  <link rel="stylesheet" href="/css/tiny-slider.css">
+  <link rel="stylesheet" href="/css/glightbox.min.css">
+  <link rel="stylesheet" href="/css/main.css">
 </head>
-
 <body>
-<h2> 결제 실패 </h2>
-<p id="code"></p>
-<p id="message"></p>
+<!-- Include header -->
+<header th:replace="~{fragments/header :: header}"></header>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+      <h2>결제 실패</h2>
+      <p>결제 처리 중 문제가 발생했습니다.</p>
+      <p>메시지: <span id="message"></span></p>
+      <p>코드: <span id="code"></span></p>
+    </div>
+  </div>
+</div>
+
+<!--<script>-->
+<!--  const urlParams = new URLSearchParams(window.location.search);-->
+<!--  document.getElementById("message").textContent = urlParams.get("message");-->
+<!--  document.getElementById("code").textContent = urlParams.get("code");-->
+<!--</script>-->
+
+<!-- Include footer -->
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>
-
-<script>
-  const urlParams = new URLSearchParams(window.location.search);
-
-  const codeElement = document.getElementById("code");
-  const messageElement = document.getElementById("message");
-
-  codeElement.textContent = "에러코드: " + urlParams.get("code");
-  messageElement.textContent = "실패 사유: " + urlParams.get("message");
-</script>

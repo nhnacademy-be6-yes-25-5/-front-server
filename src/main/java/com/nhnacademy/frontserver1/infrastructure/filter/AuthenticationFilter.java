@@ -19,10 +19,10 @@ import java.io.IOException;
  * @author lettuce82
  * @version 1.0
  */
-@Component
+//@Component
 public class AuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
+//    @Autowired
     private TokenService tokenService;
 
     private static final String[] RESOURCE_PATTERNS = {

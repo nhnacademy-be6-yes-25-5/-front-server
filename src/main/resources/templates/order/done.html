@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <!-- ========================= CSS here ========================= -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/LineIcons.3.0.css">
+  <link rel="stylesheet" href="/css/tiny-slider.css">
+  <link rel="stylesheet" href="/css/glightbox.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<!-- Include header -->
+<header th:replace="~{fragments/header :: header}"></header>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+      <h2>결제 성공</h2>
+      <p>주문번호: <span th:text="${orderId}"></span></p>
+      <p>결제 금액: <span th:text="${amount}"></span>원</p>
+    </div>
+  </div>
+
+  <div class="row justify-content-center mt-4">
+    <div class="col-md-10">
+      <h3>주문 내역</h3>
+      <div class="list-group">
+        <div th:each="order : ${orders}" class="list-group-item">
+          <div class="row">
+            <div class="col-md-3">
+              <img th:src="${order.bookImage != null ? order.bookImage : '/images/no-image.png'}" class="img-fluid" alt="책 이미지">
+            </div>
+            <div class="col-md-9">
+              <h5 th:text="${order.bookName}"></h5>
+              <p th:text="'저자: ' + ${order.bookAuthor}"></p>
+              <p th:text="'가격: ' + ${order.bookPrice} + '원'"></p>
+              <p th:text="'수량: ' + ${order.bookQuantity}"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Include footer -->
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

@@ -22,12 +22,12 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build --no-cache -t front-app .
+          docker build --no-cache -t front1-app .
 
 
       - name: Run Maven tests in Docker
         run: |
-          docker run --rm front-app mvn clean verify sonar:sonar \
+          docker run --rm front1-app mvn clean verify sonar:sonar \
           -Dsonar.projectKey=yes-25-5-order-front-server \
           -Dsonar.projectName='yes-25-5-order-front-server' \
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
@@ -35,7 +35,7 @@ jobs:
 
       - name: Build Maven project in Docker
         run: |
-          docker run --rm -v "$(pwd)":/app -w /app front-app mvn package
+          docker run --rm -v "$(pwd)":/app -w /app front1-app mvn package
 
       - name: Check if JAR file exists
         run: |

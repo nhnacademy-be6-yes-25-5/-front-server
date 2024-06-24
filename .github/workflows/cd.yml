@@ -25,6 +25,22 @@ jobs:
           chmod 400 ~/.ssh/github_rsa
           ssh-keyscan ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
+      - name: Copy project files to Remote Server
+        env:
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
+        run: |
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no Dockerfile ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/Dockerfile
+
+      - name: Check Dockerfile on Remote Server
+        env:
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
+        run: |
+          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/Dockerfile"
+
       - name: Deploy JAR on Remote Server
         env:
           REMOTE_USER: ${{ secrets.SSH_USER }}
@@ -33,13 +49,14 @@ jobs:
         run: |
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
             cd ${REMOTE_DIR}
-            # Ensure the JAR file exists
-            if [ ! -f *.jar ]; then
-              echo "JAR file not found!"
+            if [ ! -f Dockerfile ]; then
+              echo "Dockerfile not found!"
               exit 1
             fi
-            # Run the JAR file (Example command, update as needed)
-            java -jar *.jar
+            docker build --no-cache -t front1-app .
+            docker stop front1-app || true
+            docker rm front1-app || true
+            docker run -d -p 8040:8040 --name front1-app front1-app
           EOF
 
       - name: Send Deployment Status to Dooray
@@ -54,9 +71,9 @@ jobs:
           script: |
             const webhookUrl = process.env.DOORAY_WEBHOOK_URL;
             const payload = {
-              botName: "프론트 서버1 Bot",
+              botName: "프론트1 서버 Bot",
               botIconImage: "https://www.tistory.com/favicon.ico",
-              text: "프론트 서버1의 배포가 성공적으로 완료되었습니다!",
+              text: "프론트1 서버의 배포가 성공적으로 완료되었습니다!",
               attachments: [
                 {
                   title: "Pull Request URL",
@@ -91,9 +108,9 @@ jobs:
           script: |
             const webhookUrl = process.env.DOORAY_WEBHOOK_URL;
             const payload = {
-              botName: "프론트 서버1 Bot",
+              botName: "프론트1 서버 Bot",
               botIconImage: "https://www.tistory.com/favicon.ico",
-              text: "프론트 서버1의 배포가 실패했습니다...",
+              text: "프론트1 서버의 배포가 실패했습니다...",
               attachments: [
                 {
                   title: "Pull Request URL",

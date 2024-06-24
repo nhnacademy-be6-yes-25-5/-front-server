@@ -3,12 +3,10 @@ package com.nhnacademy.frontserver1.application.service.impl;
 import com.nhnacademy.frontserver1.application.service.AuthService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.AuthAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.LoginUserRequest;
-import com.nhnacademy.frontserver1.presentation.dto.response.user.LoginUserResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * AuthServiceImpl 클래스는 사용자 인증 기능을 제공하는 서비스 구현체입니다.
@@ -42,8 +40,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String testToken(String testRequest) {
-        ResponseEntity<String> response = authAdaptor.tokenTest(testRequest);;
+    public String testToken(String token) {
+        ResponseEntity<String> response = authAdaptor.tokenTest(token);
         return response.getBody();
     }
 

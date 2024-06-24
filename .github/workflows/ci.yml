@@ -22,7 +22,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t front-app .
+          docker build --no-cache -t front-app .
 
 
       - name: Run Maven tests in Docker

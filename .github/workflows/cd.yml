@@ -57,10 +57,10 @@ jobs:
               echo "Dockerfile not found!"
               exit 1
             fi
-            docker build -t front-app .
-            docker stop front-app || true
-            docker rm front-app || true
-            docker run -d -p 8040:8040 --name front-app front-app
+            docker build -t front1-app .
+            docker stop front1-app || true
+            docker rm front1-app || true
+            docker run -d -p 8040:8040 --name front1-app front1-app
           EOF
 
       - name: Send Deployment Status to Dooray

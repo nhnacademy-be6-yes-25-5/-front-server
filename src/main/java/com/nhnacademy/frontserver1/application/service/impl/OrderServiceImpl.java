@@ -7,6 +7,8 @@ import com.nhnacademy.frontserver1.infrastructure.adaptor.PolicyAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderStatusResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadPaymentOrderResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
 import java.util.Comparator;
@@ -53,5 +55,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<ReadCartBookResponse> findAllCartBok(Long userId) {
         return cartAdaptor.getCartBooks(userId);
+    }
+
+    @Override
+    public List<ReadPaymentOrderResponse> findAllOrderByOrderId(String orderId) {
+        return orderAdaptor.findAllByOrderId(orderId);
+    }
+
+    @Override
+    public ReadOrderStatusResponse getOrderStatusByOrderId(String orderId) {
+        return orderAdaptor.findOrderStatusByOrderId(orderId);
     }
 }

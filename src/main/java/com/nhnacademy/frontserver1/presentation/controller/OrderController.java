@@ -4,6 +4,7 @@ import com.nhnacademy.frontserver1.application.service.OrderService;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderStatusResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
 import jakarta.servlet.http.HttpSession;
@@ -16,9 +17,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/orders")
@@ -69,6 +72,17 @@ public class OrderController {
         session.setAttribute("quantities", response.quantities());
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/fail")
+    public String getErrorPage() {
+        return "error/order-fail";
+    }
+
+    @GetMapping("/status/{orderId}")
+    @ResponseBody
+    public ResponseEntity<ReadOrderStatusResponse> getOrderStatus(@PathVariable String orderId) {
+        return ResponseEntity.ok(orderService.getOrderStatusByOrderId(orderId));
     }
 
 }

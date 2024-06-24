@@ -3,6 +3,8 @@ package com.nhnacademy.frontserver1.application.service;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderStatusResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadPaymentOrderResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
 import java.util.List;
@@ -19,4 +21,8 @@ public interface OrderService {
     List<ReadTakeoutResponse> findAllTakeout();
 
     List<ReadCartBookResponse> findAllCartBok(Long userId);
+
+    List<ReadPaymentOrderResponse> findAllOrderByOrderId(String orderId);
+
+    ReadOrderStatusResponse getOrderStatusByOrderId(String orderId);
 }

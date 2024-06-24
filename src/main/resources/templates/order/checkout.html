@@ -936,6 +936,7 @@
     })
     .catch(error => {
       console.error('주문 생성 및 결제 요청 중 오류 발생:', error);
+      window.location.href='/orders/fail'
     });
   }
 

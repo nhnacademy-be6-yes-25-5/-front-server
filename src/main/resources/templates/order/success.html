@@ -2,12 +2,25 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
+  <!-- ========================= CSS here ========================= -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/LineIcons.3.0.css">
+  <link rel="stylesheet" href="/css/tiny-slider.css">
+  <link rel="stylesheet" href="/css/glightbox.min.css">
+  <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-<h2>결제 성공</h2>
-<p id="paymentKey"></p>
-<p id="orderId"></p>
-<p id="amount"></p>
+<!-- Include header -->
+<header th:replace="~{fragments/header :: header}"></header>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+      <h2>결제 요청 중입니다...</h2>
+      <p>잠시만 기다려 주세요.</p>
+    </div>
+  </div>
+</div>
 
 <script>
   const urlParams = new URLSearchParams(window.location.search);
@@ -22,34 +35,48 @@
       amount: amount,
     };
 
-    const response = await fetch("/payments/confirm", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestData),
-    });
+    try {
+      const response = await fetch("/payments/confirm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
 
-    const json = await response.json();
-
-    if (!response.ok) {
-      // 결제 실패 비즈니스 로직을 구현하세요.
-      console.log(json);
-      window.location.href = `/payments/fail?message=${json.message}&code=${json.code}`;
+      if (!response.ok) {
+        window.location.href = `/payments/fail`;
+      } else {
+        // 폴링 시작
+        checkOrderStatus(orderId);
+      }
+    } catch (error) {
+      window.location.href = `/payments/fail?message=Network error&code=500`;
     }
-
-    // 결제 성공 비즈니스 로직을 구현하세요.
-    console.log(json);
   }
+
+  async function checkOrderStatus(orderId) {
+    try {
+      const response = await fetch(`/orders/status/${orderId}`, {
+        method: "GET",
+      });
+
+      if (response.ok) {
+        window.location.href = `/payments/done/${orderId}?amount=${amount}`;
+      } else {
+        setTimeout(() => checkOrderStatus(orderId), 3000);
+      }
+    } catch (error) {
+      setTimeout(() => checkOrderStatus(orderId), 3000);
+    }
+  }
+
+  setTimeout(() => checkOrderStatus(orderId), 3000);
+
   confirm();
-
-  const paymentKeyElement = document.getElementById("paymentKey");
-  const orderIdElement = document.getElementById("orderId");
-  const amountElement = document.getElementById("amount");
-
-  orderIdElement.textContent = "주문번호: " + orderId;
-  amountElement.textContent = "결제 금액: " + amount;
-  paymentKeyElement.textContent = "paymentKey: " + paymentKey;
 </script>
+
+<!-- Include footer -->
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>

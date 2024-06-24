@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Current Points</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #343a40;
+        }
+        .points {
+            text-align: center;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #e9ecef;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Your Current Points</h1>
+    <div class="points">
+        Current Point: <span id="currentPoint">${currentPoint}</span>
+    </div>
+    <h2>Your Point History</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Action</th>
+            <th>Points</th>
+            <th>Date</th>
+            <th>Usage Details</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pointLog : ${pointLogs}">
+            <td th:text="${pointLog.pointLogUpdatedType}">Action</td>
+            <td th:text="${pointLog.pointLogAmount}">Points</td>
+            <td th:text="${#dates.format(pointLog.pointLogUpdatedAt, 'yyyy-MM-dd HH:mm:ss')}">Date</td>
+            <td th:text="${pointLog.pointLogUsed}">Usage Details</td>
+        </tr>
+        <tr th:if="${pointLogs.size() == 0}">
+            <td colspan="4">No history available</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="footer">
+        <p>Returning to your profile? <a href="/profile">View Profile</a></p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coupon List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+  </style>
+  <script>
+    function selectCoupon(couponCode, discountValue) {
+      window.opener.document.getElementById('selectedCoupon').value = couponCode;
+      window.opener.document.getElementById('couponDiscount').value = discountValue;
+      window.close();
+    }
+  </script>
+</head>
+<body>
+<h1>Coupon List</h1>
+<table>
+  <thead>
+  <tr>
+    <th>쿠폰명</th>
+    <th>쿠폰코드</th>
+    <th>할인값</th>
+    <th>할인률</th>
+    <th>최소 주문 금액</th>
+    <th>최대 할인 금액</th>
+    <th>쿠폰 발급 일자</th>
+    <th>쿠폰 만료 일자</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <th:block th:each="coupon : ${coupons}">
+    <tr>
+      <td th:text="${coupon.couponName()}"></td>
+      <td th:text="${coupon.couponCode}"></td>
+      <td th:text="${coupon.couponPolicyDiscountValue}"></td>
+      <td th:text="${coupon.couponPolicyRate}"></td>
+      <td th:text="${coupon.couponPolicyMinOrderAmount}"></td>
+      <td th:text="${coupon.couponPolicyMaxAmount}"></td>
+      <td th:text="${#dates.format(coupon.couponCreatedAt, 'yyyy-MM-dd')}"></td>
+      <td th:text="${#dates.format(coupon.couponExpiredAt, 'yyyy-MM-dd')}"></td>
+      <td><button></button></td>
+    </tr>
+  </th:block>
+  </tbody>
+</table>
+</body>
+</html>

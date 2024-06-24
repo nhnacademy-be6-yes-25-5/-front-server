@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js" lang="zxx">
+<html class="no-js" lang="zxx" xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="utf-8"/>
@@ -8,6 +8,7 @@
   <meta name="description" content=""/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <link rel="stylesheet" href="/images/favicon.svg">
+  <script src="https://js.tosspayments.com/v1/payment"></script>
 
   <!-- ========================= CSS here ========================= -->
   <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -476,16 +477,18 @@
                     <div class="single-form form-default">
                       <label>포장 타입</label>
                       <div class="form-input form">
-                        <select name="takeoutType" id="takeoutType" required>
-                          <option value="NONE">NONE</option>
-                          <option value="CARD_BOARD">CARD_BOARD</option>
-                          <option value="PAPER">PAPER</option>
-                          <option value="VINYL">VINYL</option>
+                        <select id="takeoutType" name="takeoutType" onchange="updateTotalPrice()"
+                                required>
+                          <option value="" data-price="0">포장 타입을 선택하세요</option>
+                          <option th:each="takeout : ${takeouts}" th:value="${takeout.takeoutType}"
+                                  th:data-price="${takeout.takeoutPrice}"
+                                  th:data-description="${takeout.takeoutDescription}"
+                                  th:text="${takeout.takeoutDescription + ' - ' + takeout.takeoutPrice + '원'}">
+                          </option>
                         </select>
                       </div>
                     </div>
                   </div>
-
                   <div class="col-md-12">
                     <div class="single-form form-default">
                       <label>배송 받길 원하는 날짜</label>
@@ -496,12 +499,18 @@
                   </div>
 
                   <form id="orderForm" action="/orders" method="POST">
-                    <div th:each="request, index : ${requests}">
-                      <input type="hidden" name="productIds" th:value="${request.productId}">
-                      <input type="hidden" name="quantities" th:value="${request.quantity}">
-                      <input type="hidden" name="prices" th:value="${request.price}">
+                    <input type="hidden" name="userId" id="userId" th:value="${userId}">
+                    <div th:each="cartBook, index : ${cartBooks}">
+                      <input type="hidden" name="productIds" th:value="${cartBook.bookId}">
+                      <input type="hidden" name="cartBookIds" th:value="${cartBook.cartBookId}">
+                      <input type="hidden" name="quantities" th:value="${cartBook.cartBookQuantity}">
+                      <input type="hidden" name="prices" th:value="${cartBook.bookPrice}">
                     </div>
+                    <input type="hidden" name="shippingFee" id="hiddenShippingFee">
+                    <input type="hidden" name="points" id="hiddenPointsUsed" value="0">
+                    <input type="hidden" name="takeoutPrice" id="hiddenTakeoutPrice">
                     <input type="hidden" name="orderId" id="hiddenOrderId">
+                    <input type="hidden" name="discountPrice" id="hiddenDiscountPrice">
                     <input type="hidden" name="addressRaw" id="hiddenAddressRaw">
                     <input type="hidden" name="addressDetail" id="hiddenAddressDetail">
                     <input type="hidden" name="reference" id="hiddenReference">
@@ -566,11 +575,29 @@
                 <p class="value">할인:</p>
                 <p class="price" id="discountAmount">0원</p>
               </div>
-              <div class="additional-info mt-30 progress-bar" th:if="${freeShippingAmount != null && freeShippingAmount > 0}">
-                <p th:text="'무료 배송까지 ' + ${freeShippingAmount} + '원'"></p>
+              <div class="total-price takeout">
+                <p class="value">포장비:</p>
+                <p class="price" id="takeoutPrice">0원</p>
+              </div>
+              <div class="total-price points">
+                <p class="value">포인트 사용:</p>
+                <input type="number" id="points" value="0" min="0" oninput="updateTotalPrice()">
+                <p class="price" id="pointsDiscount">0원</p>
+              </div>
+              <div class="additional-info mt-30" th:if="${freeShippingAmount != null}">
+                <p th:if="${freeShippingAmount > 0}"
+                   th:text="'무료 배송까지 ' + ${freeShippingAmount} + '원'"></p>
+                <p th:if="${freeShippingAmount <= 0}" th:text="'무료 배송 혜택 적용중!'"></p>
+                <input type="hidden" id="freeShippingAmount" th:value="${freeShippingAmount}"/>
+                <div class="progress">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated"
+                       role="progressbar" id="progress-bar"
+                       th:aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+                       style="width: 0%">
+                  </div>
+                </div>
               </div>
             </div>
-
             <div class="total-payable">
               <div class="payable-price">
                 <p class="value">총 금액:</p>
@@ -753,6 +780,33 @@
 <script src="/js/main.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
+  function updateTotalPrice() {
+    const totalAmount = parseInt(document.getElementById('totalAmount').innerText.replace('원', ''))
+        || 0;
+    const shippingFee = parseInt(document.getElementById('shippingFee').innerText.replace('원', ''))
+        || 0;
+    const discountAmount = parseInt(document.getElementById('couponDiscount').value, 10) || 0;
+    const takeoutSelect = document.getElementById('takeoutType');
+    const selectedOption = takeoutSelect.options[takeoutSelect.selectedIndex];
+    const takeoutPrice = parseInt(selectedOption.getAttribute('data-price'), 10) || 0;
+    let pointsDiscount = parseInt(document.getElementById('points').value, 10) || 0;
+
+    const totalPriceBeforePoints = totalAmount - discountAmount + shippingFee + takeoutPrice;
+
+    if (pointsDiscount > totalPriceBeforePoints) {
+      pointsDiscount = totalPriceBeforePoints;
+      document.getElementById('points').value = totalPriceBeforePoints;
+    }
+
+    document.getElementById('takeoutPrice').textContent = takeoutPrice + '원';
+    document.getElementById('pointsDiscount').textContent = pointsDiscount + '원';
+
+    const totalPrice = totalPriceBeforePoints - pointsDiscount;
+
+    document.getElementById('discountAmount').innerText = discountAmount + '원';
+    document.getElementById('totalPriceValue').innerText = totalPrice + '원';
+  }
+
   function daumPost() {
     new daum.Postcode({
       oncomplete: function (data) {
@@ -802,43 +856,124 @@
     }
   }
 
+  function generateUUID() {
+    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+  }
+
   function submitOrder() {
+    const orderId = `order-${generateUUID()}`;
     const deliveryDateValue = document.getElementById('deliveryDate').value;
-    const orderId = `order-${Date.now()}`;
     const totalPrice = document.getElementById('totalPriceValue').textContent;
 
-    document.getElementById('hiddenOrderId').value = orderId;
-    document.getElementById('hiddenDeliveryDate').value = deliveryDateValue + "T00:00:00";
-    document.getElementById('hiddenAddressRaw').value = document.getElementById('addressRaw').value;
-    document.getElementById('hiddenReference').value = document.getElementById('reference').value;
-    document.getElementById('hiddenOrderName').value = document.getElementById('orderName').value;
-    document.getElementById('hiddenOrderEmail').value = document.getElementById('orderEmail').value;
-    document.getElementById('hiddenOrderPhoneNumber').value = document.getElementById(
-        'orderPhoneNumber').value;
-    document.getElementById('hiddenReceiveOrderName').value = document.getElementById(
-        'receiveName').value;
-    document.getElementById('hiddenReceiveOrderEmail').value = document.getElementById(
-        'receiveEmail').value;
-    document.getElementById('hiddenReceiveOrderPhoneNumber').value = document.getElementById(
-        'receivePhoneNumber').value;
-    document.getElementById('hiddenAddressDetail').value = document.getElementById(
-        'addressDetail').value;
-    document.getElementById('hiddenZipcode').value = document.getElementById('postcode').value;
-    document.getElementById('hiddenTakeoutType').value = document.getElementById(
-        'takeoutType').value;
+    const getNumberValue = (id) => {
+      const value = document.getElementById(id).textContent.replace('원', '').trim();
+      return value ? value : "0";
+    };
 
-    document.getElementById('hiddenTotalPrice').value = totalPrice.replace('원', '').trim();
+    const userId = document.getElementById('userId').value;
+    const totalPriceValue = totalPrice.replace('원', '').trim();
+    const takeoutPrice = document.getElementById('takeoutPrice').innerText.replace('원', '');
+    const shippingFee = document.getElementById('shippingFee').innerText.replace('원', '');
+    const couponDiscount = getNumberValue('discountAmount');
+    const orderName = document.getElementById('orderName').value;
+    const orderEmail = document.getElementById('orderEmail').value;
+    const orderPhoneNumber = document.getElementById('orderPhoneNumber').value;
+    const receiveName = document.getElementById('receiveName').value;
+    const receiveEmail = document.getElementById('receiveEmail').value;
+    const receivePhoneNumber = document.getElementById('receivePhoneNumber').value;
+    const addressRaw = document.getElementById('addressRaw').value;
+    const reference = document.getElementById('reference').value;
+    const addressDetail = document.getElementById('addressDetail').value;
+    const postcode = document.getElementById('postcode').value;
+    const takeoutType = document.getElementById('takeoutType').value;
+    const points = document.getElementById('points').value || "0";
+    const productIds = Array.from(document.querySelectorAll('input[name="productIds"]')).map(
+        input => input.value);
+    const cartBookIds = Array.from(document.querySelectorAll('input[name="cartBookIds"]')).map(
+        input => input.value);
+    const quantities = Array.from(document.querySelectorAll('input[name="quantities"]')).map(
+        input => input.value);
+    const prices = Array.from(document.querySelectorAll('input[name="prices"]')).map(
+        input => input.value);
 
-    document.getElementById('orderForm').submit();
+    fetch('/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId : userId,
+        orderId: orderId,
+        deliveryDate: deliveryDateValue,
+        orderTotalAmount: totalPriceValue,
+        takeoutPrice: takeoutPrice,
+        shippingFee: shippingFee,
+        discountPrice: couponDiscount,
+        orderName: orderName,
+        orderEmail: orderEmail,
+        orderPhoneNumber: orderPhoneNumber,
+        receiveName: receiveName,
+        receiveEmail: receiveEmail,
+        receivePhoneNumber: receivePhoneNumber,
+        addressRaw: addressRaw,
+        reference: reference,
+        addressDetail: addressDetail,
+        zipcode: postcode,
+        takeoutType: takeoutType,
+        points: points,
+        productIds: productIds,
+        quantities: quantities,
+        prices: prices,
+        cartBookIds: cartBookIds
+      }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      const {orderId, totalAmount} = data;
+      startPaymentProcess(orderId, totalAmount);
+    })
+    .catch(error => {
+      console.error('주문 생성 및 결제 요청 중 오류 발생:', error);
+    });
+  }
+
+  function startPaymentProcess(orderId, totalAmount) {
+    const customerKey = generateUUID();
+
+    const clientKey = 'test_ck_5OWRapdA8dJYOKZkAR06Vo1zEqZK';
+    const tossPayments = TossPayments(clientKey);
+
+    tossPayments.requestPayment('카드', {
+      amount: totalAmount,
+      orderId: orderId,
+      orderName: orderId,
+      customerName: customerKey,
+      successUrl: window.location.origin + "/payments/success",
+      failUrl: window.location.origin + "/payments/fail",
+    })
+    .catch(function (error) {
+      if (error.code === 'USER_CANCEL') {
+        console.error('사용자가 결제를 취소하였습니다.');
+      } else if (error.code === 'INVALID_CARD_COMPANY') {
+        console.error('유효하지 않은 카드 회사입니다.');
+      }
+    });
   }
 
   function openCouponPopup() {
-    const popup = window.open('couponPopup.html', '쿠폰 목록', 'width=600,height=400');
+    // const userId = document.getElementById('userId').value;
+    const userId = 4;
+    const popup = window.open(`/orders/couponPopup?userId=${userId}`, '쿠폰 목록',
+        'width=600,height=400');
     popup.onunload = function () {
       if (popup.selectedCoupon) {
         document.getElementById('selectedCoupon').value = popup.selectedCoupon;
+        document.getElementById('couponDiscount').value = popup.selectedCouponDiscount;
+        updateTotalPrice();
       }
-    };
+    }
   }
 
   function updateShippingFee(fee) {
@@ -846,14 +981,7 @@
     updateTotalPrice();
   }
 
-  function updateTotalPrice() {
-    const totalAmount = parseInt(document.getElementById('totalAmount').innerText.replace('원', ''));
-    const shippingFee = parseInt(document.getElementById('shippingFee').innerText.replace('원', ''));
-    const discountAmount = parseInt(document.getElementById('couponDiscount').value, 10);
-    const totalPrice = totalAmount + shippingFee - discountAmount;
-    document.getElementById('discountAmount').innerText = discountAmount + '원';
-    document.getElementById('totalPriceValue').innerText = totalPrice + '원';
-  }
+  document.getElementById('points').addEventListener('input', updateTotalPrice);
 
   document.addEventListener('DOMContentLoaded', function () {
     const firstShippingOption = document.querySelector('input[name="shipping"]:checked');
@@ -864,6 +992,49 @@
     }
   });
 
+  document.addEventListener("DOMContentLoaded", function () {
+    const totalAmountElement = document.getElementById('totalAmount');
+    const freeShippingAmountElement = document.getElementById('freeShippingAmount');
+
+    if (!totalAmountElement || !freeShippingAmountElement) {
+      console.error('필요한 요소가 존재하지 않습니다.');
+      return;
+    }
+
+    const totalAmountText = totalAmountElement.innerText.replace('원', '');
+    const totalAmount = parseInt(totalAmountText, 10);
+    const freeShippingAmount = parseInt(freeShippingAmountElement.value, 10);
+    const progressBar = document.getElementById("progress-bar");
+
+    let progress = 0;
+    if (freeShippingAmount <= 0) {
+      progress = 100;
+    } else {
+      progress = Math.min((totalAmount / (totalAmount + freeShippingAmount)) * 100, 100);
+    }
+
+    animateProgressBar(progressBar, progress);
+  });
+
+  function animateProgressBar(progressBar, targetProgress) {
+    let currentProgress = 0;
+    const animationDuration = 1000;
+    const frameRate = 30;
+
+    const increment = (targetProgress - currentProgress) / (animationDuration / (1000 / frameRate));
+
+    const intervalId = setInterval(function () {
+      currentProgress += increment;
+      if (currentProgress >= targetProgress) {
+        currentProgress = targetProgress;
+        clearInterval(intervalId);
+      }
+
+      progressBar.style.width = currentProgress + "%";
+      progressBar.setAttribute('aria-valuenow', currentProgress.toFixed(0));
+      progressBar.innerText = currentProgress.toFixed(0) + "%";
+    }, 1000 / frameRate);
+  }
 </script>
 </body>
 

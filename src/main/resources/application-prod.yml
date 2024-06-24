@@ -14,5 +14,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
+
 eureka:
   gateway: http://133.186.153.195:8085

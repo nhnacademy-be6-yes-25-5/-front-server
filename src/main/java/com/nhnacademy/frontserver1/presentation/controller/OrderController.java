@@ -33,8 +33,7 @@ public class OrderController {
 
     @GetMapping("checkout")
     public String findAllCheckout(Model model, Pageable pageable) {
-        Long userId = 8L;
-        List<ReadCartBookResponse> cartBookResponses = orderService.findAllCartBok(userId);
+        List<ReadCartBookResponse> cartBookResponses = List.of(ReadCartBookResponse.from());
 
         Integer totalAmount = getTotalAmount(cartBookResponses);
         ReadShippingPolicyResponse shippingPolicy = orderService.findAllOrderPolicy(pageable, totalAmount);
@@ -42,7 +41,7 @@ public class OrderController {
         Integer freeShippingAmount = freeShippingPolicy.shippingPolicyMinAmount() - totalAmount;
         List<ReadTakeoutResponse> takeoutResponses = orderService.findAllTakeout();
 
-        model.addAttribute("userId", userId);
+        model.addAttribute("userId", cartBookResponses.get(0).userId());
         model.addAttribute("shippingPolicy", shippingPolicy);
         model.addAttribute("freeShippingPolicy", freeShippingPolicy);
         model.addAttribute("freeShippingAmount", freeShippingAmount);

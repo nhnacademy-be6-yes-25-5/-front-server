@@ -4,11 +4,10 @@ import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadCartBookRe
 import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name = "cartAdaptor", url = "${eureka.gateway}/users")
 public interface CartAdaptor {
 
-    @GetMapping("/{userId}/cart-books")
-    List<ReadCartBookResponse> getCartBooks(@PathVariable Long userId);
+    @GetMapping("/cart-books")
+    List<ReadCartBookResponse> getCartBooks();
 }

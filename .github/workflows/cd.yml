@@ -60,7 +60,7 @@ jobs:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
         run: |
-          active_env=$(ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "if docker ps -f name=front1-app-blue --format '{{.Names}}' | grep -w front1-app-blue; then echo blue; else echo green; fi")
+          active_env=$(ssh -t -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "if docker ps -f name=front1-app-blue --format '{{.Names}}' | grep -w front1-app-blue; then echo blue; else echo green; fi")
           echo "active-env=$active_env" >> $GITHUB_ENV
 
       - name: Deploy JAR on Remote Server
@@ -78,8 +78,8 @@ jobs:
             NEW_PORT="8040"
           fi
 
-          # Stop and remove the currently active environment
-          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
+          # Stop and remove the currently active environment (if exists)
+          ssh -t -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
             echo "Stopping container front1-app-$ACTIVE_ENV"
             docker stop front1-app-$ACTIVE_ENV || true
             echo "Removing container front1-app-$ACTIVE_ENV"
@@ -87,7 +87,7 @@ jobs:
           EOF
 
           # Deploy to the new environment
-          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
+          ssh -t -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
             cd ${REMOTE_DIR}
             docker build --no-cache -t front1-app-$NEW_ENV .
             docker run -d -p $NEW_PORT:8040 --name front1-app-$NEW_ENV front1-app-$NEW_ENV
@@ -105,7 +105,7 @@ jobs:
             NEW_UPSTREAM="blue"
           fi
 
-          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
+          ssh -t -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
             sudo sed -i "s/proxy_pass http:\/\/.*;/proxy_pass http:\/\/$NEW_UPSTREAM;/" /etc/nginx/sites-available/default
             sudo nginx -s reload
           EOF

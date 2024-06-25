@@ -42,68 +42,52 @@ jobs:
           scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no Dockerfile ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/Dockerfile
           scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no pom.xml ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/pom.xml
           scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no -r src ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/src
-          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no src/main/resources/application-prod.yml ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/src/main/resources/application-prod.yml
 
-      - name: Check Dockerfile on Remote Server
+      - name: Deploy to Green Environment
         env:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
-          REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
+          GREEN_DIR: ${{ secrets.GREEN_DIR }}
         run: |
-          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/Dockerfile"
-          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/pom.xml"
-          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/src"
+          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "rm -rf ${GREEN_DIR}/*"
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no Dockerfile ${REMOTE_USER}@${REMOTE_HOST}:${GREEN_DIR}/Dockerfile
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no pom.xml ${REMOTE_USER}@${REMOTE_HOST}:${GREEN_DIR}/pom.xml
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no -r src ${REMOTE_USER}@${REMOTE_HOST}:${GREEN_DIR}/src
+          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "cd ${GREEN_DIR} && docker build -t green_app . && docker run -d -p 8040:8080 green_app"
 
-      - name: Determine Active Environment
-        id: active-env
+      - name: Update Nginx Config to Green
         env:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
         run: |
-          active_env=$(ssh -tt -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "if docker ps -f name=front1-app-blue --format '{{.Names}}' | grep -w front1-app-blue; then echo blue; else echo green; fi")
-          echo "active-env=$active_env" >> $GITHUB_ENV
+          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "
+            sudo sed -i 's/upstream backend {.*server .*:8041;/upstream backend { server 133.186.153.195:8040;/' /etc/nginx/sites-available/default &&
+            sudo systemctl reload nginx
+          "
 
-      - name: Deploy JAR on Remote Server
+      - name: Deploy to Blue Environment
+        if: always()
         env:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
-          REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
-          ACTIVE_ENV: ${{ env.active-env }}
+          BLUE_DIR: ${{ secrets.BLUE_DIR }}
         run: |
-          if [ "$ACTIVE_ENV" = "blue" ]; then
-            NEW_ENV="green"
-            NEW_PORT="8041"
-          else
-            NEW_ENV="blue"
-            NEW_PORT="8040"
-          fi
+          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "rm -rf ${BLUE_DIR}/*"
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no Dockerfile ${REMOTE_USER}@${REMOTE_HOST}:${BLUE_DIR}/Dockerfile
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no pom.xml ${REMOTE_USER}@${REMOTE_HOST}:${BLUE_DIR}/pom.xml
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no -r src ${REMOTE_USER}@${REMOTE_HOST}:${BLUE_DIR}/src
+          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "cd ${BLUE_DIR} && docker build -t blue_app . && docker run -d -p 8041:8080 blue_app"
 
-          ssh -tt -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
-            echo "Stopping container front1-app-$ACTIVE_ENV"
-            docker stop front1-app-$ACTIVE_ENV || true
-            echo "Removing container front1-app-$ACTIVE_ENV"
-            docker rm -f front1-app-$ACTIVE_ENV || true
-            cd ${REMOTE_DIR}
-            docker build --no-cache -t front1-app-$NEW_ENV .
-            docker run -d -p $NEW_PORT:8040 --name front1-app-$NEW_ENV front1-app-$NEW_ENV
-          EOF
-
-      - name: Update Nginx Configuration
+      - name: Update Nginx Config to Blue
+        if: always()
         env:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
-          ACTIVE_ENV: ${{ env.active-env }}
         run: |
-          if [ "$ACTIVE_ENV" = "blue" ]; then
-            NEW_ENV="green"
-          else
-            NEW_ENV="blue"
-          fi
-
-          ssh -tt -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
-            sed -i 's/server $ACTIVE_ENV/server $NEW_ENV/' /etc/nginx/sites-available/default
-            nginx -s reload
-          EOF
+          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "
+            sudo sed -i 's/upstream backend {.*server .*:8040;/upstream backend { server 133.186.153.195:8041;/' /etc/nginx/sites-available/default &&
+            sudo systemctl reload nginx
+          "
 
       - name: Send Deployment Status to Dooray
         if: success()

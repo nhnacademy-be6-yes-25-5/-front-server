@@ -3,7 +3,7 @@ package com.nhnacademy.frontserver1.presentation.controller;
 import com.nhnacademy.frontserver1.application.service.CouponService;
 import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyRequestDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyResponseDTO;
-import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponUserListResponseDTO;
+//import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponUserListResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

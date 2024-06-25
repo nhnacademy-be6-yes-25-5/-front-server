@@ -5,7 +5,7 @@ import com.nhnacademy.frontserver1.common.exception.FeignClientException;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.CouponAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyRequestDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyResponseDTO;
-import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponUserListResponseDTO;
+//import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponUserListResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

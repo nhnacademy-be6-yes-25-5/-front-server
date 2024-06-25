@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface CouponService {
     Page<CouponPolicyResponseDTO> findAllCouponPolicies(Pageable pageable);
-    List<CouponUserListResponseDTO> findUserCoupons(Long userId);
+//    List<CouponUserListResponseDTO> findUserCoupons(Long userId);
     void createCoupon(CouponPolicyRequestDTO createCouponRequest);
-    void deleteCoupon(Long id);
+//    void deleteCoupon(Long id);
 }

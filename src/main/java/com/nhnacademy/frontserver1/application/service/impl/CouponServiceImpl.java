@@ -49,28 +49,28 @@ public class CouponServiceImpl implements CouponService {
         }
     }
 
-
-    @Override
-    public List<CouponUserListResponseDTO> findUserCoupons(Long userId) {
-        try {
-            return couponAdaptor.findUserCoupons(userId);
-        } catch (FeignClientException e) {
-            logger.error("Error occurred while fetching user coupons", e);
-            throw e;
-        } catch (Exception e) {
-            logger.error("Unexpected error occurred while fetching user coupons", e);
-            throw e;
-        }
-    }
+//
+//    @Override
+//    public List<CouponUserListResponseDTO> findUserCoupons(Long userId) {
+//        try {
+//            return couponAdaptor.findUserCoupons(userId);
+//        } catch (FeignClientException e) {
+//            logger.error("Error occurred while fetching user coupons", e);
+//            throw e;
+//        } catch (Exception e) {
+//            logger.error("Unexpected error occurred while fetching user coupons", e);
+//            throw e;
+//        }
+//    }
 
     @Override
     public void createCoupon(CouponPolicyRequestDTO createCouponRequest) {
         couponAdaptor.create(createCouponRequest);
     }
 
-    @Override
-    public void deleteCoupon(Long id) {
-        couponAdaptor.delete(id);
-    }
+//    @Override
+//    public void deleteCoupon(Long id) {
+//        couponAdaptor.delete(id);
+//    }
 
 }

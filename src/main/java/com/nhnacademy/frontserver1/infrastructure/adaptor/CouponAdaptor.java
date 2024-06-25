@@ -14,12 +14,13 @@ public interface CouponAdaptor {
     @GetMapping("/admin-policy")
     List<CouponPolicyResponseDTO> findAll();
 
-    @GetMapping("/user-coupons/user")
-    List<CouponUserListResponseDTO> findUserCoupons(@RequestParam("userId") Long userId);
-
     @PostMapping("/admin-policy/coupon")
     void create(@RequestBody CouponPolicyRequestDTO createCouponRequest);
 
-    @DeleteMapping("/admin-policy/coupon/{id}")
-    void delete(@PathVariable Long id);
+//    @GetMapping("/user-coupons/user")
+//    List<CouponUserListResponseDTO> findUserCoupons(@RequestParam("userId") Long userId);
+
+//
+//    @DeleteMapping("/admin-policy/coupon/{id}")
+//    void delete(@PathVariable Long id);
 }

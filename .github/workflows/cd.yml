@@ -116,6 +116,7 @@ jobs:
             sudo sed -i 's/default blue;/default green;/g' /etc/nginx/sites-available/default
             sudo nginx -t && sudo systemctl reload nginx
           EOF
+        shell: bash
 
       - name: Switch Nginx to Blue Environment
         if: env.previous-environment == 'green'
@@ -129,6 +130,7 @@ jobs:
             sudo sed -i 's/default green;/default blue;/g' /etc/nginx/sites-available/default
             sudo nginx -t && sudo systemctl reload nginx
           EOF
+        shell: bash
 
       - name: Send Deployment Status to Dooray
         if: success()
@@ -142,9 +144,9 @@ jobs:
           script: |
             const webhookUrl = process.env.DOORAY_WEBHOOK_URL;
             const payload = {
-              botName: "주문 및 결제 서버 Bot",
+              botName: "프론트 서버 Bot",
               botIconImage: "https://www.tistory.com/favicon.ico",
-              text: "주문 및 결제 서버의 배포가 성공적으로 완료되었습니다!",
+              text: "프론트 서버의 배포가 성공적으로 완료되었습니다!",
               attachments: [
                 {
                   title: "Pull Request URL",
@@ -179,9 +181,9 @@ jobs:
           script: |
             const webhookUrl = process.env.DOORAY_WEBHOOK_URL;
             const payload = {
-              botName: "주문 및 결제 서버 Bot",
+              botName: "프론트 서버 Bot",
               botIconImage: "https://www.tistory.com/favicon.ico",
-              text: "주문 및 결제 서버의 배포가 실패했습니다...",
+              text: "프론트 서버의 배포가 실패했습니다...",
               attachments: [
                 {
                   title: "Pull Request URL",

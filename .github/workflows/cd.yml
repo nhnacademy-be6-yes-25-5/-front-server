@@ -39,21 +39,13 @@ jobs:
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
           REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
         run: |
-          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no Dockerfile ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/Dockerfile
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no DockerFile-8040 ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/DockerFile-8040
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no DockerFile-8041 ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/DockerFile-8041
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no build_and_run.sh ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/build_and_run.sh
           scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no pom.xml ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/pom.xml
           scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no -r src ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/src
 
-      - name: Check Dockerfile on Remote Server
-        env:
-          REMOTE_USER: ${{ secrets.SSH_USER }}
-          REMOTE_HOST: ${{ secrets.SSH_HOST }}
-          REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
-        run: |
-          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/Dockerfile"
-          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/pom.xml"
-          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/src"
-
-      - name: Deploy First JAR on Remote Server (Port 8040)
+      - name: Deploy JARs on Remote Server
         env:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
@@ -61,35 +53,8 @@ jobs:
         run: |
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
             cd ${REMOTE_DIR}
-            if [ ! -f Dockerfile ]; then
-              echo "Dockerfile not found!"
-              exit 1
-            fi
-            docker build --no-cache -t front1-app .
-            docker stop front1-app || true
-            docker rm front1-app || true
-            docker run -d -p 8040:8040 --name front1-app front1-app
-          EOF
-
-      - name: Wait for 30 seconds
-        run: sleep 30
-
-      - name: Deploy Second JAR on Remote Server (Port 8041)
-        env:
-          REMOTE_USER: ${{ secrets.SSH_USER }}
-          REMOTE_HOST: ${{ secrets.SSH_HOST }}
-          REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
-        run: |
-          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
-            cd ${REMOTE_DIR}
-            if [ ! -f Dockerfile ]; then
-              echo "Dockerfile not found!"
-              exit 1
-            fi
-            docker build --no-cache -t front1-app-2 .
-            docker stop front1-app-2 || true
-            docker rm front1-app-2 || true
-            docker run -d -p 8041:8041 --name front1-app-2 front1-app
+            chmod +x build_and_run.sh
+            ./build_and_run.sh
           EOF
 
       - name: Send Deployment Status to Dooray

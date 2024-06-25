@@ -30,7 +30,6 @@
                             <th>최소 주문 금액</th>
                             <th>최대 금액</th>
                             <th>할인 유형</th>
-                            <th>작업</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -42,14 +41,6 @@
                             <td th:text="${coupon.couponPolicyMinOrderAmount}"></td>
                             <td th:text="${coupon.couponPolicyMaxAmount}"></td>
                             <td th:text="${coupon.couponPolicyDiscountType ? '비율' : '고정 금액'}"></td>
-                            <td>
-                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editCouponModal" th:data-id="${coupon.couponPolicyId}">
-                                    수정
-                                </button>
-                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteCouponModal" th:data-id="${coupon.couponPolicyId}">
-                                    삭제
-                                </button>
-                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -118,7 +109,7 @@
                                         <option value="true">Percentage</option>
                                         <option value="false">Fixed Amount</option>
                                     </select>
-                                </div>
+                                </div>6/25 화요일
                             </div>
                         </div>
                         <div class="modal-footer">

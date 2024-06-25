@@ -13,8 +13,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
       - name: Set up SSH
         env:
@@ -42,6 +40,7 @@ jobs:
           scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no Dockerfile ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/Dockerfile
           scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no pom.xml ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/pom.xml
           scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no -r src ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/src
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no src/main/resources/application-prod.yml ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/src/main/resources/application-prod.yml
 
       - name: Check Dockerfile on Remote Server
         env:
@@ -52,6 +51,7 @@ jobs:
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/Dockerfile"
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/pom.xml"
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/src"
+          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/src/main/resources/application-prod.yml"
 
       - name: Set previous environment
         id: set-env
@@ -61,10 +61,10 @@ jobs:
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
         run: |
           ENV=$(ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "grep 'default ' /etc/nginx/sites-available/default | awk '{print $2}' | sed 's/;//'")
-          echo "::set-output name=previous-environment::${ENV}"
+          echo "previous-environment=${ENV}" >> $GITHUB_ENV
 
       - name: Deploy JAR to Blue Environment
-        if: steps.set-env.outputs.previous-environment == 'green'
+        if: env.previous-environment == 'green'
         env:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
@@ -83,7 +83,7 @@ jobs:
           EOF
 
       - name: Deploy JAR to Green Environment
-        if: steps.set-env.outputs.previous-environment == 'blue'
+        if: env.previous-environment == 'blue'
         env:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
@@ -102,7 +102,7 @@ jobs:
           EOF
 
       - name: Switch Nginx to Green Environment
-        if: steps.set-env.outputs.previous-environment == 'blue'
+        if: env.previous-environment == 'blue'
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REMOTE_USER: ${{ secrets.SSH_USER }}
@@ -115,7 +115,7 @@ jobs:
           EOF
 
       - name: Switch Nginx to Blue Environment
-        if: steps.set-env.outputs.previous-environment == 'green'
+        if: env.previous-environment == 'green'
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REMOTE_USER: ${{ secrets.SSH_USER }}
@@ -139,9 +139,9 @@ jobs:
           script: |
             const webhookUrl = process.env.DOORAY_WEBHOOK_URL;
             const payload = {
-              botName: "프론트1 서버 Bot",
+              botName: "주문 및 결제 서버 Bot",
               botIconImage: "https://www.tistory.com/favicon.ico",
-              text: "프론트1 서버의 배포가 성공적으로 완료되었습니다!",
+              text: "주문 및 결제 서버의 배포가 성공적으로 완료되었습니다!",
               attachments: [
                 {
                   title: "Pull Request URL",
@@ -176,9 +176,9 @@ jobs:
           script: |
             const webhookUrl = process.env.DOORAY_WEBHOOK_URL;
             const payload = {
-              botName: "프론트1 서버 Bot",
+              botName: "주문 및 결제 서버 Bot",
               botIconImage: "https://www.tistory.com/favicon.ico",
-              text: "프론트1 서버의 배포가 실패했습니다...",
+              text: "주문 및 결제 서버의 배포가 실패했습니다...",
               attachments: [
                 {
                   title: "Pull Request URL",

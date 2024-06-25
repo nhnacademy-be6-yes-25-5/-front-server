@@ -53,7 +53,7 @@ jobs:
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/pom.xml"
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/src"
 
-      - name: Deploy JAR on Remote Server
+      - name: Deploy First JAR on Remote Server (Port 8040)
         env:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
@@ -69,6 +69,27 @@ jobs:
             docker stop front1-app || true
             docker rm front1-app || true
             docker run -d -p 8040:8040 --name front1-app front1-app
+          EOF
+
+      - name: Wait for 30 seconds
+        run: sleep 30
+
+      - name: Deploy Second JAR on Remote Server (Port 8041)
+        env:
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
+        run: |
+          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
+            cd ${REMOTE_DIR}
+            if [ ! -f Dockerfile ]; then
+              echo "Dockerfile not found!"
+              exit 1
+            fi
+            docker build --no-cache -t front1-app-2 .
+            docker stop front1-app-2 || true
+            docker rm front1-app-2 || true
+            docker run -d -p 8041:8041 --name front1-app-2 front1-app
           EOF
 
       - name: Send Deployment Status to Dooray

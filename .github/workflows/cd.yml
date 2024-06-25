@@ -60,7 +60,7 @@ jobs:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
         run: |
-          active_env=$(ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "if docker ps -f name=front1-blue --format '{{.Names}}' | grep -w front1-blue; then echo blue; else echo green; fi")
+          active_env=$(ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "if docker ps -f name=front1-app-blue --format '{{.Names}}' | grep -w front1-app-blue; then echo blue; else echo green; fi")
           echo "::set-output name=active-env::$active_env"
 
       - name: Deploy JAR on Remote Server
@@ -78,11 +78,16 @@ jobs:
             NEW_PORT="8040"
           fi
 
+          # Stop the currently active environment
+          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
+            docker stop front1-app-$ACTIVE_ENV || true
+            docker rm front1-app-$ACTIVE_ENV || true
+          EOF
+
+          # Deploy to the new environment
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
             cd ${REMOTE_DIR}
             docker build --no-cache -t front1-app-$NEW_ENV .
-            docker stop front1-app-$NEW_ENV || true
-            docker rm front1-app-$NEW_ENV || true
             docker run -d -p $NEW_PORT:8040 --name front1-app-$NEW_ENV front1-app-$NEW_ENV
           EOF
 

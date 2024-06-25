@@ -53,7 +53,8 @@ jobs:
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/pom.xml"
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/src"
 
-      - name: Deploy JAR on Remote Server
+      - name: Deploy JAR to Blue Environment
+        if: ${{ needs.deploy.outputs.previous-environment == 'green' }}
         env:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
@@ -65,10 +66,55 @@ jobs:
               echo "Dockerfile not found!"
               exit 1
             fi
-            docker build --no-cache -t front1-app .
-            docker stop front1-app || true
-            docker rm front1-app || true
-            docker run -d -p 8040:8040 --name front1-app front1-app
+            docker build --no-cache -t front1-app-blue .
+            docker stop front1-app-blue || true
+            docker rm front1-app-blue || true
+            docker run -d -p 8040:8040 --name front1-app-blue front1-app-blue
+          EOF
+
+      - name: Deploy JAR to Green Environment
+        if: ${{ needs.deploy.outputs.previous-environment == 'blue' }}
+        env:
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
+        run: |
+          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
+            cd ${REMOTE_DIR}
+            if [ ! -f Dockerfile ]; then
+              echo "Dockerfile not found!"
+              exit 1
+            fi
+            docker build --no-cache -t front1-app-green .
+            docker stop front1-app-green || true
+            docker rm front1-app-green || true
+            docker run -d -p 8041:8041 --name front1-app-green front1-app-green
+          EOF
+
+      - name: Switch Nginx to Green Environment
+        if: ${{ needs.deploy.outputs.previous-environment == 'blue' }}
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+        run: |
+          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
+            echo "Switching Nginx to Green environment"
+            sudo sed -i 's/default blue;/default green;/g' /etc/nginx/sites-available/default
+            sudo nginx -t && sudo systemctl reload nginx
+          EOF
+
+      - name: Switch Nginx to Blue Environment
+        if: ${{ needs.deploy.outputs.previous-environment == 'green' }}
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+        run: |
+          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
+            echo "Switching Nginx to Blue environment"
+            sudo sed -i 's/default green;/default blue;/g' /etc/nginx/sites-available/default
+            sudo nginx -t && sudo systemctl reload nginx
           EOF
 
       - name: Send Deployment Status to Dooray

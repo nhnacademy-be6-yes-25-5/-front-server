@@ -60,8 +60,11 @@ jobs:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
         run: |
-          ENV=$(ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "grep 'default ' /etc/nginx/sites-available/default | awk '{print $2}' | sed 's/;//'")
+          echo "Running SSH command to get the default environment..."
+          ENV=$(ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "grep 'default ' /etc/nginx/sites-available/default | awk '{print \$2}' | sed 's/;//'")
+          echo "Environment value: ${ENV}"
           echo "previous-environment=${ENV}" >> $GITHUB_ENV
+        shell: bash
 
       - name: Deploy JAR to Blue Environment
         if: env.previous-environment == 'green'

@@ -20,7 +20,7 @@ public interface OrderService {
 
     List<ReadTakeoutResponse> findAllTakeout();
 
-    List<ReadCartBookResponse> findAllCartBok(Long userId);
+    List<ReadCartBookResponse> findAllCartBok();
 
     List<ReadPaymentOrderResponse> findAllOrderByOrderId(String orderId);
 

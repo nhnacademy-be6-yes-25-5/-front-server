@@ -53,8 +53,19 @@ jobs:
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/pom.xml"
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/src"
 
+      - name: Set previous environment
+        id: set-env
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+        run: |
+          ENV=$(ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "grep 'default ' /etc/nginx/sites-available/default | awk '{print $2}' | sed 's/;//'")
+          echo "previous-environment=${ENV}" >> $GITHUB_ENV
+          echo "::set-output name=previous-environment::${ENV}"
+
       - name: Deploy JAR to Blue Environment
-        if: ${{ needs.deploy.outputs.previous-environment == 'green' }}
+        if: steps.set-env.outputs.previous-environment == 'green'
         env:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
@@ -73,7 +84,7 @@ jobs:
           EOF
 
       - name: Deploy JAR to Green Environment
-        if: ${{ needs.deploy.outputs.previous-environment == 'blue' }}
+        if: steps.set-env.outputs.previous-environment == 'blue'
         env:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
@@ -92,7 +103,7 @@ jobs:
           EOF
 
       - name: Switch Nginx to Green Environment
-        if: ${{ needs.deploy.outputs.previous-environment == 'blue' }}
+        if: steps.set-env.outputs.previous-environment == 'blue'
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REMOTE_USER: ${{ secrets.SSH_USER }}
@@ -105,7 +116,7 @@ jobs:
           EOF
 
       - name: Switch Nginx to Blue Environment
-        if: ${{ needs.deploy.outputs.previous-environment == 'green' }}
+        if: steps.set-env.outputs.previous-environment == 'green'
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REMOTE_USER: ${{ secrets.SSH_USER }}

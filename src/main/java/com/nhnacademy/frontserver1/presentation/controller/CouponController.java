@@ -3,7 +3,7 @@ package com.nhnacademy.frontserver1.presentation.controller;
 import com.nhnacademy.frontserver1.application.service.CouponService;
 import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyRequestDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyResponseDTO;
-import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponUserListResponseDTO;
+//import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponUserListResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,16 +25,9 @@ public class CouponController {
 
     private final CouponService couponService;
 
-    @GetMapping("/orders/couponPopup")
-    public String getCouponPopup(@RequestParam("userId") Long userId, Model model) {
-        List<CouponUserListResponseDTO> coupons = couponService.findUserCoupons(userId);
-        model.addAttribute("coupons", coupons);
-        return "coupon/popup";
-    } //유저ID에 따른 쿠폰
-
     @GetMapping("/admin/policy/admin-coupon-policy")
     public String getAdminCouponPolicy(@RequestParam(defaultValue = "0") int page,
-                                       @RequestParam(defaultValue = "5") int size,
+                                       @RequestParam(defaultValue = "10") int size,
                                        Model model) {
         Pageable pageable = PageRequest.of(page, size);
         Page<CouponPolicyResponseDTO> couponPage = couponService.findAllCouponPolicies(pageable);
@@ -62,9 +55,18 @@ public class CouponController {
         return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
     } //쿠폰 정책 생성
 
-    @DeleteMapping("/admin/policy/coupon/{id}")
-    public ResponseEntity<Void> deleteCoupon(@PathVariable Long id) {
-        couponService.deleteCoupon(id);
-        return ResponseEntity.noContent().build();
-    }
+//
+//    @GetMapping("/orders/couponPopup")
+//    public String getCouponPopup(@RequestParam("userId") Long userId, Model model) {
+//        List<CouponUserListResponseDTO> coupons = couponService.findUserCoupons(userId);
+//        model.addAttribute("coupons", coupons);
+//        return "coupon/popup";
+//    } //유저ID에 따른 쿠폰
+
+//
+//    @DeleteMapping("/admin/policy/coupon/{id}")
+//    public ResponseEntity<Void> deleteCoupon(@PathVariable Long id) {
+//        couponService.deleteCoupon(id);
+//        return ResponseEntity.noContent().build();
+//    }
 }

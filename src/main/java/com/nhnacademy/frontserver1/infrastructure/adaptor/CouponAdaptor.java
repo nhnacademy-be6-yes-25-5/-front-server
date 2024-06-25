@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "couponAdaptor", url = "http://localhost:8085/admin-policy")
+@FeignClient(name = "couponAdaptor", url = "http://localhost:8085/coupons")
 public interface CouponAdaptor {
 
-    @GetMapping
+    @GetMapping("/policy")
     List<CouponPolicyResponseDTO> findAll();
 
-    @PostMapping("/coupon")
+    @PostMapping("/policy/create")
     void create(@RequestBody CouponPolicyRequestDTO createCouponRequest);
 
 //    @GetMapping("/user-coupons/user")

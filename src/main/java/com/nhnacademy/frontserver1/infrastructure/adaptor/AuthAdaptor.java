@@ -5,7 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "authAdaptor", url = "http://localhost:8085/auth")
+@FeignClient(name = "authAdaptor", url = "${eureka.gateway}/auth")
 public interface AuthAdaptor {
 
     @PostMapping("/login")

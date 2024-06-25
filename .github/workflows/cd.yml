@@ -39,8 +39,8 @@ jobs:
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
           REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
         run: |
-          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no DockerFile-8040 ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/DockerFile-8040
-          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no DockerFile-8041 ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/DockerFile-8041
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no Dockerfile-8040 ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/Dockerfile-8040
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no Dockerfile-8041 ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/Dockerfile-8041
           scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no build_and_run.sh ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/build_and_run.sh
           scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no pom.xml ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/pom.xml
           scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no -r src ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/src

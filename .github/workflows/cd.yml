@@ -61,14 +61,14 @@ jobs:
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
         run: |
           active_env=$(ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "if docker ps -f name=front1-app-blue --format '{{.Names}}' | grep -w front1-app-blue; then echo blue; else echo green; fi")
-          echo "::set-output name=active-env::$active_env"
+          echo "active-env=$active_env" >> $GITHUB_ENV
 
       - name: Deploy JAR on Remote Server
         env:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
           REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
-          ACTIVE_ENV: ${{ steps.active-env.outputs.active-env }}
+          ACTIVE_ENV: ${{ env.active-env }}
         run: |
           if [ "$ACTIVE_ENV" = "blue" ]; then
             NEW_ENV="green"
@@ -78,10 +78,12 @@ jobs:
             NEW_PORT="8040"
           fi
 
-          # Stop the currently active environment
+          # Stop and remove the currently active environment
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
+            echo "Stopping container front1-app-$ACTIVE_ENV"
             docker stop front1-app-$ACTIVE_ENV || true
-            docker rm front1-app-$ACTIVE_ENV || true
+            echo "Removing container front1-app-$ACTIVE_ENV"
+            docker rm -f front1-app-$ACTIVE_ENV || true
           EOF
 
           # Deploy to the new environment
@@ -95,7 +97,7 @@ jobs:
         env:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
-          ACTIVE_ENV: ${{ steps.active-env.outputs.active-env }}
+          ACTIVE_ENV: ${{ env.active-env }}
         run: |
           if [ "$ACTIVE_ENV" = "blue" ]; then
             NEW_UPSTREAM="green"

@@ -53,8 +53,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<ReadCartBookResponse> findAllCartBok(Long userId) {
-        return cartAdaptor.getCartBooks(userId);
+    public List<ReadCartBookResponse> findAllCartBok() {
+        return cartAdaptor.getCartBooks();
     }
 
     @Override

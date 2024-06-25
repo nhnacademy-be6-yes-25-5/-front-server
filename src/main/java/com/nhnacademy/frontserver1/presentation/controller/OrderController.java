@@ -5,6 +5,8 @@ import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderReq
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderStatusResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMaximumDiscountCouponResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserInfoResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
 import jakarta.servlet.http.HttpSession;
@@ -33,8 +35,9 @@ public class OrderController {
 
     @GetMapping("checkout")
     public String findAllCheckout(Model model, Pageable pageable) {
-        Long userId = 8L;
-        List<ReadCartBookResponse> cartBookResponses = orderService.findAllCartBok(userId);
+        List<ReadCartBookResponse> cartBookResponses = List.of(ReadCartBookResponse.fromTest());
+        ReadOrderUserInfoResponse orderUserInfoResponse = ReadOrderUserInfoResponse.fromTest();
+        ReadMaximumDiscountCouponResponse maximumDiscountCouponResponse = ReadMaximumDiscountCouponResponse.fromTest();
 
         Integer totalAmount = getTotalAmount(cartBookResponses);
         ReadShippingPolicyResponse shippingPolicy = orderService.findAllOrderPolicy(pageable, totalAmount);
@@ -42,7 +45,9 @@ public class OrderController {
         Integer freeShippingAmount = freeShippingPolicy.shippingPolicyMinAmount() - totalAmount;
         List<ReadTakeoutResponse> takeoutResponses = orderService.findAllTakeout();
 
-        model.addAttribute("userId", userId);
+        model.addAttribute("userInfos", orderUserInfoResponse);
+        model.addAttribute("userId", orderUserInfoResponse.userId());
+        model.addAttribute("maxDiscountCoupon", maximumDiscountCouponResponse);
         model.addAttribute("shippingPolicy", shippingPolicy);
         model.addAttribute("freeShippingPolicy", freeShippingPolicy);
         model.addAttribute("freeShippingAmount", freeShippingAmount);

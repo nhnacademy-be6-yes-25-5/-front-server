@@ -54,22 +54,53 @@ jobs:
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/pom.xml"
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/src"
 
+      - name: Determine Active Environment
+        id: active-env
+        env:
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+        run: |
+          active_env=$(ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "if docker ps -f name=front1-blue --format '{{.Names}}' | grep -w front1-blue; then echo blue; else echo green; fi")
+          echo "::set-output name=active-env::$active_env"
+
       - name: Deploy JAR on Remote Server
         env:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
           REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
+          ACTIVE_ENV: ${{ steps.active-env.outputs.active-env }}
         run: |
+          if [ "$ACTIVE_ENV" = "blue" ]; then
+            NEW_ENV="green"
+            NEW_PORT="8041"
+          else
+            NEW_ENV="blue"
+            NEW_PORT="8040"
+          fi
+
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
             cd ${REMOTE_DIR}
-            if [ ! -f Dockerfile ]; then
-              echo "Dockerfile not found!"
-              exit 1
-            fi
-            docker build --no-cache -t front1-app .
-            docker stop front1-app || true
-            docker rm front1-app || true
-            docker run -d -p 8040:8040 --name front1-app front1-app
+            docker build --no-cache -t front1-app-$NEW_ENV .
+            docker stop front1-app-$NEW_ENV || true
+            docker rm front1-app-$NEW_ENV || true
+            docker run -d -p $NEW_PORT:8040 --name front1-app-$NEW_ENV front1-app-$NEW_ENV
+          EOF
+
+      - name: Update Nginx Configuration
+        env:
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          ACTIVE_ENV: ${{ steps.active-env.outputs.active-env }}
+        run: |
+          if [ "$ACTIVE_ENV" = "blue" ]; then
+            NEW_UPSTREAM="green"
+          else
+            NEW_UPSTREAM="blue"
+          fi
+
+          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
+            sudo sed -i "s/proxy_pass http:\/\/.*;/proxy_pass http:\/\/$NEW_UPSTREAM;/" /etc/nginx/sites-available/default
+            sudo nginx -s reload
           EOF
 
       - name: Send Deployment Status to Dooray

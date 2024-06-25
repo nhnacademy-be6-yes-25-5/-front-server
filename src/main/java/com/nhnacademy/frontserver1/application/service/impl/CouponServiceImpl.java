@@ -49,6 +49,11 @@ public class CouponServiceImpl implements CouponService {
         }
     }
 
+    @Override
+    public void createCoupon(CouponPolicyRequestDTO createCouponRequest) {
+        couponAdaptor.create(createCouponRequest);
+    }
+
 //
 //    @Override
 //    public List<CouponUserListResponseDTO> findUserCoupons(Long userId) {
@@ -63,10 +68,6 @@ public class CouponServiceImpl implements CouponService {
 //        }
 //    }
 
-    @Override
-    public void createCoupon(CouponPolicyRequestDTO createCouponRequest) {
-        couponAdaptor.create(createCouponRequest);
-    }
 
 //    @Override
 //    public void deleteCoupon(Long id) {

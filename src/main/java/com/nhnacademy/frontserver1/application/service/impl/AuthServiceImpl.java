@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AuthServiceImpl implements AuthService {
 
     private final AuthAdaptor authAdaptor;
-    private final TokenService tokenService;
 
     /**
      * 사용자 로그인 정보를 전달받아 인증을 수행하고, 인증 토큰을 생성하여 저장합니다.
@@ -30,18 +29,23 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public String loginUser(LoginUserRequest loginUserRequest) {
+
         ResponseEntity<String> response = authAdaptor.findLoginUserByEmail(loginUserRequest);
 
-        String token = response.getBody();
-
-        tokenService.storeToken(token);
-
-        return token;
+        return response.getBody();
     }
 
+    /**
+     * 사용자가 로그인 후 쿠키에 저장된 토큰을 헤더에 담아 api로 전달하는 test용 메소드입니다.
+     *
+     * @param token 쿠키에 담겨 있던 토큰
+     * @return 토큰에 저장되어 있는 정보
+     */
     @Override
     public String testToken(String token) {
+
         ResponseEntity<String> response = authAdaptor.tokenTest(token);
+
         return response.getBody();
     }
 

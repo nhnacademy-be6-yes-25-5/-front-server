@@ -46,7 +46,7 @@ public class AuthContorller {
      * 사용자 로그인을 처리합니다.
      *
      * 1. 사용자의 이메일과 비밀번호를 받아 AuthServiceImpl을 통해 로그인을 수행합니다.
-     * 2. 로그인 성공 시 레디스에 토큰 저장할 때 사용된 토큰 키를 반환하고, 이를 쿠키에 저장하여 응답 헤더에 추가합니다.
+     * 2. 로그인 성공 시 토큰을 반환하고, 이를 쿠키에 저장하여 응답합니다.
      * 3. 인증 성공 후 메인 페이지로 리다이렉트합니다.
      *
      * @param loginUserRequest 로그인 요청 정보
@@ -57,7 +57,6 @@ public class AuthContorller {
     public String login(@ModelAttribute LoginUserRequest loginUserRequest, HttpServletResponse response) {
         String token = authService.loginUser(loginUserRequest);
 
-        // 토큰을 쿠키에 저장
         Cookie authCookie = new Cookie("Authorization", token);
         authCookie.setHttpOnly(true);
         authCookie.setPath("/");
@@ -87,6 +86,5 @@ public class AuthContorller {
         }
         return "tokenTest";
     }
-
 
 }

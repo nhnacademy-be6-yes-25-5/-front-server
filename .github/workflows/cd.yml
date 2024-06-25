@@ -53,6 +53,11 @@ jobs:
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/pom.xml"
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/src"
 
+      - name: Set previous environment
+        id: set-env
+        run: |
+          echo "::set-output name=previous-environment::blue"
+
       - name: Deploy JAR to Blue Environment
         if: ${{ needs.deploy.outputs.previous-environment == 'green' }}
         env:

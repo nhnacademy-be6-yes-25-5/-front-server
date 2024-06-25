@@ -9,7 +9,7 @@ public record ReadCartBookResponse(Long cartBookId,
                                    int cartBookQuantity,
                                    Long userId) {
 
-    public static ReadCartBookResponse from() {
+    public static ReadCartBookResponse fromTest() {
         return new ReadCartBookResponse(6L, 1L, "멋진책", BigDecimal.valueOf(10000), 1, 1L);
     }
 }

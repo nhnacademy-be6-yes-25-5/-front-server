@@ -33,27 +33,21 @@ jobs:
         run: |
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "rm -rf ${REMOTE_DIR}/*"
 
-      - name: Copy project files to Remote Server
-        env:
-          REMOTE_USER: ${{ secrets.SSH_USER }}
-          REMOTE_HOST: ${{ secrets.SSH_HOST }}
-          REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
-        run: |
-          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no Dockerfile ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/Dockerfile
-          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no pom.xml ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/pom.xml
-          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no -r src ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/src
-
       - name: Deploy to Green Environment
         env:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
           GREEN_DIR: ${{ secrets.GREEN_DIR }}
         run: |
-          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "rm -rf ${GREEN_DIR}/*"
+          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "
+            docker ps -q --filter 'name=green_app' | grep -q . && docker stop green_app && docker rm green_app || true
+          "
           scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no Dockerfile ${REMOTE_USER}@${REMOTE_HOST}:${GREEN_DIR}/Dockerfile
           scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no pom.xml ${REMOTE_USER}@${REMOTE_HOST}:${GREEN_DIR}/pom.xml
           scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no -r src ${REMOTE_USER}@${REMOTE_HOST}:${GREEN_DIR}/src
-          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "cd ${GREEN_DIR} && docker build -t green_app . && docker run -d -p 8040:8080 green_app"
+          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "
+            cd ${GREEN_DIR} && docker build -t green_app . && docker run -d --name green_app -p 8040:8080 green_app
+          "
 
       - name: Update Nginx Config to Green
         env:
@@ -62,7 +56,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "
             sudo sed -i 's/upstream backend {.*server .*:8041;/upstream backend { server 133.186.153.195:8040;/' /etc/nginx/sites-available/default &&
-            sudo systemctl reload nginx
+            sudo nginx -s reload
           "
 
       - name: Deploy to Blue Environment
@@ -72,11 +66,15 @@ jobs:
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
           BLUE_DIR: ${{ secrets.BLUE_DIR }}
         run: |
-          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "rm -rf ${BLUE_DIR}/*"
+          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "
+            docker ps -q --filter 'name=blue_app' | grep -q . && docker stop blue_app && docker rm blue_app || true
+          "
           scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no Dockerfile ${REMOTE_USER}@${REMOTE_HOST}:${BLUE_DIR}/Dockerfile
           scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no pom.xml ${REMOTE_USER}@${REMOTE_HOST}:${BLUE_DIR}/pom.xml
           scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no -r src ${REMOTE_USER}@${REMOTE_HOST}:${BLUE_DIR}/src
-          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "cd ${BLUE_DIR} && docker build -t blue_app . && docker run -d -p 8041:8080 blue_app"
+          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "
+            cd ${BLUE_DIR} && docker build -t blue_app . && docker run -d --name blue_app -p 8041:8080 blue_app
+          "
 
       - name: Update Nginx Config to Blue
         if: always()
@@ -86,7 +84,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "
             sudo sed -i 's/upstream backend {.*server .*:8040;/upstream backend { server 133.186.153.195:8041;/' /etc/nginx/sites-available/default &&
-            sudo systemctl reload nginx
+            sudo nginx -s reload
           "
 
       - name: Send Deployment Status to Dooray

@@ -10,7 +10,7 @@ public record ReadMaximumDiscountCouponResponse(Long couponId,
     public static ReadMaximumDiscountCouponResponse fromTest() {
         return ReadMaximumDiscountCouponResponse.builder()
             .couponId(1L)
-            .discountAmount(BigDecimal.valueOf(20000))
+            .discountAmount(BigDecimal.valueOf(2000))
             .build();
     }
 }

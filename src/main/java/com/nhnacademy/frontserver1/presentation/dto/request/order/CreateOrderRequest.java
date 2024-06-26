@@ -1,6 +1,5 @@
 package com.nhnacademy.frontserver1.presentation.dto.request.order;
 
-import com.nhnacademy.frontserver1.application.service.dto.request.CreatePreOrderRequest;
 import com.nhnacademy.frontserver1.domain.TakeoutType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -29,33 +28,6 @@ public record CreateOrderRequest(Long userId,
                                  List<Long> productIds,
                                  List<Integer> quantities,
                                  List<BigDecimal> prices,
-                                 List<Long> cartBookIds) {
-
-    public CreatePreOrderRequest toPreOrderRequest() {
-        return CreatePreOrderRequest.builder()
-            .orderId(orderId)
-            .userId(userId)
-            .productIds(productIds)
-            .prices(prices)
-            .quantities(quantities)
-            .addressDetail(addressDetail)
-            .addressRaw(addressRaw)
-            .zipcode(zipcode)
-            .reference(reference)
-            .deliveryDate(deliveryDate)
-            .orderTotalAmount(orderTotalAmount)
-            .takeoutType(takeoutType)
-            .orderName(orderName)
-            .orderEmail(orderEmail)
-            .orderPhoneNumber(orderPhoneNumber)
-            .receiveName(receiveName)
-            .receiveEmail(receiveEmail)
-            .receivePhoneNumber(receivePhoneNumber)
-            .shippingFee(shippingFee)
-            .takeoutPrice(takeoutPrice)
-            .couponId(couponId)
-            .points(points)
-            .cartBookIds(cartBookIds)
-            .build();
-    }
+                                 List<Long> cartBookIds,
+                                 String role) {
 }

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "couponAdaptor", url = "http://localhost:8085/coupons")
+@FeignClient(name = "couponAdaptor", url = "${eureka.gateway}/coupons")
 public interface CouponAdaptor {
 
     @GetMapping("/policy")

@@ -28,6 +28,9 @@
   const orderId = urlParams.get("orderId");
   const amount = urlParams.get("amount");
 
+  const MAX_RETRIES = 10;
+  let retryCount = 0;
+
   async function confirm() {
     const requestData = {
       paymentKey: paymentKey,
@@ -47,8 +50,7 @@
       if (!response.ok) {
         window.location.href = `/payments/fail`;
       } else {
-        // 폴링 시작
-        checkOrderStatus(orderId);
+        await checkOrderStatus(orderId);
       }
     } catch (error) {
       window.location.href = `/payments/fail?message=Network error&code=500`;
@@ -56,6 +58,12 @@
   }
 
   async function checkOrderStatus(orderId) {
+    if (retryCount >= MAX_RETRIES) {
+      console.log(retryCount);
+      window.location.href = `/payments/fail?message=Max retries reached&code=408`;
+      return;
+    }
+
     try {
       const response = await fetch(`/orders/status/${orderId}`, {
         method: "GET",
@@ -64,14 +72,14 @@
       if (response.ok) {
         window.location.href = `/payments/done/${orderId}?amount=${amount}`;
       } else {
+        retryCount++;
         setTimeout(() => checkOrderStatus(orderId), 3000);
       }
     } catch (error) {
+      retryCount++;
       setTimeout(() => checkOrderStatus(orderId), 3000);
     }
   }
-
-  setTimeout(() => checkOrderStatus(orderId), 3000);
 
   confirm();
 </script>

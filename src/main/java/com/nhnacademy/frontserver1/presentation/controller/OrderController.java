@@ -4,8 +4,8 @@ import com.nhnacademy.frontserver1.application.service.OrderService;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderStatusResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMaximumDiscountCouponResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderStatusResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserInfoResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/orders")
@@ -32,11 +31,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class OrderController {
 
     private final OrderService orderService;
+    private static final String MEMBER = "MEMBER";
 
-    @GetMapping("checkout")
+    @GetMapping("/checkout")
     public String findAllCheckout(Model model, Pageable pageable) {
         List<ReadCartBookResponse> cartBookResponses = List.of(ReadCartBookResponse.fromTest());
-        ReadOrderUserInfoResponse orderUserInfoResponse = ReadOrderUserInfoResponse.fromTest();
+        ReadOrderUserInfoResponse orderUserInfoResponse = ReadOrderUserInfoResponse.fromTestMember();
         ReadMaximumDiscountCouponResponse maximumDiscountCouponResponse = ReadMaximumDiscountCouponResponse.fromTest();
 
         Integer totalAmount = getTotalAmount(cartBookResponses);
@@ -45,9 +45,21 @@ public class OrderController {
         Integer freeShippingAmount = freeShippingPolicy.shippingPolicyMinAmount() - totalAmount;
         List<ReadTakeoutResponse> takeoutResponses = orderService.findAllTakeout();
 
-        model.addAttribute("userInfos", orderUserInfoResponse);
-        model.addAttribute("userId", orderUserInfoResponse.userId());
-        model.addAttribute("maxDiscountCoupon", maximumDiscountCouponResponse);
+        model.addAttribute("userInfo", orderUserInfoResponse);
+        if (MEMBER.equals(orderUserInfoResponse.role())) {
+            model.addAttribute("orderUserName", orderUserInfoResponse.email());
+            model.addAttribute("orderUserEmail", orderUserInfoResponse.email());
+            model.addAttribute("orderUserPhoneNumber", orderUserInfoResponse.phoneNumber());
+            model.addAttribute("points", orderUserInfoResponse.points());
+            model.addAttribute("maxDiscountCoupon", maximumDiscountCouponResponse);
+        } else {
+            model.addAttribute("orderUserName", "");
+            model.addAttribute("orderUserEmail", "");
+            model.addAttribute("orderUserPhoneNumber", "");
+            model.addAttribute("points", 0);
+            model.addAttribute("maxDiscountCoupon", null);
+        }
+
         model.addAttribute("shippingPolicy", shippingPolicy);
         model.addAttribute("freeShippingPolicy", freeShippingPolicy);
         model.addAttribute("freeShippingAmount", freeShippingAmount);
@@ -85,7 +97,6 @@ public class OrderController {
     }
 
     @GetMapping("/status/{orderId}")
-    @ResponseBody
     public ResponseEntity<ReadOrderStatusResponse> getOrderStatus(@PathVariable String orderId) {
         return ResponseEntity.ok(orderService.getOrderStatusByOrderId(orderId));
     }

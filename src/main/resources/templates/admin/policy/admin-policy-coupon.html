@@ -78,7 +78,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addCouponForm" method="post" th:action="@{/admin-policy/coupon}">
+                    <form id="addCouponForm" method="post" th:action="@{/coupons/policy/create}">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -109,7 +109,7 @@
                                         <option value="true">Percentage</option>
                                         <option value="false">Fixed Amount</option>
                                     </select>
-                                </div>6/25 화요일
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -201,7 +201,7 @@
 
             const formData = new FormData(this);
 
-            fetch('/admin-policy/coupon', {
+            fetch('/coupons/policy/create', {
                 method: 'POST',
                 body: new URLSearchParams(formData)
             })

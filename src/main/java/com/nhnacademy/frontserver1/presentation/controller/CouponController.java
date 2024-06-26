@@ -21,11 +21,12 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/coupons")
 public class CouponController {
 
     private final CouponService couponService;
 
-    @GetMapping("/admin/policy/admin-coupon-policy")
+    @GetMapping("/policy")
     public String getAdminCouponPolicy(@RequestParam(defaultValue = "0") int page,
                                        @RequestParam(defaultValue = "10") int size,
                                        Model model) {
@@ -40,12 +41,12 @@ public class CouponController {
         return "admin/policy/admin-policy-coupon";
     } //생성한 쿠폰 정책 목록
 
-    @PostMapping("/admin-policy/coupon")
+    @PostMapping("/policy/create")
     public ResponseEntity<Void> createCoupon(@ModelAttribute CouponPolicyRequestDTO createCouponRequest) {
         couponService.createCoupon(createCouponRequest);
 
         URI redirectUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/admin/policy/admin-coupon-policy")
+                .path("/coupons/policy")
                 .build()
                 .toUri();
 

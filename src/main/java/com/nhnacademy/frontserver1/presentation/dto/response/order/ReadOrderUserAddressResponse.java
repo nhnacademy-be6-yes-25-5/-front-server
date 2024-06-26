@@ -5,6 +5,7 @@ public record ReadOrderUserAddressResponse(Long userAddressId,
                                            String addressDetail,
                                            String addressName,
                                            String zipCode,
+                                           String reference,
                                            Boolean addressBased) {
 
 }

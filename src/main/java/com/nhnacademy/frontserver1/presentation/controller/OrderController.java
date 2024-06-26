@@ -4,8 +4,8 @@ import com.nhnacademy.frontserver1.application.service.OrderService;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMaximumDiscountCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderStatusResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserAddressResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserInfoResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -35,23 +36,25 @@ public class OrderController {
 
     @GetMapping("/checkout")
     public String findAllCheckout(Model model, Pageable pageable) {
-        List<ReadCartBookResponse> cartBookResponses = List.of(ReadCartBookResponse.fromTest());
-        ReadOrderUserInfoResponse orderUserInfoResponse = ReadOrderUserInfoResponse.fromTestMember();
-        ReadMaximumDiscountCouponResponse maximumDiscountCouponResponse = ReadMaximumDiscountCouponResponse.fromTest();
-
+        List<ReadCartBookResponse> cartBookResponses = orderService.findAllCartBok();
+        ReadOrderUserInfoResponse orderUserInfoResponse = orderService.getUserInfo();
         Integer totalAmount = getTotalAmount(cartBookResponses);
-        ReadShippingPolicyResponse shippingPolicy = orderService.findAllOrderPolicy(pageable, totalAmount);
-        ReadShippingPolicyResponse freeShippingPolicy = orderService.findFreePolicy();
-        Integer freeShippingAmount = freeShippingPolicy.shippingPolicyMinAmount() - totalAmount;
-        List<ReadTakeoutResponse> takeoutResponses = orderService.findAllTakeout();
 
+        populateUserInfo(model, orderUserInfoResponse);
+        populateOrderDetails(model, pageable, totalAmount, cartBookResponses);
+
+        return "order/checkout";
+    }
+
+    private void populateUserInfo(Model model, ReadOrderUserInfoResponse orderUserInfoResponse) {
         model.addAttribute("userInfo", orderUserInfoResponse);
+
         if (MEMBER.equals(orderUserInfoResponse.role())) {
-            model.addAttribute("orderUserName", orderUserInfoResponse.email());
+            model.addAttribute("orderUserName", orderUserInfoResponse.name());
             model.addAttribute("orderUserEmail", orderUserInfoResponse.email());
             model.addAttribute("orderUserPhoneNumber", orderUserInfoResponse.phoneNumber());
             model.addAttribute("points", orderUserInfoResponse.points());
-            model.addAttribute("maxDiscountCoupon", maximumDiscountCouponResponse);
+            model.addAttribute("maxDiscountCoupon", orderService.getMaxDiscountCoupon(getTotalAmount(orderService.findAllCartBok())));
         } else {
             model.addAttribute("orderUserName", "");
             model.addAttribute("orderUserEmail", "");
@@ -59,6 +62,13 @@ public class OrderController {
             model.addAttribute("points", 0);
             model.addAttribute("maxDiscountCoupon", null);
         }
+    }
+
+    private void populateOrderDetails(Model model, Pageable pageable, Integer totalAmount, List<ReadCartBookResponse> cartBookResponses) {
+        ReadShippingPolicyResponse shippingPolicy = orderService.findAllOrderPolicy(pageable, totalAmount);
+        ReadShippingPolicyResponse freeShippingPolicy = orderService.findFreePolicy();
+        Integer freeShippingAmount = freeShippingPolicy.shippingPolicyMinAmount() - totalAmount;
+        List<ReadTakeoutResponse> takeoutResponses = orderService.findAllTakeout();
 
         model.addAttribute("shippingPolicy", shippingPolicy);
         model.addAttribute("freeShippingPolicy", freeShippingPolicy);
@@ -66,8 +76,6 @@ public class OrderController {
         model.addAttribute("totalAmount", totalAmount);
         model.addAttribute("cartBooks", cartBookResponses);
         model.addAttribute("takeouts", takeoutResponses);
-
-        return "order/checkout";
     }
 
     private Integer getTotalAmount(List<ReadCartBookResponse> cartBookResponses) {
@@ -99,6 +107,14 @@ public class OrderController {
     @GetMapping("/status/{orderId}")
     public ResponseEntity<ReadOrderStatusResponse> getOrderStatus(@PathVariable String orderId) {
         return ResponseEntity.ok(orderService.getOrderStatusByOrderId(orderId));
+    }
+
+    @GetMapping("/address")
+    public String getUserAddress(Pageable pageable, Model model) {
+        Page<ReadOrderUserAddressResponse> responses = orderService.getUserAddresses(pageable);
+        model.addAttribute("addresses", responses);
+
+        return "order/address-popup";
     }
 
 }

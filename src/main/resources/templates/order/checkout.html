@@ -16,18 +16,14 @@
   <link rel="stylesheet" href="/css/tiny-slider.css">
   <link rel="stylesheet" href="/css/glightbox.min.css">
   <link rel="stylesheet" href="/css/main.css">
-
+  <style>
+    .error {
+      border: 2px solid red;
+    }
+  </style>
 </head>
 
 <body>
-<!--[if lte IE 9]>
-<p class="browserupgrade">
-  You are using an <strong>outdated</strong> browser. Please
-  <a href="https://browsehappy.com/">upgrade your browser</a> to improve
-  your experience and security.
-</p>
-<![endif]-->
-
 <!-- Preloader -->
 <div class="preloader">
   <div class="preloader-inner">
@@ -62,8 +58,7 @@
                         <label>주문자명</label>
                         <div class="row">
                           <div class="col-md-6 form-input form">
-                            <input type="text" name="orderName" id="orderName" placeholder="주문자명"
-                                   th:value="${orderUserName}" th:disabled="${userInfo.role == 'NONE_MEMBER'}" required>
+                            <input type="text" name="orderName" id="orderName" placeholder="주문자명" required>
                           </div>
                         </div>
                       </div>
@@ -72,8 +67,7 @@
                       <div class="single-form form-default">
                         <label>주문자 이메일</label>
                         <div class="form-input form">
-                          <input type="text" name="orderEmail" id="orderEmail" placeholder="이메일"
-                                 th:value="${orderUserEmail}" th:disabled="${userInfo.role == 'NONE_MEMBER'}" required>
+                          <input type="text" name="orderEmail" id="orderEmail" placeholder="이메일" required>
                         </div>
                       </div>
                     </div>
@@ -81,17 +75,13 @@
                       <div class="single-form form-default">
                         <label>주문자 핸드폰 번호</label>
                         <div class="form-input form">
-                          <input type="text" id="orderPhoneNumber" name="orderPhoneNumber"
-                                 placeholder="주문자 핸드폰 번호" th:value="${orderUserPhoneNumber}" th:disabled="${userInfo.role == 'NONE_MEMBER'}" required>
+                          <input type="text" id="orderPhoneNumber" name="orderPhoneNumber" placeholder="주문자 핸드폰 번호" required>
                         </div>
                       </div>
                     </div>
                     <div class="col-md-12">
                       <div class="single-form button">
-                        <button class="btn" data-bs-toggle="collapse"
-                                data-bs-target="#collapseFour" aria-expanded="false"
-                                aria-controls="collapseFour">다음 단계
-                        </button>
+                        <button class="btn" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">다음 단계</button>
                       </div>
                     </div>
                   </div>
@@ -99,10 +89,8 @@
               </section>
             </li>
             <li>
-              <h6 class="title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFour"
-                  aria-expanded="false" aria-controls="collapseFour">배송정보</h6>
-              <section class="checkout-steps-form-content collapse" id="collapseFour"
-                       aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+              <h6 class="title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">배송정보</h6>
+              <section class="checkout-steps-form-content collapse" id="collapseFour" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
                 <div class="col-md-12">
                   <div class="single-checkbox checkbox-style-3">
                     <input type="checkbox" id="checkbox-3" onclick="copyOrderInfo()">
@@ -111,7 +99,7 @@
                   </div>
                 </div>
                 <div class="col-md-12">
-                  <button class="btn btn-secondary" onclick="openAddressPopup()">배송지 목록 보기</button>
+                  <button class="btn btn-secondary" onclick="openAddressPopup()" th:disabled="${userInfo.role == 'NONE_MEMBER'}">배송지 목록 보기</button>
                 </div>
                 <div class="row">
                   <div class="col-md-12">
@@ -119,8 +107,7 @@
                       <label>배송받는 사람</label>
                       <div class="row">
                         <div class="col-md-6 form-input form">
-                          <input type="text" name="receiveName" id="receiveName"
-                                 placeholder="배송받는 사람" required>
+                          <input type="text" name="receiveName" id="receiveName" placeholder="배송받는 사람" required>
                         </div>
                       </div>
                     </div>
@@ -129,8 +116,7 @@
                     <div class="single-form form-default">
                       <label>배송받는 사람 이메일</label>
                       <div class="form-input form">
-                        <input type="text" name="receiveEmail" id="receiveEmail" placeholder="이메일"
-                               required>
+                        <input type="text" name="receiveEmail" id="receiveEmail" placeholder="이메일" required>
                       </div>
                     </div>
                   </div>
@@ -138,8 +124,7 @@
                     <div class="single-form form-default">
                       <label>배송받는 사람 핸드폰 번호</label>
                       <div class="form-input form">
-                        <input type="text" name="receivePhoneNumber" id="receivePhoneNumber"
-                               placeholder="핸드폰 번호" required>
+                        <input type="text" name="receivePhoneNumber" id="receivePhoneNumber" placeholder="핸드폰 번호" required>
                       </div>
                     </div>
                   </div>
@@ -159,14 +144,9 @@
                     <div class="single-form form-default">
                       <label>포장 타입</label>
                       <div class="form-input form">
-                        <select id="takeoutType" name="takeoutType" onchange="updateTotalPrice()"
-                                required>
+                        <select id="takeoutType" name="takeoutType" onchange="updateTotalPrice()" required>
                           <option value="" data-price="0">포장 타입을 선택하세요</option>
-                          <option th:each="takeout : ${takeouts}" th:value="${takeout.takeoutType}"
-                                  th:data-price="${takeout.takeoutPrice}"
-                                  th:data-description="${takeout.takeoutDescription}"
-                                  th:text="${takeout.takeoutDescription + ' - ' + takeout.takeoutPrice + '원'}">
-                          </option>
+                          <option th:each="takeout : ${takeouts}" th:value="${takeout.takeoutType}" th:data-price="${takeout.takeoutPrice}" th:data-description="${takeout.takeoutDescription}" th:text="${takeout.takeoutDescription + ' - ' + takeout.takeoutPrice + '원'}"></option>
                         </select>
                       </div>
                     </div>
@@ -205,8 +185,7 @@
                     <input type="hidden" name="orderPhoneNumber" id="hiddenOrderPhoneNumber">
                     <input type="hidden" name="receiveName" id="hiddenReceiveOrderName">
                     <input type="hidden" name="receiveEmail" id="hiddenReceiveOrderEmail">
-                    <input type="hidden" name="receivePhoneNumber"
-                           id="hiddenReceiveOrderPhoneNumber">
+                    <input type="hidden" name="receivePhoneNumber" id="hiddenReceiveOrderPhoneNumber">
 
                     <input type="hidden" name="orderTotalAmount" id="hiddenTotalPrice">
 
@@ -215,16 +194,11 @@
                         <h6 class="heading-6 font-weight-400 payment-title">배송비 정책</h6>
                         <div class="payment-option-wrapper">
                           <div class="single-payment-option">
-                            <input type="radio" name="shipping"
-                                   th:id="'shipping-' + ${shippingPolicy.shippingPolicyId}"
-                                   th:value="${shippingPolicy.shippingPolicyFee}"
-                                   checked readonly>
+                            <input type="radio" name="shipping" th:id="'shipping-' + ${shippingPolicy.shippingPolicyId}" th:value="${shippingPolicy.shippingPolicyFee}" checked readonly>
                             <label th:for="'shipping-' + ${shippingPolicy.shippingPolicyId}">
                               <img src="https://via.placeholder.com/60x32" alt="Shipping">
-                              <span class="price"
-                                    th:text="${'배송비 ' + shippingPolicy.shippingPolicyFee + '원'}"></span>
-                              <p class="min-amount"
-                                 th:text="'최소 주문 금액 ' + ${shippingPolicy.shippingPolicyMinAmount} + '원'"></p>
+                              <span class="price" th:text="${'배송비 ' + shippingPolicy.shippingPolicyFee + '원'}"></span>
+                              <p class="min-amount" th:text="'최소 주문 금액 ' + ${shippingPolicy.shippingPolicyMinAmount} + '원'"></p>
                             </label>
                           </div>
                         </div>
@@ -257,7 +231,7 @@
               </div>
               <div class="total-price discount">
                 <p class="value">할인:</p>
-                <p class="price" id="discountAmount" th:text="${maxDiscountCoupon != null ? maxDiscountCoupon.discountAmount + '원' : '0원'}">0원</p>
+                <p class="price" id="discountAmount">0원</p>
               </div>
               <div class="total-price takeout">
                 <p class="value">포장비:</p>
@@ -270,20 +244,15 @@
               </div>
               <div class="total-price points">
                 <p class="value">포인트 사용:</p>
-                <input type="number" id="points" value="0" min="0" th:max="${points}" oninput="updateTotalPrice()">
+                <input type="number" id="points" value="0" min="0" th:max="${points}" th:disabled="${userInfo.role == 'NONE_MEMBER'}" oninput="updateTotalPrice()">
                 <p class="price" id="pointsDiscount">0원</p>
               </div>
               <div class="additional-info mt-30" th:if="${freeShippingAmount != null}">
-                <p th:if="${freeShippingAmount > 0}"
-                   th:text="'무료 배송까지 ' + ${freeShippingAmount} + '원'"></p>
+                <p th:if="${freeShippingAmount > 0}" th:text="'무료 배송까지 ' + ${freeShippingAmount} + '원'"></p>
                 <p th:if="${freeShippingAmount <= 0}" th:text="'무료 배송 혜택 적용중!'"></p>
                 <input type="hidden" id="freeShippingAmount" th:value="${freeShippingAmount}"/>
                 <div class="progress">
-                  <div class="progress-bar progress-bar-striped progress-bar-animated"
-                       role="progressbar" id="progress-bar"
-                       th:aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
-                       style="width: 0%">
-                  </div>
+                  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" id="progress-bar" th:aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
                 </div>
               </div>
             </div>
@@ -294,7 +263,7 @@
               </div>
             </div>
             <div class="price-table-btn button">
-              <button type="button" class="btn btn-alt" onclick="submitOrder()">Checkout</button>
+              <button type="button" class="btn btn-alt" onclick="if (validateForm()) { submitOrder(); }">Checkout</button>
             </div>
           </div>
 
@@ -325,10 +294,8 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
   function updateTotalPrice() {
-    const totalAmount = parseInt(document.getElementById('totalAmount').innerText.replace('원', ''))
-        || 0;
-    const shippingFee = parseInt(document.getElementById('shippingFee').innerText.replace('원', ''))
-        || 0;
+    const totalAmount = parseInt(document.getElementById('totalAmount').innerText.replace('원', '')) || 0;
+    const shippingFee = parseInt(document.getElementById('shippingFee').innerText.replace('원', '')) || 0;
     const discountAmount = parseInt(document.getElementById('couponDiscount').value, 10) || 0;
     const takeoutSelect = document.getElementById('takeoutType');
     const selectedOption = takeoutSelect.options[takeoutSelect.selectedIndex];
@@ -391,8 +358,7 @@
     if (checkbox.checked) {
       document.getElementById('receiveName').value = document.getElementById('orderName').value;
       document.getElementById('receiveEmail').value = document.getElementById('orderEmail').value;
-      document.getElementById('receivePhoneNumber').value = document.getElementById(
-          'orderPhoneNumber').value;
+      document.getElementById('receivePhoneNumber').value = document.getElementById('orderPhoneNumber').value;
     } else {
       document.getElementById('receiveName').value = '';
       document.getElementById('receiveEmail').value = '';
@@ -513,8 +479,7 @@
 
   function openCouponPopup() {
     const userId = 4;
-    const popup = window.open(`/orders/couponPopup?userId=${userId}`, '쿠폰 목록',
-        'width=600,height=400');
+    const popup = window.open(`/orders/couponPopup?userId=${userId}`, '쿠폰 목록', 'width=600,height=400');
     popup.onunload = function () {
       if (popup.selectedCoupon) {
         document.getElementById('selectedCoupon').value = popup.selectedCoupon;
@@ -526,19 +491,22 @@
   }
 
   function openAddressPopup() {
-    const popup = window.open(`/orders/address`, '배송지 목록',
-        'width=600,height=400');
+    const popup = window.open(`/orders/address`, '배송지 목록', 'width=600,height=400');
     popup.onunload = function () {
       if (popup.selectedAddress) {
-        document.getElementById('receiveName').value = popup.selectedAddress.name;
-        document.getElementById('receiveEmail').value = popup.selectedAddress.email;
-        document.getElementById('receivePhoneNumber').value = popup.selectedAddress.phoneNumber;
         document.getElementById('postcode').value = popup.selectedAddress.postcode;
         document.getElementById('addressRaw').value = popup.selectedAddress.rawAddress;
         document.getElementById('addressDetail').value = popup.selectedAddress.detailAddress;
         document.getElementById('reference').value = popup.selectedAddress.reference;
       }
     }
+  }
+
+  function updateAddressFields(address) {
+    document.getElementById('postcode').value = address.postcode;
+    document.getElementById('addressRaw').value = address.rawAddress;
+    document.getElementById('addressDetail').value = address.detailAddress;
+    document.getElementById('reference').value = address.reference;
   }
 
   function updateShippingFee(fee) {
@@ -597,6 +565,39 @@
       progressBar.setAttribute('aria-valuenow', currentProgress.toFixed(0));
       progressBar.innerText = currentProgress.toFixed(0) + "%";
     }, 1000 / frameRate);
+  }
+
+  function validateForm() {
+    const requiredFields = [
+      'orderName',
+      'orderEmail',
+      'orderPhoneNumber',
+      'receiveName',
+      'receiveEmail',
+      'receivePhoneNumber',
+      'postcode',
+      'addressRaw',
+      'addressDetail',
+      'takeoutType',
+      'deliveryDate'
+    ];
+
+    let isValid = true;
+
+    for (const fieldId of requiredFields) {
+      const field = document.getElementById(fieldId);
+      if (!field || !field.value.trim()) {
+        field.classList.add('error');
+        if (isValid) {
+          field.focus();
+        }
+        isValid = false;
+      } else {
+        field.classList.remove('error');
+      }
+    }
+
+    return isValid;
   }
 </script>
 </body>

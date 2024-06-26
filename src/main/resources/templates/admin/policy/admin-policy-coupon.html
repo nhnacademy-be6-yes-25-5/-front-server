@@ -49,15 +49,15 @@
                     <nav>
                         <ul class="pagination justify-content-center">
                             <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                                <a class="page-link" th:href="@{/admin/policy/admin-coupon-policy(page=${currentPage - 1}, size=${pageSize})}" aria-label="Previous">
+                                <a class="page-link" th:href="@{/coupons/policy(page=${currentPage - 1}, size=${pageSize})}" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
                             <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${pageNum == currentPage} ? 'active'">
-                                <a class="page-link" th:href="@{/admin/policy/admin-coupon-policy(page=${pageNum}, size=${pageSize})}" th:text="${pageNum + 1}">1</a>
+                                <a class="page-link" th:href="@{/coupons/policy(page=${pageNum}, size=${pageSize})}" th:text="${pageNum + 1}">1</a>
                             </li>
                             <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                                <a class="page-link" th:href="@{/admin/policy/admin-coupon-policy(page=${currentPage + 1}, size=${pageSize})}" aria-label="Next">
+                                <a class="page-link" th:href="@{/coupons/policy(page=${currentPage + 1}, size=${pageSize})}" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>

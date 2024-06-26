@@ -97,8 +97,8 @@ public class OrderServiceImpl implements OrderService {
     public ReadOrderUserInfoResponse getUserInfo() {
 //        return userAdaptor.getUserInfo();
 
-//        return ReadOrderUserInfoResponse.fromTestMember();
-        return ReadOrderUserInfoResponse.fromTestNoneMember();
+        return ReadOrderUserInfoResponse.fromTestMember();
+//        return ReadOrderUserInfoResponse.fromTestNoneMember();
     }
 
     @Override

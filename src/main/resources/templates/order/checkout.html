@@ -58,7 +58,7 @@
                         <label>주문자명</label>
                         <div class="row">
                           <div class="col-md-6 form-input form">
-                            <input type="text" name="orderName" id="orderName" placeholder="주문자명" required>
+                            <input type="text" name="orderName" id="orderName" placeholder="주문자명" th:value="${orderUserName}" required>
                           </div>
                         </div>
                       </div>
@@ -67,7 +67,7 @@
                       <div class="single-form form-default">
                         <label>주문자 이메일</label>
                         <div class="form-input form">
-                          <input type="text" name="orderEmail" id="orderEmail" placeholder="이메일" required>
+                          <input type="text" name="orderEmail" id="orderEmail" placeholder="이메일" th:value="${orderUserEmail}" required>
                         </div>
                       </div>
                     </div>
@@ -75,7 +75,7 @@
                       <div class="single-form form-default">
                         <label>주문자 핸드폰 번호</label>
                         <div class="form-input form">
-                          <input type="text" id="orderPhoneNumber" name="orderPhoneNumber" placeholder="주문자 핸드폰 번호" required>
+                          <input type="text" id="orderPhoneNumber" name="orderPhoneNumber" placeholder="주문자 핸드폰 번호" th:value="${orderUserPhoneNumber}" required>
                         </div>
                       </div>
                     </div>

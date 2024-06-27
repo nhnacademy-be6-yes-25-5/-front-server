@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>주소 목록</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+  <h1>주소 목록</h1>
+  <div class="list-group">
+    <div th:each="address : ${addresses}">
+      <a href="#" class="list-group-item list-group-item-action"
+         th:classappend="${address.addressBased} ? 'list-group-item-primary' : ''"
+         th:data-name="${address.addressName}"
+         th:data-postcode="${address.zipCode}"
+         th:data-rawaddress="${address.addressRaw}"
+         th:data-detailaddress="${address.addressDetail}"
+         th:data-reference="${address.reference}"
+         onclick="selectAddress(this)">
+        <div th:text="${address.addressName}"></div>
+        <div th:text="${address.addressRaw} + ' ' + ${address.addressDetail}"></div>
+        <div th:text="${address.zipCode}"></div>
+      </a>
+    </div>
+  </div>
+
+  <nav>
+    <ul class="pagination">
+      <li th:classappend="${addresses.hasPrevious()} ? '' : 'disabled'">
+        <a th:href="@{|/orders/address?page=${addresses.number - 1}|}" class="page-link">Previous</a>
+      </li>
+      <li th:each="i : ${#numbers.sequence(1, addresses.totalPages)}"
+          th:classappend="${addresses.number + 1 == i} ? 'active' : ''">
+        <a th:href="@{|/orders/address?page=${i - 1}|}" class="page-link" th:text="${i}">1</a>
+      </li>
+      <li th:classappend="${addresses.hasNext()} ? '' : 'disabled'">
+        <a th:href="@{|/orders/address?page=${addresses.number + 1}|}" class="page-link">Next</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+<script>
+  function selectAddress(element) {
+    const address = {
+      postcode: element.getAttribute('data-postcode'),
+      rawAddress: element.getAttribute('data-rawaddress'),
+      detailAddress: element.getAttribute('data-detailaddress'),
+      reference: element.getAttribute('data-reference')
+    };
+
+    if (window.opener && !window.opener.closed) {
+      if (typeof window.opener.updateAddressFields === 'function') {
+        window.opener.updateAddressFields(address);
+      } else {
+        console.error('Parent window function updateAddressFields is not defined');
+      }
+    } else {
+      console.error('No opener or opener is closed');
+    }
+    window.close();
+  }
+</script>
+</body>
+</html>

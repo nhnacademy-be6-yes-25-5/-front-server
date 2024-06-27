@@ -39,6 +39,7 @@
     };
 
     try {
+      console.log("Sending confirmation request:", requestData);
       const response = await fetch("/payments/confirm", {
         method: "POST",
         headers: {
@@ -48,35 +49,40 @@
       });
 
       if (!response.ok) {
+        console.log("Confirmation failed:", await response.text());
         window.location.href = `/payments/fail`;
       } else {
-        await checkOrderStatus(orderId);
+        console.log("Confirmation successful, checking order status...");
+        checkOrderStatus(orderId); // Use function directly, no await
       }
     } catch (error) {
+      console.error('Confirm error:', error);
       window.location.href = `/payments/fail?message=Network error&code=500`;
     }
   }
 
   async function checkOrderStatus(orderId) {
     if (retryCount >= MAX_RETRIES) {
-      console.log(retryCount);
+      console.log(`Max retries (${retryCount}) reached`);
       window.location.href = `/payments/fail?message=Max retries reached&code=408`;
       return;
     }
 
     try {
+      console.log(`Checking order status, attempt ${retryCount + 1}`);
       const response = await fetch(`/orders/status/${orderId}`, {
         method: "GET",
       });
 
       if (response.ok) {
+        console.log("Order status check successful, redirecting to done page...");
         window.location.href = `/payments/done/${orderId}?amount=${amount}`;
       } else {
-        retryCount++;
-        setTimeout(() => checkOrderStatus(orderId), 3000);
+        throw new Error('Order status check failed');
       }
     } catch (error) {
       retryCount++;
+      console.error(`Error occurred on retry ${retryCount}:`, error);
       setTimeout(() => checkOrderStatus(orderId), 3000);
     }
   }

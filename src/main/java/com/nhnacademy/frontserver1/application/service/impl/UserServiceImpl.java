@@ -4,7 +4,9 @@ import com.nhnacademy.frontserver1.application.service.UserService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.UserAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.CreateUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.DeleteUserRequest;
+import com.nhnacademy.frontserver1.presentation.dto.request.user.PointPolicyRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.UpdateUserRequest;
+import com.nhnacademy.frontserver1.presentation.dto.response.user.PointPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UpdateUserResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UserResponse;
 import lombok.RequiredArgsConstructor;
@@ -36,5 +38,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(DeleteUserRequest userRequest) {
         userAdaptor.deleteUser(userRequest);
+    }
+
+    @Override
+    public PointPolicyResponse getPointPolicies(PointPolicyRequest pointPolicyRequest) {
+        return null;
     }
 }

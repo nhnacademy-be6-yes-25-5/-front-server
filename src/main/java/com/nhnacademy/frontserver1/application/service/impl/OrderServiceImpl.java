@@ -82,23 +82,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Page<ReadOrderUserAddressResponse> getUserAddresses(Pageable pageable) {
-//        return addressAdaptor.getUserAddresses(pageable);
-
-        List<ReadOrderUserAddressResponse> addressResponses = List.of(
-            new ReadOrderUserAddressResponse(1L, "123 Main St", "Apt 101", "Home", "12345", "지산동", true),
-            new ReadOrderUserAddressResponse(2L, "456 Elm St", "Suite 202", "Work", "67890", "강호동", false),
-            new ReadOrderUserAddressResponse(3L, "789 Oak St", "Unit 303", "Vacation Home", "11223", "대왕판교로", false)
-        );
-
-        return new PageImpl<>(addressResponses, pageable, addressResponses.size());
+        return addressAdaptor.getUserAddresses(pageable);
     }
 
     @Override
     public ReadOrderUserInfoResponse getUserInfo() {
-//        return userAdaptor.getUserInfo();
-
-        return ReadOrderUserInfoResponse.fromTestMember();
-//        return ReadOrderUserInfoResponse.fromTestNoneMember();
+        return userAdaptor.getUserInfo();
     }
 
     @Override

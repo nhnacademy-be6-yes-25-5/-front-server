@@ -6,7 +6,7 @@ import com.nhnacademy.frontserver1.presentation.dto.response.book.LikesResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "likesAdapter", url = "http://localhost:8050/likes")
+@FeignClient(name = "likesAdapter", url = "${eureka.gateway}/books/likes")
 public interface LikesAdapter {
 
     @GetMapping("/users/{userId}")

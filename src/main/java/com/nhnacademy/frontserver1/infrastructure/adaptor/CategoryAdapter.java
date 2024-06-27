@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "categoryAdapter", url = "http://localhost:8085/categories")
+@FeignClient(name = "categoryAdapter", url = "${eureka.gateway}/books/categories")
 public interface CategoryAdapter {
 
     @GetMapping("/page")

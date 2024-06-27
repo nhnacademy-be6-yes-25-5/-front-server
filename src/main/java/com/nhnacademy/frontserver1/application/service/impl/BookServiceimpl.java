@@ -33,7 +33,7 @@ public class BookServiceimpl implements BookService {
 
     private final String clientSecret = "mmnE38HTvttvM422Rk00";
 
-    private final String clientId = "4HfHyIX7Xd";
+    private final String clientId = "OR6nwIYwvb";
 
     private final BookAdapter bookAdapter;
 

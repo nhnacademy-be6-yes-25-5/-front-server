@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "tagAdapter", url = "http://localhost:8085/tags")
+@FeignClient(name = "tagAdapter", url = "${eureka.gateway}/books/tags")
 public interface TagAdapter {
 
     @GetMapping

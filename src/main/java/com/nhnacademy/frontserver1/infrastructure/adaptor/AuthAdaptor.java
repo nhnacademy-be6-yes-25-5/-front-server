@@ -12,6 +12,6 @@ public interface AuthAdaptor {
     ResponseEntity<String> findLoginUserByEmail(@RequestBody LoginUserRequest loginUserRequest);
 
     @GetMapping("/test")
-    ResponseEntity<String> tokenTest(@RequestHeader("Authorization") String token);
+    ResponseEntity<String> tokenTest();
 
 }

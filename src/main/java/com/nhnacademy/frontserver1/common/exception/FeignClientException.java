@@ -8,4 +8,5 @@ public class FeignClientException extends ApplicationException {
     public FeignClientException(ErrorStatus errorStatus) {
         super(errorStatus);
     }
+
 }

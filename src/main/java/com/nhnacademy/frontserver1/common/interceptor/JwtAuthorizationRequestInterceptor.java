@@ -1,22 +1,27 @@
 package com.nhnacademy.frontserver1.common.interceptor;
 
+import com.nhnacademy.frontserver1.common.exception.TokenCookieMissingException;
+import com.nhnacademy.frontserver1.common.provider.CookieTokenProvider;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
 import java.util.Optional;
 
 /**
  * JWT 인증을 위한 Feign 요청 인터셉터입니다.
  * 이 인터셉터는 쿠키에서 JWT 토큰을 추출하여 Feign 요청의 Authorization 헤더에 추가합니다.
+ * Authorization 쿠키(토큰이 담겨있는 쿠키)가 없는 경우 NoTokenCookieException을 던져 로그인 페이지로 리디렉션합니다.
  */
 @Component
+@RequiredArgsConstructor
 public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
+
+    private final CookieTokenProvider cookieTokenProvider;
 
     /**
      * Feign 요청에 JWT 토큰을 추가합니다.
@@ -34,28 +39,13 @@ public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
             return;
         }
 
-        Optional<String> token = getTokenFromCookie(request);
-        token.ifPresent(s -> template.header(HttpHeaders.AUTHORIZATION, "Bearer " + s));
-    }
-
-    /**
-     * HttpServletRequest의 쿠키에서 'Authorization' 토큰을 추출합니다.
-     *
-     * @param request 현재 HTTP 요청
-     * @return 쿠키에서 추출한 토큰. 토큰이 없으면 빈 Optional을 반환합니다.
-     */
-    private Optional<String> getTokenFromCookie(HttpServletRequest request) {
-
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("Authorization")) {
-                    return Optional.of(cookie.getValue());
+        Optional<String> token = cookieTokenProvider.getTokenFromCookie(request);
+        token.ifPresentOrElse(
+                t -> template.header(HttpHeaders.AUTHORIZATION, "Bearer " + t),
+                () -> {
+                    throw new TokenCookieMissingException();
                 }
-            }
-        }
-
-        return Optional.empty();
+        );
     }
 
 }

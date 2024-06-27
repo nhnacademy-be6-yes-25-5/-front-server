@@ -1,7 +1,6 @@
 package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.impl.AuthServiceImpl;
-import com.nhnacademy.frontserver1.common.provider.JwtTokenProvider;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.LoginUserRequest;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AuthContorller {
 
     private final AuthServiceImpl authService;
-    private final JwtTokenProvider jwtTokenProvider;
 
     /**
      * 로그인 페이지를 반환합니다.

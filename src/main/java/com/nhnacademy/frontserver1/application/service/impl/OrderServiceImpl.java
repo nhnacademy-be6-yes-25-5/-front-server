@@ -1,7 +1,6 @@
 package com.nhnacademy.frontserver1.application.service.impl;
 
 import com.nhnacademy.frontserver1.application.service.OrderService;
-import com.nhnacademy.frontserver1.application.service.dto.request.ReadMaximumDiscountCouponRequest;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.AddressAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.CartAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.CouponAdaptor;
@@ -22,7 +21,6 @@ import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -65,9 +63,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<ReadCartBookResponse> findAllCartBok() {
-//        return cartAdaptor.getCartBooks();
-
-        return List.of(ReadCartBookResponse.fromTest());
+        return cartAdaptor.getCartBooks();
     }
 
     @Override

@@ -1,12 +1,13 @@
 package com.nhnacademy.frontserver1.infrastructure.adaptor;
 
 import com.nhnacademy.frontserver1.application.service.dto.request.CreatePaymentsRequest;
+import com.nhnacademy.frontserver1.common.config.FeignClientConfig;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreatePaymentResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "paymentAdaptor", url = "${eureka.gateway}/payments")
+@FeignClient(name = "paymentAdaptor", url = "${eureka.gateway}/payments", configuration = FeignClientConfig.class)
 public interface PaymentAdaptor {
 
     @PostMapping("/confirm")

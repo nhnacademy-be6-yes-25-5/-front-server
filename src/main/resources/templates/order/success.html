@@ -2,18 +2,34 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
+  <!-- ========================= CSS here ========================= -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/LineIcons.3.0.css">
+  <link rel="stylesheet" href="/css/tiny-slider.css">
+  <link rel="stylesheet" href="/css/glightbox.min.css">
+  <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-<h2>결제 성공</h2>
-<p id="paymentKey"></p>
-<p id="orderId"></p>
-<p id="amount"></p>
+<!-- Include header -->
+<header th:replace="~{fragments/header :: header}"></header>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+      <h2>결제 요청 중입니다...</h2>
+      <p>잠시만 기다려 주세요.</p>
+    </div>
+  </div>
+</div>
 
 <script>
   const urlParams = new URLSearchParams(window.location.search);
   const paymentKey = urlParams.get("paymentKey");
   const orderId = urlParams.get("orderId");
   const amount = urlParams.get("amount");
+
+  const MAX_RETRIES = 10;
+  let retryCount = 0;
 
   async function confirm() {
     const requestData = {
@@ -22,34 +38,59 @@
       amount: amount,
     };
 
-    const response = await fetch("/payments/confirm", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestData),
-    });
+    try {
+      console.log("Sending confirmation request:", requestData);
+      const response = await fetch("/payments/confirm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
 
-    const json = await response.json();
+      if (!response.ok) {
+        console.log("Confirmation failed:", await response.text());
+        window.location.href = `/payments/fail`;
+      } else {
+        console.log("Confirmation successful, checking order status...");
+        checkOrderStatus(orderId); // Use function directly, no await
+      }
+    } catch (error) {
+      console.error('Confirm error:', error);
+      window.location.href = `/payments/fail?message=Network error&code=500`;
+    }
+  }
 
-    if (!response.ok) {
-      // 결제 실패 비즈니스 로직을 구현하세요.
-      console.log(json);
-      window.location.href = `/payments/fail?message=${json.message}&code=${json.code}`;
+  async function checkOrderStatus(orderId) {
+    if (retryCount >= MAX_RETRIES) {
+      console.log(`Max retries (${retryCount}) reached`);
+      window.location.href = `/payments/fail?message=Max retries reached&code=408`;
+      return;
     }
 
-    // 결제 성공 비즈니스 로직을 구현하세요.
-    console.log(json);
+    try {
+      console.log(`Checking order status, attempt ${retryCount + 1}`);
+      const response = await fetch(`/orders/status/${orderId}`, {
+        method: "GET",
+      });
+
+      if (response.ok) {
+        console.log("Order status check successful, redirecting to done page...");
+        window.location.href = `/payments/done/${orderId}?amount=${amount}`;
+      } else {
+        throw new Error('Order status check failed');
+      }
+    } catch (error) {
+      retryCount++;
+      console.error(`Error occurred on retry ${retryCount}:`, error);
+      setTimeout(() => checkOrderStatus(orderId), 3000);
+    }
   }
+
   confirm();
-
-  const paymentKeyElement = document.getElementById("paymentKey");
-  const orderIdElement = document.getElementById("orderId");
-  const amountElement = document.getElementById("amount");
-
-  orderIdElement.textContent = "주문번호: " + orderId;
-  amountElement.textContent = "결제 금액: " + amount;
-  paymentKeyElement.textContent = "paymentKey: " + paymentKey;
 </script>
+
+<!-- Include footer -->
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>

@@ -1,7 +1,7 @@
 package com.nhnacademy.frontserver1.common.decoder;
 
-
 import com.nhnacademy.frontserver1.common.exception.FeignClientException;
+import com.nhnacademy.frontserver1.common.exception.OrderWaitingException;
 import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
 import feign.Response;
 import feign.codec.ErrorDecoder;
@@ -20,30 +20,36 @@ public class CustomErrorDecoder implements ErrorDecoder {
         try {
             responseBody = response.body() != null ? new String(response.body().asInputStream().readAllBytes(), StandardCharsets.UTF_8) : null;
         } catch (IOException e) {
-            log.error("응답 본문을 읽는 중 에러 발생", e);
+            log.error("응답 본문을 읽는 중 에러 발생: methodKey={}, status={}, 에러 메시지={}", methodKey, response.status(), e.getMessage(), e);
         }
 
-        return handleException(response, responseBody);
+        return handleException(methodKey, response, responseBody);
     }
 
-    private Exception handleException(Response response, String responseBody) {
-        if (response.status() == 400) {
-            log.error("클라이언트 요청에서 에러가 발생하였습니다. 상태 코드: 400, 응답 본문: {}", responseBody);
+    private Exception handleException(String methodKey, Response response, String responseBody) {
+        int status = response.status();
 
-            return throwFeignClientException(response, responseBody);
+        switch (status) {
+            case 400:
+                log.error("클라이언트 요청에서 에러가 발생하였습니다. 상태 코드: 400, 응답 본문: {}", responseBody);
+                break;
+            case 404:
+                if (methodKey.contains("findOrderStatusByOrderId")) {
+                    return new OrderWaitingException(
+                        ErrorStatus.toErrorStatus("주문 완료 대기중", 301, LocalDateTime.now())
+                    );
+                }
+                log.error("리소스를 찾을 수 없습니다. 상태 코드: 404, 응답 본문: {}", responseBody);
+                break;
+            case 500:
+                log.error("서버에서 에러가 발생하였습니다. 상태 코드: 500, 응답 본문: {}", responseBody);
+                break;
+            default:
+                log.error("알 수 없는 에러가 발생하였습니다. 상태 코드: {}, 응답 본문: {}", status, responseBody);
+                break;
         }
 
-        else if (response.status() == 500) {
-            log.error("서버에서 에러가 발생하였습니다. 상태 코드: 500, 응답 본문: {}", responseBody);
-
-            return throwFeignClientException(response, responseBody);
-        }
-
-        else {
-            log.error("알 수 없는 에러가 발생하였습니다. 상태 코드: {}, 응답 본문: {}", response.status(), responseBody);
-
-            return throwFeignClientException(response, responseBody);
-        }
+        return throwFeignClientException(response, responseBody);
     }
 
     private FeignClientException throwFeignClientException(Response response, String responseBody) {

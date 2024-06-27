@@ -5,7 +5,7 @@ import com.nhnacademy.frontserver1.common.exception.FeignClientException;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.CouponAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyRequestDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyResponseDTO;
-import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponUserListResponseDTO;
+//import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponUserListResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,28 +49,29 @@ public class CouponServiceImpl implements CouponService {
         }
     }
 
-
-    @Override
-    public List<CouponUserListResponseDTO> findUserCoupons(Long userId) {
-        try {
-            return couponAdaptor.findUserCoupons(userId);
-        } catch (FeignClientException e) {
-            logger.error("Error occurred while fetching user coupons", e);
-            throw e;
-        } catch (Exception e) {
-            logger.error("Unexpected error occurred while fetching user coupons", e);
-            throw e;
-        }
-    }
-
     @Override
     public void createCoupon(CouponPolicyRequestDTO createCouponRequest) {
         couponAdaptor.create(createCouponRequest);
     }
 
-    @Override
-    public void deleteCoupon(Long id) {
-        couponAdaptor.delete(id);
-    }
+//
+//    @Override
+//    public List<CouponUserListResponseDTO> findUserCoupons(Long userId) {
+//        try {
+//            return couponAdaptor.findUserCoupons(userId);
+//        } catch (FeignClientException e) {
+//            logger.error("Error occurred while fetching user coupons", e);
+//            throw e;
+//        } catch (Exception e) {
+//            logger.error("Unexpected error occurred while fetching user coupons", e);
+//            throw e;
+//        }
+//    }
+
+
+//    @Override
+//    public void deleteCoupon(Long id) {
+//        couponAdaptor.delete(id);
+//    }
 
 }

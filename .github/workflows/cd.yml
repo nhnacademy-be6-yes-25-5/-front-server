@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set up SSH
         env:
@@ -23,28 +25,27 @@ jobs:
           chmod 400 ~/.ssh/github_rsa
           ssh-keyscan ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
+      - name: Clean Remote Directory
+        env:
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
+        run: |
+          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "rm -rf ${REMOTE_DIR}/*"
+
       - name: Copy project files to Remote Server
         env:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
           REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
         run: |
-          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no Dockerfile ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/Dockerfile
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no Dockerfile-8040 ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/Dockerfile-8040
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no Dockerfile-8041 ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/Dockerfile-8041
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no build_and_run.sh ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/build_and_run.sh
           scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no pom.xml ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/pom.xml
           scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no -r src ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/src
-          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no -r src/main/resources/application-prod.yml ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/src/main/resources/application-prod.yml
 
-      - name: Check Dockerfile on Remote Server
-        env:
-          REMOTE_USER: ${{ secrets.SSH_USER }}
-          REMOTE_HOST: ${{ secrets.SSH_HOST }}
-          REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
-        run: |
-          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/Dockerfile"
-          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/pom.xml"
-          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "ls -la ${REMOTE_DIR}/src"
-
-      - name: Deploy JAR on Remote Server
+      - name: Deploy JARs on Remote Server
         env:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
@@ -52,14 +53,8 @@ jobs:
         run: |
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
             cd ${REMOTE_DIR}
-            if [ ! -f Dockerfile ]; then
-              echo "Dockerfile not found!"
-              exit 1
-            fi
-            docker build -t front-app .
-            docker stop front-app || true
-            docker rm front-app || true
-            docker run -d -p 8071:8071 --name front-app front-app --spring.profiles.active=prod
+            chmod +x build_and_run.sh
+            ./build_and_run.sh
           EOF
 
       - name: Send Deployment Status to Dooray

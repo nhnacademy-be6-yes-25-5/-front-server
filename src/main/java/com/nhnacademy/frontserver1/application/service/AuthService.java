@@ -7,4 +7,5 @@ public interface AuthService {
 
     String loginUser(@RequestBody LoginUserRequest loginUserRequest);
 
+    String testToken();
 }

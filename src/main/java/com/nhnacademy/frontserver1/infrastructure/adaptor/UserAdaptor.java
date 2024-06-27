@@ -6,10 +6,13 @@ import com.nhnacademy.frontserver1.presentation.dto.request.user.UpdateUserReque
 import com.nhnacademy.frontserver1.presentation.dto.response.user.PointPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UpdateUserResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UserResponse;
+import com.nhnacademy.frontserver1.common.config.FeignClientConfig;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserInfoResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
 
-@FeignClient(name = "userAdaptor", url = "http://localhost:8085/users")
+@FeignClient(name = "userAdaptor", url = "${eureka.gateway}/users", configuration = FeignClientConfig.class)
 public interface UserAdaptor {
 
     @PostMapping("/users/sign-up")
@@ -26,4 +29,7 @@ public interface UserAdaptor {
 
     @GetMapping("/admin/point-policies/{pointPolicyId}")
     PointPolicyResponse getPointPolicy(@PathVariable Long pointPolicyId);
+
+    @GetMapping("/orders/info")
+    ReadOrderUserInfoResponse getUserInfo();
 }

@@ -30,7 +30,7 @@
                                 <a class="nav-link" href="#">쿠폰함</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">정보 수정</a>
+                                <a class="nav-link" href="/users/info">정보 수정</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">나의 리뷰</a>
@@ -50,29 +50,41 @@
                                         <h3>정보 수정</h3>
                                         <p>회원정보를 수정할 수 있습니다.</p>
                                     </div>
-                                    <form class="card login-form" method="post">
+                                    <form id="update-form" class="card login-form">
+                                        <!-- 나머지 입력 필드들 -->
                                         <div class="card-body">
                                             <div class="form-group input-group">
-                                                <label for="name">이름</label>
-                                                <input class="form-control" type="text" name="name" id="name">
+                                                <label for="userEmail">이메일</label>
+                                                <input class="form-control" type="email" id="userEmail" th:field="*{user.userEmail}" readonly>
                                             </div>
                                             <div class="form-group input-group">
-                                                <label for="phoneNumber">전화번호</label>
-                                                <input class="form-control" type="number" name="phoneNumber" id="phoneNumber">
+                                                <label for="userName">이름</label>
+                                                <input class="form-control" type="text" name="userName" id="userName" th:field="*{user.userName}" required>
                                             </div>
                                             <div class="form-group input-group">
-                                                <label for="new-password">현재 비밀번호</label>
-                                                <input class="form-control" type="password" id="new-password" required>
+                                                <label for="userPhone">전화번호</label>
+                                                <input class="form-control" type="text" name="phoneNumber" id="userPhone" th:field="*{user.userPhone}" required>
                                             </div>
                                             <div class="form-group input-group">
-                                                <label for="confirm-password">비밀번호 확인</label>
-                                                <input class="form-control" type="password" id="confirm-password" required>
+                                                <label for="userBirth">생일</label>
+                                                <input class="form-control" type="date" name="userBirth" id="userBirth" th:field="*{user.userBirth}">
                                             </div>
-                                            <div id="pwConfirm">
-
+                                            <div class="form-group input-group">
+                                                <label for="userPassword">현재 비밀번호</label>
+                                                <input class="form-control" type="password" name="userPassword" id="userPassword" required>
                                             </div>
-                                            <div class="button">
-                                                <button class="btn" type="submit" id="update-btn">수정</button>
+                                            <div class="form-group input-group">
+                                                <label for="newUserPassword">새 비밀번호</label>
+                                                <input class="form-control" type="password" name="newUserPassword" id="newUserPassword">
+                                            </div>
+                                            <div class="form-group input-group">
+                                                <label for="newUserConfirmPassword">새 비밀번호 확인</label>
+                                                <input class="form-control" type="password" name="newUserConfirmPassword" id="newUserConfirmPassword">
+                                            </div>
+                                            <div id="pwConfirm"></div>
+                                            <div class="button-group">
+                                                <button class="btn btn-primary" type="submit" id="update-btn">수정</button>
+                                                <a class="btn btn-danger ml-2" href="/users/delete" id="delete-account-btn">회원 탈퇴</a>
                                             </div>
                                         </div>
                                     </form>
@@ -85,10 +97,56 @@
         </div>
     </div>
     <!-- End Order History Area -->
+
     <script>
+        document.getElementById('update-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+
+            fetch('/users', {
+                method: 'PUT',
+                body: JSON.stringify(Object.fromEntries(formData)),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    alert('정보가 성공적으로 수정되었습니다.');
+                    window.location.href = '/users/info';
+                } else {
+                    alert('정보 수정에 실패했습니다.');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        // 전화번호 입력 필드 포맷팅 함수
+        function formatPhoneNumber(event) {
+            let input = event.target.value.replace(/\D/g, ''); // 숫자 이외의 문자 제거
+            let formatted = '';
+
+            if (input.length > 0) {
+                formatted = input.substring(0, 3);
+                if (input.length > 3) {
+                    formatted += '-' + input.substring(3, 7);
+                }
+                if (input.length > 7) {
+                    formatted += '-' + input.substring(7, 11);
+                }
+            }
+
+            event.target.value = formatted;
+        }
+
+        // 전화번호 입력 필드에 이벤트 리스너 추가
+        const userPhoneInput = document.getElementById('userPhone');
+        userPhoneInput.addEventListener('input', formatPhoneNumber);
+
         // 비밀번호 확인하는 JS
-        const newPasswordInput = document.getElementById('new-password');
-        const confirmPasswordInput = document.getElementById('confirm-password');
+        const newPasswordInput = document.getElementById('newUserPassword');
+        const confirmPasswordInput = document.getElementById('newUserConfirmPassword');
         const pwConfirmElement = document.getElementById('pwConfirm');
         const setPasswordBtn = document.getElementById('update-btn');
 

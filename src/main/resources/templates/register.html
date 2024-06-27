@@ -16,51 +16,48 @@
                             <h3>No Account? Register</h3>
                             <p>Registration takes less than a minute but gives you full control over your orders.</p>
                         </div>
-                        <form class="row" method="post">
+                        <form class="row" method="post" action="/users/sign-up" id="registerForm">
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="reg-fn">First Name</label>
-                                    <input class="form-control" type="text" id="reg-fn" required>
+                                    <label for="userName">이름</label>
+                                    <input class="form-control" type="text" id="userName" name="userName" required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="reg-ln">Last Name</label>
-                                    <input class="form-control" type="text" id="reg-ln" required>
+                                    <label for="userBirth">생년월일</label>
+                                    <input class="form-control" type="date" id="userBirth" name="userBirth" required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="reg-email">E-mail Address</label>
-                                    <input class="form-control" type="email" id="reg-email" required>
+                                    <label for="userEmail">E-mail 주소</label>
+                                    <input class="form-control" type="email" id="userEmail" name="userEmail" required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="reg-phone">Phone Number</label>
-                                    <input class="form-control" type="text" id="reg-phone" required>
+                                    <label for="userPhone">휴대전화 번호</label>
+                                    <input class="form-control" type="text" id="userPhone" name="userPhone" required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="reg-pass">Password</label>
-                                    <input class="form-control" type="password" id="reg-pass" required>
+                                    <label for="userPassword">비밀번호</label>
+                                    <input class="form-control" type="password" id="userPassword" name="userPassword" required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="reg-pass-confirm">Confirm Password</label>
-                                    <input class="form-control" type="password" id="reg-pass-confirm" required>
+                                    <label for="userConfirmPassword">비밀번호 확인</label>
+                                    <input class="form-control" type="password" id="userConfirmPassword" name="userConfirmPassword" required>
                                 </div>
                             </div>
-                            <div id="pwConfirm">
-
+                            <div id="pwConfirm" class="col-12"></div>
+                            <div class="button col-12">
+                                <button class="btn btn-primary" type="submit" id="register-btn">Register</button>
                             </div>
-                            <div class="button">
-                                <button class="btn" type="submit" id="register-btn">Register</button>
-                            </div>
-                            <p class="outer-link">Already have an account? <a href="#">Login Now</a>
-                            </p>
+                            <p class="outer-link">Already have an account? <a href="#">Login Now</a></p>
                         </form>
                     </div>
                 </div>
@@ -68,6 +65,7 @@
         </div>
     </div>
     <!-- End Account Register Area -->
+
     <!-- 모달 -->
     <div class="modal fade" id="registrationSuccessModal" tabindex="-1" aria-labelledby="registrationSuccessModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -81,46 +79,89 @@
                         Welcome 쿠폰이 발급되었어요. 쿠폰함에서 확인할 수 있어요!</p>
                 </div>
                 <div class="modal-footer">
-                    <a href="#" class="btn btn-primary" data-bs-dismiss="modal">쿠폰함으로 이동</a>
-                    <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">메인으로 이동</a>
+                    <a href="/mypage-coupon" class="btn btn-primary" data-bs-dismiss="modal">쿠폰함으로 이동</a>
+                    <a href="/index" class="btn btn-secondary" data-bs-dismiss="modal">메인으로 이동</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        // 회원가입 버튼 눌럿을 때 Welcome 쿠폰 관련 모달 뜨게 하는 JS
-        // 현재는 Register 버튼 눌렀을 떄 무조건 모달 뜨게 구현해 놓음
-        const registerButton = document.querySelector('.register-form .button .btn');
-        registerButton.addEventListener('click', function(event) {
-            event.preventDefault(); // 기본 동작 방지
-            const registrationSuccessModal = new bootstrap.Modal(document.getElementById('registrationSuccessModal'));
-            registrationSuccessModal.show();
-        });
-    </script>
 
-    <script>
+
+<!-- jQuery CDN 추가 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- 인라인 JavaScript -->
+<script>
+    const phoneInput = document.getElementById('userPhone');
+
+    phoneInput.addEventListener('input', function(e) {
+        let formatted = '';
+        const input = e.target.value.replace(/\D/g, ''); // 숫자 이외의 문자 제거
+
+        if (input.length > 0) {
+            formatted = input.substring(0, 3);
+            if (input.length > 3) {
+                formatted += '-' + input.substring(3, 7);
+            }
+            if (input.length > 7) {
+                formatted += '-' + input.substring(7, 11);
+            }
+        }
+
+        e.target.value = formatted;
+    });
+
     // 비밀번호 확인하는 JS
-    const newPasswordInput = document.getElementById('reg-pass');
-    const confirmPasswordInput = document.getElementById('reg-pass-confirm');
+    const userPasswordInput = document.getElementById('userPassword');
+    const userConfirmPasswordInput = document.getElementById('userConfirmPassword');
     const pwConfirmElement = document.getElementById('pwConfirm');
-    const setPasswordBtn = document.getElementById('register-btn');
+    const registerButton = document.getElementById('register-btn');
+    const registerForm = document.getElementById('registerForm');
 
-    function pwCheck() {
-        if (newPasswordInput.value === confirmPasswordInput.value) {
+    function checkPassword() {
+        if (userPasswordInput.value === userConfirmPasswordInput.value) {
             pwConfirmElement.textContent = '비밀번호 일치';
             pwConfirmElement.style.color = 'green';
+            registerButton.disabled = false; // 비밀번호가 일치하면 버튼 활성화
         } else {
             pwConfirmElement.textContent = '비밀번호 불일치';
             pwConfirmElement.style.color = 'red';
+            registerButton.disabled = true; // 비밀번호가 일치하지 않으면 버튼 비활성화
         }
-
-        setPasswordBtn.disabled = (newPasswordInput.value !== confirmPasswordInput.value);
     }
 
-    newPasswordInput.addEventListener('input', pwCheck);
-    confirmPasswordInput.addEventListener('input', pwCheck);
+    userConfirmPasswordInput.addEventListener('keyup', checkPassword);
+
+    // 회원가입 성공 모달 표시 및 폼 제출
+    registerForm.addEventListener('submit', function(event) {
+        if (userPasswordInput.value !== userConfirmPasswordInput.value) {
+            event.preventDefault(); // 폼 기본 제출 방지
+            pwConfirmElement.textContent = '비밀번호 불일치';
+            pwConfirmElement.style.color = 'red';
+            return;
+        }
+
+        // 비밀번호가 일치할 때만 모달 표시
+        $('#registrationSuccessModal').modal('show'); // 모달 표시
+
+        // 모달이 닫힐 때 폼 제출
+        $('#registrationSuccessModal').on('hidden.bs.modal', function () {
+            registerForm.submit();
+        });
+
+        // 폼 제출 후에는 리다이렉트를 막고 추가적인 작업을 수행할 수 있음
+        event.preventDefault();
+    });
 </script>
+
+<!-- Bootstrap 및 기타 JavaScript 파일 -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
+        integrity="sha384-uW4RJSK5cXomJgjXjl9a2zHaK87gmfd/wa4vDucYm2U5bsVN6lpsaynBhLnlD4aa"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+jTp2DkxyFp4x14FqnOrjF55fkgvL5D7Ibb"
+        crossorigin="anonymous"></script>
 </div>
 </body>
 </html>

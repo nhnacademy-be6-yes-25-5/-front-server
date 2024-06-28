@@ -31,9 +31,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookServiceimpl implements BookService {
 
-    private final String clientSecret = "mmnE38HTvttvM422Rk00";
+    private final String clientSecret = "lGNHabz2fB";
 
-    private final String clientId = "OR6nwIYwvb";
+    private final String clientId = "uS5wTyLK7Z5_wkmDowph";
 
     private final BookAdapter bookAdapter;
 

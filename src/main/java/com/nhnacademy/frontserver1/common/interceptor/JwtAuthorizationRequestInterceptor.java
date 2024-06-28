@@ -10,7 +10,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import java.util.Optional;
+
+import java.util.List;
 
 /**
  * JWT 인증을 위한 Feign 요청 인터셉터입니다.
@@ -31,7 +32,6 @@ public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
      */
     @Override
     public void apply(RequestTemplate template) {
-
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String path = request.getServletPath();
 
@@ -39,13 +39,14 @@ public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
             return;
         }
 
-        Optional<String> token = cookieTokenProvider.getTokenFromCookie(request);
-        token.ifPresentOrElse(
-                t -> template.header(HttpHeaders.AUTHORIZATION, "Bearer " + t),
-                () -> {
-                    throw new TokenCookieMissingException();
-                }
-        );
+        try {
+            List<String> tokens = cookieTokenProvider.getTokenFromCookie(request);
+            if (!tokens.isEmpty()) {
+                template.header(HttpHeaders.AUTHORIZATION, "Bearer " + tokens.get(0)); // AccessToken
+                template.header("RefreshToken", tokens.get(1)); // RefreshToken
+            }
+        } catch (TokenCookieMissingException e) {
+            throw new TokenCookieMissingException();
+        }
     }
-
 }

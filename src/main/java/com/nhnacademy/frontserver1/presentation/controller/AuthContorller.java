@@ -54,17 +54,22 @@ public class AuthContorller {
         AuthResponse token = authService.loginUser(loginUserRequest);
 
         // AccessToken을 헤더에 추가
-        response.setHeader("Authorization", "Bearer " + token.accessToken());
+        Cookie accessTokenCookie = new Cookie("AccessToken", token.accessToken());
+        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setSecure(true); // HTTPS 연결에서만 전송
+        accessTokenCookie.setPath("/");
 
-        // RefreshToken을 쿠키에 추가
         Cookie refreshTokenCookie = new Cookie("RefreshToken", token.refreshToken());
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setSecure(true); // HTTPS 연결에서만 전송
         refreshTokenCookie.setPath("/");
+
+        response.addCookie(accessTokenCookie);
         response.addCookie(refreshTokenCookie);
 
         return "redirect:/";
     }
+
 
     /**
      * 토큰 테스트 페이지를 반환합니다.

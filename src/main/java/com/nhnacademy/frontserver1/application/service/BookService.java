@@ -4,8 +4,10 @@ import com.nhnacademy.frontserver1.presentation.dto.request.book.CreateBookReque
 import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookAPIResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.book.UploadImageResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

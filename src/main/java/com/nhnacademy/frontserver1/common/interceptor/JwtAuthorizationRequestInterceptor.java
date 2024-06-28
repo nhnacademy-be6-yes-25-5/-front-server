@@ -6,6 +6,7 @@ import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -23,6 +24,9 @@ public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
 
     private final CookieTokenProvider cookieTokenProvider;
 
+    @Value("${app.mode}")
+    private String mode;
+
     /**
      * Feign 요청에 JWT 토큰을 추가합니다.
      * '/auth/login' 경로에 대한 요청은 인증이 필요하지 않으므로 토큰을 추가하지 않습니다.
@@ -34,6 +38,10 @@ public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String path = request.getServletPath();
+
+        if("development".equals(mode)) {
+            return;
+        }
 
         if (path.startsWith("/auth/login")) {
             return;

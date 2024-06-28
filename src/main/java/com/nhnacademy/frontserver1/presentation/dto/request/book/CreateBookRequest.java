@@ -4,12 +4,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 
+@Builder
 public record CreateBookRequest (
         @NotNull(message = "ISBN이 없습니다.")
         @Size(min = 10, max = 13)
@@ -36,11 +38,26 @@ public record CreateBookRequest (
         @NotNull(message = "책 판매 가격은 필수 입력 항목입니다.")
         BigDecimal bookSellingPrice,
 
-        String bookImage,
-
         @NotNull(message = "수량은 필수 입력 항목입니다.")
-        Integer quantity
+        Integer quantity,
+
+        String imageURL
 )
 {
+        public static CreateBookRequest updateImageURL(CreateBookRequest request, String imageURL) {
+                return CreateBookRequest.builder()
+                        .bookDescription(request.bookDescription())
+                        .bookIsbn(request.bookIsbn())
+                        .bookName(request.bookName())
+                        .index(request.index())
+                        .bookAuthor(request.bookAuthor())
+                        .bookPublisher(request.bookPublisher())
+                        .bookPublishDate(request.bookPublishDate())
+                        .bookPrice(request.bookPrice())
+                        .bookSellingPrice(request.bookSellingPrice())
+                        .quantity(request.quantity())
+                        .imageURL(imageURL)
+                        .build();
+        }
 }
 

@@ -32,14 +32,14 @@ public class CouponController {
     public String getAdminCouponPolicy(@RequestParam(defaultValue = "0") int page,
                                        @RequestParam(defaultValue = "10") int size,
                                        Model model) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<CouponPolicyResponseDTO> couponPage = couponService.findAllCouponPolicies(pageable);
-
-        model.addAttribute("coupons", couponPage.getContent());
-        model.addAttribute("currentPage", couponPage.getNumber());
-        model.addAttribute("totalPages", couponPage.getTotalPages());
-        model.addAttribute("pageSize", couponPage.getSize());
-        model.addAttribute("newCouponPolicy", new CouponPolicyRequestDTO());
+//        Pageable pageable = PageRequest.of(page, size);
+//        Page<CouponPolicyResponseDTO> couponPage = couponService.findAllCouponPolicies(pageable);
+//
+//        model.addAttribute("coupons", couponPage.getContent());
+//        model.addAttribute("currentPage", couponPage.getNumber());
+//        model.addAttribute("totalPages", couponPage.getTotalPages());
+//        model.addAttribute("pageSize", couponPage.getSize());
+//        model.addAttribute("newCouponPolicy", new CouponPolicyRequestDTO());
         return "admin/policy/admin-policy-coupon";
     } //생성한 쿠폰 정책 목록
 

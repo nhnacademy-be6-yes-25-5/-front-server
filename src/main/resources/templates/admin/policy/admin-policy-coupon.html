@@ -33,36 +33,36 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="coupon : ${coupons}">
-                            <td th:text="${coupon.couponPolicyId}"></td>
-                            <td th:text="${coupon.couponPolicyName}"></td>
-                            <td th:text="${coupon.couponPolicyDiscountValue}"></td>
-                            <td th:text="${coupon.couponPolicyRate}"></td>
-                            <td th:text="${coupon.couponPolicyMinOrderAmount}"></td>
-                            <td th:text="${coupon.couponPolicyMaxAmount}"></td>
-                            <td th:text="${coupon.couponPolicyDiscountType ? '비율' : '고정 금액'}"></td>
-                        </tr>
+<!--                        <tr th:each="coupon : ${coupons}">-->
+<!--                            <td th:text="${coupon.couponPolicyId}"></td>-->
+<!--                            <td th:text="${coupon.couponPolicyName}"></td>-->
+<!--                            <td th:text="${coupon.couponPolicyDiscountValue}"></td>-->
+<!--                            <td th:text="${coupon.couponPolicyRate}"></td>-->
+<!--                            <td th:text="${coupon.couponPolicyMinOrderAmount}"></td>-->
+<!--                            <td th:text="${coupon.couponPolicyMaxAmount}"></td>-->
+<!--                            <td th:text="${coupon.couponPolicyDiscountType ? '비율' : '고정 금액'}"></td>-->
+<!--                        </tr>-->
                         </tbody>
                     </table>
 
                     <!-- Pagination -->
-                    <nav>
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                                <a class="page-link" th:href="@{/coupons/policy(page=${currentPage - 1}, size=${pageSize})}" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                            <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${pageNum == currentPage} ? 'active'">
-                                <a class="page-link" th:href="@{/coupons/policy(page=${pageNum}, size=${pageSize})}" th:text="${pageNum + 1}">1</a>
-                            </li>
-                            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                                <a class="page-link" th:href="@{/coupons/policy(page=${currentPage + 1}, size=${pageSize})}" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
+<!--                    <nav>-->
+<!--                        <ul class="pagination justify-content-center">-->
+<!--                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">-->
+<!--                                <a class="page-link" th:href="@{/coupons/policy(page=${currentPage - 1}, size=${pageSize})}" aria-label="Previous">-->
+<!--                                    <span aria-hidden="true">&laquo;</span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                            <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${pageNum == currentPage} ? 'active'">-->
+<!--                                <a class="page-link" th:href="@{/coupons/policy(page=${pageNum}, size=${pageSize})}" th:text="${pageNum + 1}">1</a>-->
+<!--                            </li>-->
+<!--                            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">-->
+<!--                                <a class="page-link" th:href="@{/coupons/policy(page=${currentPage + 1}, size=${pageSize})}" aria-label="Next">-->
+<!--                                    <span aria-hidden="true">&raquo;</span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </nav>-->
                 </div>
             </div>
         </div>

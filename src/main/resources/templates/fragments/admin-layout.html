@@ -62,14 +62,15 @@
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
                                 배송비 정책
                             </a>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth2" aria-expanded="false" aria-controls="pagesCollapseAuth2">
+                            <a class="nav-link collapsed" href="#" id="policyLink" data-bs-toggle="collapse"
+                               data-bs-target="#pagesCollapseAuth2" aria-expanded="false" aria-controls="pagesCollapseAuth2">
                                 쿠폰 정책
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="pagesCollapseAuth2" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordionPages2">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="#">카테고리 쿠폰 정책</a>
-                                    <a class="nav-link" href="#">도서 쿠폰 정책</a>
+                                    <a class="nav-link" href="/coupons/policy/category">카테고리 쿠폰 정책</a>
+                                    <a class="nav-link" href="/coupons/policy/books">도서 쿠폰 정책</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
@@ -105,7 +106,7 @@
             <div class="container-fluid px-4">
 
                 <!-- Start Content -->
-                <div th:replace="${content}"></div>
+                <div th:replace="${content}"  id="main-content"></div>
                 <!-- End Content -->
                 </ol>
             </div>

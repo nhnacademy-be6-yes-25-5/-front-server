@@ -4,6 +4,7 @@ import com.nhnacademy.frontserver1.application.service.impl.AuthServiceImpl;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.LoginUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.AuthResponse;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.net.http.HttpHeaders;
 
 /**
  * AuthController 클래스는 사용자 인증 관련 기능을 제공하는 Spring MVC 컨트롤러입니다.
@@ -50,18 +53,14 @@ public class AuthContorller {
     public String login(@ModelAttribute LoginUserRequest loginUserRequest, HttpServletResponse response) {
         AuthResponse token = authService.loginUser(loginUserRequest);
 
-        Cookie accessTokenCookie = new Cookie("AccessToken", token.accessToken());
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setSecure(true); // HTTPS 연결에서만 전송
-        accessTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge(15 * 60); // 15분
+        // AccessToken을 헤더에 추가
+        response.setHeader("Authorization", "Bearer " + token.accessToken());
 
+        // RefreshToken을 쿠키에 추가
         Cookie refreshTokenCookie = new Cookie("RefreshToken", token.refreshToken());
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setSecure(true); // HTTPS 연결에서만 전송
         refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60); // 7일
-        response.addCookie(accessTokenCookie);
         response.addCookie(refreshTokenCookie);
 
         return "redirect:/";

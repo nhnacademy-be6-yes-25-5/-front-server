@@ -21,7 +21,7 @@ public class CookieTokenProvider {
 
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("Authorization")) {
+                if (cookie.getName().equals("AccessToken") ) {
 
                     return Optional.of(cookie.getValue());
                 }

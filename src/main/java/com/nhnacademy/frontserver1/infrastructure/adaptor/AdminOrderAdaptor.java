@@ -10,14 +10,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "adminOrderAdaptor", url = "${eureka.gateway}/orders", configuration = FeignClientConfig.class)
 public interface AdminOrderAdaptor {
 
     @GetMapping("/admin")
-    Page<ReadAllUserOrderStatusResponse> getAllUserOrderStatusByPaging(Pageable pageable);
+    Page<ReadAllUserOrderStatusResponse> getAllUserOrderStatusByPaging(Pageable pageable,
+        @RequestParam(required = false) String role);
 
     @PutMapping("/{orderId}/admin")
     void updateOrderStatusByOrderId(@PathVariable String orderId,
-        @RequestBody UpdateOrderStatusRequest updateOrderStatusRequest);
+        @RequestBody UpdateOrderStatusRequest updateOrderStatusRequests);
 }

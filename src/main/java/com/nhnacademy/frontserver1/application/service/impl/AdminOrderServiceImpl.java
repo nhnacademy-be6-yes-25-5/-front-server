@@ -16,8 +16,9 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     private final AdminOrderAdaptor adminOrderAdaptor;
 
     @Override
-    public Page<ReadAllUserOrderStatusResponse> getAllUserOrderStatus(Pageable pageable) {
-        return adminOrderAdaptor.getAllUserOrderStatusByPaging(pageable);
+    public Page<ReadAllUserOrderStatusResponse> getAllUserOrderStatus(Pageable pageable,
+        String role) {
+        return adminOrderAdaptor.getAllUserOrderStatusByPaging(pageable, role);
     }
 
     @Override

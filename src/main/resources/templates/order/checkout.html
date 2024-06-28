@@ -39,7 +39,6 @@
 <header th:replace="~{fragments/header :: header}"></header>
 
 <!--====== Checkout Form Steps Part Start ======-->
-
 <section class="checkout-wrapper section">
   <div class="container">
     <div class="row justify-content-center">
@@ -599,6 +598,15 @@
 
     return isValid;
   }
+
+  window.addEventListener('load', function () {
+    setTimeout(function () {
+      const preloader = document.querySelector('.preloader');
+      if (preloader) {
+        preloader.classList.add('hidden');
+      }
+    }, 1000);
+  });
 </script>
 </body>
 

@@ -1,0 +1,72 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/admin-layout :: admin-layout(~{::content})}">
+<body>
+<div th:fragment="content">
+    <h1 class="mt-4">회원 주문 관리</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">회원 주문 관리</li>
+    </ol>
+
+    <div class="container-fluid">
+        <div class="card mb-4">
+            <div class="card-header">
+                주문 목록
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>주문번호</th>
+                        <th>회원번호</th>
+                        <th>주문 상품</th>
+                        <th>주문 금액</th>
+                        <th>주문 상태</th>
+                        <th>주문 일자</th>
+                        <th>배송 일자</th>
+                        <th>주문 상태 변경</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="order : ${orderInfos}">
+                        <td th:text="${order.orderId}">주문번호</td>
+                        <td th:text="${order.customerId}">회원번호</td>
+                        <td>
+                            <ul>
+                                <li th:each="bookName : ${order.bookNames}" th:text="${bookName}">주문 상품</li>
+                            </ul>
+                        </td>
+                        <td th:text="${order.amount}">주문 금액</td>
+                        <td th:text="${order.orderStatusType}">주문 상태</td>
+                        <td th:text="${order.orderCreatedAt}">주문 일자</td>
+                        <td th:text="${order.orderDeliveryAt}">배송 일자</td>
+                        <td>
+                            <button class="btn btn-primary">상태 변경</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <!-- Pagination controls -->
+                <div class="d-flex justify-content-center">
+                    <ul class="pagination">
+                        <li class="page-item" th:classappend="${orderInfos.hasPrevious()} ? '' : 'disabled'">
+                            <a class="page-link" th:href="@{/admin/orders(page=${orderInfos.number - 1})}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item" th:each="i : ${#numbers.sequence(0, orderInfos.totalPages - 1)}"
+                            th:classappend="${orderInfos.number == i} ? 'active'">
+                            <a class="page-link" th:href="@{/admin/orders(page=${i})}" th:text="${i + 1}">1</a>
+                        </li>
+                        <li class="page-item" th:classappend="${orderInfos.hasNext()} ? '' : 'disabled'">
+                            <a class="page-link" th:href="@{/admin/orders(page=${orderInfos.number + 1})}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

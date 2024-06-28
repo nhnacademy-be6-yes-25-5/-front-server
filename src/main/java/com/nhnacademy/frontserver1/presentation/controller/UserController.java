@@ -5,6 +5,7 @@ import com.nhnacademy.frontserver1.presentation.dto.request.user.CreateUserReque
 import com.nhnacademy.frontserver1.presentation.dto.request.user.DeleteUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.UpdateUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UpdateUserResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.user.UserGradeResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -88,5 +89,18 @@ public class UserController {
         userService.deleteUser(userRequest);
 
         return ResponseEntity.ok().build();
+    }
+
+    // 회원 등급 페이지
+    @GetMapping("/grades")
+    public String getUserGrades(Model model) {
+
+        // todo : 회원 등급 가져오는 로직
+
+        UserGradeResponse userGrade = userService.getUserGrade();
+
+        model.addAttribute("userGrade", userGrade);
+
+        return "mypage/mypage-grade";
     }
 }

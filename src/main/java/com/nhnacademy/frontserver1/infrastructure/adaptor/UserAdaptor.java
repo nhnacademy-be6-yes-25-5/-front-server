@@ -5,6 +5,7 @@ import com.nhnacademy.frontserver1.presentation.dto.request.user.DeleteUserReque
 import com.nhnacademy.frontserver1.presentation.dto.request.user.UpdateUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.PointPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UpdateUserResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.user.UserGradeResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UserResponse;
 import com.nhnacademy.frontserver1.common.config.FeignClientConfig;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserInfoResponse;
@@ -27,9 +28,9 @@ public interface UserAdaptor {
     @DeleteMapping("/users")
     void deleteUser(@RequestBody DeleteUserRequest userRequest);
 
-    @GetMapping("/admin/point-policies/{pointPolicyId}")
-    PointPolicyResponse getPointPolicy(@PathVariable Long pointPolicyId);
-
     @GetMapping("/orders/info")
     ReadOrderUserInfoResponse getUserInfo();
+
+    @GetMapping("/grades")
+    UserGradeResponse getUserGrade();
 }

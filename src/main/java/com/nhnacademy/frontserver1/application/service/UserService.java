@@ -6,6 +6,7 @@ import com.nhnacademy.frontserver1.presentation.dto.request.user.PointPolicyRequ
 import com.nhnacademy.frontserver1.presentation.dto.request.user.UpdateUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.PointPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UpdateUserResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.user.UserGradeResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UserResponse;
 
 public interface UserService {
@@ -19,4 +20,6 @@ public interface UserService {
     void deleteUser(DeleteUserRequest userRequest);
 
     PointPolicyResponse getPointPolicies(PointPolicyRequest pointPolicyRequest);
+
+    UserGradeResponse getUserGrade();
 }

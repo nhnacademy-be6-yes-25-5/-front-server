@@ -8,6 +8,7 @@ import com.nhnacademy.frontserver1.presentation.dto.request.user.PointPolicyRequ
 import com.nhnacademy.frontserver1.presentation.dto.request.user.UpdateUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.PointPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UpdateUserResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.user.UserGradeResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -43,5 +44,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public PointPolicyResponse getPointPolicies(PointPolicyRequest pointPolicyRequest) {
         return null;
+    }
+
+    @Override
+    public UserGradeResponse getUserGrade() {
+        return userAdaptor.getUserGrade();
     }
 }

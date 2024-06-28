@@ -11,6 +11,7 @@ import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookReque
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookAPIResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,9 +31,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
-    private final String clientSecret = "lGNHabz2fB";
+    @Value("${naverapi.secret}")
+    private String clientSecret;
 
-    private final String clientId = "uS5wTyLK7Z5_wkmDowph";
+    @Value("{naverapi.id}")
+    private String clientId;
 
     private final BookAdapter bookAdapter;
 

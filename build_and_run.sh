@@ -9,7 +9,10 @@ docker stop front1-app-8040 || true
 docker rm front1-app-8040 || true
 
 # Run container for port 8040
-docker run -d -p 8040:8040 --name front1-app-8040 front1-app-8040
+docker run -d -p 8040:8040 --name front1-app-8040 \
+  -e NAVER_SECRET = ${NAVER_SECRET} \
+  -e NHN_IMAGE_SECRET = ${NHN_IMAGE_SECRET} \
+  front1-app-8040
 
 # Wait for 30 seconds
 sleep 30
@@ -19,4 +22,9 @@ docker stop front1-app-8041 || true
 docker rm front1-app-8041 || true
 
 # Run container for port 8041
-docker run -d -p 8041:8041 --name front1-app-8041 front1-app-8041
+docker run -d -p 8041:8041 --name front1-app-8041 \
+  -e NAVER_ID = ${NAVER_ID} \
+  -e NAVER_SECRET = ${NAVER_SECRET} \
+  -e NHN_IMAGE_SECRET = ${NHN_IMAGE_SECRET} \
+  -e NHN_IMAGE_APPKEY = ${NHN_IMAGE_APPKEY} \
+  front1-app-8041

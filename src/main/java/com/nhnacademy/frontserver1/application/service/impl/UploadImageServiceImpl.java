@@ -7,6 +7,7 @@ import com.nhnacademy.frontserver1.common.exception.ApplicationException;
 import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.UploadImageResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,8 +23,12 @@ import java.time.LocalDateTime;
 @Slf4j
 public class UploadImageServiceImpl implements UploadImageService {
 
-    private final String appKey = "vyiy4M85i8mJ5mgP";
-    private final String secretKey = "ffpUQvzkmH8RsQDTuvpZD7U9tWlqExe4";
+    @Value("${nhn.appkey}")
+    private String appKey;
+
+    @Value("${nhn.secret}")
+    private String secretKey;
+
     private final String imagePath = "/yes25-5-images";
 
     @Override
@@ -59,7 +64,7 @@ public class UploadImageServiceImpl implements UploadImageService {
 
                 return parseUploadResponse(response.toString());
             } else {
-                throw new ApplicationException(ErrorStatus.toErrorStatus("파일 업로드 중 오류가 발생했습니다.", responseCode, LocalDateTime.now()));
+                throw new ApplicationException(ErrorStatus.toErrorStatus("파일 업로드 API 호출 중 오류가 발생했습니다.", responseCode, LocalDateTime.now()));
             }
         } catch (Exception e) {
             throw new ApplicationException(ErrorStatus.toErrorStatus("파일 업로드 중 알수없는 오류가 발생했습니다.", 500, LocalDateTime.now()));

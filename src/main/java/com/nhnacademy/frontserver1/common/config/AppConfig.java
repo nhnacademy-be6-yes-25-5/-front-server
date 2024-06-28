@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 @Configuration
 public class AppConfig {
@@ -15,5 +16,10 @@ public class AppConfig {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setInterceptors(Collections.singletonList(new LoggingRequestInterceptor()));
         return restTemplate;
+    }
+
+    @Bean
+    public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
+        return new HiddenHttpMethodFilter();
     }
 }

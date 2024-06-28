@@ -3,10 +3,9 @@ package com.nhnacademy.frontserver1.application.service;
 import com.nhnacademy.frontserver1.presentation.dto.request.payment.CreatePaymentRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreatePaymentResponse;
 import java.util.List;
-import org.springframework.web.bind.annotation.RequestBody;
 
 public interface PaymentService {
 
-    CreatePaymentResponse createPayment(@RequestBody CreatePaymentRequest request,
+    CreatePaymentResponse createPayment(CreatePaymentRequest request,
         List<Long> bookIds, List<Integer> quantities);
 }

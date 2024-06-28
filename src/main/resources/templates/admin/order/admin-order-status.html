@@ -22,7 +22,7 @@
                         <th>주문 상태</th>
                         <th>주문 일자</th>
                         <th>배송 일자</th>
-                        <th>주문 상태 변경</th>
+                        <th th:text="#{order.status.label}">주문 상태</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -30,16 +30,28 @@
                         <td th:text="${order.orderId}">주문번호</td>
                         <td th:text="${order.customerId}">회원번호</td>
                         <td>
-                            <ul>
-                                <li th:each="bookName : ${order.bookNames}" th:text="${bookName}">주문 상품</li>
-                            </ul>
+                            <span th:if="${order.bookNames.size() == 1}" th:text="${order.bookNames[0]}">주문 상품</span>
+                            <span th:if="${order.bookNames.size() > 1}" th:text="${order.bookNames[0]} + ' 외 ' + (${order.bookNames.size()} - 1) + '개'">주문 상품 외 n개</span>
                         </td>
                         <td th:text="${order.amount}">주문 금액</td>
-                        <td th:text="${order.orderStatusType}">주문 상태</td>
+                        <td th:text="#{${'order.status.' + order.orderStatusType.name()}}">주문 상태</td>
                         <td th:text="${order.orderCreatedAt}">주문 일자</td>
                         <td th:text="${order.orderDeliveryAt}">배송 일자</td>
                         <td>
-                            <button class="btn btn-primary">상태 변경</button>
+                            <form th:action="@{/admin/orders/{orderId}(orderId=${order.orderId})}" th:method="post" th:object="${order}">
+                                <input type="hidden" name="_method" value="put"/>
+                                <div class="d-flex align-items-center">
+                                    <select name="orderStatusType" class="form-control" th:disabled="${order.orderStatusType != T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).WAIT && order.orderStatusType != T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DELIVERING}">
+                                        <option th:value="${T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).WAIT}"
+                                                th:text="#{order.status.WAIT}"
+                                                th:selected="${order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).WAIT}">대기</option>
+                                        <option th:value="${T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DELIVERING}"
+                                                th:text="#{order.status.DELIVERING}"
+                                                th:selected="${order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DELIVERING}">배송중</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary ml-2" th:text="#{change.button}" th:disabled="${order.orderStatusType != T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).WAIT && order.orderStatusType != T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DELIVERING}">변경</button>
+                                </div>
+                            </form>
                         </td>
                     </tr>
                     </tbody>

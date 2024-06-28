@@ -5,6 +5,7 @@ import static com.nhnacademy.frontserver1.common.utils.SessionUtil.getLongListFr
 
 import com.nhnacademy.frontserver1.application.service.OrderService;
 import com.nhnacademy.frontserver1.application.service.PaymentService;
+import com.nhnacademy.frontserver1.common.exception.ApplicationException;
 import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
 import com.nhnacademy.frontserver1.presentation.dto.request.payment.CreatePaymentRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadPaymentOrderResponse;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/payments")
 @RequiredArgsConstructor
+@Slf4j
 public class PaymentController {
 
     private final PaymentService paymentService;
@@ -41,12 +43,14 @@ public class PaymentController {
         List<Integer> quantities = getIntegerListFromSession(session.getAttribute("quantities"));
 
         if (!Objects.equals(request.orderId(), orderId) || !Objects.equals(request.amount(), totalAmount)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            log.error("결제 정보와 주문 정보가 일치하지 않습니다.");
+            throw new ApplicationException(
                 ErrorStatus.toErrorStatus("결제 정보가 주문 정보와 일치하지 않습니다.", 400, LocalDateTime.now()));
         }
 
         if (paymentService.createPayment(request, bookIds, quantities).status() != 200) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+            log.error("결제에 실패했습니다.");
+            throw new ApplicationException(
                 ErrorStatus.toErrorStatus("결제에 실패했습니다.", 500, LocalDateTime.now()));
         }
 

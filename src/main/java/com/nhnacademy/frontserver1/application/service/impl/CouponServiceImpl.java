@@ -2,8 +2,11 @@ package com.nhnacademy.frontserver1.application.service.impl;
 
 import com.nhnacademy.frontserver1.application.service.CouponService;
 import com.nhnacademy.frontserver1.common.exception.FeignClientException;
+import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.CouponAdaptor;
+import com.nhnacademy.frontserver1.presentation.dto.request.book.CouponPolicyBookRequestDTO;
 import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyRequestDTO;
+import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyBookResponseDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyResponseDTO;
 //import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponUserListResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +16,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpServerErrorException;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -54,6 +60,38 @@ public class CouponServiceImpl implements CouponService {
         couponAdaptor.create(createCouponRequest);
     }
 
+    @Override
+    public void createCouponPolicyBook(CouponPolicyBookRequestDTO createCouponPolicyBookRequest) {
+        couponAdaptor.create(createCouponPolicyBookRequest);
+    }
+
+    @Override
+    public Page<CouponPolicyBookResponseDTO> findAllBookCouponPolicies(Pageable pageable) {
+        try {
+            List<CouponPolicyBookResponseDTO> bookCoupons = couponAdaptor.findAllBooks();
+            if (bookCoupons == null) {
+                logger.warn("Received null response for book coupons");
+                bookCoupons = Collections.emptyList();
+            }
+            logger.info("Book Coupons received: {}", bookCoupons);
+
+            int start = (int) pageable.getOffset();
+            int end = Math.min((start + pageable.getPageSize()), bookCoupons.size());
+            List<CouponPolicyBookResponseDTO> pagedBookCoupons = bookCoupons.subList(start, end);
+
+            return new PageImpl<>(pagedBookCoupons, pageable, bookCoupons.size());
+        } catch (HttpServerErrorException e) {
+            logger.error("Error occurred while fetching book coupons: {}", e.getResponseBodyAsString(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Unexpected error occurred while fetching book coupons", e);
+            throw e;
+        }
+    }
+
+}
+
+
 //
 //    @Override
 //    public List<CouponUserListResponseDTO> findUserCoupons(Long userId) {
@@ -73,5 +111,3 @@ public class CouponServiceImpl implements CouponService {
 //    public void deleteCoupon(Long id) {
 //        couponAdaptor.delete(id);
 //    }
-
-}

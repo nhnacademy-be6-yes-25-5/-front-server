@@ -1,7 +1,9 @@
 package com.nhnacademy.frontserver1.infrastructure.adaptor;
 
 import com.nhnacademy.frontserver1.application.service.dto.request.ReadMaximumDiscountCouponRequest;
+import com.nhnacademy.frontserver1.presentation.dto.request.book.CouponPolicyBookRequestDTO;
 import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyRequestDTO;
+import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyBookResponseDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyResponseDTO;
 //import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponUserListResponseDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMaximumDiscountCouponResponse;
@@ -22,6 +24,12 @@ public interface CouponAdaptor {
     @GetMapping("/max")
     ReadMaximumDiscountCouponResponse getMaxDiscountCouponByTotalAmount(
         @RequestBody ReadMaximumDiscountCouponRequest request);
+
+    @GetMapping("/policy/books")
+    List<CouponPolicyBookResponseDTO> findAllBooks();
+
+    @PostMapping("/policy/books/create")
+    CouponPolicyBookResponseDTO create(@RequestBody CouponPolicyBookRequestDTO requestDTO);
 
 //    @GetMapping("/user-coupons/user")
 //    List<CouponUserListResponseDTO> findUserCoupons(@RequestParam("userId") Long userId);

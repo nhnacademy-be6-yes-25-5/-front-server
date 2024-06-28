@@ -2,6 +2,7 @@ package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.impl.AuthServiceImpl;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.LoginUserRequest;
+import com.nhnacademy.frontserver1.presentation.dto.response.user.AuthResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -47,9 +48,9 @@ public class AuthContorller {
      */
     @PostMapping("/login")
     public String login(@ModelAttribute LoginUserRequest loginUserRequest, HttpServletResponse response) {
-        String token = authService.loginUser(loginUserRequest);
+        AuthResponse token = authService.loginUser(loginUserRequest);
 
-        Cookie authCookie = new Cookie("Authorization", token);
+        Cookie authCookie = new Cookie("Authorization", token.accessToken());
         authCookie.setHttpOnly(true);
         authCookie.setPath("/");
         response.addCookie(authCookie);

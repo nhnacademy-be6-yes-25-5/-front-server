@@ -50,10 +50,19 @@ public class AuthContorller {
     public String login(@ModelAttribute LoginUserRequest loginUserRequest, HttpServletResponse response) {
         AuthResponse token = authService.loginUser(loginUserRequest);
 
-        Cookie authCookie = new Cookie("Authorization", token.accessToken());
-        authCookie.setHttpOnly(true);
-        authCookie.setPath("/");
-        response.addCookie(authCookie);
+        Cookie accessTokenCookie = new Cookie("AccessToken", token.accessToken());
+        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setSecure(true); // HTTPS 연결에서만 전송
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setMaxAge(15 * 60); // 15분
+
+        Cookie refreshTokenCookie = new Cookie("RefreshToken", token.refreshToken());
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setSecure(true); // HTTPS 연결에서만 전송
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60); // 7일
+        response.addCookie(accessTokenCookie);
+        response.addCookie(refreshTokenCookie);
 
         return "redirect:/";
     }

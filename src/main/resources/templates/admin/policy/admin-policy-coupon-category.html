@@ -34,42 +34,41 @@
                         </tr>
                         </thead>
                         <tbody>
-<!--                        <tr th:each="coupon : ${coupons}">-->
-<!--                            <td th:text="${coupon.couponPolicyId}"></td>-->
-<!--                            <td th:text="${coupon.couponPolicyName}"></td>-->
-<!--                            <td>카테고리 이름</td>-->
-<!--                            <td th:text="${coupon.couponPolicyDiscountValue}"></td>-->
-<!--                            <td th:text="${coupon.couponPolicyRate}"></td>-->
-<!--                            <td th:text="${coupon.couponPolicyMinOrderAmount}"></td>-->
-<!--                            <td th:text="${coupon.couponPolicyMaxAmount}"></td>-->
-<!--                            <td th:text="${coupon.couponPolicyDiscountType ? '비율' : '고정 금액'}"></td>-->
-<!--                        </tr>-->
+                        <tr th:each="coupon : ${categoryCoupons}">
+                            <td th:text="${coupon.categoryId}"></td>
+                            <td th:text="${coupon.couponPolicy.couponPolicyName}"></td>
+                            <td th:text="${coupon.categoryName}"></td>
+                            <td th:text="${coupon.couponPolicy.couponPolicyDiscountValue}"></td>
+                            <td th:text="${coupon.couponPolicy.couponPolicyRate}"></td>
+                            <td th:text="${coupon.couponPolicy.couponPolicyMinOrderAmount}"></td>
+                            <td th:text="${coupon.couponPolicy.couponPolicyMaxAmount}"></td>
+                            <td th:text="${coupon.couponPolicy.couponPolicyDiscountType ? '비율' : '고정 금액'}"></td>
+                        </tr>
                         </tbody>
                     </table>
 
                     <!-- Pagination -->
                     <nav>
                         <ul class="pagination justify-content-center">
-<!--                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">-->
-<!--                                <a class="page-link" th:href="@{/coupons/policy(page=${currentPage - 1}, size=${pageSize})}" aria-label="Previous">-->
-<!--                                    <span aria-hidden="true">&laquo;</span>-->
-<!--                                </a>-->
-<!--                            </li>-->
-<!--                            <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${pageNum == currentPage} ? 'active'">-->
-<!--                                <a class="page-link" th:href="@{/coupons/policy(page=${pageNum}, size=${pageSize})}" th:text="${pageNum + 1}">1</a>-->
-<!--                            </li>-->
-<!--                            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">-->
-<!--                                <a class="page-link" th:href="@{/coupons/policy(page=${currentPage + 1}, size=${pageSize})}" aria-label="Next">-->
-<!--                                    <span aria-hidden="true">&raquo;</span>-->
-<!--                                </a>-->
-<!--                            </li>-->
+                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                <a class="page-link" th:href="@{/coupons/policy/categories(page=${currentPage - 1}, size=${pageSize})}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${pageNum == currentPage} ? 'active'">
+                                <a class="page-link" th:href="@{/coupons/policy/categories(page=${pageNum}, size=${pageSize})}" th:text="${pageNum + 1}">1</a>
+                            </li>
+                            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                <a class="page-link" th:href="@{/coupons/policy/categories(page=${currentPage + 1}, size=${pageSize})}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
                         </ul>
                     </nav>
                 </div>
             </div>
         </div>
     </div>
-
 
     <!-- Add Coupon Modal -->
     <div class="modal fade" id="addCouponModal" tabindex="-1" aria-labelledby="addCouponModalLabel" aria-hidden="true">
@@ -80,7 +79,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addCouponForm" method="post" th:action="@{/coupons/policy/create}">
+                    <form id="addCouponForm" method="post" th:action="@{/coupons/policy/categories/create}">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -116,6 +115,10 @@
                                         <option value="false">Fixed Amount</option>
                                     </select>
                                 </div>
+                                <div class="mb-3">
+                                    <label for="categoryId" class="form-label">카테고리 ID</label>
+                                    <input type="number" class="form-control" id="categoryId" name="categoryId" required>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -144,16 +147,20 @@
 
                 const formData = new FormData(this);
 
-                fetch('/coupons/policy/create', {
+                fetch('/coupons/policy/categories/create', {
                     method: 'POST',
-                    body: new URLSearchParams(formData)
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData.entries()))
                 })
                     .then(response => {
                         if (response.ok) {
                             console.log('Coupon policy created successfully');
-                            window.location.href = '/coupons/policy';
+                            window.location.href = '/coupons/policy/categories';
                         } else {
                             console.error('Failed to create coupon policy');
+                            return response.json().then(err => { throw err; });
                         }
                     })
                     .catch(error => {

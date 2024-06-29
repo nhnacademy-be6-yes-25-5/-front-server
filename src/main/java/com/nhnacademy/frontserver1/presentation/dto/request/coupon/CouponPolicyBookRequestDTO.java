@@ -9,9 +9,6 @@ import java.math.BigDecimal;
 @Getter
 public class CouponPolicyBookRequestDTO {
 
-        @NotNull(message = "Coupon policy ID cannot be null")
-        private Long couponPolicyId;
-
         @NotEmpty(message = "Book name cannot be null")
         private String bookName;
 

@@ -1,4 +1,4 @@
-package com.nhnacademy.frontserver1.presentation.dto.request.book;
+package com.nhnacademy.frontserver1.presentation.dto.request.coupon;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -7,7 +7,13 @@ import lombok.Getter;
 import java.math.BigDecimal;
 
 @Getter
-public class CouponPolicyBookRequestDTO {
+public class CouponPolicyCategoryRequestDTO {
+
+        @NotEmpty(message = "Category name cannot be null")
+        private String categoryName;
+
+        @NotNull(message = "Category ID cannot be null")
+        private Long categoryId;
 
         @NotEmpty(message = "Coupon policy name cannot be null")
         private String couponPolicyName;
@@ -22,12 +28,5 @@ public class CouponPolicyBookRequestDTO {
         @NotNull(message = "Coupon policy maximum amount cannot be null")
         private BigDecimal couponPolicyMaxAmount;
 
-        @NotNull(message = "Coupon policy discount type cannot be null")
         private boolean couponPolicyDiscountType;
-
-        @NotEmpty(message = "Book name cannot be null")
-        private String bookName;
-
-        @NotNull(message = "Book ID cannot be null")
-        private Long bookId;
 }

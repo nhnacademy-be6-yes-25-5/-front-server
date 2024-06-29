@@ -23,9 +23,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
 
     private final CookieTokenProvider cookieTokenProvider;
-
-    @Value("${app.mode}")
-    private String mode;
+//
+//    @Value("${app.mode}")
+//    private String mode;
 
     /**
      * Feign 요청에 JWT 토큰을 추가합니다.
@@ -38,10 +38,10 @@ public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String path = request.getServletPath();
 
-        // 개발 모드일 때는 인증을 생략합니다.
-        if ("development".equals(mode)) {
-            return;
-        }
+//        // 개발 모드일 때는 인증을 생략합니다.
+//        if ("development".equals(mode)) {
+//            return;
+//        }
 
         if (path.startsWith("/auth/login")) {
             return;

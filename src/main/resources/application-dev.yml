@@ -16,3 +16,6 @@ spring:
 
 eureka:
   gateway: http://localhost:8085
+
+app:
+  mode: development

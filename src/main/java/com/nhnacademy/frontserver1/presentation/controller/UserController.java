@@ -35,8 +35,22 @@ public class UserController {
 
     // 회원 가입
     @PostMapping("/sign-up")
-    public String signUp(@ModelAttribute CreateUserRequest userRequest,
+    public String signUp(@RequestParam String userName,
+                         @RequestParam LocalDate userBirth,
+                         @RequestParam String userEmail,
+                         @RequestParam String userPhone,
+                         @RequestParam String userPassword,
+                         @RequestParam String userConfirmPassword,
                          Model model) {
+
+        CreateUserRequest userRequest = CreateUserRequest.builder()
+                .userName(userName)
+                .userBirth(userBirth)
+                .userEmail(userEmail)
+                .userPhone(userPhone)
+                .userPassword(userPassword)
+                .userConfirmPassword(userConfirmPassword)
+                .build();
 
         UserResponse userResponse = userService.signUp(userRequest);
 

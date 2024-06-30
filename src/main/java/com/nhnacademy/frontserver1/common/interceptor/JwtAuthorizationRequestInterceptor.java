@@ -42,16 +42,7 @@ public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String path = request.getServletPath();
 
-//        // 개발 모드일 때는 인증을 생략합니다.
-//        if ("development".equals(mode)) {
-//            return;
-//        }
-
         if (path.startsWith("/auth/login")) {
-            return;
-        }
-
-        if ("development".equals(mode)) {
             return;
         }
 

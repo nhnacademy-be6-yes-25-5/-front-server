@@ -8,6 +8,8 @@ import feign.codec.ErrorDecoder;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+
+import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

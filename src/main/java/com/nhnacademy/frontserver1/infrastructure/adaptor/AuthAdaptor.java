@@ -17,7 +17,7 @@ public interface AuthAdaptor {
     @GetMapping("/test")
     ResponseEntity<String> tokenTest();
 
-    @PostMapping("/token/refresh")
+    @PostMapping("/refresh")
     CreateAccessTokenResponse refreshToken(@RequestBody CreateAccessTokenRequest request);
 
 }

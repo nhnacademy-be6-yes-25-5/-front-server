@@ -68,15 +68,24 @@
 <div class="container">
     <h1>Your Membership Level</h1>
     <p>Here is your current membership level and benefits:</p>
-    <h2>Membership Level: <span class="membership-level" th:text="${userGrade.gradeName}">Loading...</span></h2>
+    <h2><span class="membership-name" th:text="${userGrade.userName}"></span>'s Membership Level: <span class="membership-level" th:text="${userGrade.gradeName}"></span></h2>
     <div class="benefits">
         <h2>Benefit:</h2>
         <ul>
-            <li>Exclusive discounts on selected products</li>
-            <li>Free shipping on all orders</li>
-            <li>Early access to new products</li>
-            <li>Priority customer support</li>
+            <li th:if="${userGrade.gradeName} == 'Gold'">Exclusive discounts on selected products</li>
+            <li th:if="${userGrade.gradeName} == 'Gold'">Free shipping on all orders</li>
+            <li th:if="${userGrade.gradeName} == 'Gold'">Early access to new products</li>
+            <li th:if="${userGrade.gradeName} == 'Gold'">Priority customer support</li>
+
+            <li th:if="${userGrade.gradeName} == 'Silver'">Discounts on selected products</li>
+            <li th:if="${userGrade.gradeName} == 'Silver'">Free shipping on orders over $50</li>
+            <li th:if="${userGrade.gradeName} == 'Silver'">Early access to new products</li>
+
+            <li th:if="${userGrade.gradeName} == 'Bronze'">Basic discounts on selected products</li>
+            <li th:if="${userGrade.gradeName} == 'Bronze'">Standard shipping rates apply</li>
         </ul>
+
+
     </div>
     <div class="footer">
         <p>Returning to your profile? <a href="/profile">View Profile</a></p>

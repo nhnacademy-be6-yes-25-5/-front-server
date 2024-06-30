@@ -5,9 +5,9 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "userGradeAdaptor", url = "http://example.com") // URL은 실제 서버의 URL로 변경해야 합니다.
+@FeignClient(name = "userGradeAdaptor", url = "http://localhost:8085")
 public interface GradeAdaptor {
 
-    @GetMapping("/user/grade")
+    @GetMapping("/user/grade/{userId}")
     GradeResponse getUserGradeByUserId(@RequestParam("userId") Long userId);
 }

@@ -1,4 +1,8 @@
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+</head>
 <body>
 <div th:fragment="content">
 
@@ -15,11 +19,11 @@
                         <div class="user-info">
                             <div class="user-grade">
                                 <span>회원 등급:</span>
-                                <span class="grade">일반회원</span>
+                                <span class="grade" th:text="${userGrade}">일반회원</span>
                             </div>
                             <div class="user-points">
                                 <span>잔여 포인트:</span>
-                                <span class="points">1,000P</span>
+                                <span class="points" th:text="${userPoints}">1,000P</span>
                             </div>
                         </div>
                         <ul class="nav nav-tabs flex-column">
@@ -74,30 +78,46 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <tr>
-                                                        <td>홍길동</td>
-                                                        <td>서울시 강남구 역삼동 123-45</td>
-                                                        <td>010-1234-5678</td>
+                                                    <tr th:each="address : ${addresses}">
+                                                        <td th:text="${address.addressName}"></td>
+                                                        <td th:text="${address.addressDetail}"></td>
+                                                        <td th:text="${address.addressPhone}"></td>
                                                         <td>
-                                                            <button type="button" class="btn btn-primary btn-sm">기본 배송지로 설정</button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>김철수</td>
-                                                        <td>경기도 수원시 팔달구 매산로 123</td>
-                                                        <td>011-9876-5432</td>
-                                                        <td>
-                                                            <button type="button" class="btn btn-primary btn-sm">기본 배송지로 설정</button>
+                                                            <button type="button" class="btn btn-primary btn-sm"
+                                                                    th:disabled="${address.addressBased}"
+                                                                    th:text="${address.addressBased ? '기본 배송지' : '기본 배송지로 설정'}"
+                                                                    th:onclick="'setAsDefault('+ ${address.addressId} +')'">
+                                                            </button>
                                                         </td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
+                                            <!-- Pagination -->
+                                            <div class="pagination">
+                                                <ul class="pagination">
+                                                    <li th:classappend="${currentPage == 0} ? 'disabled'">
+                                                        <a th:href="@{|/users/${userId}/addresses?page=${currentPage - 1}|}">Previous</a>
+                                                    </li>
+                                                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                                                        th:classappend="${currentPage == i} ? 'active'">
+                                                        <a th:href="@{|/users/${userId}/addresses?page=${i}|}" th:text="${i + 1}">1</a>
+                                                    </li>
+                                                    <li th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                                        <a th:href="@{|/users/${userId}/addresses?page=${currentPage + 1}|}">Next</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                         <div class="tab-pane fade" id="default-address" role="tabpanel" aria-labelledby="default-address-tab">
                                             <div class="default-address-info">
                                                 <h4>기본 배송지</h4>
-                                                <p>홍길동 | 서울시 강남구 역삼동 123-45 | 010-1234-5678</p>
+                                                <p th:if="${defaultAddress != null}">
+                                                    <span th:text="${defaultAddress.addressName}"></span> |
+                                                    <span th:text="${defaultAddress.addressDetail}"></span> |
+                                                    <span th:text="${defaultAddress.addressPhone}"></span>
+                                                </p>
+                                                <p th:if="${defaultAddress == null}">기본 배송지가 설정되지 않았습니다.</p>
                                             </div>
                                         </div>
                                     </div>
@@ -121,8 +141,8 @@
                                         <input type="text" class="form-control" id="addressName" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="addressLine1" class="form-label">주소</label>
-                                        <input type="text" class="form-control" id="addressLine1" required>
+                                        <label for="addressDetail" class="form-label">주소</label>
+                                        <input type="text" class="form-control" id="addressDetail" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="addressPhone" class="form-label">연락처</label>
@@ -148,28 +168,12 @@
     </div>
     <!-- End Order History Area -->
     <script>
-        // 비밀번호 확인하는 JS
-        const newPasswordInput = document.getElementById('new-password');
-        const confirmPasswordInput = document.getElementById('confirm-password');
-        const pwConfirmElement = document.getElementById('pwConfirm');
-        const setPasswordBtn = document.getElementById('update-btn');
-
-        function pwCheck() {
-            if (newPasswordInput.value === confirmPasswordInput.value) {
-                pwConfirmElement.textContent = '비밀번호 일치';
-                pwConfirmElement.style.color = 'green';
-            } else {
-                pwConfirmElement.textContent = '비밀번호 불일치';
-                pwConfirmElement.style.color = 'red';
-            }
-
-            setPasswordBtn.disabled = (newPasswordInput.value !== confirmPasswordInput.value);
+        function setAsDefault(addressId) {
+            // 기본 배송지 설정을 위한 AJAX 호출 로직을 여기에 추가합니다.
+            console.log("Set address with ID " + addressId + " as default.");
         }
-
-        newPasswordInput.addEventListener('input', pwCheck);
-        confirmPasswordInput.addEventListener('input', pwCheck);
     </script>
 
-</div>>
+</div>
 </body>
 </html>

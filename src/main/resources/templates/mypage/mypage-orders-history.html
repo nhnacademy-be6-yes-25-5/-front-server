@@ -72,7 +72,7 @@
                                         </select>
                                     </div>
                                     <div class="order-history-list">
-                                        <table class="table">
+                                        <table class="table" th:if="${orders != null and not #lists.isEmpty(orders.content)}">
                                             <thead>
                                             <tr>
                                                 <th>주문 ID</th>
@@ -85,10 +85,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr th:if="${orders == null || orders.content.isEmpty()}">
-                                                <td colspan="7" class="text-center">주문 내역이 존재하지 않습니다.</td>
-                                            </tr>
-                                            <tr th:each="order : ${orders?.content}">
+                                            <tr th:each="order : ${orders.content}">
                                                 <td th:text="${order.orderId}">1234567890</td>
                                                 <td th:text="${#temporals.format(order.orderCreatedAt, 'yyyy-MM-dd')}">2023-06-10</td>
                                                 <td>
@@ -98,16 +95,16 @@
                                                 </td>
                                                 <td th:text="${order.quantities.size()}">3</td>
                                                 <td th:text="${order.orderTotalAmount}">$99.99</td>
-
                                                 <td th:text="#{${'order.status.' + order.orderStatus}}">출고처리중</td>
                                                 <td>
                                                     <a href="#" class="btn btn-sm btn-outline-secondary">View Details</a>
-                                                    <button th:if="${order.orderStatus == 'WAIT'}" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal" th:data-order-id="${order.orderId}">주문 취소</button>
-                                                    <button th:if="${order.orderStatus == 'DELIVERING'}" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#returnModal" th:data-order-id="${order.orderId}">반품</button>
+                                                    <button th:if="${order.orderStatus == 'WAIT'}" class="btn btn-sm btn-danger" onclick="showCancelModal('${order.orderId}')">주문 취소</button>
+                                                    <button th:if="${order.orderStatus == 'DELIVERING'}" class="btn btn-sm btn-warning" onclick="showReturnModal('${order.orderId}')">반품</button>
                                                 </td>
                                             </tr>
                                             </tbody>
                                         </table>
+                                        <div th:if="${orders == null or #lists.isEmpty(orders.content)}" class="text-center">주문 내역이 존재하지 않습니다.</div>
                                     </div>
                                 </div>
                             </div>
@@ -127,7 +124,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                                    <button type="button" class="btn btn-danger" th:data-order-id="" onclick="cancelOrder(this)">취소하기</button>
+                                    <button type="button" class="btn btn-danger" id="cancelOrderButton" onclick="cancelOrder()">취소하기</button>
                                 </div>
                             </div>
                         </div>
@@ -148,7 +145,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                                    <button type="button" class="btn btn-warning" th:data-order-id="" onclick="returnOrder(this)">반품하기</button>
+                                    <button type="button" class="btn btn-warning" id="returnOrderButton" onclick="returnOrder()">반품하기</button>
                                 </div>
                             </div>
                         </div>
@@ -163,6 +160,8 @@
 </div>
 
 <script>
+    let currentOrderId = null;
+
     function updateOrderStatus(orderId, orderStatusType) {
         fetch(`/orders/${orderId}`, {
             method: 'PUT',
@@ -182,14 +181,28 @@
         });
     }
 
-    function cancelOrder(button) {
-        const orderId = button.getAttribute("data-order-id");
-        updateOrderStatus(orderId, 'CANCEL');
+    function showCancelModal(orderId) {
+        currentOrderId = orderId;
+        const cancelModal = new bootstrap.Modal(document.getElementById('cancelModal'));
+        cancelModal.show();
     }
 
-    function returnOrder(button) {
-        const orderId = button.getAttribute("data-order-id");
-        updateOrderStatus(orderId, 'REFUND');
+    function showReturnModal(orderId) {
+        currentOrderId = orderId;
+        const returnModal = new bootstrap.Modal(document.getElementById('returnModal'));
+        returnModal.show();
+    }
+
+    function cancelOrder() {
+        if (currentOrderId) {
+            updateOrderStatus(currentOrderId, 'CANCEL');
+        }
+    }
+
+    function returnOrder() {
+        if (currentOrderId) {
+            updateOrderStatus(currentOrderId, 'REFUND');
+        }
     }
 </script>
 </body>

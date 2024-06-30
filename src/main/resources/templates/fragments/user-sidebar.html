@@ -6,11 +6,16 @@
     <div class="user-info">
       <div class="user-grade">
         <span>회원 등급:</span>
-        <span class="grade">일반회원</span>
+        <span class="grade">
+          <span th:if="${userInfo.gradeId == 1}">일반회원</span>
+          <span th:if="${userInfo.gradeId == 2}">로얄회원</span>
+          <span th:if="${userInfo.gradeId == 3}">골드회원</span>
+          <span th:if="${userInfo.gradeId == 4}">플래티넘회원</span>
+        </span>
       </div>
       <div class="user-points">
         <span>잔여 포인트:</span>
-        <span class="points">1,000P</span>
+        <span class="points" th:text="${#numbers.formatInteger(userInfo.points, 0)} + 'P'">1,000P</span>
       </div>
     </div>
     <ul class="nav nav-tabs flex-column">

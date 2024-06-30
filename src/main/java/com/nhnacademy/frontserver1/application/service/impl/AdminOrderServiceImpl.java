@@ -3,6 +3,7 @@ package com.nhnacademy.frontserver1.application.service.impl;
 import com.nhnacademy.frontserver1.application.service.AdminOrderService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.AdminOrderAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.response.admin.ReadAllUserOrderStatusResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.admin.UpdateOrderStatusRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +16,14 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     private final AdminOrderAdaptor adminOrderAdaptor;
 
     @Override
-    public Page<ReadAllUserOrderStatusResponse> getAllUserOrderStatus(Pageable pageable) {
-        return adminOrderAdaptor.getAllUserOrderStatusByPaging(pageable);
+    public Page<ReadAllUserOrderStatusResponse> getAllUserOrderStatus(Pageable pageable,
+        String role) {
+        return adminOrderAdaptor.getAllUserOrderStatusByPaging(pageable, role);
+    }
+
+    @Override
+    public void updateOrderStatusByOrderId(String orderId,
+        UpdateOrderStatusRequest updateOrderStatusRequest) {
+        adminOrderAdaptor.updateOrderStatusByOrderId(orderId, updateOrderStatusRequest);
     }
 }

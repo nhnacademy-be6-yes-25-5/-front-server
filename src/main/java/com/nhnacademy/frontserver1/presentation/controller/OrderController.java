@@ -3,12 +3,14 @@ package com.nhnacademy.frontserver1.presentation.controller;
 import com.nhnacademy.frontserver1.application.service.OrderService;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadCartBookResponse;
+import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderStatusResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserAddressResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserInfoResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.UpdateOrderResponse;
 import jakarta.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.List;
@@ -22,6 +24,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -115,6 +118,12 @@ public class OrderController {
         model.addAttribute("addresses", responses);
 
         return "order/address-popup";
+    }
+
+    @PutMapping("/{orderId}")
+    public ResponseEntity<UpdateOrderResponse> updateOrder(@PathVariable String orderId,
+        @RequestBody UpdateOrderRequest request) {
+        return ResponseEntity.ok(orderService.updateOrderByOrderId(orderId, request));
     }
 
 }

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<body>
+<div th:fragment="content">
+
+    <!-- Start Breadcrumbs Component -->
+    <div th:replace="~{fragments/breadcrumbs :: breadcrumbs}"></div>
+    <!-- End Breadcrumbs Component -->
+
+    <!-- Start Order History Area -->
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2">
+                    <div th:replace="~{fragments/user-sidebar :: user-sidebar}"></div>
+                </div>
+                <div class="col-lg-10">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="order-history-wrapper">
+                                    <div class="title">
+                                        <h3>주문 내역</h3>
+                                        <p>과거 주문 내역을 확인해보세요.</p>
+                                    </div>
+
+                                    <div class="age-range">
+                                        <div class="range-container">
+                                            <div class="range-item" th:classappend="${purePrice < 100000 ? 'active' : ''}">
+                                                <div class="label">일반회원</div>
+                                                <div class="description">(10만원 미만)</div>
+                                                <div class="amount-text">
+                                                    <span>순수 주문금액 : <span th:text="${purePrice}">0</span>원</span>
+                                                    <span>(2024.03.01 ~ 현재)</span>
+                                                </div>
+                                            </div>
+                                            <div class="range-item" th:classappend="${purePrice >= 100000 && purePrice < 200000 ? 'active' : ''}">
+                                                <div class="label">로얄회원</div>
+                                                <div class="description">(10 ~ 20만원)</div>
+                                                <div class="amount-text">
+                                                    <span>순수 주문금액 : <span th:text="${purePrice}">0</span>원</span>
+                                                    <span>(2024.03.01 ~ 현재)</span>
+                                                </div>
+                                            </div>
+                                            <div class="range-item" th:classappend="${purePrice >= 200000 && purePrice < 300000 ? 'active' : ''}">
+                                                <div class="label">골드회원</div>
+                                                <div class="description">(20 ~ 30만원)</div>
+                                                <div class="amount-text">
+                                                    <span>순수 주문금액 : <span th:text="${purePrice}">0</span>원</span>
+                                                    <span>(2024.03.01 ~ 현재)</span>
+                                                </div>
+                                            </div>
+                                            <div class="range-item" th:classappend="${purePrice >= 300000 ? 'active' : ''}">
+                                                <div class="label">플래티넘회원</div>
+                                                <div class="description">(30만원~)</div>
+                                                <div class="amount-text">
+                                                    <span>순수 주문금액 : <span th:text="${purePrice}">0</span>원</span>
+                                                    <span>(2024.03.01 ~ 현재)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="order-history-filter">
+                                        <select id="order-status" class="form-select">
+                                            <option value="ALL">전부</option>
+                                            <option value="WAIT">대기</option>
+                                            <option value="DELIVERING">배송 중</option>
+                                            <option value="DONE">완료</option>
+                                            <option value="REFUND">환불</option>
+                                            <option value="CANCEL">취소</option>
+                                        </select>
+                                    </div>
+                                    <div class="order-history-list">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th>주문 ID</th>
+                                                <th>주문 일자</th>
+                                                <th>상품 목록</th>
+                                                <th>수량</th>
+                                                <th>주문 금액</th>
+                                                <th>주문 상태</th>
+                                                <th>변경</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:if="${orders == null || orders.content.isEmpty()}">
+                                                <td colspan="7" class="text-center">주문 내역이 존재하지 않습니다.</td>
+                                            </tr>
+                                            <tr th:each="order : ${orders?.content}">
+                                                <td th:text="${order.orderId}">1234567890</td>
+                                                <td th:text="${#temporals.format(order.orderCreatedAt, 'yyyy-MM-dd')}">2023-06-10</td>
+                                                <td>
+                                                    <ul>
+                                                        <li th:each="bookName : ${order.bookNames}" th:text="${bookName}">Product 1</li>
+                                                    </ul>
+                                                </td>
+                                                <td th:text="${order.quantities.size()}">3</td>
+                                                <td th:text="${order.orderTotalAmount}">$99.99</td>
+
+                                                <td th:text="#{${'order.status.' + order.orderStatus}}">출고처리중</td>
+                                                <td>
+                                                    <a href="#" class="btn btn-sm btn-outline-secondary">View Details</a>
+                                                    <button th:if="${order.orderStatus == 'WAIT'}" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal" th:data-order-id="${order.orderId}">주문 취소</button>
+                                                    <button th:if="${order.orderStatus == 'DELIVERING'}" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#returnModal" th:data-order-id="${order.orderId}">반품</button>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cancel Order Modal -->
+                    <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="cancelModalLabel">결제 취소</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>이 주문을 취소하시겠습니까?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                    <button type="button" class="btn btn-danger" th:data-order-id="" onclick="cancelOrder(this)">취소하기</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Return Order Modal -->
+                    <div class="modal fade" id="returnModal" tabindex="-1" aria-labelledby="returnModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="returnModalLabel">반품</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>출고일로부터 10일 이내 미사용 시 반품택배비 차감 후 반품이 가능합니다.</p>
+                                    <p>파손, 파본에 의한 반품은 출고일 기준 30일까지 가능합니다.</p>
+                                    <p>반품시 결제금액은 포인트로 적립됩니다.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                    <button type="button" class="btn btn-warning" th:data-order-id="" onclick="returnOrder(this)">반품하기</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Order History Area -->
+
+</div>
+
+<script>
+    function updateOrderStatus(orderId, orderStatusType) {
+        fetch(`/orders/${orderId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ orderStatusType: orderStatusType })
+        }).then(response => response.json().then(data => ({status: response.status, body: data})))
+        .then(response => {
+            if (response.status === 200) {
+                location.reload();
+            } else {
+                alert(response.body);
+            }
+        }).catch(error => {
+            alert('주문 상태 변경 중 알 수 없는 오류가 발생했습니다.');
+        });
+    }
+
+    function cancelOrder(button) {
+        const orderId = button.getAttribute("data-order-id");
+        updateOrderStatus(orderId, 'CANCEL');
+    }
+
+    function returnOrder(button) {
+        const orderId = button.getAttribute("data-order-id");
+        updateOrderStatus(orderId, 'REFUND');
+    }
+</script>
+</body>
+</html>

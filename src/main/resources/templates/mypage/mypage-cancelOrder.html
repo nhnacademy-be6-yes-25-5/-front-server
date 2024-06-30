@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Cancellation Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .modal {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 300px;
+            text-align: center;
+        }
+        .modal h2 {
+            margin-bottom: 20px;
+        }
+        .modal button {
+            margin: 10px 5px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .close-btn {
+            background-color: #ccc;
+        }
+        .cancel-btn {
+            background-color: #ff4d4d;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="modal">
+    <h2>Cancel Order?</h2>
+    <p>Are you sure you want to cancel this order?</p>
+    <button class="close-btn" onclick="closeModal()">Close</button>
+    <button class="cancel-btn" onclick="cancelOrder()">Cancel Order</button>
+</div>
+
+<script>
+    function closeModal() {
+        // Function to keep the user on the current order history page
+        window.location.href = "mypage-orderHistory.html"; // replace with the actual order history page URL
+    }
+
+    function cancelOrder() {
+        // Function to redirect the user to the main page
+        window.location.href = "index.html"; // replace with the actual main page URL
+    }
+</script>
+
+</body>
+</html>

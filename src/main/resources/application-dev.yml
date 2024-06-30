@@ -25,3 +25,6 @@ nhn:
 naverapi:
   secret: ${NAVER_SECRET}
   id: ${NAVER_ID}
+
+#app:
+#  mode: development

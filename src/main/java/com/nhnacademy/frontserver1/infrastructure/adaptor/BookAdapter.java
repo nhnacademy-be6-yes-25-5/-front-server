@@ -4,6 +4,7 @@ import com.nhnacademy.frontserver1.presentation.dto.request.book.CreateBookReque
 import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookQuantityRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,4 +36,8 @@ public interface BookAdapter {
 
     @DeleteMapping("/{bookId}")
     ResponseEntity<Void> deleteBook(@PathVariable("bookId") Long bookId);
+
+    //도서명 주고 도서 정보 반환하는 코드
+    @GetMapping("/search")
+    List<BookResponseDTO> findBooksByName(@RequestParam("name") String name);
 }

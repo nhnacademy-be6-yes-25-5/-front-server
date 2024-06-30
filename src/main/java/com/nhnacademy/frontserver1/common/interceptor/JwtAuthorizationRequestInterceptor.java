@@ -7,6 +7,7 @@ import feign.RequestTemplate;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +24,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
 
     private final CookieTokenProvider cookieTokenProvider;
+//
+//    @Value("${app.mode}")
+//    private String mode;
 
     @Value("${app.mode}")
     private String mode;
@@ -30,7 +34,6 @@ public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
     /**
      * Feign 요청에 JWT 토큰을 추가합니다.
      * '/auth/login' 경로에 대한 요청은 인증이 필요하지 않으므로 토큰을 추가하지 않습니다.
-     *
      * @param template Feign 요청 템플릿
      */
     @Override
@@ -38,6 +41,11 @@ public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String path = request.getServletPath();
+
+//        // 개발 모드일 때는 인증을 생략합니다.
+//        if ("development".equals(mode)) {
+//            return;
+//        }
 
         if (path.startsWith("/auth/login")) {
             return;

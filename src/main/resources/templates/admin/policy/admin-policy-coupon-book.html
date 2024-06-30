@@ -88,7 +88,10 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="bookName" class="form-label">도서명</label>
-                                    <input type="text" class="form-control" id="bookName" name="bookName" required>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="bookName" name="bookName" required>
+                                        <button class="btn btn-outline-secondary" type="button" onclick="openBookSearchPopup()">검색</button>
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="couponPolicyDiscountValue" class="form-label">할인 값(금액)</label>
@@ -132,6 +135,10 @@
     </div>
 
     <script>
+        function openBookSearchPopup() {
+            window.open('/coupons/policy/books/search', '도서 검색', 'width=800,height=600');
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('addCouponForm').addEventListener('submit', function(event) {
                 const discountValueField = document.getElementById('couponPolicyDiscountValue');
@@ -142,8 +149,6 @@
                     event.preventDefault(); // 폼 제출을 막음
                     return;
                 }
-
-                event.preventDefault(); // 기본 폼 제출을 막음
 
                 const formData = new FormData(this);
 

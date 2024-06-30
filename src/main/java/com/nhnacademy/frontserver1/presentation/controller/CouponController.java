@@ -1,9 +1,7 @@
 package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.CouponService;
-import com.nhnacademy.frontserver1.infrastructure.adaptor.BookAdapter;
 import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyRequestDTO;
-import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponseDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyResponseDTO;
 //import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponUserListResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor

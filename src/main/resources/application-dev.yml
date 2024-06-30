@@ -19,11 +19,9 @@ eureka:
 
 app:
   mode: development
-
-naverapi:
-  secret: ${NAVER_SECRET}
-  id: ${NAVER_ID}
-
 nhn:
   appkey: ${NHN_IMAGE_APPKEY}
   secret: ${NHN_IMAGE_SECRET}
+naverapi:
+  secret: ${NAVER_SECRET}
+  id: ${NAVER_ID}

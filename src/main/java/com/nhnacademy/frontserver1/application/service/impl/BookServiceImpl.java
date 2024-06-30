@@ -34,7 +34,7 @@ public class BookServiceImpl implements BookService {
     @Value("${naverapi.secret}")
     private String clientSecret;
 
-    @Value("{naverapi.id}")
+    @Value("${naverapi.id}")
     private String clientId;
 
     private final BookAdapter bookAdapter;

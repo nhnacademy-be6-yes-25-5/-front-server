@@ -1,4 +1,4 @@
-package com.nhnacademy.frontserver1.presentation.dto.response.user;
+package com.nhnacademy.frontserver1.presentation.dto.response.point;
 
 import lombok.Builder;
 

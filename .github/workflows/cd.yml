@@ -50,6 +50,10 @@ jobs:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
           REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
+          NAVER_ID: ${{ secrets.NAVER_ID }}
+          NAVER_SECRET: ${{ secrets.NAVER_SECRET }}
+          NHN_IMAGE_APPKEY: ${{ secrets.NHN_IMAGE_APPKEY }}
+          NHN_IMAGE_SECRET: ${{ secrets.NHN_IMAGE_SECRET }}
         run: |
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
             cd ${REMOTE_DIR}

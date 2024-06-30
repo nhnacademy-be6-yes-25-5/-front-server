@@ -39,7 +39,7 @@ public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String path = request.getServletPath();
 
-        if (path.startsWith("/auth/login") || path.startsWith("/users/sign-up")) {
+        if (path.startsWith("/auth/login") || path.startsWith("/users/sign-up")) {  // todo : 이메일, 비밀번호 찾기 경로 추가
             return;
         }
 

@@ -29,11 +29,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BookServiceimpl implements BookService {
+public class BookServiceImpl implements BookService {
 
-    private final String clientSecret = "lGNHabz2fB";
+    @Value("${naverapi.secret}")
+    private String clientSecret;
 
-    private final String clientId = "uS5wTyLK7Z5_wkmDowph";
+    @Value("${naverapi.id}")
+    private String clientId;
 
     private final BookAdapter bookAdapter;
 

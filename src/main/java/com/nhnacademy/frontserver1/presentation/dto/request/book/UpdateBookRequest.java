@@ -41,9 +41,25 @@ public record UpdateBookRequest(
         @NotNull(message = "책 판매 가격은 필수 입력 항목입니다.")
         BigDecimal bookSellingPrice,
 
-        String bookImage,
+        String imageURL,
 
         @NotNull(message = "책 수량은 필수 입력 항목입니다.")
         Integer quantity
 ) {
+    public static UpdateBookRequest updateImageURL(UpdateBookRequest request, String imageURL) {
+            return UpdateBookRequest.builder()
+                    .bookId(request.bookId())
+                    .bookDescription(request.bookDescription())
+                    .bookIsbn(request.bookIsbn())
+                    .bookName(request.bookName())
+                    .index(request.index())
+                    .bookAuthor(request.bookAuthor())
+                    .bookPublisher(request.bookPublisher())
+                    .bookPublishDate(request.bookPublishDate())
+                    .bookPrice(request.bookPrice())
+                    .bookSellingPrice(request.bookSellingPrice())
+                    .quantity(request.quantity())
+                    .imageURL(imageURL)
+                    .build();
+    }
 }

@@ -17,5 +17,14 @@ spring:
 eureka:
   gateway: http://localhost:8085
 
+app:
+  mode: development
+nhn:
+  appkey: ${NHN_IMAGE_APPKEY}
+  secret: ${NHN_IMAGE_SECRET}
+naverapi:
+  secret: ${NAVER_SECRET}
+  id: ${NAVER_ID}
+
 #app:
 #  mode: development

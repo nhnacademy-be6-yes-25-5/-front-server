@@ -21,13 +21,13 @@ public interface UserAdaptor {
     @PostMapping("/sign-up")
     UserResponse signUp(@RequestBody CreateUserRequest userRequest);
 
-    @GetMapping()
+    @GetMapping("/info")
     UserResponse findByUserId();
 
-    @PutMapping
+    @PutMapping("/info")
     UpdateUserResponse updateUser(@RequestBody UpdateUserRequest userRequest);
 
-    @DeleteMapping
+    @DeleteMapping("/delete")
     void deleteUser(@RequestBody DeleteUserRequest userRequest);
 
     @GetMapping("/orders/info")

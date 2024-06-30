@@ -6,13 +6,15 @@ import com.nhnacademy.frontserver1.presentation.dto.request.user.CreateUserReque
 import com.nhnacademy.frontserver1.presentation.dto.request.user.DeleteUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.PointPolicyRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.UpdateUserRequest;
-import com.nhnacademy.frontserver1.presentation.dto.response.user.PointPolicyResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.point.PointLogResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.point.PointPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UpdateUserResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UserGradeResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UserResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse findByUserId() {
+    public UserResponse findByUser() {
         return userAdaptor.findByUserId();
     }
 
@@ -41,13 +43,18 @@ public class UserServiceImpl implements UserService {
         userAdaptor.deleteUser(userRequest);
     }
 
-    @Override
-    public PointPolicyResponse getPointPolicies(PointPolicyRequest pointPolicyRequest) {
-        return null;
-    }
+//    @Override
+//    public PointPolicyResponse getPointPolicies(PointPolicyRequest pointPolicyRequest) {
+//        return null;
+//    }
 
     @Override
     public UserGradeResponse getUserGrade() {
         return userAdaptor.getUserGrade();
+    }
+
+    @Override
+    public Page<PointLogResponse> getPointLogs(Pageable pageable) {
+        return userAdaptor.getUserPointLogs(pageable);
     }
 }

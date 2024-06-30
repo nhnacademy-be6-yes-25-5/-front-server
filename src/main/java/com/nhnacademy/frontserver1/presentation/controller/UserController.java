@@ -4,15 +4,20 @@ import com.nhnacademy.frontserver1.application.service.UserService;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.CreateUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.DeleteUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.UpdateUserRequest;
+import com.nhnacademy.frontserver1.presentation.dto.response.point.PointLogResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UpdateUserResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UserGradeResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UserResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Controller
@@ -30,22 +35,8 @@ public class UserController {
 
     // 회원 가입
     @PostMapping("/sign-up")
-    public String signUp(@RequestParam String userName,
-                         @RequestParam LocalDate userBirth,
-                         @RequestParam String userEmail,
-                         @RequestParam String userPhone,
-                         @RequestParam String userPassword,
-                         @RequestParam String userConfirmPassword,
+    public String signUp(@ModelAttribute CreateUserRequest userRequest,
                          Model model) {
-
-        CreateUserRequest userRequest = CreateUserRequest.builder()
-                .userName(userName)
-                .userBirth(userBirth)
-                .userEmail(userEmail)
-                .userPhone(userPhone)
-                .userPassword(userPassword)
-                .userConfirmPassword(userConfirmPassword)
-                .build();
 
         UserResponse userResponse = userService.signUp(userRequest);
 
@@ -58,7 +49,7 @@ public class UserController {
     @GetMapping("/info")
     public String userInfo(Model model) {
 
-        UserResponse user = userService.findByUserId();
+        UserResponse user = userService.findByUser();
 
         model.addAttribute("user", user);
 
@@ -102,5 +93,19 @@ public class UserController {
         model.addAttribute("userGrade", userGrade);
 
         return "mypage/mypage-grade";
+    }
+
+    // 회원 현재 포인트와 포인트 이력 조회
+    @GetMapping("/points/logs")
+    public String getUserPoints(@RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "15") int size,
+                                Model model) {
+
+        Page<PointLogResponse> pointLogs = userService.getPointLogs(PageRequest.of(page, size));
+
+        model.addAttribute("currentPoint", pointLogs.getContent().isEmpty() ? BigDecimal.ZERO : pointLogs.getContent().getFirst().pointCurrent());
+        model.addAttribute("pointLogs", pointLogs);
+
+        return "mypage/mypage-pointLogs";
     }
 }

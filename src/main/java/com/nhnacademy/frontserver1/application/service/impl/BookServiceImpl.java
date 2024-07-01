@@ -109,4 +109,9 @@ public class BookServiceImpl implements BookService {
     public BookResponse updateBook(UpdateBookRequest updateBookRequest, List<Long> categoryIdList, List<Long> tagIdList) {
         return bookAdapter.updateBook(updateBookRequest, categoryIdList, tagIdList);
     }
+
+    @Override
+    public BookResponse getBook(Long id) {
+        return bookAdapter.findBookById(id);
+    }
 }

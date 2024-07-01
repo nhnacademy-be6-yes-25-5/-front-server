@@ -48,14 +48,17 @@ public class HomeController {
     public String bookCategory(Model model, @PathVariable Long categoryId, @PageableDefault(size = 8, page = 0) Pageable pageable){
 
         Page<BookResponse> bookList = bookService.getBookByCategoryId(categoryId, pageable);
-        int nowPage = bookList.getPageable().getPageNumber() + 1;
-        int startPage = Math.max(nowPage - 4, 1);
-        int endPage = Math.min(nowPage + 5, bookList.getTotalPages());
+        List<CategoryResponse> rootCategories = categoryService.findRootCategories();
+        int nowPage = bookList.getNumber();
+        int startPage = Math.max(nowPage - 4, 0);
+        int endPage = Math.min(nowPage + 5, bookList.getTotalPages() - 1);
 
         model.addAttribute("bookList", bookList);
-        model.addAttribute("nowPage", nowPage);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
+        model.addAttribute("nowPage", nowPage + 1); // 현재 페이지 번호 (1부터 시작하도록 +1)
+        model.addAttribute("startPage", startPage + 1); // 시작 페이지 번호 (1부터 시작하도록 +1)
+        model.addAttribute("endPage", endPage + 1); // 끝 페이지 번호 (1부터 시작하도록 +1)
+        model.addAttribute("totalPages", bookList.getTotalPages());
+        model.addAttribute("categories", rootCategories);
 
         return "product/product-list";
     }

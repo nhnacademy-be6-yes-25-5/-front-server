@@ -79,7 +79,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addCouponForm" method="post" th:action="@{/coupons/policy/books/create}">
+                    <form id="addCouponForm">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -141,23 +141,27 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('addCouponForm').addEventListener('submit', function(event) {
+                event.preventDefault(); // 기본 폼 제출을 막음
+
                 const discountValueField = document.getElementById('couponPolicyDiscountValue');
                 const discountRateField = document.getElementById('couponPolicyRate');
 
                 if ((discountValueField.value && discountRateField.value) || (!discountValueField.value && !discountRateField.value)) {
                     alert('할인 값(금액) 또는 할인율(비율) 중 하나만 입력해야 합니다.');
-                    event.preventDefault(); // 폼 제출을 막음
-                    return;
+                    return; // 폼 제출을 막음
                 }
 
                 const formData = new FormData(this);
+                const jsonData = {};
+
+                formData.forEach((value, key) => jsonData[key] = value);
 
                 fetch('/coupons/policy/books/create', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(Object.fromEntries(formData.entries()))
+                    body: JSON.stringify(jsonData)
                 })
                     .then(response => {
                         if (response.ok) {

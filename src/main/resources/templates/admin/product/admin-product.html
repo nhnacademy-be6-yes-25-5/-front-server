@@ -127,14 +127,23 @@
                                                                 <label for="publishDate" class="form-label">출판 일시</label>
                                                                 <input th:value="${#dates.format(product.bookPublishDate(), 'yyyy-MM-dd')}" type="date" class="form-control" id="publishDate" name = "bookPublishDate" >
                                                             </div>
+                                                            <div class="form-check form-switch">
+                                                                <input type="hidden" name="_bookIsPackable" value="on">
+                                                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name = "bookIsPackable" value = "true">
+                                                                <label class="form-check-label" for="flexSwitchCheckDefault">포장 가능</label>
+                                                            </div>
+
                                                         </div>
 
+
+                                                        <label class="form-check-label">책 설명</label>
                                                         <!-- 에디터를 적용할 요소 (컨테이너) -->
                                                         <div id="content" class = "wysiwyg-editor">
 
                                                         </div>
 
                                                         <input type="hidden" th:attr="id='editorContent-' + ${product.bookId()}" name="bookDescription">
+
 
                                                         <!-- TUI 에디터 JS CDN -->
                                                         <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
@@ -293,10 +302,16 @@
                                     <label for="addPublishDate" class="form-label">출판 일시</label>
                                     <input type="date" class="form-control" id="addPublishDate" name="bookPublishDate" required>
                                 </div>
+                                <div class="form-check form-switch">
+                                    <input type="hidden" name="_bookIsPackable" value="on">
+                                    <input class="form-check-input" type="checkbox" role="switch" name = "bookIsPackable">
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">포장 가능</label>
+                                </div>
                             </div>
 
                             <div id="addContent"></div>
 
+                            <label class="form-label">책 설명</label>
                             <input type="hidden" id="addEditorContent" name="bookDescription">
 
                         </div>

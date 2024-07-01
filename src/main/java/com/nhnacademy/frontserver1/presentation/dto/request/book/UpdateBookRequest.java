@@ -44,7 +44,9 @@ public record UpdateBookRequest(
         String imageURL,
 
         @NotNull(message = "책 수량은 필수 입력 항목입니다.")
-        Integer quantity
+        Integer quantity,
+
+        boolean bookIsPackable
 ) {
     public static UpdateBookRequest updateImageURL(UpdateBookRequest request, String imageURL) {
             return UpdateBookRequest.builder()
@@ -60,6 +62,7 @@ public record UpdateBookRequest(
                     .bookSellingPrice(request.bookSellingPrice())
                     .quantity(request.quantity())
                     .imageURL(imageURL)
+                    .bookIsPackable(request.bookIsPackable())
                     .build();
     }
 }

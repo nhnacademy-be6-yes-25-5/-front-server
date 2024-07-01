@@ -62,4 +62,13 @@ public class CookieTokenProvider {
         response.addCookie(cookie);
     }
 
+    public void setAccessTokenCookie(HttpServletResponse httpServletResponse, String accessToken) {
+        String token = accessToken.startsWith("Bearer ") ? accessToken.substring(7) : accessToken;
+        addAccessTokenToCookie(httpServletResponse, token);
+    }
+
+    public void setRefreshTokenCookie(HttpServletResponse httpServletResponse, String refreshToken) {
+        addRefreshTokenToCookie(httpServletResponse, refreshToken);
+    }
+
 }

@@ -5,6 +5,7 @@ import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderReq
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDeliveryInfoResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderStatusResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserAddressResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserInfoResponse;
@@ -124,6 +125,14 @@ public class OrderController {
     public ResponseEntity<UpdateOrderResponse> updateOrder(@PathVariable String orderId,
         @RequestBody UpdateOrderRequest request) {
         return ResponseEntity.ok(orderService.updateOrderByOrderId(orderId, request));
+    }
+
+    @GetMapping("/{orderId}/delivery")
+    public String getOrder(@PathVariable String orderId, Model model) {
+        ReadOrderDeliveryInfoResponse orderInfoResponse = orderService.getMyOrder(orderId);
+        model.addAttribute("orderInfo", orderInfoResponse);
+
+        return "mypage/mypage-delivery-detail";
     }
 
 }

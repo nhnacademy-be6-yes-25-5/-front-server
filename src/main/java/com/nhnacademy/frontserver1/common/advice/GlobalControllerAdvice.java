@@ -1,4 +1,4 @@
-package com.nhnacademy.frontserver1.common.handler;
+package com.nhnacademy.frontserver1.common.advice;
 
 import com.nhnacademy.frontserver1.application.service.UserService;
 import com.nhnacademy.frontserver1.common.exception.FeignClientException;
@@ -19,7 +19,7 @@ import org.springframework.web.servlet.view.RedirectView;
 @ControllerAdvice
 @RequiredArgsConstructor
 @Slf4j
-public class GlobalExceptionHandler {
+public class GlobalControllerAdvice {
 
     private final UserService userService;
 

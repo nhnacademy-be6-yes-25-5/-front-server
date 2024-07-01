@@ -6,10 +6,10 @@ import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderReq
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMaximumDiscountCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMyOrderHistoryResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDeliveryInfoResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderStatusResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserAddressResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserInfoResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadPaymentOrderResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadPurePriceResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
@@ -30,8 +30,6 @@ public interface OrderService {
 
     List<ReadCartBookResponse> findAllCartBok();
 
-    List<ReadPaymentOrderResponse> findAllOrderByOrderId(String orderId);
-
     ReadOrderStatusResponse getOrderStatusByOrderId(String orderId);
 
     Page<ReadOrderUserAddressResponse> getUserAddresses(Pageable pageable);
@@ -45,4 +43,6 @@ public interface OrderService {
     ReadPurePriceResponse getPurePrice();
 
     UpdateOrderResponse updateOrderByOrderId(String orderId, UpdateOrderRequest request);
+
+    ReadOrderDeliveryInfoResponse getMyOrder(String orderId);
 }

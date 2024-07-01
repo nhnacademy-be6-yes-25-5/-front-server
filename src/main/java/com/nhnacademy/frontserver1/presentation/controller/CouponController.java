@@ -1,9 +1,11 @@
 package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.CouponService;
+import com.nhnacademy.frontserver1.infrastructure.adaptor.CouponAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyRequestDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyResponseDTO;
 //import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponUserListResponseDTO;
+import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,6 +27,7 @@ import java.net.URI;
 public class CouponController {
 
     private final CouponService couponService;
+    private final CouponAdaptor couponAdaptor;
 
     @GetMapping("/policy")
     public String getAdminCouponPolicy(@RequestParam(defaultValue = "0") int page,
@@ -54,6 +58,14 @@ public class CouponController {
 
         return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
     } //쿠폰 정책 생성
+
+    @GetMapping("/books/{bookId}")
+    public String getCouponsByBookId(@PathVariable Long bookId, Model model) {
+        // 쿠폰 정보 가져오기
+        List<CouponResponseDTO> coupons = couponAdaptor.getCouponsByBookIdAndCategoryIds(bookId);
+        model.addAttribute("coupons", coupons);
+        return "product/product-details";
+    }
 
 //
 //    @GetMapping("/orders/couponPopup")

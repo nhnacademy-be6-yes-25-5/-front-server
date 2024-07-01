@@ -8,6 +8,7 @@ import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicy
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyCategoryResponseDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyResponseDTO;
 //import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponUserListResponseDTO;
+import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponResponseDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMaximumDiscountCouponResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
@@ -40,6 +41,9 @@ public interface CouponAdaptor {
 
     @PostMapping("/policy/categories/create")
     CouponPolicyCategoryResponseDTO create(@RequestBody CouponPolicyCategoryRequestDTO requestDTO);
+
+    @GetMapping("/bookDetail/{bookId}")
+    List<CouponResponseDTO> getCouponsByBookIdAndCategoryIds(@PathVariable Long bookId);
 
 //    @GetMapping("/user-coupons/user")
 //    List<CouponUserListResponseDTO> findUserCoupons(@RequestParam("userId") Long userId);

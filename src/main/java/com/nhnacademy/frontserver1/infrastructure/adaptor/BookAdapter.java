@@ -6,6 +6,7 @@ import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookQuant
 import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.CategoryResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.coupon.BookCouponResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

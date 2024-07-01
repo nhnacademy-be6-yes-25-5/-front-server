@@ -70,7 +70,7 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <form th:action="@{/admin/product/{id}/update(id=${product.bookId()})}" id="updateForm" method="post">
+                                                <form th:action="@{/admin/product/{id}/update(id=${product.bookId()})}" enctype="multipart/form-data" id="updateForm" method="post">
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="mb-3">
@@ -98,8 +98,8 @@
                                                                 <input th:value="${product.bookQuantity()}" type="number" class="form-control" id="quantity" name = "quantity" required>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label for="imageUrl" class="form-label">이미지 URL</label>
-                                                                <input th:value="${product.bookImage()}" type="text" class="form-control" id="imageUrl" name="bookImage">
+                                                                <label for="imageUrl" class="form-label">이미지</label>
+                                                                <input type="file" class="form-control" id="imageUrl" name="bookImage">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
@@ -127,14 +127,23 @@
                                                                 <label for="publishDate" class="form-label">출판 일시</label>
                                                                 <input th:value="${#dates.format(product.bookPublishDate(), 'yyyy-MM-dd')}" type="date" class="form-control" id="publishDate" name = "bookPublishDate" >
                                                             </div>
+                                                            <div class="form-check form-switch">
+                                                                <input type="hidden" name="_bookIsPackable" value="on">
+                                                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name = "bookIsPackable" value = "true">
+                                                                <label class="form-check-label" for="flexSwitchCheckDefault">포장 가능</label>
+                                                            </div>
+
                                                         </div>
 
+
+                                                        <label class="form-check-label">책 설명</label>
                                                         <!-- 에디터를 적용할 요소 (컨테이너) -->
                                                         <div id="content" class = "wysiwyg-editor">
 
                                                         </div>
 
                                                         <input type="hidden" th:attr="id='editorContent-' + ${product.bookId()}" name="bookDescription">
+
 
                                                         <!-- TUI 에디터 JS CDN -->
                                                         <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
@@ -236,7 +245,7 @@
                         }
                     </script>
 
-                    <form th:object="${newProduct}" th:action="@{/admin/product}" id="productForm" method="post">
+                    <form th:object="${newProduct}" th:action="@{/admin/product}" enctype="multipart/form-data" id="productForm" method="post">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -259,9 +268,13 @@
                                     <label for="addQuantity" class="form-label">재고</label>
                                     <input type="number" class="form-control" id="addQuantity" name ="quantity" required>
                                 </div>
+<!--                                <div class="mb-3">-->
+<!--                                    <label for="addImageUrl" class="form-label">이미지 URL</label>-->
+<!--                                    <input type="text" class="form-control" id="addImageUrl" name="bookImage" required>-->
+<!--                                </div>-->
                                 <div class="mb-3">
-                                    <label for="addImageUrl" class="form-label">이미지 URL</label>
-                                    <input type="text" class="form-control" id="addImageUrl" name="bookImage" required>
+                                    <label for="addImageUrl" class="form-label">이미지</label>
+                                    <input type="file" class="form-control" id="addImageUrl" name="bookImage">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -289,10 +302,16 @@
                                     <label for="addPublishDate" class="form-label">출판 일시</label>
                                     <input type="date" class="form-control" id="addPublishDate" name="bookPublishDate" required>
                                 </div>
+                                <div class="form-check form-switch">
+                                    <input type="hidden" name="_bookIsPackable" value="on">
+                                    <input class="form-check-input" type="checkbox" role="switch" name = "bookIsPackable">
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">포장 가능</label>
+                                </div>
                             </div>
 
                             <div id="addContent"></div>
 
+                            <label class="form-label">책 설명</label>
                             <input type="hidden" id="addEditorContent" name="bookDescription">
 
                         </div>

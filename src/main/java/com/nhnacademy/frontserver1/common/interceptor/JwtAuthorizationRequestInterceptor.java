@@ -9,6 +9,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -37,11 +38,6 @@ public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String path = request.getServletPath();
-
-//        // 개발 모드일 때는 인증을 생략합니다.
-//        if ("development".equals(mode)) {
-//            return;
-//        }
 
         if (path.startsWith("/auth/login")) {
             return;

@@ -13,3 +13,10 @@ spring:
 
 eureka:
   gateway: http://133.186.153.195:8085
+
+nhn:
+  appkey: ${NHN_IMAGE_APPKEY}
+  secret: ${NHN_IMAGE_SECRET}
+naverapi:
+  secret: ${NAVER_SECRET}
+  id: ${NAVER_ID}

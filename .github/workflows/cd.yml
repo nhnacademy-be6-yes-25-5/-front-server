@@ -50,11 +50,39 @@ jobs:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
           REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
+          NAVER_ID: ${{ secrets.NAVER_ID }}
+          NAVER_SECRET: ${{ secrets.NAVER_SECRET }}
+          NHN_IMAGE_APPKEY: ${{ secrets.NHN_IMAGE_APPKEY }}
+          NHN_IMAGE_SECRET: ${{ secrets.NHN_IMAGE_SECRET }}
         run: |
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
             cd ${REMOTE_DIR}
-            chmod +x build_and_run.sh
-            ./build_and_run.sh
+            docker build -f Dockerfile-8040 -t front1-app-8040 .
+            docker build -f Dockerfile-8041 -t front1-app-8041 .
+            
+            docker stop front1-app-8040 || true
+            docker rm front1-app-8040 || true
+            
+            docker run -d -p 8040:8040 --name front1-app-8040 \
+            --network yes255-network \
+            -e NAVER_ID=${NAVER_ID} \
+            -e NAVER_SECRET=${NAVER_SECRET} \
+            -e NHN_IMAGE_SECRET=${NHN_IMAGE_SECRET} \
+            -e NHN_IMAGE_APPKEY=${NHN_IMAGE_APPKEY} \
+            front1-app-8040
+            
+            sleep 30
+            
+            docker stop front1-app-8041 || true
+            docker rm front1-app-8041 || true
+            
+            docker run -d -p 8041:8041 --name front1-app-8041 \
+            --network yes255-network \
+            -e NAVER_ID=${NAVER_ID} \
+            -e NAVER_SECRET=${NAVER_SECRET} \
+            -e NHN_IMAGE_SECRET=${NHN_IMAGE_SECRET} \
+            -e NHN_IMAGE_APPKEY=${NHN_IMAGE_APPKEY} \
+            front1-app-8041
           EOF
 
       - name: Send Deployment Status to Dooray

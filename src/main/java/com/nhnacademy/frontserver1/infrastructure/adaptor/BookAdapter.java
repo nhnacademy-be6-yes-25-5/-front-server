@@ -1,5 +1,6 @@
 package com.nhnacademy.frontserver1.infrastructure.adaptor;
 
+import com.nhnacademy.frontserver1.common.config.FeignClientConfig;
 import com.nhnacademy.frontserver1.presentation.dto.request.book.CreateBookRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookQuantityRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookRequest;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "bookAdapter", url = "${eureka.gateway}/books")
+@FeignClient(name = "bookAdapter", url = "${eureka.gateway}/books" , configuration = FeignClientConfig.class)
 public interface BookAdapter {
 
     @GetMapping("/page")

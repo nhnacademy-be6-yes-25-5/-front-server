@@ -4,8 +4,6 @@ import com.nhnacademy.frontserver1.application.service.AuthService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.AuthAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.LoginUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.AuthResponse;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,7 +20,6 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
 
     private final AuthAdaptor authAdaptor;
-    private final HttpServletResponse httpServletResponse;
 
     /**
      * 사용자 로그인을 처리합니다.
@@ -46,24 +43,6 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String testToken() {
         ResponseEntity<String> response = authAdaptor.tokenTest();
-        String newAccessToken = response.getHeaders().getFirst("X-New-Access-Token");
-        String newRefreshToken = response.getHeaders().getFirst("X-New-Refresh-Token");
-
-        if (newAccessToken != null) {
-            Cookie accessTokenCookie = new Cookie("AccessToken", newAccessToken);
-            accessTokenCookie.setHttpOnly(true);
-            accessTokenCookie.setSecure(true);
-            accessTokenCookie.setPath("/");
-            httpServletResponse.addCookie(accessTokenCookie);
-        }
-
-        if (newRefreshToken != null) {
-            Cookie refreshTokenCookie = new Cookie("RefreshToken", newRefreshToken);
-            refreshTokenCookie.setHttpOnly(true);
-            refreshTokenCookie.setSecure(true);
-            refreshTokenCookie.setPath("/");
-            httpServletResponse.addCookie(refreshTokenCookie);
-        }
 
         return response.getBody();
     }

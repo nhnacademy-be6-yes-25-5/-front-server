@@ -3,8 +3,6 @@ package com.nhnacademy.frontserver1.common.jwt;
 import com.nhnacademy.frontserver1.common.exception.JwtException;
 import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.AuthAdaptor;
-import com.nhnacademy.frontserver1.presentation.dto.request.auth.CreateAccessTokenRequest;
-import com.nhnacademy.frontserver1.presentation.dto.response.auth.CreateAccessTokenResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -45,18 +43,6 @@ public class JwtProvider {
         } catch (SignatureException e) {
             throw new JwtException(
                     ErrorStatus.toErrorStatus("시크릿키 변경이 감지되었습니다.", 401, LocalDateTime.now())
-            );
-        }
-    }
-
-    public CreateAccessTokenResponse updateRefreshAccessToken(String refreshToken) {
-        CreateAccessTokenRequest request = new CreateAccessTokenRequest(refreshToken);
-
-        try {
-            return authAdaptor.refreshToken(request);
-        } catch (Exception e) {
-            throw new JwtException(
-                    ErrorStatus.toErrorStatus("토큰 갱신에 실패했습니다.", 401, LocalDateTime.now())
             );
         }
     }

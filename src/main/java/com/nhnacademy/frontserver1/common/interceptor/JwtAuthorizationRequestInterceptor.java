@@ -5,7 +5,7 @@ import com.nhnacademy.frontserver1.common.provider.CookieTokenProvider;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.Optional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -22,9 +22,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
 
     private final CookieTokenProvider cookieTokenProvider;
-//
-//    @Value("${app.mode}")
-//    private String mode;
 
     /**
      * Feign 요청에 JWT 토큰을 추가합니다.
@@ -33,30 +30,26 @@ public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
      */
     @Override
     public void apply(RequestTemplate template) {
-
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String path = request.getServletPath();
-
-//        // 개발 모드일 때는 인증을 생략합니다.
-//        if ("development".equals(mode)) {
-//            return;
-//        }
 
         if (path.startsWith("/auth/login")) {
             return;
         }
 
-        Optional<String> token = cookieTokenProvider.getTokenFromCookie(request);
-        token.ifPresentOrElse(
-                t -> {
-                    log.debug("Adding Authorization header: Bearer {}", t);
-                    template.header(HttpHeaders.AUTHORIZATION, "Bearer " + t);
-                },
-                () -> {
-                    log.warn("Authorization token is missing in the cookies.");
-                    throw new TokenCookieMissingException();
-                }
-        );
+        List<String> tokens = cookieTokenProvider.getTokenFromCookie(request);
+
+        if (!tokens.isEmpty()) {
+            String accessToken = tokens.get(0);
+            String refreshToken = tokens.get(1);
+            template.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+            log.debug("Adding Authorization header: Bearer {}", accessToken);
+            template.header("RefreshToken", refreshToken);
+            log.debug("Adding RefreshToken header: {}", refreshToken);
+        } else {
+            log.warn("Authorization token is missing in the cookies.");
+            throw new TokenCookieMissingException();
+        }
     }
 
 }

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border-bottom: 1px solid #555555;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="col-md-12">
+    <h1>카테고리 목록</h1>
+    <h2>클릭시 자동 입력됩니다 !!</h2>
+    <div class="col-md-4">
+        <form th:action="@{/coupons/policy/categories/search}" method="get">
+        </form>
+    </div>
+    <hr>
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>카테고리명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <script>
+                function selectElement(selectedElement) {
+                    addDataToForm(selectedElement);
+                    try {
+                        window.close();
+                    } catch (e) {
+                        console.error("팝업 창을 닫는 데 실패했습니다:", e);
+                    }
+                }
+
+                function addDataToForm(ele) {
+                    console.log('addDateToForm' + ele);
+
+                    let elements = ele.getElementsByTagName("td");
+                    let data = {
+                        categoryId: elements[0].textContent,
+                        categoryName: elements[1].textContent
+                    };
+
+                    // 부모 창으로 element 전달
+                    opener.document.getElementById("categoryId").value = data.categoryId;
+                    opener.document.getElementById("categoryName").value = data.categoryName;
+                }
+            </script>
+
+            <tr th:each="category : ${categoryList}" onclick="selectElement(this)" style="cursor: pointer;">
+                <td th:text="${category.categoryId}"></td>
+                <td th:text="${category.categoryName}">카테고리명</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

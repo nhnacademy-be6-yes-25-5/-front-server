@@ -30,7 +30,7 @@ public class PointPolicyController {
     }
 
     @PostMapping
-    public String createPointPolicy(@RequestBody PointPolicyRequest pointPolicyRequest) {
+    public String createPointPolicy(@ModelAttribute PointPolicyRequest pointPolicyRequest) {
 
         pointPolicyService.createPointPolicy(pointPolicyRequest);
 

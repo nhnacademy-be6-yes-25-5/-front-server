@@ -15,7 +15,7 @@
                         <div class="product-images">
                             <main id="gallery">
                                 <div class="main-img">
-                                    <img src="https://via.placeholder.com/1000x670" id="current" alt="#">
+                                    <img th:src="${book.bookImage()}" id="current" alt="#">
                                 </div>
                                 <div class="images">
                                     <img src="https://via.placeholder.com/1000x670" class="img" alt="#">
@@ -29,13 +29,20 @@
                     </div>
                     <div class="col-lg-6 col-md-12 col-12">
                         <div class="product-info">
-                            <h2 class="title">GoPro Karma Camera Drone</h2>
-                            <p class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">Action
+                            <h2 th:text = "${book.bookName()}" class="title">GoPro Karma Camera Drone</h2>
+                            <p th:text = "${book.bookAuthor()}" class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">Action
                                     cameras</a></p>
-                            <h3 class="price">$850<span>$945</span></h3>
-                            <p class="info-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor incididunt
-                                ut labore et dolore magna aliqua.</p>
+                            <h3 class="price">
+                                <span th:text = "${book.bookPrice()}">$945</span>
+                                <h5 th:if="${book.bookPrice() > 0}">
+                                    <span th:text="${(1 - book.bookSellingPrice() / book.bookPrice()) * 100 + '%'}"></span>
+                                    <span> off</span>
+                                </h5>
+                                <h3 th:text = "${book.bookSellingPrice()}">$850</h3>
+                            </h3>
+<!--                            <p class="info-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod-->
+<!--                                tempor incididunt-->
+<!--                                ut labore et dolore magna aliqua.</p>-->
                             <div class="row">
                                 <div class="col-lg-4 col-md-4 col-12">
                                     <div class="form-group color-option">
@@ -95,7 +102,12 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-12">
                                         <div class="wish-button">
-                                            <button class="btn"><i class="lni lni-heart"></i> To Wishlist</button>
+                                            <button th:onclick="|location.href='@{'/likes/'+ ${book.bookId()}}'|" th:if="${like == null || !like.likesStatus()}" class="btn">
+                                                <i class="lni lni-heart"></i> To Wishlist
+                                            </button>
+                                            <button th:onclick="|location.href='@{'/likes/'+ ${book.bookId()}}'|" th:if="${like != null && like.likesStatus()}" class="btn">
+                                                <i class="lni lni-heart-filled"></i> To Wishlist
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -110,7 +122,7 @@
                         <div class="col-lg-6 col-12">
                             <div class="info-body custom-responsive-margin">
                                 <h4>Details</h4>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                <p th:text = "${book.bookDescription()}">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
                                     incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
                                     exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
                                     irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.</p>

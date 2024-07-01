@@ -105,7 +105,7 @@ jobs:
                   title: "Pull Request URL",
                   titleLink: process.env.PR_URL,
                   color: "green",
-                  text: `PR 제목: ${process.env.PR_TITLE}, PR 작성자: ${process.env.PR_ACTOR}`
+                  text: `PR 제목: ${process.env.PR_TITLE}, PR 작성자: Limchaereong`
                 }
               ]
             };

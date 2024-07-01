@@ -19,9 +19,13 @@ public interface BookService {
 
     Page<BookResponse> findAllBooks(Pageable pageable);
 
+    List<BookResponse> findAllBooks();
+
     void deleteBook(Long id);
 
     BookResponse updateBook(UpdateBookRequest updateBookRequest, List<Long> categoryIdList, List<Long> tagIdList);
 
     BookResponse getBook(Long id);
+
+    Page<BookResponse> getBookByCategoryId(Long categoryId, Pageable pageable);
 }

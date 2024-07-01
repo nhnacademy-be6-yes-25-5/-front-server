@@ -7,6 +7,7 @@ import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderRe
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMaximumDiscountCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMyOrderHistoryResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDeliveryInfoResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDetailResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderStatusResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserAddressResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserInfoResponse;
@@ -44,5 +45,7 @@ public interface OrderService {
 
     UpdateOrderResponse updateOrderByOrderId(String orderId, UpdateOrderRequest request);
 
-    ReadOrderDeliveryInfoResponse getMyOrder(String orderId);
+    ReadOrderDeliveryInfoResponse getMyOrderDelivery(String orderId);
+
+    ReadOrderDetailResponse getMyOrderByOrderId(String orderId);
 }

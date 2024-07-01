@@ -6,6 +6,7 @@ import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadCartBookRe
 import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDeliveryInfoResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDetailResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderStatusResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserAddressResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserInfoResponse;
@@ -127,9 +128,17 @@ public class OrderController {
         return ResponseEntity.ok(orderService.updateOrderByOrderId(orderId, request));
     }
 
-    @GetMapping("/{orderId}/delivery")
+    @GetMapping("/{orderId}")
     public String getOrder(@PathVariable String orderId, Model model) {
-        ReadOrderDeliveryInfoResponse orderInfoResponse = orderService.getMyOrder(orderId);
+        ReadOrderDetailResponse response = orderService.getMyOrderByOrderId(orderId);
+        model.addAttribute("order", response);
+
+        return "mypage/mypage-orders-detail";
+    }
+
+    @GetMapping("/{orderId}/delivery")
+    public String getOrderDelivery(@PathVariable String orderId, Model model) {
+        ReadOrderDeliveryInfoResponse orderInfoResponse = orderService.getMyOrderDelivery(orderId);
         model.addAttribute("orderInfo", orderInfoResponse);
 
         return "mypage/mypage-delivery-detail";

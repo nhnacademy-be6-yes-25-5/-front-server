@@ -14,6 +14,7 @@ import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderRe
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMaximumDiscountCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMyOrderHistoryResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDeliveryInfoResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDetailResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderStatusResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserAddressResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserInfoResponse;
@@ -111,7 +112,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ReadOrderDeliveryInfoResponse getMyOrder(String orderId) {
+    public ReadOrderDeliveryInfoResponse getMyOrderDelivery(String orderId) {
+        return orderAdaptor.getMyOrderDeliveryByOrderId(orderId);
+    }
+
+    @Override
+    public ReadOrderDetailResponse getMyOrderByOrderId(String orderId) {
         return orderAdaptor.getMyOrderByOrderId(orderId);
     }
 }

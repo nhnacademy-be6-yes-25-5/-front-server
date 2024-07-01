@@ -9,14 +9,18 @@ import com.nhnacademy.frontserver1.infrastructure.adaptor.PolicyAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.UserAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadCartBookResponse;
+import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMaximumDiscountCouponResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMyOrderHistoryResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDeliveryInfoResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderStatusResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserAddressResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserInfoResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadPaymentOrderResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadPurePriceResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.UpdateOrderResponse;
 import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -67,11 +71,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<ReadPaymentOrderResponse> findAllOrderByOrderId(String orderId) {
-        return orderAdaptor.findAllByOrderId(orderId);
-    }
-
-    @Override
     public ReadOrderStatusResponse getOrderStatusByOrderId(String orderId) {
         return orderAdaptor.findOrderStatusByOrderId(orderId);
     }
@@ -92,5 +91,27 @@ public class OrderServiceImpl implements OrderService {
 //        return couponAdaptor.getMaxDiscountCouponByTotalAmount(request);
 
         return ReadMaximumDiscountCouponResponse.fromTest();
+    }
+
+    @Override
+    public Page<ReadMyOrderHistoryResponse> getMyOrders(Pageable pageable) {
+        return orderAdaptor.getMyOrders(pageable);
+    }
+
+    @Override
+    public ReadPurePriceResponse getPurePrice() {
+//        return userAdaptor.getPurePrice();
+
+        return ReadPurePriceResponse.fromTest();
+    }
+
+    @Override
+    public UpdateOrderResponse updateOrderByOrderId(String orderId, UpdateOrderRequest request) {
+        return orderAdaptor.updateOrderByOrderId(orderId, request);
+    }
+
+    @Override
+    public ReadOrderDeliveryInfoResponse getMyOrder(String orderId) {
+        return orderAdaptor.getMyOrderByOrderId(orderId);
     }
 }

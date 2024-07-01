@@ -5,6 +5,7 @@ import com.nhnacademy.frontserver1.application.service.dto.request.CreatePayment
 import com.nhnacademy.frontserver1.infrastructure.adaptor.PaymentAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.payment.CreatePaymentRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreatePaymentResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadPaymentOrderResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,4 +26,8 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentAdaptor.createPayment(paymentsRequest);
     }
 
+    @Override
+    public List<ReadPaymentOrderResponse> findAllOrderByOrderId(String orderId) {
+        return paymentAdaptor.findAllByOrderId(orderId);
+    }
 }

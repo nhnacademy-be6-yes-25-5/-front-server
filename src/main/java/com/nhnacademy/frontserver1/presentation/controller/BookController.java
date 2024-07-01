@@ -5,7 +5,6 @@ import com.nhnacademy.frontserver1.infrastructure.adaptor.BookAdapter;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.BookCouponResponse;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.LikesAdapter;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponseDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.LikesResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

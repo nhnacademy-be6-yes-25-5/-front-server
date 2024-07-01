@@ -7,7 +7,6 @@ import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyR
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyBookResponseDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyCategoryResponseDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyResponseDTO;
-//import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponUserListResponseDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponResponseDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMaximumDiscountCouponResponse;
 import org.springframework.cloud.openfeign.FeignClient;

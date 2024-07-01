@@ -6,10 +6,8 @@ import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyB
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.BookCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyBookResponseDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;

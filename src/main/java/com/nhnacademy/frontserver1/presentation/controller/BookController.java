@@ -2,6 +2,7 @@ package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.BookService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.BookAdapter;
+import com.nhnacademy.frontserver1.infrastructure.adaptor.CategoryAdapter;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.BookCouponResponse;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.LikesAdapter;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;

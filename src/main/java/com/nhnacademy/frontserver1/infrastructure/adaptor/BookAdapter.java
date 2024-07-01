@@ -39,11 +39,12 @@ public interface BookAdapter {
     @DeleteMapping("/{bookId}")
     ResponseEntity<Void> deleteBook(@PathVariable("bookId") Long bookId);
 
-    //도서명 주고 도서 정보 반환하는 코드
+    @GetMapping("/category/{categoryId}/page")
+    Page<BookResponse> getBookByCategory(@PathVariable Long categoryId, Pageable pageable);
+
     @GetMapping("/search")
     List<BookCouponResponse> findBooksByName(@RequestParam("query") String query);
 
-    // 카테고리 조회 메소드 추가
     @GetMapping("/categories")
     List<CategoryResponse> findAllCategories();
 }

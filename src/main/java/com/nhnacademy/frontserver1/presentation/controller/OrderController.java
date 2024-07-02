@@ -1,6 +1,7 @@
 package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.OrderService;
+import com.nhnacademy.frontserver1.domain.TakeoutType;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderRequest;
@@ -77,12 +78,18 @@ public class OrderController {
         Integer freeShippingAmount = freeShippingPolicy.shippingPolicyMinAmount() - totalAmount;
         List<ReadTakeoutResponse> takeoutResponses = orderService.findAllTakeout();
 
+        boolean hasUnPackableBook = cartBookResponses.stream().anyMatch(cartBook -> !cartBook.bookIsPackable());
+
+        List<ReadTakeoutResponse> availableTakeouts = hasUnPackableBook
+            ? List.of(new ReadTakeoutResponse(TakeoutType.NONE, 0, "포장 불가"))
+            : takeoutResponses;
+
         model.addAttribute("shippingPolicy", shippingPolicy);
         model.addAttribute("freeShippingPolicy", freeShippingPolicy);
         model.addAttribute("freeShippingAmount", freeShippingAmount);
         model.addAttribute("totalAmount", totalAmount);
         model.addAttribute("cartBooks", cartBookResponses);
-        model.addAttribute("takeouts", takeoutResponses);
+        model.addAttribute("takeouts", availableTakeouts);
     }
 
     private Integer getTotalAmount(List<ReadCartBookResponse> cartBookResponses) {

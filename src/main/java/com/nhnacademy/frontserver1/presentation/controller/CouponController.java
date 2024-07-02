@@ -1,12 +1,16 @@
 package com.nhnacademy.frontserver1.presentation.controller;
 
+import com.nhnacademy.frontserver1.application.service.BookService;
 import com.nhnacademy.frontserver1.application.service.CouponService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.CouponAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyRequestDTO;
+import com.nhnacademy.frontserver1.presentation.dto.response.coupon.BookDetailCouponResponseDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyResponseDTO;
 //import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponUserListResponseDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponResponseDTO;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,8 +30,10 @@ import java.util.List;
 @RequestMapping("/coupons")
 public class CouponController {
 
+    private static final Logger log = LoggerFactory.getLogger(CouponController.class);
     private final CouponService couponService;
     private final CouponAdaptor couponAdaptor;
+    private final BookService bookService;
 
     @GetMapping("/policy")
     public String getAdminCouponPolicy(@RequestParam(defaultValue = "0") int page,
@@ -59,12 +65,18 @@ public class CouponController {
         return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
     } //쿠폰 정책 생성
 
-    @GetMapping("/books/{bookId}")
-    public String getCouponsByBookId(@PathVariable Long bookId, Model model) {
-        // 쿠폰 정보 가져오기
-        List<CouponResponseDTO> coupons = couponAdaptor.getCouponsByBookIdAndCategoryIds(bookId);
-        model.addAttribute("coupons", coupons);
-        return "product/product-details";
+    @GetMapping("/books/{bookId}/coupons")
+    public ResponseEntity<List<BookDetailCouponResponseDTO>> getCouponsByBookId(@PathVariable Long bookId) {
+        List<Long> categoryIds = bookService.getCategoryIdsByBookId(bookId);
+        List<BookDetailCouponResponseDTO> coupons = couponService.getCoupons(bookId, categoryIds);
+        return ResponseEntity.ok(coupons);
+    }
+
+    @PostMapping("/claim")
+    public ResponseEntity<Void> claimCoupon(@RequestParam Long couponId) {
+        log.info("claim coupon {}", couponId);
+        couponService.claimCoupon(couponId);
+        return ResponseEntity.ok().build();
     }
 
 //

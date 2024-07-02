@@ -28,4 +28,6 @@ public interface BookService {
     BookResponse getBook(Long id);
 
     Page<BookResponse> getBookByCategoryId(Long categoryId, Pageable pageable);
+
+    List<Long> getCategoryIdsByBookId(Long bookId);
 }

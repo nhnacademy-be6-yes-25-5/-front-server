@@ -4,10 +4,7 @@ import com.nhnacademy.frontserver1.application.service.dto.request.ReadMaximumDi
 import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyBookRequestDTO;
 import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyCategoryRequestDTO;
 import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyRequestDTO;
-import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyBookResponseDTO;
-import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyCategoryResponseDTO;
-import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyResponseDTO;
-import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponResponseDTO;
+import com.nhnacademy.frontserver1.presentation.dto.response.coupon.*;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMaximumDiscountCouponResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
@@ -41,8 +38,8 @@ public interface CouponAdaptor {
     @PostMapping("/policy/categories/create")
     CouponPolicyCategoryResponseDTO create(@RequestBody CouponPolicyCategoryRequestDTO requestDTO);
 
-    @GetMapping("/bookDetail/{bookId}")
-    List<CouponResponseDTO> getCouponsByBookIdAndCategoryIds(@PathVariable Long bookId);
+    @GetMapping
+    List<BookDetailCouponResponseDTO> getCouponsByBookIdAndCategoryIds(@RequestParam("bookId") Long bookId, @RequestParam("categoryIds") List<Long> categoryIds);
 
 //    @GetMapping("/user-coupons/user")
 //    List<CouponUserListResponseDTO> findUserCoupons(@RequestParam("userId") Long userId);

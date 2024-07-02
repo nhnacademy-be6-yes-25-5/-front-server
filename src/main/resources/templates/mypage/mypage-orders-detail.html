@@ -1,10 +1,103 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+  <title>Order Details</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
+<div th:fragment="content" class="container mt-5">
+  <!-- Start Breadcrumbs Component -->
+<!--  <div th:replace="~{fragments/breadcrumbs :: breadcrumbs}"></div>-->
+  <!-- End Breadcrumbs Component -->
 
+  <div class="row">
+    <div class="col-md-3">
+      <!-- Include User Sidebar -->
+      <div th:replace="~{fragments/user-sidebar :: user-sidebar}"></div>
+    </div>
+    <div class="col-md-9 order-details">
+      <input type="hidden" id="orderId" th:value="${order.orderId}">
+      <h2>주문상세</h2>
+      <div>
+        <p><strong><span th:text="${#temporals.format(order.orderCreatedAt, 'yyyy. M. d')}"></span> 주문</strong> : 주문번호 <span th:text="${order.orderId}">11100055733606</span></p>
+      </div>
+      <div class="card mb-4 order-card">
+        <div class="card-body">
+          <h5 class="card-title">
+            <span th:text="${#temporals.format(order.deliveryStartedAt, 'E')}"></span>
+          </h5>
+          <div class="order-info">
+            <span th:text="${order.bookNames.get(0)}">와이넷 미니 세탁기용 배수호스</span>, <span th:text="${order.quantities.get(0)}">1개</span>
+            <br>
+            <strong th:text="${order.orderTotalAmount}">5,010원</strong>
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-secondary btn-custom" th:data-order-id="${order.orderId}" onclick="location.href='/orders/' + this.getAttribute('data-order-id') + '/delivery'">배송조회</button>
+            <button class="btn btn-outline-secondary btn-custom">리뷰 작성하기</button>
+            <button class="btn btn-warning btn-custom" th:if="${order.orderStatusType.name == 'DONE'}" onclick="changeOrderStatus('REFUND')">반품</button>
+            <button class="btn btn-danger btn-custom" th:if="${order.orderStatusType.name == 'WAIT'}" onclick="changeOrderStatus('CANCEL')">결제취소</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h5>받는사람 정보</h5>
+        <div class="card mb-4 order-card">
+          <div class="card-body">
+            <p>
+              받는사람: <span th:text="${order.receiveUserName}">김토스</span><br>
+              연락처: <span th:text="${order.receiveUserPhoneNumber}">010-1234-5678</span><br>
+              받는주소: <span th:text="${order.addressRaw}">주소</span> <span th:text="${order.addressDetail}">상세 주소</span><br>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h5>결제 정보</h5>
+        <div class="card mb-4 order-card">
+          <div class="card-body">
+            <p>
+              총 상품가격: <span th:text="${order.orderTotalAmount}">5,010 원</span><br>
+              배송비: <span th:text="${order.shippingPrice}">0 원</span><br>
+              <span class="order-total">총 결제금액: <span th:text="${order.orderTotalAmount}">5,010 원</span></span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <a href="/mypage/orders" class="btn btn-primary">주문목록 돌아가기</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function changeOrderStatus(status) {
+      const orderId = document.getElementById('orderId').value;
+      console.log(orderId);
+      fetch('/orders/' + orderId, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ orderStatusType: status })
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Network response was not ok');
+        }
+      })
+      .then(data => {
+        alert('주문 상태가 성공적으로 변경되었습니다.');
+        location.reload();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('주문 상태를 변경하는데 실패하였습니다.');
+      });
+    }
+  </script>
+</div>
 </body>
 </html>

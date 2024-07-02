@@ -53,7 +53,7 @@
         window.location.href = `/payments/fail`;
       } else {
         console.log("Confirmation successful, checking order status...");
-        checkOrderStatus(orderId); // Use function directly, no await
+        checkOrderStatus(orderId);
       }
     } catch (error) {
       console.error('Confirm error:', error);

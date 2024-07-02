@@ -2,6 +2,7 @@ package com.nhnacademy.frontserver1.application.service.impl;
 
 import com.nhnacademy.frontserver1.application.service.OrderService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.AddressAdaptor;
+import com.nhnacademy.frontserver1.infrastructure.adaptor.BookAdapter;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.CartAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.CouponAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.OrderAdaptor;
@@ -10,10 +11,12 @@ import com.nhnacademy.frontserver1.infrastructure.adaptor.UserAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderRequest;
+import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMaximumDiscountCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMyOrderHistoryResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDeliveryInfoResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDetailResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderStatusResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserAddressResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserInfoResponse;
@@ -21,8 +24,11 @@ import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadPurePrice
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.UpdateOrderResponse;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +43,7 @@ public class OrderServiceImpl implements OrderService {
     private final CartAdaptor cartAdaptor;
     private final AddressAdaptor addressAdaptor;
     private final UserAdaptor userAdaptor;
+    private final BookAdapter bookAdapter;
     private final CouponAdaptor couponAdaptor;
 
     @Override
@@ -66,7 +73,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<ReadCartBookResponse> findAllCartBok() {
+    public List<ReadCartBookResponse> getOrderBook(Long bookId, Integer quantity) {
+        if (Objects.nonNull(bookId) && Objects.nonNull(quantity)) {
+            BookResponse bookResponse = bookAdapter.findBookById(bookId);
+            ReadCartBookResponse readCartBookResponse = ReadCartBookResponse.from(bookResponse, quantity);
+
+            return Collections.singletonList(readCartBookResponse);
+        }
+
         return cartAdaptor.getCartBooks();
     }
 
@@ -111,7 +125,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ReadOrderDeliveryInfoResponse getMyOrder(String orderId) {
+    public ReadOrderDeliveryInfoResponse getMyOrderDelivery(String orderId) {
+        return orderAdaptor.getMyOrderDeliveryByOrderId(orderId);
+    }
+
+    @Override
+    public ReadOrderDetailResponse getMyOrderByOrderId(String orderId) {
         return orderAdaptor.getMyOrderByOrderId(orderId);
     }
 }

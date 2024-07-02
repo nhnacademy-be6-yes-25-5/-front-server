@@ -7,6 +7,7 @@ import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderReq
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMyOrderHistoryResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDeliveryInfoResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDetailResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderStatusResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.UpdateOrderResponse;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -34,6 +35,9 @@ public interface OrderAdaptor {
     UpdateOrderResponse updateOrderByOrderId(@PathVariable String orderId,
         @RequestBody UpdateOrderRequest request);
 
+    @GetMapping("/{orderId}/delivery")
+    ReadOrderDeliveryInfoResponse getMyOrderDeliveryByOrderId(@PathVariable String orderId);
+
     @GetMapping("/{orderId}")
-    ReadOrderDeliveryInfoResponse getMyOrderByOrderId(@PathVariable String orderId);
+    ReadOrderDetailResponse getMyOrderByOrderId(@PathVariable String orderId);
 }

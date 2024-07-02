@@ -18,7 +18,7 @@ public class CustomErrorDecoder implements ErrorDecoder {
         String responseBody = null;
 
         try {
-            responseBody = response.body() != null ? new String(response.body().asInputStream().readAllBytes(), StandardCharsets.UTF_8) : null;
+            responseBody = response.body() != null ? new String(response.body().asInputStream().readAllBytes(), StandardCharsets.UTF_8) : "알 수 없는 에러";
         } catch (IOException e) {
             log.error("응답 본문을 읽는 중 에러 발생: methodKey={}, status={}, 에러 메시지={}", methodKey, response.status(), e.getMessage(), e);
         }

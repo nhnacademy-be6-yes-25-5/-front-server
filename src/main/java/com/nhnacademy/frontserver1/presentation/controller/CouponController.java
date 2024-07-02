@@ -9,6 +9,8 @@ import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicy
 //import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponUserListResponseDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponResponseDTO;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +30,7 @@ import java.util.List;
 @RequestMapping("/coupons")
 public class CouponController {
 
+    private static final Logger log = LoggerFactory.getLogger(CouponController.class);
     private final CouponService couponService;
     private final CouponAdaptor couponAdaptor;
     private final BookService bookService;
@@ -67,6 +70,12 @@ public class CouponController {
         List<Long> categoryIds = bookService.getCategoryIdsByBookId(bookId);
         List<BookDetailCouponResponseDTO> coupons = couponService.getCoupons(bookId, categoryIds);
         return ResponseEntity.ok(coupons);
+    }
+
+    @PostMapping("/claim")
+    public void claimCoupon(@RequestParam Long couponId) {
+        log.info("claim coupon {}", couponId);
+        couponService.claimCoupon(couponId);
     }
 
 //

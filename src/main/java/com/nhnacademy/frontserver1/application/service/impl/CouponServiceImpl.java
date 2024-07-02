@@ -2,6 +2,7 @@ package com.nhnacademy.frontserver1.application.service.impl;
 
 import com.nhnacademy.frontserver1.application.service.CouponService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.CouponAdaptor;
+import com.nhnacademy.frontserver1.infrastructure.adaptor.UserAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyBookRequestDTO;
 import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyCategoryRequestDTO;
 import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyRequestDTO;
@@ -26,6 +27,7 @@ import java.util.List;
 public class CouponServiceImpl implements CouponService {
 
     private final CouponAdaptor couponAdaptor;
+    private final UserAdaptor userAdaptor;
     private static final Logger logger = LoggerFactory.getLogger(CouponServiceImpl.class);
 
     @Override
@@ -124,4 +126,11 @@ public class CouponServiceImpl implements CouponService {
     public List<BookDetailCouponResponseDTO> getCoupons(Long bookId, List<Long> categoryIds) {
         return couponAdaptor.getCouponsByBookIdAndCategoryIds(bookId, categoryIds);
     }
+
+    @Override
+    public void claimCoupon(Long couponId) {
+        logger.info("Claiming coupon {}", couponId);
+        userAdaptor.claimCoupon(couponId);
+    }
+
 }

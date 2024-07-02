@@ -20,4 +20,5 @@ public interface CouponService {
     void createCouponPolicyCategory(CouponPolicyCategoryRequestDTO createCouponPolicyCategoryRequest);
     Page<CouponPolicyCategoryResponseDTO> findAllCategoryCouponPolicies(Pageable pageable);
     List<BookDetailCouponResponseDTO> getCoupons(Long bookId, List<Long> categoryIds);
+    void claimCoupon(Long couponId);
 }

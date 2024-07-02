@@ -9,6 +9,7 @@ import java.util.Date;
 @Getter
 @Builder
 public class BookDetailCouponResponseDTO {
+    private final Long couponId;
     private final String couponName;
     private final Date couponExpiredAt;
     private final String couponPolicyName;

@@ -73,9 +73,10 @@ public class CouponController {
     }
 
     @PostMapping("/claim")
-    public void claimCoupon(@RequestParam Long couponId) {
+    public ResponseEntity<Void> claimCoupon(@RequestParam Long couponId) {
         log.info("claim coupon {}", couponId);
         couponService.claimCoupon(couponId);
+        return ResponseEntity.ok().build();
     }
 
 //

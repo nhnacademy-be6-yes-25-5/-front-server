@@ -29,6 +29,8 @@
                     </div>
                     <div class="col-lg-6 col-md-12 col-12">
                         <div class="product-info">
+                            <input type="hidden" id="bookId" th:value="${book.bookId()}">
+
                             <h2 th:text = "${book.bookName()}" class="title">GoPro Karma Camera Drone</h2>
                             <p th:text = "${book.bookAuthor()}" class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">Action
                                     cameras</a></p>
@@ -97,7 +99,9 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-12">
                                         <div class="wish-button">
-                                            <button class="btn" data-bs-toggle="modal" data-bs-target="#couponModal"><i class="lni lni-gift"></i> Receive Coupon</button>
+                                            <button class="btn" id="couponButton" data-bs-toggle="modal" data-bs-target="#couponModal">
+                                                <i class="lni lni-gift"></i> Receive Coupon
+                                            </button>
                                         </div>
                                     </div>
 
@@ -124,7 +128,7 @@
                                                             <td th:text="${coupon.couponName}"></td>
                                                             <td th:text="${coupon.couponPolicyRate != null ? coupon.couponPolicyRate + '%' : coupon.couponPolicyDiscountValue}"></td>
                                                             <td th:text="${coupon.couponExpiredAt}"></td>
-                                                            <td><button class="btn btn-primary" data-coupon-id="${coupon.couponId}">발급받기</button></td>
+                                                            <td><button class="btn btn-primary claim-coupon-btn" data-coupon-id="${coupon.couponId}">발급받기</button></td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
@@ -376,6 +380,7 @@
     <script src="/js/tiny-slider.js"></script>
     <script src="/js/glightbox.min.js"></script>
     <script src="/js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script type="text/javascript">
@@ -407,7 +412,7 @@
             document.getElementById('couponButton').addEventListener('click', function () {
                 var bookId = document.getElementById('bookId').value; // Hidden input field to store the bookId
                 $.ajax({
-                    url: '/books/' + bookId + '/coupons',
+                    url: '/coupons/books/' + bookId + '/coupons',
                     method: 'GET',
                     success: function(data) {
                         var couponList = $('#couponList');
@@ -417,13 +422,13 @@
                                 '<td>' + coupon.couponName + '</td>' +
                                 '<td>' + (coupon.couponPolicyRate ? coupon.couponPolicyRate + '%' : coupon.couponPolicyDiscountValue) + '</td>' +
                                 '<td>' + coupon.couponExpiredAt + '</td>' +
-                                '<td><button class="btn btn-primary" data-coupon-id="' + coupon.couponId + '">발급받기</button></td>' +
+                                '<td><button class="btn btn-primary claim-coupon-btn" data-coupon-id="' + coupon.couponId + '">발급받기</button></td>' +
                                 '</tr>';
                             couponList.append(row);
                         });
 
                         // 쿠폰 발급 버튼 클릭 이벤트
-                        document.querySelectorAll('.btn-primary').forEach(button => {
+                        document.querySelectorAll('.claim-coupon-btn').forEach(button => {
                             button.addEventListener('click', function () {
                                 var couponId = this.getAttribute('data-coupon-id');
                                 fetch('/coupons/claim', {

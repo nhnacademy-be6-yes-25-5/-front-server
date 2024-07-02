@@ -35,12 +35,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryResponse> findRootCategories() {
-        return List.of();
+        return categoryAdapter.findRootCategories();
     }
 
     @Override
     public List<CategoryResponse> findCategoriesByParentId(Long parentId) {
-        return List.of();
+        return categoryAdapter.findCategoriesByParentId(parentId);
     }
 
     @Override

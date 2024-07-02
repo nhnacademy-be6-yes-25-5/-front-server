@@ -22518,9 +22518,11 @@ body {
   margin: 0 10px 0 0;
 }
 
+/*edit by chae*/
 .table-striped td:last-child .btn {
   margin-top: 0 !important;
-  width: 30%;
+  width: 250px;
+  margin: 0 0 0 10px;
 }
 
 .navbar-brand img {

@@ -7,7 +7,9 @@ import com.nhnacademy.frontserver1.presentation.dto.request.user.UpdateUserReque
 import com.nhnacademy.frontserver1.presentation.dto.response.point.PointLogResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UpdateUserResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UserGradeResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.address.UserAddressResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.UserResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.user.UsersResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +17,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -121,5 +126,23 @@ public class UserController {
         model.addAttribute("pointLogs", pointLogs);
 
         return "mypage/mypage-pointLogs";
+    }
+
+    @GetMapping("/{userId}/addresses")
+    public String getUserAddresses(@PathVariable Long userId, Model model) {
+        Pageable pageable = PageRequest.of(0, 10);
+        UsersResponse user = userService.getUserById(userId);
+        Page<UserAddressResponse> addressPage = userService.getUserAddresses(userId, pageable);
+
+        model.addAttribute("userName", user.userName());
+        model.addAttribute("userGrade", user.userGrade());
+        model.addAttribute("userPoints", user.userPoints());
+        model.addAttribute("defaultAddress", user.defaultAddress());
+        model.addAttribute("addresses", addressPage.getContent());
+        model.addAttribute("currentPage", addressPage.getNumber());
+        model.addAttribute("totalPages", addressPage.getTotalPages());
+        model.addAttribute("pageSize", addressPage.getSize());
+
+        return "mypage/mypage-address";
     }
 }

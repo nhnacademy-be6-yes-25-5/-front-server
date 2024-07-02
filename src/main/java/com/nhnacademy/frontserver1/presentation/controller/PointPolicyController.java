@@ -7,9 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 @Controller
 @RequiredArgsConstructor
@@ -39,7 +42,23 @@ public class PointPolicyController {
 
     @PutMapping("/{pointPolicyId}")
     public String updatePointPolicy(@PathVariable Long pointPolicyId,
-                                    @RequestBody PointPolicyRequest pointPolicyRequest) {
+                                    @ModelAttribute PointPolicyRequest pointPolicyRequest) {
+//                                    @RequestParam Long pointPolicyId,
+//                                    @RequestParam(name = "pointPolicyName") String pointPolicyName,
+//                                    @RequestParam BigDecimal pointPolicyApply,
+//                                    @RequestParam String pointPolicyCondition,
+//                                    @RequestParam boolean pointPolicyApplyType,
+//                                    @RequestParam BigDecimal pointPolicyConditionAmount) {
+//
+//        PointPolicyRequest pointPolicyRequest = PointPolicyRequest.builder()
+//                .pointPolicyName(pointPolicyName)
+//                .pointPolicyApply(pointPolicyApply)
+//                .pointPolicyCondition(pointPolicyCondition)
+//                .pointPolicyApplyType(pointPolicyApplyType)
+//                .pointPolicyConditionAmount(pointPolicyConditionAmount)
+//                .build();
+
+        // todo : 수정 기능, 장바구니
 
         pointPolicyService.updatePointPolicy(pointPolicyId, pointPolicyRequest);
 
@@ -47,10 +66,18 @@ public class PointPolicyController {
     }
 
     @DeleteMapping("/{pointPolicyId}")
-    public String deletePointPolicy(@PathVariable Long pointPolicyId) {
+    public ResponseEntity<PointPolicyResponse> deletePointPolicy(@PathVariable Long pointPolicyId) {
 
         pointPolicyService.deletePointPolicy(pointPolicyId);
 
-        return "redirect:/admin/point-policies";
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{pointPolicyId}")
+    public ResponseEntity<PointPolicyResponse> getPointPolicy(@PathVariable Long pointPolicyId) {
+
+        PointPolicyResponse pointPolicy = pointPolicyService.getPointPolicyById(pointPolicyId);
+
+        return ResponseEntity.ok(pointPolicy);
     }
 }

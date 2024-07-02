@@ -88,7 +88,10 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="categoryName" class="form-label">카테고리명</label>
-                                    <input type="text" class="form-control" id="categoryName" name="categoryName" required>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="categoryName" name="categoryName" required>
+                                        <button class="btn btn-outline-secondary" type="button" onclick="openCategorySearchPopup()">검색</button>
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="couponPolicyDiscountValue" class="form-label">할인 값(금액)</label>
@@ -132,6 +135,10 @@
     </div>
 
     <script>
+        function openCategorySearchPopup() {
+            window.open('/coupons/policy/categories/search', '카테고리 검색', 'width=800,height=600');
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('addCouponForm').addEventListener('submit', function(event) {
                 const discountValueField = document.getElementById('couponPolicyDiscountValue');

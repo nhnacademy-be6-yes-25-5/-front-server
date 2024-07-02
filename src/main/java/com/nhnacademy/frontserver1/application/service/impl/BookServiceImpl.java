@@ -101,6 +101,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<BookResponse> findAllBooks() {
+        return bookAdapter.findAllBooks();
+    }
+
+    @Override
     public void deleteBook(Long id) {
         bookAdapter.deleteBook(id);
     }
@@ -108,5 +113,15 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookResponse updateBook(UpdateBookRequest updateBookRequest, List<Long> categoryIdList, List<Long> tagIdList) {
         return bookAdapter.updateBook(updateBookRequest, categoryIdList, tagIdList);
+    }
+
+    @Override
+    public BookResponse getBook(Long id) {
+        return bookAdapter.findBookById(id);
+    }
+
+    @Override
+    public Page<BookResponse> getBookByCategoryId(Long categoryId, Pageable pageable) {
+        return bookAdapter.getBookByCategory(categoryId, pageable);
     }
 }

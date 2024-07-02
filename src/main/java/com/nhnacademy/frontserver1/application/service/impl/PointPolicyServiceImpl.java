@@ -28,11 +28,16 @@ public class PointPolicyServiceImpl implements PointPolicyService {
 
     @Override
     public PointPolicyResponse updatePointPolicy(Long pointPolicyId, PointPolicyRequest pointPolicyRequest) {
-        return null;
+        return pointPolicyAdaptor.updatePointPolicy(pointPolicyId, pointPolicyRequest);
     }
 
     @Override
     public void deletePointPolicy(Long pointPolicyId) {
         pointPolicyAdaptor.deletePointPolicy(pointPolicyId);
+    }
+
+    @Override
+    public PointPolicyResponse getPointPolicyById(Long pointPolicyId) {
+        return pointPolicyAdaptor.getPointPolicy(pointPolicyId);
     }
 }

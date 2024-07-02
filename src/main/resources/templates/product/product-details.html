@@ -15,7 +15,7 @@
                         <div class="product-images">
                             <main id="gallery">
                                 <div class="main-img">
-                                    <img src="https://via.placeholder.com/1000x670" id="current" alt="#">
+                                    <img th:src="${book.bookImage()}" id="current" alt="#">
                                 </div>
                                 <div class="images">
                                     <img src="https://via.placeholder.com/1000x670" class="img" alt="#">
@@ -29,13 +29,20 @@
                     </div>
                     <div class="col-lg-6 col-md-12 col-12">
                         <div class="product-info">
-                            <h2 class="title">GoPro Karma Camera Drone</h2>
-                            <p class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">Action
+                            <h2 th:text = "${book.bookName()}" class="title">GoPro Karma Camera Drone</h2>
+                            <p th:text = "${book.bookAuthor()}" class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">Action
                                     cameras</a></p>
-                            <h3 class="price">$850<span>$945</span></h3>
-                            <p class="info-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor incididunt
-                                ut labore et dolore magna aliqua.</p>
+                            <h3 class="price">
+                                <span th:text = "${book.bookPrice()}">$945</span>
+                                <h5 th:if="${book.bookPrice() > 0}">
+                                    <span th:text="${(1 - book.bookSellingPrice() / book.bookPrice()) * 100 + '%'}"></span>
+                                    <span> off</span>
+                                </h5>
+                                <h3 th:text = "${book.bookSellingPrice()}">$850</h3>
+                            </h3>
+<!--                            <p class="info-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod-->
+<!--                                tempor incididunt-->
+<!--                                ut labore et dolore magna aliqua.</p>-->
                             <div class="row">
                                 <div class="col-lg-4 col-md-4 col-12">
                                     <div class="form-group color-option">
@@ -90,12 +97,50 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-12">
                                         <div class="wish-button">
-                                            <button class="btn"><i class="lni lni-reload"></i> Compare</button>
+                                            <button class="btn" data-bs-toggle="modal" data-bs-target="#couponModal"><i class="lni lni-gift"></i> Receive Coupon</button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Coupon Modal -->
+                                    <div class="modal fade" id="couponModal" tabindex="-1" aria-labelledby="couponModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="couponModalLabel">Available Coupons</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <!-- 쿠폰 목록을 표시하는 내용 -->
+                                                    <table class="table">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>쿠폰 이름</th>
+                                                            <th>할인율</th>
+                                                            <th>유효기간</th>
+                                                            <th>발급</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody id="couponList">
+                                                        <tr th:each="coupon : ${coupons}">
+                                                            <td th:text="${coupon.couponName}"></td>
+                                                            <td th:text="${coupon.discountValue}"></td>
+                                                            <td th:text="${coupon.expiredAt}"></td>
+                                                            <td><button class="btn btn-primary">발급받기</button></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-12">
                                         <div class="wish-button">
-                                            <button class="btn"><i class="lni lni-heart"></i> To Wishlist</button>
+                                            <button th:onclick="|location.href='@{'/likes/'+ ${book.bookId()}}'|" th:if="${like == null || !like.likesStatus()}" class="btn">
+                                                <i class="lni lni-heart"></i> To Wishlist
+                                            </button>
+                                            <button th:onclick="|location.href='@{'/likes/'+ ${book.bookId()}}'|" th:if="${like != null && like.likesStatus()}" class="btn">
+                                                <i class="lni lni-heart-filled"></i> To Wishlist
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -110,7 +155,7 @@
                         <div class="col-lg-6 col-12">
                             <div class="info-body custom-responsive-margin">
                                 <h4>Details</h4>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                <p th:text = "${book.bookDescription()}">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
                                     incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
                                     exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
                                     irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.</p>
@@ -332,21 +377,36 @@
     <script src="/js/tiny-slider.js"></script>
     <script src="/js/glightbox.min.js"></script>
     <script src="/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script type="text/javascript">
-        const current = document.getElementById("current");
-        const opacity = 0.6;
-        const imgs = document.querySelectorAll(".img");
-        imgs.forEach(img => {
-            img.addEventListener("click", (e) => {
-                //reset opacity
-                imgs.forEach(img => {
-                    img.style.opacity = 1;
+        document.addEventListener('DOMContentLoaded', function () {
+            // 이미지 갤러리 기능
+            const current = document.getElementById("current");
+            const opacity = 0.6;
+            const imgs = document.querySelectorAll(".img");
+            imgs.forEach(img => {
+                img.addEventListener("click", (e) => {
+                    //reset opacity
+                    imgs.forEach(img => {
+                        img.style.opacity = 1;
+                    });
+                    current.src = e.target.src;
+                    //adding class
+                    //current.classList.add("fade-in");
+                    //opacity
+                    e.target.style.opacity = opacity;
                 });
-                current.src = e.target.src;
-                //adding class 
-                //current.classList.add("fade-in");
-                //opacity
-                e.target.style.opacity = opacity;
+            });
+
+            // 모달 초기화 코드
+            var myModal = new bootstrap.Modal(document.getElementById('couponModal'), {
+                keyboard: false
+            });
+
+            // 버튼 클릭 이벤트
+            document.querySelector('.wish-button button').addEventListener('click', function () {
+                myModal.show();
             });
         });
     </script>

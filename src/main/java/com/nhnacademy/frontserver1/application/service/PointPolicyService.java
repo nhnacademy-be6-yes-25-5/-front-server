@@ -14,4 +14,6 @@ public interface PointPolicyService {
     PointPolicyResponse updatePointPolicy(Long pointPolicyId, PointPolicyRequest pointPolicyRequest);
 
     void deletePointPolicy(Long pointPolicyId);
+
+    PointPolicyResponse getPointPolicyById(Long pointPolicyId);
 }

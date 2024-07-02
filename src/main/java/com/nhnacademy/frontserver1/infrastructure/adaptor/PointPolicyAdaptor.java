@@ -20,8 +20,11 @@ public interface PointPolicyAdaptor {
     PointPolicyResponse createPointPolicy(@RequestBody PointPolicyRequest pointPolicyRequest);
 
     @PutMapping("/admin/point-policies/{pointPolicyId}")
-    void updatePointPolicy(@PathVariable Long pointPolicyId, @RequestBody PointPolicyRequest pointPolicyRequest);
+    PointPolicyResponse updatePointPolicy(@PathVariable Long pointPolicyId, @RequestBody PointPolicyRequest pointPolicyRequest);
 
     @DeleteMapping("/admin/point-policies/{pointPolicyId}")
     void deletePointPolicy(@PathVariable Long pointPolicyId);
+
+    @GetMapping("/admin/point-policies/{pointPolicyId}")
+    PointPolicyResponse findPointPolicyById(@PathVariable Long pointPolicyId);
 }

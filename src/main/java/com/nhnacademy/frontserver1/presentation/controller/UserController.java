@@ -40,7 +40,7 @@ public class UserController {
 
     // 회원 가입
     @PostMapping("/sign-up")
-    public String signUp(@RequestParam String userName,
+    public String signUp(@RequestParam String userName, // todo : @ModelAttribute 변경 예정, 중복 이메일 예외 처리 예정
                          @RequestParam LocalDate userBirth,
                          @RequestParam String userEmail,
                          @RequestParam String userPhone,

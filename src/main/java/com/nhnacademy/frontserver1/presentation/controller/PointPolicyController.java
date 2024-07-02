@@ -42,7 +42,7 @@ public class PointPolicyController {
 
     @PutMapping("/{pointPolicyId}")
     public String updatePointPolicy(@PathVariable Long pointPolicyId,
-                                    @ModelAttribute PointPolicyRequest pointPolicyRequest) {
+                                    @RequestBody PointPolicyRequest pointPolicyRequest) {
 //                                    @RequestParam Long pointPolicyId,
 //                                    @RequestParam(name = "pointPolicyName") String pointPolicyName,
 //                                    @RequestParam BigDecimal pointPolicyApply,

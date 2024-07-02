@@ -3,7 +3,6 @@ package com.nhnacademy.frontserver1.presentation.controller;
 import static com.nhnacademy.frontserver1.common.utils.SessionUtil.getIntegerListFromSession;
 import static com.nhnacademy.frontserver1.common.utils.SessionUtil.getLongListFromSession;
 
-import com.nhnacademy.frontserver1.application.service.OrderService;
 import com.nhnacademy.frontserver1.application.service.PaymentService;
 import com.nhnacademy.frontserver1.common.exception.ApplicationException;
 import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
@@ -33,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PaymentController {
 
     private final PaymentService paymentService;
-    private final OrderService orderService;
 
     @PostMapping("/confirm")
     public ResponseEntity<?> confirm(@RequestBody CreatePaymentRequest request, HttpSession session) {
@@ -70,7 +68,7 @@ public class PaymentController {
 
     @GetMapping("/done/{orderId}")
     public String paymentDone(@PathVariable String orderId, Model model, @RequestParam Integer amount) {
-        List<ReadPaymentOrderResponse> responses = orderService.findAllOrderByOrderId(orderId);
+        List<ReadPaymentOrderResponse> responses = paymentService.findAllOrderByOrderId(orderId);
 
         model.addAttribute("orders", responses);
         model.addAttribute("orderId", orderId);

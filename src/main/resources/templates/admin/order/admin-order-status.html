@@ -53,26 +53,29 @@
                                 <form th:action="@{/admin/orders/{orderId}(orderId=${order.orderId})}" method="post" th:object="${order}">
                                     <input type="hidden" name="_method" value="put"/>
                                     <div class="d-flex align-items-center">
-                                        <select name="orderStatusType" class="form-control" th:disabled="${order.orderStatusType != T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).WAIT && order.orderStatusType != T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DELIVERING}">
+                                        <select name="orderStatusType" class="form-control"
+                                                th:disabled="${order.orderStatusType != T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).WAIT &&
+                     order.orderStatusType != T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DELIVERING}">
                                             <option th:value="${T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).WAIT}"
                                                     th:text="#{order.status.WAIT}"
-                                                    th:selected="${order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).WAIT}">대기</option>
+                                                    th:selected="${order.orderStatusType != null && order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).WAIT}">대기</option>
                                             <option th:value="${T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DELIVERING}"
                                                     th:text="#{order.status.DELIVERING}"
-                                                    th:selected="${order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DELIVERING}">배송중</option>
-                                            <option th:if="${order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DONE}"
+                                                    th:selected="${order.orderStatusType != null && order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DELIVERING}">배송중</option>
+                                            <option th:if="${order.orderStatusType != null && order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DONE}"
                                                     th:value="${T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DONE}"
                                                     th:text="#{order.status.DONE}"
                                                     th:selected="${order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DONE}">완료</option>
-                                            <option th:if="${order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).REFUND}"
+                                            <option th:if="${order.orderStatusType != null && order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).REFUND}"
                                                     th:value="${T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).REFUND}"
                                                     th:text="#{order.status.REFUND}"
                                                     th:selected="${order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).REFUND}">환불</option>
-                                            <option th:if="${order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).CANCEL}"
+                                            <option th:if="${order.orderStatusType != null && order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).CANCEL}"
                                                     th:value="${T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).CANCEL}"
                                                     th:text="#{order.status.CANCEL}"
                                                     th:selected="${order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).CANCEL}">취소</option>
                                         </select>
+
                                         <button type="submit" class="btn btn-primary btn-order-status ml-2" th:disabled="${order.orderStatusType != T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).WAIT && order.orderStatusType != T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DELIVERING}">주문 상태 변경</button>
                                     </div>
                                 </form>

@@ -48,7 +48,9 @@ public class CouponPolicyBookController {
 
     @GetMapping("/search")
     public String searchBooks(@RequestParam(value = "query", required = false, defaultValue = "") String query, Model model) {
+        System.out.println("Query: " + query); // 로그 추가
         List<BookCouponResponse> books = bookAdapter.findBooksByName(query);
+        System.out.println("Book List: " + books); // 로그 추가
         model.addAttribute("bookList", books);
         model.addAttribute("keyword", query);
         return "/admin/policy/admin-policy-coupon-book-search";

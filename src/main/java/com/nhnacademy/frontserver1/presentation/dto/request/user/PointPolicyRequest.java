@@ -7,6 +7,6 @@ import java.math.BigDecimal;
 @Builder
 
 public record PointPolicyRequest(String pointPolicyName, BigDecimal pointPolicyApply,
-                                 String pointPolicyCondition, Boolean pointPolicyApplyType,
+                                 String pointPolicyCondition, boolean pointPolicyApplyType,
                                  BigDecimal pointPolicyConditionAmount) {
 }

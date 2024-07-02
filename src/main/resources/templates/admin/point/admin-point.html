@@ -94,20 +94,24 @@
                             <input type="text" class="form-control" id="pointPolicyName" name="pointPolicyName" required>
                         </div>
                         <div class="mb-3">
+                            <label for="pointPolicyApplyType" class="form-label">적용 타입</label>
+                            <select class="form-select" id="pointPolicyApplyType" name="pointPolicyApplyType" required>
+                                <option value=true>적립 금액</option>
+                                <option value=false>적립률</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label for="pointPolicyConditionAmount" class="form-label">조건 최소 금액</label>
                             <input type="text" class="form-control" id="pointPolicyConditionAmount" name="pointPolicyConditionAmount">
                         </div>
                         <div class="mb-3">
-                            <label for="pointPolicyApplyType" class="form-label">적용 타입</label>
-                            <select class="form-select" id="pointPolicyApplyType" name="pointPolicyApplyType" required>
-                                <option value="false">적립 금액</option>
-                                <option value="true">적립률</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="pointPolicyApply" class="form-label">적립 금액/적립률</label>
+                            <label for="pointPolicyApply" class="form-label">정책 비율/금액</label>
                             <input type="text" class="form-control" id="pointPolicyApply" name="pointPolicyApply" required>
                         </div>
+<!--                        <div class="mb-3">-->
+<!--                            <label for="pointPolicyApplyAmount" class="form-label">적립 금액/적립률</label>-->
+<!--                            <input type="text" class="form-control" id="pointPolicyApplyAmount" name="pointPolicyApplyAmount" required>-->
+<!--                        </div>-->
 <!--                        <div class="mb-3">-->
 <!--                            <label for="pointPolicyRate" class="form-label">적립률</label>-->
 <!--                            <input type="text" class="form-control" id="pointPolicyRate" name="pointPolicyRate" required>-->
@@ -141,24 +145,32 @@
                         <input type="text" class="form-control" id="editPointPolicyName" name="pointPolicyName" required>
                     </div>
                     <div class="mb-3">
-                        <label for="editPointPolicyConditionAmount" class="form-label">조건 최소 금액</label>
-                        <input type="text" class="form-control" id="editPointPolicyConditionAmount" name="pointPolicyConditionAmount" required>
-                    </div>
-                    <div class="mb-3">
                         <label for="editPointPolicyApplyType" class="form-label">적용 타입</label>
                         <select class="form-select" id="editPointPolicyApplyType" name="pointPolicyApplyType" required>
                             <option value="true">적립 금액</option>
                             <option value="false">적립률</option>
                         </select>
                     </div>
+
+
                     <div class="mb-3">
-                        <label for="editPointPolicyApplyAmount" class="form-label">적립 금액</label>
-                        <input type="text" class="form-control" id="editPointPolicyApplyAmount" name="pointPolicyApplyAmount" required>
+                        <label for="editPointPolicyApply" class="form-label">정책 비율/금액</label>
+                        <input type="text" class="form-control" id="editPointPolicyApply" name="pointPolicyApply" required>
                     </div>
+
+
+<!--                    <div class="mb-3">-->
+<!--                        <label for="editPointPolicyApplyAmount" class="form-label">적립 금액</label>-->
+<!--                        <input type="text" class="form-control" id="editPointPolicyApplyAmount" name="pointPolicyApplyAmount" required>-->
+<!--                    </div>-->
                     <div class="mb-3">
-                        <label for="editPointPolicyRate" class="form-label">적립률</label>
-                        <input type="text" class="form-control" id="editPointPolicyRate" name="pointPolicyRate" required>
+                        <label for="editPointPolicyConditionAmount" class="form-label">조건 최소 금액</label>
+                        <input type="text" class="form-control" id="editPointPolicyConditionAmount" name="pointPolicyConditionAmount" required>
                     </div>
+<!--                    <label for="editPointPolicyRate" class="form-label">적립률</label>-->
+<!--                    <input type="text" class="form-control" id="editPointPolicyRate" name="pointPolicyRate" required>-->
+<!--                </div>                    <div class="mb-3">-->
+
                     <div class="mb-3">
                         <label for="editPointPolicyCondition" class="form-label">조건</label>
                         <input type="text" class="form-control" id="editPointPolicyCondition" name="pointPolicyCondition" required>
@@ -197,24 +209,24 @@
     <script>
         document.getElementById('pointPolicyApplyType').addEventListener('change', function() {
             const applyType = this.value === 'true';
-            document.getElementById('pointPolicyConditionAmount').disabled = !applyType;
-            document.getElementById('pointPolicyApplyAmount').disabled = applyType;
-            document.getElementById('pointPolicyRate').disabled = !applyType;
+            document.getElementById('pointPolicyConditionAmount').disabled = applyType;
+            // document.getElementById('pointPolicyApplyAmount').disabled = applyType;
+            // document.getElementById('pointPolicyRate').disabled = !applyType;
         });
 
         // 초기 상태 설정
         document.addEventListener('DOMContentLoaded', function() {
             const applyType = document.getElementById('pointPolicyApplyType').value === 'true';
-            document.getElementById('pointPolicyConditionAmount').disabled = !applyType;
-            document.getElementById('pointPolicyApplyAmount').disabled = applyType;
-            document.getElementById('pointPolicyRate').disabled = !applyType;
+            document.getElementById('pointPolicyConditionAmount').disabled = applyType;
+            // document.getElementById('pointPolicyApplyAmount').disabled = applyType;
+            // document.getElementById('pointPolicyRate').disabled = !applyType;
         });
 
         document.getElementById('editPointPolicyApplyType').addEventListener('change', function() {
             const applyType = this.value === 'true';
             document.getElementById('editPointPolicyConditionAmount').disabled = applyType;
-            document.getElementById('editPointPolicyApplyAmount').disabled = !applyType;
-            document.getElementById('editPointPolicyRate').disabled = applyType;
+            // document.getElementById('editPointPolicyApplyAmount').disabled = applyType;
+            // document.getElementById('editPointPolicyRate').disabled = !applyType;
         });
     </script>
 
@@ -241,22 +253,29 @@
                         const applyType = data.pointPolicyApplyType;
                         modal.find('#editPointPolicyName').val(data.pointPolicyName);
 
-                        if (applyType) {
-                            modal.find('#editPointPolicyApplyType').val('true');
-                            modal.find('#editPointPolicyApplyAmount').val(data.pointPolicyApply);
-                            modal.find('#editPointPolicyRate').val(null);
-                        } else {
-                            modal.find('#editPointPolicyApplyType').val('false');
-                            modal.find('#editPointPolicyApplyAmount').val(null);
-                            modal.find('#editPointPolicyRate').val(data.pointPolicyApply);
-                            modal.find('#editPointPolicyConditionAmount').val(data.pointPolicyConditionAmount)
-                        }
+                        // if (applyType) {
+                        //     modal.find('#editPointPolicyApplyType').val('true');
+                        //     modal.find('#editPointPolicyApplyAmount').val(data.pointPolicyApply);
+                        //     modal.find('#editPointPolicyRate').val(null);
+                        // } else {
+                        //     modal.find('#editPointPolicyApplyType').val('false');
+                        //     modal.find('#editPointPolicyApplyAmount').val(null);
+                        //     modal.find('#editPointPolicyRate').val(data.pointPolicyApply);
+                        //     modal.find('#editPointPolicyConditionAmount').val(data.pointPolicyConditionAmount)
+                        // }
+
+
+                        modal.find('#editPointPolicyApplyType').val(applyType ? 'true' : 'false')
+                        modal.find('#editPointPolicyApply').val(data.pointPolicyApply);
+                        modal.find('#editPointPolicyConditionAmount').val(data.pointPolicyConditionAmount)
+
+
 
                         modal.find('#editPointPolicyCondition').val(data.pointPolicyCondition);
 
                         modal.find('#editPointPolicyConditionAmount').prop('disabled', applyType)
-                        modal.find('#editPointPolicyApplyAmount').prop('disabled', !applyType);
-                        modal.find('#editPointPolicyRate').prop('disabled', applyType);
+                        // modal.find('#editPointPolicyApplyAmount').prop('disabled', !applyType);
+                        // modal.find('#editPointPolicyRate').prop('disabled', applyType);
                     })
                     .catch(error => {
                         console.error('Failed to fetch point policy:', error);
@@ -266,29 +285,39 @@
         });
 
             // Handle edit button click
-// Edit Point Policy Modal
+            // Edit Point Policy Modal
             document.getElementById('editPointPolicyBtn').addEventListener('click', function() {
                 const modal = document.getElementById('editPointPolicyModal');
 
-                // Prepare data for PUT request
-                // var pointPolicyId = modal.find('#editPointPolicyId').val();
-                // var pointPolicyApplyType = modal.find('#editPointPolicyType');
-                // const formData = {
-                //     pointPolicyName: modal.find('#editPointPolicyName').val(),
-                //     // pointPolicyApply: !modal.find('#editPointPolicyApplyType').val() ? modal.find('#editPointPolicyRate').val() : modal.find('#editPointPolicyApplyAmount').val(),
-                //     pointPolicyCondition: modal.find('#editPointPolicyCondition').val(),
-                //     pointPolicyApplyType: !!modal.find('#editPointPolicyApplyType').val(),
-                //     // pointPolicyConditionAmount: modal.find('#editPointPolicyApplyType').val() ? modal.find('#editPointPolicyConditionAmount').val() : null
-                // };
-
                 const pointPolicyId = modal.querySelector('#editPointPolicyId').value;
+                const pointPolicyName = modal.querySelector('#editPointPolicyName').value;
+                const pointPolicyConditionAmount = modal.querySelector('#editPointPolicyConditionAmount').value;
+                const pointPolicyApplyType = modal.querySelector('#editPointPolicyApplyType').value;
+                const pointPolicyApply = modal.querySelector('#editPointPolicyApply').value;
+                const pointPolicyCondition = modal.querySelector('#editPointPolicyCondition').value;
+
+                const decimalPattern = /^\d{1,8}(\.\d{1,2})?$/;
+                if (!decimalPattern.test(pointPolicyApply)) {
+                    alert('정책 비율/금액은 최대 8자리 정수와 최대 2자리 소수로 입력해야 합니다.');
+                    return;
+                }
+
                 const data = {
-                    pointPolicyName: modal.querySelector('#editPointPolicyName').value,
-                    pointPolicyConditionAmount: modal.querySelector('#editPointPolicyConditionAmount').value,
-                    pointPolicyApplyType: modal.querySelector('#editPointPolicyApplyType').value === 'true'.toString(),
-                    pointPolicyApply: modal.querySelector('#editPointPolicyApplyType').value === 'true' ? modal.querySelector('#editPointPolicyApplyAmount').value : modal.querySelector('#editPointPolicyRate').value,
-                    pointPolicyCondition: modal.querySelector('#editPointPolicyCondition').value
+                    pointPolicyName,
+                    pointPolicyApplyType,
+                    pointPolicyApply,
+                    pointPolicyConditionAmount,
+                    pointPolicyCondition
                 };
+
+                // const pointPolicyId = modal.querySelector('#editPointPolicyId').value;
+                // const data = {
+                //     pointPolicyName: modal.querySelector('#editPointPolicyName').value,
+                //     pointPolicyConditionAmount: modal.querySelector('#editPointPolicyConditionAmount').value,
+                //     pointPolicyApplyType: modal.querySelector('#editPointPolicyApplyType').value,
+                //     pointPolicyApply: modal.querySelector('#editPointPolicyApply').value,
+                //     pointPolicyCondition: modal.querySelector('#editPointPolicyCondition').value
+                // };
 
                 // Send PUT request to update point policy
                 fetch('/admin/point-policies/' + pointPolicyId, {
@@ -299,17 +328,16 @@
                     body: JSON.stringify(data)
                 })
                     .then(response => {
-                        if (!response.ok) {
+                        if (response.ok) {
+                            console.log('Point policy updated successfully:', data);
+
+                            $('#editPointPolicyModal').modal('hide');
+
+                            window.location.reload();
+                        }
+                        else if (!response.ok) {
                             throw new Error('Network response was not ok');
                         }
-
-                    })
-                    .then(data => {
-                        console.log('Point policy updated successfully:', data);
-                        // Optionally close the modal or refresh page
-                        $('#editPointPolicyModal').modal('hide');
-                        // Reload the page or update UI as needed
-                        window.location.reload(); // Example: Reload the page
                     })
                     .catch(error => {
                         console.error('Failed to update point policy:', error);

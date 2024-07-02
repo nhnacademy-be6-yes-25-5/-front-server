@@ -19,10 +19,10 @@ import java.math.BigDecimal;
 @RequestMapping("/admin/point-policies")
 public class PointPolicyController {
 
-    final PointPolicyService pointPolicyService;
+    final PointPolicyService pointPolicyService;        // todo : 장바구니 프론트 구현
 
     @GetMapping
-    public String getPointPolicies(@RequestParam(defaultValue = "0") int page,
+    public String getPointPolicies(@RequestParam(defaultValue = "0") int page, // todo : @PageableDefault 변경 예정
                                    @RequestParam(defaultValue = "5") int size,
                                    Model model) {
         Page<PointPolicyResponse> pointPolicies = pointPolicyService.getPointPolicies(PageRequest.of(page, size));
@@ -41,28 +41,12 @@ public class PointPolicyController {
     }
 
     @PutMapping("/{pointPolicyId}")
-    public String updatePointPolicy(@PathVariable Long pointPolicyId,
+    public ResponseEntity<Void> updatePointPolicy(@PathVariable Long pointPolicyId,
                                     @RequestBody PointPolicyRequest pointPolicyRequest) {
-//                                    @RequestParam Long pointPolicyId,
-//                                    @RequestParam(name = "pointPolicyName") String pointPolicyName,
-//                                    @RequestParam BigDecimal pointPolicyApply,
-//                                    @RequestParam String pointPolicyCondition,
-//                                    @RequestParam boolean pointPolicyApplyType,
-//                                    @RequestParam BigDecimal pointPolicyConditionAmount) {
-//
-//        PointPolicyRequest pointPolicyRequest = PointPolicyRequest.builder()
-//                .pointPolicyName(pointPolicyName)
-//                .pointPolicyApply(pointPolicyApply)
-//                .pointPolicyCondition(pointPolicyCondition)
-//                .pointPolicyApplyType(pointPolicyApplyType)
-//                .pointPolicyConditionAmount(pointPolicyConditionAmount)
-//                .build();
-
-        // todo : 수정 기능, 장바구니
 
         pointPolicyService.updatePointPolicy(pointPolicyId, pointPolicyRequest);
 
-        return "redirect:/admin/point-policies";
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{pointPolicyId}")

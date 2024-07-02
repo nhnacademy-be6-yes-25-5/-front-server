@@ -53,7 +53,7 @@ public class CouponPolicyBookController {
         System.out.println("Book List: " + books); // 로그 추가
         model.addAttribute("bookList", books);
         model.addAttribute("keyword", query);
-        return "/admin/policy/admin-policy-coupon-book-search";
+        return "admin/policy/admin-policy-coupon-book-search";
     }
 
 }

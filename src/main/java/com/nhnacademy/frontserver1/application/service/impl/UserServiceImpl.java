@@ -23,9 +23,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ReadUserInfoResponse getUserPointsAndGrade() {
-//        return userAdaptor.getUserPointsAndGrade();
-
-        return ReadUserInfoResponse.fromTest();
+        return userAdaptor.getUserPointsAndGrade();
     }
 
     // fixme. 해당 기능 구현하지 않아 주석처리하였습니다.

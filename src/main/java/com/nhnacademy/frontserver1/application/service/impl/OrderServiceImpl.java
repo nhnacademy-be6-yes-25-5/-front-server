@@ -10,6 +10,7 @@ import com.nhnacademy.frontserver1.infrastructure.adaptor.PolicyAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.UserAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadCartBookResponse;
+import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadOrderNoneMemberRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
@@ -24,7 +25,6 @@ import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadPurePrice
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.UpdateOrderResponse;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -132,5 +132,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ReadOrderDetailResponse getMyOrderByOrderId(String orderId) {
         return orderAdaptor.getMyOrderByOrderId(orderId);
+    }
+
+    @Override
+    public ReadOrderDetailResponse findOrderNoneMemberByOrderIdAndEmail(ReadOrderNoneMemberRequest request) {
+        return orderAdaptor.findOrderNoneMemberByOrderIdAndEmail(request.orderId(), request.email());
     }
 }

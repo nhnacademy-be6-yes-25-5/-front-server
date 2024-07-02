@@ -35,8 +35,8 @@
           <div class="btn-group">
             <button class="btn btn-secondary btn-custom" th:data-order-id="${order.orderId}" onclick="location.href='/orders/' + this.getAttribute('data-order-id') + '/delivery'">배송조회</button>
             <button class="btn btn-outline-secondary btn-custom">리뷰 작성하기</button>
-            <button class="btn btn-warning btn-custom" th:if="${order.orderStatusType.name == 'DONE'}" onclick="changeOrderStatus('REFUND')">반품</button>
-            <button class="btn btn-danger btn-custom" th:if="${order.orderStatusType.name == 'WAIT'}" onclick="changeOrderStatus('CANCEL')">결제취소</button>
+            <button class="btn btn-warning btn-custom" th:if="${order.orderStatusType.name == 'DONE'}" th:disabled="${noneMember != null}" onclick="changeOrderStatus('REFUND')">반품</button>
+            <button class="btn btn-danger btn-custom" th:if="${order.orderStatusType.name == 'WAIT'}" th:disabled="${noneMember != null}" onclick="changeOrderStatus('CANCEL')">결제취소</button>
           </div>
         </div>
       </div>
@@ -65,7 +65,7 @@
         </div>
       </div>
       <div class="text-center mt-4">
-        <a href="/mypage/orders" class="btn btn-primary">주문목록 돌아가기</a>
+        <a href="/mypage/orders" class="btn btn-primary" th:disabled="${noneMember != null}">주문목록 돌아가기</a>
       </div>
     </div>
   </div>

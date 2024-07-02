@@ -60,7 +60,6 @@ public class PaymentController {
         return ResponseEntity.ok(SuccessPaymentResponse.from(orderId));
     }
 
-
     @GetMapping("/success")
     public String success(){
         return "order/success";

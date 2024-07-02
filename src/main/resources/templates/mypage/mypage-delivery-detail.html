@@ -23,18 +23,21 @@
       <div class="card mb-4">
         <div class="card-body">
           <h2 class="card-title text-center">
-            <span th:if="${orderInfo.orderStatusType == 'DONE'}">
+            <span th:if="${orderInfo.orderStatusType.name == 'DONE'}">
               <span th:if="${#temporals.isToday(orderInfo.timestamp[orderInfo.timestamp.size() - 1])}">오늘</span>
               <span th:if="${#temporals.isYesterday(orderInfo.timestamp[orderInfo.timestamp.size() - 1])}">어제</span>
               <span th:if="${#temporals.isToday(orderInfo.timestamp[orderInfo.timestamp.size() - 1]) == false and #temporals.isYesterday(orderInfo.timestamp[orderInfo.timestamp.size() - 1]) == false}"
                     th:text="${#temporals.format(orderInfo.timestamp[orderInfo.timestamp.size() - 1], 'yyyy-MM-dd')}"></span>
               도착 완료
             </span>
-            <span th:if="${orderInfo.orderStatusType != 'DONE'}">배송중</span>
+            <span th:if="${orderInfo.orderStatusType.name == 'WAIT'}">출고대기중</span>
+            <span th:if="${orderInfo.orderStatusType.name == 'DELIVERY'}">배송중</span>
+            <span th:if="${orderInfo.orderStatusType.name == 'DONE'}">배송완료</span>
           </h2>
           <p class="text-center">
-            <span th:if="${orderInfo.orderStatusType == 'DONE'}">고객님이 주문하신 상품이 배송완료 되었습니다.</span>
-            <span th:if="${orderInfo.orderStatusType != 'DONE'}">고객님이 주문하신 상품을 안전하게 배송중입니다.</span>
+            <span th:if="${orderInfo.orderStatusType.name == 'WAIT'}">고객님이 주문하신 상품이 출고대기중입니다.</span>
+            <span th:if="${orderInfo.orderStatusType.name == 'DELIVERY'}">고객님이 주문하신 상품을 안전하게 배송중입니다.</span>
+            <span th:if="${orderInfo.orderStatusType.name == 'DONE' or (orderInfo.orderStatusType.name != 'WAIT' and orderInfo.orderStatusType.name != 'DELIVERY')}">고객님이 주문하신 상품이 배송완료 되었습니다.</span>
           </p>
           <div class="row">
             <div class="col-md-4 text-center">

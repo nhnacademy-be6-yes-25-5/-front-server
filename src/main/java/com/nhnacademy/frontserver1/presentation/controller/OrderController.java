@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/orders")
@@ -40,18 +41,19 @@ public class OrderController {
     private static final String MEMBER = "MEMBER";
 
     @GetMapping("/checkout")
-    public String findAllCheckout(Model model, Pageable pageable) {
-        List<ReadCartBookResponse> cartBookResponses = orderService.findAllCartBok();
+    public String findAllCheckout(Model model, Pageable pageable, @RequestParam(required = false) Long bookId, @RequestParam(required = false) Integer quantity) {
+        List<ReadCartBookResponse> cartBookResponses = orderService.getOrderBook(bookId, quantity);
         ReadOrderUserInfoResponse orderUserInfoResponse = orderService.getUserInfo();
         Integer totalAmount = getTotalAmount(cartBookResponses);
 
-        populateUserInfo(model, orderUserInfoResponse);
+        populateUserInfo(model, orderUserInfoResponse, totalAmount);
         populateOrderDetails(model, pageable, totalAmount, cartBookResponses);
 
         return "order/checkout";
     }
 
-    private void populateUserInfo(Model model, ReadOrderUserInfoResponse orderUserInfoResponse) {
+    private void populateUserInfo(Model model, ReadOrderUserInfoResponse orderUserInfoResponse,
+        Integer totalAmount) {
         model.addAttribute("userInfo", orderUserInfoResponse);
 
         if (MEMBER.equals(orderUserInfoResponse.role())) {
@@ -59,7 +61,7 @@ public class OrderController {
             model.addAttribute("orderUserEmail", orderUserInfoResponse.email());
             model.addAttribute("orderUserPhoneNumber", orderUserInfoResponse.phoneNumber());
             model.addAttribute("points", orderUserInfoResponse.points());
-            model.addAttribute("maxDiscountCoupon", orderService.getMaxDiscountCoupon(getTotalAmount(orderService.findAllCartBok())));
+            model.addAttribute("maxDiscountCoupon", orderService.getMaxDiscountCoupon(totalAmount));
         } else {
             model.addAttribute("orderUserName", "");
             model.addAttribute("orderUserEmail", "");

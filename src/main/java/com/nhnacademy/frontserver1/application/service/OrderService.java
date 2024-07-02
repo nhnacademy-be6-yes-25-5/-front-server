@@ -29,7 +29,7 @@ public interface OrderService {
 
     List<ReadTakeoutResponse> findAllTakeout();
 
-    List<ReadCartBookResponse> findAllCartBok();
+    List<ReadCartBookResponse> getOrderBook(Long bookId, Integer quantity);
 
     ReadOrderStatusResponse getOrderStatusByOrderId(String orderId);
 

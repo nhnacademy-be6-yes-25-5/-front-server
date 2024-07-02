@@ -1,8 +1,10 @@
 package com.nhnacademy.frontserver1.presentation.controller;
 
+import com.nhnacademy.frontserver1.application.service.BookService;
 import com.nhnacademy.frontserver1.application.service.CouponService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.CouponAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyRequestDTO;
+import com.nhnacademy.frontserver1.presentation.dto.response.coupon.BookDetailCouponResponseDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyResponseDTO;
 //import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponUserListResponseDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponResponseDTO;
@@ -28,6 +30,7 @@ public class CouponController {
 
     private final CouponService couponService;
     private final CouponAdaptor couponAdaptor;
+    private final BookService bookService;
 
     @GetMapping("/policy")
     public String getAdminCouponPolicy(@RequestParam(defaultValue = "0") int page,
@@ -59,12 +62,11 @@ public class CouponController {
         return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
     } //쿠폰 정책 생성
 
-    @GetMapping("/books/{bookId}")
-    public String getCouponsByBookId(@PathVariable Long bookId, Model model) {
-        // 쿠폰 정보 가져오기
-        List<CouponResponseDTO> coupons = couponAdaptor.getCouponsByBookIdAndCategoryIds(bookId);
-        model.addAttribute("coupons", coupons);
-        return "product/product-details";
+    @GetMapping("/books/{bookId}/coupons")
+    public ResponseEntity<List<BookDetailCouponResponseDTO>> getCouponsByBookId(@PathVariable Long bookId) {
+        List<Long> categoryIds = bookService.getCategoryIdsByBookId(bookId);
+        List<BookDetailCouponResponseDTO> coupons = couponService.getCoupons(bookId, categoryIds);
+        return ResponseEntity.ok(coupons);
     }
 
 //

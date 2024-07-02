@@ -101,7 +101,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Coupon Modal -->
+                                    <!-- 쿠폰 모달 -->
                                     <div class="modal fade" id="couponModal" tabindex="-1" aria-labelledby="couponModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
@@ -110,7 +110,6 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <!-- 쿠폰 목록을 표시하는 내용 -->
                                                     <table class="table">
                                                         <thead>
                                                         <tr>
@@ -120,11 +119,11 @@
                                                             <th>발급</th>
                                                         </tr>
                                                         </thead>
-                                                        <tbody id="couponList">
-                                                        <tr th:each="coupon : ${coupons}">
+                                                        <tbody id="couponList" th:each="coupon : ${coupons}">
+                                                        <tr>
                                                             <td th:text="${coupon.couponName}"></td>
-                                                            <td th:text="${coupon.discountValue}"></td>
-                                                            <td th:text="${coupon.expiredAt}"></td>
+                                                            <td th:text="${coupon.couponPolicyRate != null ? coupon.couponPolicyRate + '%' : coupon.couponPolicyDiscountValue}"></td>
+                                                            <td th:text="${coupon.couponExpiredAt}"></td>
                                                             <td><button class="btn btn-primary">발급받기</button></td>
                                                         </tr>
                                                         </tbody>
@@ -404,9 +403,26 @@
                 keyboard: false
             });
 
-            // 버튼 클릭 이벤트
-            document.querySelector('.wish-button button').addEventListener('click', function () {
-                myModal.show();
+            // 쿠폰 버튼 클릭 이벤트
+            document.getElementById('couponButton').addEventListener('click', function () {
+                var bookId = document.getElementById('bookId').value; // Hidden input field to store the bookId
+                $.ajax({
+                    url: '/books/' + bookId + '/coupons',
+                    method: 'GET',
+                    success: function(data) {
+                        var couponList = $('#couponList');
+                        couponList.empty();
+                        data.forEach(function(coupon) {
+                            var row = '<tr>' +
+                                '<td>' + coupon.couponName + '</td>' +
+                                '<td>' + coupon.couponPolicyRate + '%' + '</td>' +
+                                '<td>' + coupon.couponExpiredAt + '</td>' +
+                                '<td><button class="btn btn-primary">발급받기</button></td>' +
+                                '</tr>';
+                            couponList.append(row);
+                        });
+                    }
+                });
             });
         });
     </script>

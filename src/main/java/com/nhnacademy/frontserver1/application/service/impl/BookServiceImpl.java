@@ -124,4 +124,8 @@ public class BookServiceImpl implements BookService {
     public Page<BookResponse> getBookByCategoryId(Long categoryId, Pageable pageable) {
         return bookAdapter.getBookByCategory(categoryId, pageable);
     }
+
+    public List<Long> getCategoryIdsByBookId(Long bookId) {
+        return bookAdapter.getCategoryIdsByBookId(bookId);
+    }
 }

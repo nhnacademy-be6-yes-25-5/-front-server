@@ -2,6 +2,7 @@ package com.nhnacademy.frontserver1.application.service;
 
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadCartBookResponse;
+import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadOrderNoneMemberRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMaximumDiscountCouponResponse;
@@ -48,4 +49,6 @@ public interface OrderService {
     ReadOrderDeliveryInfoResponse getMyOrderDelivery(String orderId);
 
     ReadOrderDetailResponse getMyOrderByOrderId(String orderId);
+
+    ReadOrderDetailResponse findOrderNoneMemberByOrderIdAndEmail(ReadOrderNoneMemberRequest request);
 }

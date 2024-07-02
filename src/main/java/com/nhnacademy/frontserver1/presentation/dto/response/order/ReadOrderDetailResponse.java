@@ -29,6 +29,7 @@ public record ReadOrderDetailResponse(String orderId,
                                       Long couponId,
                                       BigDecimal points,
                                       List<String> bookNames,
-                                      List<Integer> quantities) {
+                                      List<Integer> quantities,
+                                      List<BigDecimal> bookPrices) {
 
 }

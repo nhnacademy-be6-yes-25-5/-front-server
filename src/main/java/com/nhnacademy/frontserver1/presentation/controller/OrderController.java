@@ -4,6 +4,7 @@ import com.nhnacademy.frontserver1.application.service.OrderService;
 import com.nhnacademy.frontserver1.domain.TakeoutType;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadCartBookResponse;
+import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadOrderNoneMemberRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDeliveryInfoResponse;
@@ -25,6 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -153,4 +155,17 @@ public class OrderController {
         return "mypage/mypage-delivery-detail";
     }
 
+    @GetMapping("/find")
+    public String getOrderFindPage() {
+        return "order/orders-find";
+    }
+
+    @GetMapping("/none")
+    public String getOrderNoneMember(@ModelAttribute ReadOrderNoneMemberRequest request, Model model) {
+        ReadOrderDetailResponse response = orderService.findOrderNoneMemberByOrderIdAndEmail(request);
+        model.addAttribute("order", response);
+        model.addAttribute("noneMember", "noneMember");
+
+        return "mypage/mypage-orders-detail";
+    }
 }

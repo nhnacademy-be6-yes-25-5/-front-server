@@ -5,6 +5,8 @@ import com.nhnacademy.frontserver1.common.exception.FeignClientException;
 import com.nhnacademy.frontserver1.common.exception.OrderWaitingException;
 import com.nhnacademy.frontserver1.common.exception.TokenCookieMissingException;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.ReadUserInfoResponse;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

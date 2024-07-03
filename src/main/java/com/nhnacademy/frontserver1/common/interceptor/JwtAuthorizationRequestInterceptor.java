@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.thymeleaf.util.StringUtils;
 
 /**
  * JWT 인증을 위한 Feign 요청 인터셉터입니다.
@@ -39,12 +40,16 @@ public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String path = request.getServletPath();
 
-        if (path.startsWith("/auth/login") || path.startsWith("/orders/none") || path.matches(".*/orders/.*/delivery.*")
+        if (path.startsWith("/auth/login") || path.startsWith("/orders/none")
                 || path.startsWith("/users/sign-up")) {
             return;
         }
 
         Optional<String> token = cookieTokenProvider.getTokenFromCookie(request);
+        if (token.isEmpty() && path.matches(".*/orders/.*/delivery.*")) {
+            return ;
+        }
+
         token.ifPresentOrElse(
             t -> {
                 log.debug("Adding Authorization header: Bearer {}", t);

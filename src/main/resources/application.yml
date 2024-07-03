@@ -5,7 +5,3 @@ spring:
     hidden-method:
       filter:
         enabled: true
-
-
-  jwt:
-    secret: ${JWT_SECRET}

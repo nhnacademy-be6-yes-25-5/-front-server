@@ -40,7 +40,7 @@ public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
         String path = request.getServletPath();
 
         if (path.startsWith("/auth/login") || path.startsWith("/orders/none") || path.matches(".*/orders/.*/delivery.*")
-                || path.startsWith("/users/sign-up")) {
+                || path.startsWith("/sign-up")) {
             return;
         }
 

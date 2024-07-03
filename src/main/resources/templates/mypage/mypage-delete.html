@@ -81,7 +81,7 @@
         const password = document.getElementById('userPassword').value;
 
         if (confirm('정말로 회원 탈퇴를 하시겠습니까?')) {
-            fetch('/users', {
+            fetch('/mypage/delete', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'

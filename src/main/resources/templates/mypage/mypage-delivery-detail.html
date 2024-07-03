@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<head>
+  <title>Order Details</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <script th:src="@{/js/jquery.min.js}"></script>
+  <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</head>
+<body>
+<div th:fragment="content" class="container mt-5">
+
+  <!-- Start Breadcrumbs Component -->
+  <div th:replace="~{fragments/breadcrumbs :: breadcrumbs}"></div>
+  <!-- End Breadcrumbs Component -->
+
+  <div class="row">
+    <div class="col-md-3">
+      <!-- Include User Sidebar -->
+      <div th:replace="~{fragments/user-sidebar :: user-sidebar}"></div>
+    </div>
+    <div class="col-md-9">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h2 class="card-title text-center">
+            <span th:if="${orderInfo.orderStatusType.name == 'DONE'}">
+              <span th:if="${orderInfo.timestamp.get(orderInfo.timestamp.size() - 1).toLocalDate().isEqual(T(java.time.LocalDate).now())}">오늘</span>
+              <span th:if="${orderInfo.timestamp.get(orderInfo.timestamp.size() - 1).toLocalDate().isEqual(T(java.time.LocalDate).now().minusDays(1))}">어제</span>
+              <span th:if="${!orderInfo.timestamp.get(orderInfo.timestamp.size() - 1).toLocalDate().isEqual(T(java.time.LocalDate).now()) && !orderInfo.timestamp.get(orderInfo.timestamp.size() - 1).toLocalDate().isEqual(T(java.time.LocalDate).now().minusDays(1))}"
+                    th:text="${#dates.format(orderInfo.timestamp.get(orderInfo.timestamp.size() - 1), 'yyyy-MM-dd')}"></span>
+              도착 완료
+            </span>
+            <span th:if="${orderInfo.orderStatusType.name == 'WAIT'}">출고대기중</span>
+            <span th:if="${orderInfo.orderStatusType.name == 'DELIVERING'}">배송중</span>
+          </h2>
+          <p class="text-center">
+            <span th:if="${orderInfo.orderStatusType.name == 'WAIT'}">고객님이 주문하신 상품이 출고대기중입니다.</span>
+            <span th:if="${orderInfo.orderStatusType.name == 'DELIVERING'}">고객님이 주문하신 상품을 안전하게 배송중입니다.</span>
+            <span th:if="${orderInfo.orderStatusType.name == 'DONE'}">고객님이 주문하신 상품이 배송완료 되었습니다.</span>
+          </p>
+          <div class="row">
+            <div class="col-md-4 text-center">
+              <p>주문번호: <span th:text="${orderInfo.orderId}"></span></p>
+            </div>
+            <div class="col-md-8">
+              <table class="table">
+                <tbody>
+                <tr>
+                  <th>받는사람</th>
+                  <td th:text="${orderInfo.receiveUserName}"></td>
+                </tr>
+                <tr>
+                  <th>받는주소</th>
+                  <td th:text="${orderInfo.addressRaw + ' ' + orderInfo.addressDetail}"></td>
+                </tr>
+                <tr>
+                  <th>배송요청사항</th>
+                  <td th:text="${orderInfo.reference}"></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header">
+          <h2>배송조회</h2>
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th>시간</th>
+              <th>배송상태</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="status, iter : ${orderInfo.deliveryStatuses}">
+              <td th:text="${#temporals.format(orderInfo.timestamp[iter.index], 'yyyy-MM-dd HH:mm')}"></td>
+              <td th:text="${#messages.msg('order.status.' + status)}"></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <a href="/mypage/orders" class="btn btn-primary">주문목록 돌아가기</a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -5,12 +5,12 @@ import com.nhnacademy.frontserver1.common.provider.CookieTokenProvider;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import java.util.Optional;
 
 /**
  * JWT 인증을 위한 Feign 요청 인터셉터입니다.
@@ -18,17 +18,24 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  * Authorization 쿠키(토큰이 담겨있는 쿠키)가 없는 경우 NoTokenCookieException을 던져 로그인 페이지로 리디렉션합니다.
  */
 @RequiredArgsConstructor
-@Slf4j
-public class FeignJwtTokenInterceptor implements RequestInterceptor {
+public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
 
     private final CookieTokenProvider cookieTokenProvider;
 
+    /**
+     * Feign 요청에 JWT 토큰을 추가합니다.
+     * '/auth/login' 경로에 대한 요청은 인증이 필요하지 않으므로 토큰을 추가하지 않습니다.
+     *
+     * @param template Feign 요청 템플릿
+     */
     @Override
     public void apply(RequestTemplate template) {
+
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String path = request.getServletPath();
 
-        if (path.equals("/auth/login")) {
+        if (path.startsWith("/auth/login") || path.startsWith("/orders/none")
+                || path.startsWith("/users/sign-up")) {
             return;
         }
 

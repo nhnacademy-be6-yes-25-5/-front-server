@@ -12,10 +12,13 @@
                         </div>
                         <ul class="user-login">
                             <li>
-                                <a href="/auth/login">Login</a>
+                                <a href="/auth/login">Sign In</a>
                             </li>
                             <li>
-                                <a href="#">Register</a>
+                                <a href="/users/sign-up">Register</a>
+                            </li>
+                            <li>
+                                <a href="/orders/find">주문번호로 주문내역 찾기</a>
                             </li>
                         </ul>
                     </div>
@@ -30,7 +33,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-3 col-md-3 col-7">
                     <!-- Start Header Logo -->
-                    <a class="navbar-brand" href="#">
+                    <a class="navbar-brand" href="/">
                         <img src="/images/logo/logo.png" alt="Logo">
                     </a>
                     <!-- End Header Logo -->
@@ -67,7 +70,7 @@
                     <div class="middle-right-area">
                         <div class="navbar-cart">
                             <div class="myPage">
-                                <a href="#">
+                                <a href="/mypage/orders">
                                     <i class="lni lni-user"></i>
                                 </a>
                             </div>
@@ -143,12 +146,15 @@
                     <!-- Start Mega Category Menu -->
                     <div class="mega-category-menu">
                         <span class="cat-button"><i class="lni lni-menu"></i>All Categories</span>
-                        <ul class="sub-category">
-                            <!-- 1단 카테고리만 있다면 아래 줄에 있는 i 태그는 넣지 말아주세요!-->
-                            <li><a href="#">소분류 있는 대분류 카테고리 1<i class="lni lni-chevron-right"></i></a>
-                                <ul class="inner-sub-category">
-                                    <li><a href="#">소분류 카테고리 1</a></li>
-                                    <li><a href="#">소분류 카테고리 2</a></li>
+                        <ul class="sub-category" th:each="category : ${categories}">
+                            <li>
+                                <a th:href="@{'/category/' + ${category.categoryId()}}" th:text="${category.categoryName()}"></a>
+                                <!-- 소분류가 있을 때만 아이콘을 표시합니다. -->
+                                <i class="lni lni-chevron-right" th:if="${!category.subCategories().isEmpty()}"></i>
+                                <ul class="inner-sub-category" th:if="${!category.subCategories().isEmpty()}">
+                                    <li th:each="subCategory : ${category.subCategories()}">
+                                        <a th:href="@{'/category/' + ${subCategory.categoryId()}}" th:text="${subCategory.categoryName()}"></a>
+                                    </li>
                                 </ul>
                             </li>
                             <li><a href="#">소분류 없는 대분류 카테고리 2</a></li>
@@ -162,28 +168,28 @@
                                 <li class="nav-item">
                                     <a href="#" aria-label="Toggle navigation">Home</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="dd-menu active collapsed" href="javascript:void(0)"
-                                       data-bs-toggle="collapse" data-bs-target="#submenu-1-2"
-                                       aria-controls="navbarSupportedContent" aria-expanded="false"
-                                       aria-label="Toggle navigation">소메뉴 있는 대메뉴 1</a>
-                                    <ul class="sub-menu collapse" id="submenu-1-2">
-                                        <li class="nav-item"><a href="#">소메뉴 1</a></li>
-                                        <li class="nav-item"><a href="#">소메뉴 2</a></li>
+
+                                <!-- 카테고리 반복 처리 -->
+                                <li class="nav-item" th:each="category, categoryIndex : ${categories}">
+                                    <!-- 소메뉴 있는 경우 -->
+                                    <a class="dd-menu" href="javascript:void(0)"
+                                       th:class="${categoryIndex.index == 0} ? 'active collapsed' : 'collapsed'"
+                                       data-bs-toggle="collapse" th:data-bs-target="'#submenu-' + ${categoryIndex.index + 1}"
+                                       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                                       th:text="${category.categoryName}"></a>
+
+                                    <!-- 소메뉴 목록 -->
+                                    <ul class="sub-menu collapse" th:if="${!category.subCategories.isEmpty()}" th:id="'submenu-' + ${categoryIndex.index + 1}">
+                                        <li class="nav-item" th:each="subCategory : ${category.subCategories}">
+                                            <a href="#" th:text="${subCategory.categoryName}"></a>
+                                        </li>
                                     </ul>
+
+                                    <!-- 소메뉴가 없는 경우 -->
+                                    <a th:unless="${category.subCategories}" th:href="#" th:text="${category.categoryName}"></a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="dd-menu collapsed" href="javascript:void(0)" data-bs-toggle="collapse"
-                                       data-bs-target="#submenu-1-3" aria-controls="navbarSupportedContent"
-                                       aria-expanded="false" aria-label="Toggle navigation">소메뉴 있는 대메뉴 2</a>
-                                    <ul class="sub-menu collapse" id="submenu-1-3">
-                                        <li class="nav-item"><a href="#">소메뉴 1</a></li>
-                                        <li class="nav-item"><a href="#">소메뉴 2</a></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" aria-label="Toggle navigation">소메뉴 없는 대메뉴 3</a>
-                                </li>
+                                <!-- /카테고리 반복 처리 -->
+
                             </ul>
                         </div> <!-- navbar collapse -->
                     </nav>

@@ -1,0 +1,112 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/admin-layout :: admin-layout(~{::content})}">
+<body>
+<div th:fragment="content">
+    <h1 class="mt-4">회원 주문 관리</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">회원 주문 관리</li>
+    </ol>
+
+    <div class="container-fluid">
+        <div class="card mb-4">
+            <div class="card-header">
+                주문 목록
+            </div>
+            <div class="card-body">
+                <form th:action="@{/admin/orders}" method="get" class="filter-form mb-4">
+                    <div class="form-group">
+                        <label for="role">회원 및 비회원 필터</label>
+                        <select name="role" id="role" class="form-control">
+                            <option value="">전부</option>
+                            <option value="member" th:selected="${role == 'member'}">회원</option>
+                            <option value="none_member" th:selected="${role == 'none_member'}">비회원</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">필터 적용</button>
+                </form>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>주문번호</th>
+                            <th>회원번호</th>
+                            <th>주문 상품</th>
+                            <th>주문 금액</th>
+                            <th>주문 상태</th>
+                            <th>주문 일자</th>
+                            <th>배송 일자</th>
+                            <th>주문 상태 변경</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="order : ${orderInfos}">
+                            <td th:text="${order.orderId}">주문번호</td>
+                            <td th:text="${order.customerId}">회원번호</td>
+                            <td>
+                                <span th:if="${order.bookNames.size() == 1}" th:text="${order.bookNames[0]}">주문 상품</span>
+                                <span th:if="${order.bookNames.size() > 1}" th:text="${order.bookNames[0]} + ' 외 ' + (${order.bookNames.size()} - 1) + '개'">주문 상품 외 n개</span>
+                            </td>
+                            <td th:text="${order.amount}">주문 금액</td>
+                            <td th:text="#{${'order.status.' + order.orderStatusType.name()}}">주문 상태</td>
+                            <td th:text="${order.orderCreatedAt}">주문 일자</td>
+                            <td th:text="${order.orderDeliveryAt}">배송 일자</td>
+                            <td>
+                                <form th:action="@{/admin/orders/{orderId}(orderId=${order.orderId})}" method="post" th:object="${order}">
+                                    <input type="hidden" name="_method" value="put"/>
+                                    <div class="d-flex align-items-center">
+                                        <select name="orderStatusType" class="form-control"
+                                                th:disabled="${order.orderStatusType != T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).WAIT &&
+                     order.orderStatusType != T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DELIVERING}">
+                                            <option th:value="${T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).WAIT}"
+                                                    th:text="#{order.status.WAIT}"
+                                                    th:selected="${order.orderStatusType != null && order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).WAIT}">대기</option>
+                                            <option th:value="${T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DELIVERING}"
+                                                    th:text="#{order.status.DELIVERING}"
+                                                    th:selected="${order.orderStatusType != null && order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DELIVERING}">배송중</option>
+                                            <option th:if="${order.orderStatusType != null && order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DONE}"
+                                                    th:value="${T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DONE}"
+                                                    th:text="#{order.status.DONE}"
+                                                    th:selected="${order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DONE}">완료</option>
+                                            <option th:if="${order.orderStatusType != null && order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).REFUND}"
+                                                    th:value="${T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).REFUND}"
+                                                    th:text="#{order.status.REFUND}"
+                                                    th:selected="${order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).REFUND}">환불</option>
+                                            <option th:if="${order.orderStatusType != null && order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).CANCEL}"
+                                                    th:value="${T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).CANCEL}"
+                                                    th:text="#{order.status.CANCEL}"
+                                                    th:selected="${order.orderStatusType == T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).CANCEL}">취소</option>
+                                        </select>
+
+                                        <button type="submit" class="btn btn-primary btn-order-status ml-2" th:disabled="${order.orderStatusType != T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).WAIT && order.orderStatusType != T(com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType).DELIVERING}">주문 상태 변경</button>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination controls -->
+                <div class="d-flex justify-content-center">
+                    <ul class="pagination">
+                        <li class="page-item" th:classappend="${orderInfos.hasPrevious()} ? '' : 'disabled'">
+                            <a class="page-link" th:href="@{/admin/orders(page=${orderInfos.number - 1}, role=${role})}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item" th:each="i : ${#numbers.sequence(0, orderInfos.totalPages - 1)}"
+                            th:classappend="${orderInfos.number == i} ? 'active'">
+                            <a class="page-link" th:href="@{/admin/orders(page=${i}, role=${role})}" th:text="${i + 1}">1</a>
+                        </li>
+                        <li class="page-item" th:classappend="${orderInfos.hasNext()} ? '' : 'disabled'">
+                            <a class="page-link" th:href="@{/admin/orders(page=${orderInfos.number + 1}, role=${role})}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

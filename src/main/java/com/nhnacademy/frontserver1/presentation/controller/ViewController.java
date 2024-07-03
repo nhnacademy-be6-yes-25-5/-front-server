@@ -16,6 +16,6 @@ public class ViewController {
 
     @GetMapping("view")
     public String index(Model model){
-        return "admin/orderStatus/admin-order-status";
+        return "admin/policy/admin-policy-coupon";
     }
 }

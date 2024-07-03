@@ -3,30 +3,32 @@ package com.nhnacademy.frontserver1.presentation.controller;
 import com.nhnacademy.frontserver1.application.service.BookService;
 import com.nhnacademy.frontserver1.application.service.CategoryService;
 import com.nhnacademy.frontserver1.application.service.TagService;
+import com.nhnacademy.frontserver1.application.service.UploadImageService;
 import com.nhnacademy.frontserver1.presentation.dto.request.book.CreateBookRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookRequest;
-import com.nhnacademy.frontserver1.presentation.dto.response.book.BookAPIResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.book.CategoryResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.book.TagResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.book.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class AdminBookController {
 
     private final BookService bookService;
     private final CategoryService categoryService;
     private final TagService tagService;
+    private final UploadImageService uploadimageService;
 
     @GetMapping("/admin/product")
     public String adminProduct(Model model, @PageableDefault(page = 0, size = 10) Pageable pageable) {
@@ -50,9 +52,12 @@ public class AdminBookController {
     }
 
     @PostMapping("/admin/product")
-    public String adminProduct(@ModelAttribute @Valid CreateBookRequest request, @RequestParam(value = "categoryIdList") List<Long> categoryIdList, @RequestParam(value = "tagIdList", required = false) List<Long> tagIdList) {
+    public String adminProduct(@ModelAttribute @Valid CreateBookRequest request, @RequestParam(value = "categoryIdList") List<Long> categoryIdList,
+                               @RequestParam(value = "tagIdList", required = false) List<Long> tagIdList, @RequestParam(value = "bookImage", required = false) MultipartFile file) {
 
-        bookService.createBook(request, categoryIdList, tagIdList);
+        UploadImageResponse uploadImageResponse = uploadimageService.imageUpload(file);
+        CreateBookRequest createBookRequest = CreateBookRequest.updateImageURL(request, uploadImageResponse.imageUrl());
+        bookService.createBook(createBookRequest, categoryIdList, tagIdList);
 
         return "redirect:/admin/product";
     }
@@ -66,9 +71,12 @@ public class AdminBookController {
     }
 
     @PostMapping("/admin/product/{bookId}/update")
-    public String adminUpdateBook(@ModelAttribute @Valid UpdateBookRequest request, @RequestParam(value = "categoryIdList") List<Long> categoryIdList, @RequestParam(value = "tagIdList", required = false) List<Long> tagIdList) {
+    public String adminUpdateBook(@ModelAttribute @Valid UpdateBookRequest request, @RequestParam(value = "categoryIdList") List<Long> categoryIdList,
+                                  @RequestParam(value = "tagIdList", required = false) List<Long> tagIdList, @RequestParam(value = "bookImage", required = false) MultipartFile file) {
 
-        bookService.updateBook(request, categoryIdList, tagIdList);
+        UploadImageResponse uploadImageResponse = uploadimageService.imageUpload(file);
+        UpdateBookRequest updateBookRequest = UpdateBookRequest.updateImageURL(request, uploadImageResponse.imageUrl());
+        bookService.updateBook(updateBookRequest, categoryIdList, tagIdList);
 
         return "redirect:/admin/product";
     }

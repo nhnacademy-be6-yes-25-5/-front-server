@@ -62,9 +62,17 @@
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
                                 배송비 정책
                             </a>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                            <a class="nav-link collapsed" href="#" id="policyLink" data-bs-toggle="collapse"
+                               data-bs-target="#pagesCollapseAuth2" aria-expanded="false" aria-controls="pagesCollapseAuth2">
                                 쿠폰 정책
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
+                            <div class="collapse" id="pagesCollapseAuth2" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordionPages2">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="/coupons/policy/categories">카테고리 쿠폰 정책</a>
+                                    <a class="nav-link" href="/coupons/policy/books">도서 쿠폰 정책</a>
+                                </nav>
+                            </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
                                 회원 정책
                             </a>
@@ -78,13 +86,13 @@
                     </a>
                     <div class="collapse" id="orderManagementMenu" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#orderStatusManagement" aria-expanded="false" aria-controls="orderStatusManagement">
+                            <a class="nav-link" href="/admin/orders">
                                 주문 상태 관리
                             </a>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#cancelManagement" aria-expanded="false" aria-controls="cancelManagement">
+                            <a class="nav-link" href="/admin/orders/cancel">
                                 취소 상태 관리
                             </a>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#returnManagement" aria-expanded="false" aria-controls="returnManagement">
+                            <a class="nav-link" href="/admin/orders/refund">
                                 반품 상태 관리
                             </a>
                         </nav>
@@ -98,7 +106,7 @@
             <div class="container-fluid px-4">
 
                 <!-- Start Content -->
-                <div th:replace="${content}"></div>
+                <div th:replace="${content}"  id="main-content"></div>
                 <!-- End Content -->
                 </ol>
             </div>
@@ -121,5 +129,7 @@
 <script src="/js/main.js"></script>
 <script src="/js/admin.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+<script src="js/datatables-simple-demo.js"></script>
 </body>
 </html>

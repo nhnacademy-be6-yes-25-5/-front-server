@@ -1,14 +1,20 @@
 package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.OrderService;
+import com.nhnacademy.frontserver1.domain.TakeoutType;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadCartBookResponse;
+import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadOrderNoneMemberRequest;
+import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDeliveryInfoResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDetailResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderStatusResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserAddressResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserInfoResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.UpdateOrderResponse;
 import jakarta.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.List;
@@ -20,10 +26,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/orders")
@@ -35,18 +44,19 @@ public class OrderController {
     private static final String MEMBER = "MEMBER";
 
     @GetMapping("/checkout")
-    public String findAllCheckout(Model model, Pageable pageable) {
-        List<ReadCartBookResponse> cartBookResponses = orderService.findAllCartBok();
+    public String findAllCheckout(Model model, Pageable pageable, @RequestParam(required = false) Long bookId, @RequestParam(required = false) Integer quantity) {
+        List<ReadCartBookResponse> cartBookResponses = orderService.getOrderBook(bookId, quantity);
         ReadOrderUserInfoResponse orderUserInfoResponse = orderService.getUserInfo();
         Integer totalAmount = getTotalAmount(cartBookResponses);
 
-        populateUserInfo(model, orderUserInfoResponse);
+        populateUserInfo(model, orderUserInfoResponse, totalAmount);
         populateOrderDetails(model, pageable, totalAmount, cartBookResponses);
 
         return "order/checkout";
     }
 
-    private void populateUserInfo(Model model, ReadOrderUserInfoResponse orderUserInfoResponse) {
+    private void populateUserInfo(Model model, ReadOrderUserInfoResponse orderUserInfoResponse,
+        Integer totalAmount) {
         model.addAttribute("userInfo", orderUserInfoResponse);
 
         if (MEMBER.equals(orderUserInfoResponse.role())) {
@@ -54,7 +64,7 @@ public class OrderController {
             model.addAttribute("orderUserEmail", orderUserInfoResponse.email());
             model.addAttribute("orderUserPhoneNumber", orderUserInfoResponse.phoneNumber());
             model.addAttribute("points", orderUserInfoResponse.points());
-            model.addAttribute("maxDiscountCoupon", orderService.getMaxDiscountCoupon(getTotalAmount(orderService.findAllCartBok())));
+            model.addAttribute("maxDiscountCoupon", orderService.getMaxDiscountCoupon(totalAmount));
         } else {
             model.addAttribute("orderUserName", "");
             model.addAttribute("orderUserEmail", "");
@@ -70,12 +80,18 @@ public class OrderController {
         Integer freeShippingAmount = freeShippingPolicy.shippingPolicyMinAmount() - totalAmount;
         List<ReadTakeoutResponse> takeoutResponses = orderService.findAllTakeout();
 
+        boolean hasUnPackableBook = cartBookResponses.stream().anyMatch(cartBook -> !cartBook.bookIsPackable());
+
+        List<ReadTakeoutResponse> availableTakeouts = hasUnPackableBook
+            ? List.of(new ReadTakeoutResponse(TakeoutType.NONE, 0, "포장 불가"))
+            : takeoutResponses;
+
         model.addAttribute("shippingPolicy", shippingPolicy);
         model.addAttribute("freeShippingPolicy", freeShippingPolicy);
         model.addAttribute("freeShippingAmount", freeShippingAmount);
         model.addAttribute("totalAmount", totalAmount);
         model.addAttribute("cartBooks", cartBookResponses);
-        model.addAttribute("takeouts", takeoutResponses);
+        model.addAttribute("takeouts", availableTakeouts);
     }
 
     private Integer getTotalAmount(List<ReadCartBookResponse> cartBookResponses) {
@@ -117,4 +133,39 @@ public class OrderController {
         return "order/address-popup";
     }
 
+    @PutMapping("/{orderId}")
+    public ResponseEntity<UpdateOrderResponse> updateOrder(@PathVariable String orderId,
+        @RequestBody UpdateOrderRequest request) {
+        return ResponseEntity.ok(orderService.updateOrderByOrderId(orderId, request));
+    }
+
+    @GetMapping("/{orderId}")
+    public String getOrder(@PathVariable String orderId, Model model) {
+        ReadOrderDetailResponse response = orderService.getMyOrderByOrderId(orderId);
+        model.addAttribute("order", response);
+
+        return "mypage/mypage-orders-detail";
+    }
+
+    @GetMapping("/{orderId}/delivery")
+    public String getOrderDelivery(@PathVariable String orderId, Model model) {
+        ReadOrderDeliveryInfoResponse orderInfoResponse = orderService.getMyOrderDelivery(orderId);
+        model.addAttribute("orderInfo", orderInfoResponse);
+
+        return "mypage/mypage-delivery-detail";
+    }
+
+    @GetMapping("/find")
+    public String getOrderFindPage() {
+        return "order/orders-find";
+    }
+
+    @GetMapping("/none")
+    public String getOrderNoneMember(@ModelAttribute ReadOrderNoneMemberRequest request, Model model) {
+        ReadOrderDetailResponse response = orderService.findOrderNoneMemberByOrderIdAndEmail(request);
+        model.addAttribute("order", response);
+        model.addAttribute("noneMember", "noneMember");
+
+        return "mypage/mypage-orders-detail";
+    }
 }

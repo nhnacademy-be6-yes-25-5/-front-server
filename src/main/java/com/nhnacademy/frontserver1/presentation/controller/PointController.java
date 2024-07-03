@@ -22,16 +22,16 @@ public class PointController {
 
     @GetMapping("/points")
     public String findAllPoints(Model model) {
-        Long userId = 1L; // 예제용으로 사용자 ID를 설정합니다.
+        Long userId = 28L; // 예제용으로 사용자 ID를 설정합니다.
         List<PointLogResponse> pointLogs = pointService.getPointLogsByUserId(userId);
 
-        // 예제용으로 현재 포인트 값을 설정합니다. 실제로는 서비스에서 값을 가져와야 합니다.
-        BigDecimal currentPoint = pointLogs.stream()
-                .map(PointLogResponse::getPointLogAmount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        model.addAttribute("pointLogs", pointLogs);
-        model.addAttribute("currentPoint", currentPoint);
+//        // 예제용으로 현재 포인트 값을 설정합니다. 실제로는 서비스에서 값을 가져와야 합니다.
+//        BigDecimal currentPoint = pointLogs.stream()
+//                .map(PointLogResponse::getPointLogAmount)
+//                .reduce(BigDecimal.ZERO, BigDecimal::add);
+//
+//        model.addAttribute("pointLogs", pointLogs);
+//        model.addAttribute("currentPoint", currentPoint);
 
         return "mypage-orderPoints";
     }

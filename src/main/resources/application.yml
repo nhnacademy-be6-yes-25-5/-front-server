@@ -9,3 +9,7 @@ jwt:
   refresh-token:
     expiration-ms: 8640000
     cookie-name: RefreshToken
+  mvc:
+    hidden-method:
+      filter:
+        enabled: true

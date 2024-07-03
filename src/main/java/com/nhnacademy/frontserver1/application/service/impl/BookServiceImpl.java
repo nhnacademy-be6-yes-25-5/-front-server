@@ -29,11 +29,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BookServiceimpl implements BookService {
+public class BookServiceImpl implements BookService {
 
-    private final String clientSecret = "mmnE38HTvttvM422Rk00";
+    @Value("${naverapi.secret}")
+    private String clientSecret;
 
-    private final String clientId = "OR6nwIYwvb";
+    @Value("${naverapi.id}")
+    private String clientId;
 
     private final BookAdapter bookAdapter;
 
@@ -99,6 +101,11 @@ public class BookServiceimpl implements BookService {
     }
 
     @Override
+    public List<BookResponse> findAllBooks() {
+        return bookAdapter.findAllBooks();
+    }
+
+    @Override
     public void deleteBook(Long id) {
         bookAdapter.deleteBook(id);
     }
@@ -106,5 +113,19 @@ public class BookServiceimpl implements BookService {
     @Override
     public BookResponse updateBook(UpdateBookRequest updateBookRequest, List<Long> categoryIdList, List<Long> tagIdList) {
         return bookAdapter.updateBook(updateBookRequest, categoryIdList, tagIdList);
+    }
+
+    @Override
+    public BookResponse getBook(Long id) {
+        return bookAdapter.findBookById(id);
+    }
+
+    @Override
+    public Page<BookResponse> getBookByCategoryId(Long categoryId, Pageable pageable) {
+        return bookAdapter.getBookByCategory(categoryId, pageable);
+    }
+
+    public List<Long> getCategoryIdsByBookId(Long bookId) {
+        return bookAdapter.getCategoryIdsByBookId(bookId);
     }
 }

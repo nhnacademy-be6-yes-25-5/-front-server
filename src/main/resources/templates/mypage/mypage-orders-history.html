@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<body>
+<div th:fragment="content">
+
+    <!-- Start Breadcrumbs Component -->
+    <div th:replace="~{fragments/breadcrumbs :: breadcrumbs}"></div>
+    <!-- End Breadcrumbs Component -->
+
+    <!-- Start Order History Area -->
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2">
+                    <div th:replace="~{fragments/user-sidebar :: user-sidebar}"></div>
+                </div>
+                <div class="col-lg-10">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="order-history-wrapper">
+                                    <div class="title">
+                                        <h3>주문 내역</h3>
+                                        <p>과거 주문 내역을 확인해보세요.</p>
+                                    </div>
+
+                                    <div class="age-range">
+                                        <div class="range-container">
+                                            <div class="range-item" th:classappend="${purePrice < 100000 ? 'active' : ''}">
+                                                <div class="label">일반회원</div>
+                                                <div class="description">(10만원 미만)</div>
+                                                <div class="amount-text">
+                                                    <span>순수 주문금액 : <span th:text="${purePrice}">0</span>원</span>
+                                                    <span>(2024.03.01 ~ 현재)</span>
+                                                </div>
+                                            </div>
+                                            <div class="range-item" th:classappend="${purePrice >= 100000 && purePrice < 200000 ? 'active' : ''}">
+                                                <div class="label">로얄회원</div>
+                                                <div class="description">(10 ~ 20만원)</div>
+                                                <div class="amount-text">
+                                                    <span>순수 주문금액 : <span th:text="${purePrice}">0</span>원</span>
+                                                    <span>(2024.03.01 ~ 현재)</span>
+                                                </div>
+                                            </div>
+                                            <div class="range-item" th:classappend="${purePrice >= 200000 && purePrice < 300000 ? 'active' : ''}">
+                                                <div class="label">골드회원</div>
+                                                <div class="description">(20 ~ 30만원)</div>
+                                                <div class="amount-text">
+                                                    <span>순수 주문금액 : <span th:text="${purePrice}">0</span>원</span>
+                                                    <span>(2024.03.01 ~ 현재)</span>
+                                                </div>
+                                            </div>
+                                            <div class="range-item" th:classappend="${purePrice >= 300000 ? 'active' : ''}">
+                                                <div class="label">플래티넘회원</div>
+                                                <div class="description">(30만원~)</div>
+                                                <div class="amount-text">
+                                                    <span>순수 주문금액 : <span th:text="${purePrice}">0</span>원</span>
+                                                    <span>(2024.03.01 ~ 현재)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="order-history-filter">
+                                        <select id="order-status" class="form-select">
+                                            <option value="ALL">전부</option>
+                                            <option value="WAIT">대기</option>
+                                            <option value="DELIVERING">배송 중</option>
+                                            <option value="DONE">완료</option>
+                                            <option value="RETURN">반품</option>
+                                            <option value="REFUND">환불</option>
+                                            <option value="CANCEL">취소</option>
+                                        </select>
+                                    </div>
+                                    <div class="order-history-list">
+                                        <table class="table" th:if="${orders != null and not #lists.isEmpty(orders.content)}">
+                                            <thead>
+                                            <tr>
+                                                <th>주문 ID</th>
+                                                <th>주문 일자</th>
+                                                <th>상품 목록</th>
+                                                <th>수량</th>
+                                                <th>주문 금액</th>
+                                                <th>주문 상태</th>
+                                                <th>조회</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="order : ${orders.content}">
+                                                <td><a th:href="@{/orders/{orderId}(orderId=${order.orderId})}" th:text="${order.orderId}">1234567890</a></td>
+                                                <td th:text="${#temporals.format(order.orderCreatedAt, 'yyyy-MM-dd')}">2023-06-10</td>
+                                                <td>
+                                                    <span th:text="${order.bookNames.get(0)}">Product 1</span>
+                                                    <span th:if="${#lists.size(order.bookNames) > 1}" th:text="' 외 ' + (#lists.size(order.bookNames) - 1) + '개'"> 외 1개</span>
+                                                </td>
+                                                <td th:text="${order.quantities.size()}">3</td>
+                                                <td th:text="${order.orderTotalAmount}">$99.99</td>
+                                                <td th:text="#{${'order.status.' + order.orderStatus}}">출고처리중</td>
+                                                <td>
+                                                    <a th:href="@{/orders/{orderId}/delivery(orderId=${order.orderId})}" class="btn btn-sm btn-primary">배송 조회</a>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <div th:if="${orders == null or #lists.isEmpty(orders.content)}" class="text-center">주문 내역이 존재하지 않습니다.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Order History Area -->
+
+</div>
+</body>
+</html>

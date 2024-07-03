@@ -123,12 +123,12 @@
                                                             <th>발급</th>
                                                         </tr>
                                                         </thead>
-                                                        <tbody id="couponList" th:each="coupon : ${coupons}">
-                                                        <tr>
+                                                        <tbody id="couponList">
+                                                        <tr th:each="coupon : ${coupons}">
                                                             <td th:text="${coupon.couponName}"></td>
                                                             <td th:text="${coupon.couponPolicyRate != null ? coupon.couponPolicyRate + '%' : coupon.couponPolicyDiscountValue}"></td>
-                                                            <td th:text="${coupon.couponExpiredAt}"></td>
-                                                            <td><button class="btn btn-primary claim-coupon-btn" data-coupon-id="${coupon.couponId}">발급받기</button></td>
+                                                            <td th:text="${#dates.format(coupon.couponExpiredAt, 'yyyy-MM-dd')}"></td>
+                                                            <td><button class="btn btn-primary claim-coupon-btn" th:data-coupon-id="${coupon.couponId}">발급받기</button></td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
@@ -391,14 +391,10 @@
             const imgs = document.querySelectorAll(".img");
             imgs.forEach(img => {
                 img.addEventListener("click", (e) => {
-                    //reset opacity
                     imgs.forEach(img => {
                         img.style.opacity = 1;
                     });
                     current.src = e.target.src;
-                    //adding class
-                    //current.classList.add("fade-in");
-                    //opacity
                     e.target.style.opacity = opacity;
                 });
             });
@@ -417,14 +413,18 @@
                     success: function(data) {
                         var couponList = $('#couponList');
                         couponList.empty();
+                        var couponIds = new Set();
                         data.forEach(function(coupon) {
-                            var row = '<tr>' +
-                                '<td>' + coupon.couponName + '</td>' +
-                                '<td>' + (coupon.couponPolicyRate ? coupon.couponPolicyRate + '%' : coupon.couponPolicyDiscountValue) + '</td>' +
-                                '<td>' + coupon.couponExpiredAt + '</td>' +
-                                '<td><button class="btn btn-primary claim-coupon-btn" data-coupon-id="' + coupon.couponId + '">발급받기</button></td>' +
-                                '</tr>';
-                            couponList.append(row);
+                            if (!couponIds.has(coupon.couponId)) {
+                                couponIds.add(coupon.couponId);
+                                var row = '<tr>' +
+                                    '<td>' + coupon.couponName + '</td>' +
+                                    '<td>' + (coupon.couponPolicyRate ? coupon.couponPolicyRate + '%' : coupon.couponPolicyDiscountValue) + '</td>' +
+                                    '<td>' + new Date(coupon.couponExpiredAt).toLocaleString() + '</td>' +
+                                    '<td><button class="btn btn-primary claim-coupon-btn" data-coupon-id="' + coupon.couponId + '">발급받기</button></td>' +
+                                    '</tr>';
+                                couponList.append(row);
+                            }
                         });
 
                         // 쿠폰 발급 버튼 클릭 이벤트

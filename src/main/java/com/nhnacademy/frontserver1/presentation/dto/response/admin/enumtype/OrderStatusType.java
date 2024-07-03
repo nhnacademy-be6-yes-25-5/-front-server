@@ -6,5 +6,6 @@ public enum OrderStatusType {
     DELIVERING,
     DONE,
     REFUND,
-    CANCEL
+    CANCEL,
+    RETURN
 }

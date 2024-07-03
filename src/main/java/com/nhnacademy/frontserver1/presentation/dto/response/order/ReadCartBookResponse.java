@@ -1,4 +1,4 @@
-package com.nhnacademy.frontserver1.presentation.dto.request.order;
+package com.nhnacademy.frontserver1.presentation.dto.response.order;
 
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
 import java.math.BigDecimal;

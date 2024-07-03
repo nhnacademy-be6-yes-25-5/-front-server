@@ -87,7 +87,7 @@
                                             </thead>
                                             <tbody>
                                             <tr th:each="order : ${orders.content}">
-                                                <td><a th:href="@{/orders/{orderId}(orderId=${order.orderId})}" th:text="${order.orderId}">1234567890</a></td>
+                                                <td><a th:href="@{/mypage/orders/{orderId}(orderId=${order.orderId})}" th:text="${order.orderId}">1234567890</a></td>
                                                 <td th:text="${#temporals.format(order.orderCreatedAt, 'yyyy-MM-dd')}">2023-06-10</td>
                                                 <td>
                                                     <span th:text="${order.bookNames.get(0)}">Product 1</span>
@@ -97,7 +97,7 @@
                                                 <td th:text="${order.orderTotalAmount}">$99.99</td>
                                                 <td th:text="#{${'order.status.' + order.orderStatus}}">출고처리중</td>
                                                 <td>
-                                                    <a th:href="@{/orders/{orderId}/delivery(orderId=${order.orderId})}" class="btn btn-sm btn-primary">배송 조회</a>
+                                                    <a th:href="@{/mypage/orders/{orderId}/delivery(orderId=${order.orderId})}" class="btn btn-sm btn-primary">배송 조회</a>
                                                 </td>
                                             </tr>
                                             </tbody>

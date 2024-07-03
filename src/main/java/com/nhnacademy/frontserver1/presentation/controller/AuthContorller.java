@@ -4,18 +4,12 @@ import com.nhnacademy.frontserver1.application.service.impl.AuthServiceImpl;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.LoginUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.AuthResponse;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.net.http.HttpHeaders;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * AuthController 클래스는 사용자 인증 관련 기능을 제공하는 Spring MVC 컨트롤러입니다.
@@ -40,6 +34,19 @@ public class AuthContorller {
     @GetMapping("/login")
     public String loginForm() {
         return "login";
+    }
+
+    /**
+     * 인증 실패 로그인 페이질를 반환합니다.
+     *
+     * @return 인증 실패 로그인 페이지의 view 이름
+     */
+    @GetMapping("/error")
+    public String showErrorPage(@RequestParam(required = false) String cause, Model model) {
+        if (cause != null) {
+            model.addAttribute("cause", cause);
+        }
+        return "error/auth-fail";
     }
 
     /**

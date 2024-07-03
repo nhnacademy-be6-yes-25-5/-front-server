@@ -3,11 +3,13 @@ package com.nhnacademy.frontserver1.common.provider;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @Component
 public class CookieTokenProvider {
 
@@ -59,15 +61,6 @@ public class CookieTokenProvider {
         cookie.setPath("/");
         cookie.setMaxAge(maxAge);
         response.addCookie(cookie);
-    }
-
-    public void setAccessTokenCookie(HttpServletResponse httpServletResponse, String accessToken) {
-        String token = accessToken.startsWith("Bearer ") ? accessToken.substring(7) : accessToken;
-        addAccessTokenToCookie(httpServletResponse, token);
-    }
-
-    public void setRefreshTokenCookie(HttpServletResponse httpServletResponse, String refreshToken) {
-        addRefreshTokenToCookie(httpServletResponse, refreshToken);
     }
 
 }

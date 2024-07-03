@@ -1,15 +1,11 @@
 package com.nhnacademy.frontserver1.common.config;
 
-import com.nhnacademy.frontserver1.common.utils.TokenStorage;
+import com.nhnacademy.frontserver1.common.interceptor.FeignJwtTokenInterceptor;
+import com.nhnacademy.frontserver1.common.provider.CookieTokenProvider;
 import com.nhnacademy.frontserver1.common.decoder.CustomErrorDecoder;
-import feign.RequestInterceptor;
 import feign.codec.ErrorDecoder;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Configuration
 public class FeignClientConfig {
@@ -18,4 +14,11 @@ public class FeignClientConfig {
     public ErrorDecoder errorDecoder() {
         return new CustomErrorDecoder();
     }
+
+    @Bean
+    public FeignJwtTokenInterceptor jwtAuthorizationRequestInterceptor(
+            CookieTokenProvider cookieTokenProvider) {
+        return new FeignJwtTokenInterceptor(cookieTokenProvider);
+    }
+
 }

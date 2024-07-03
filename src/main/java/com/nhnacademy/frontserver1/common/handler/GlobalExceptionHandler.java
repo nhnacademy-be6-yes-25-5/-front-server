@@ -1,5 +1,7 @@
 package com.nhnacademy.frontserver1.common.handler;
 
+import com.nhnacademy.frontserver1.common.exception.ExpireRefreshJwtException;
+import com.nhnacademy.frontserver1.common.exception.RefreshTokenFailedException;
 import com.nhnacademy.frontserver1.common.exception.FeignClientException;
 import com.nhnacademy.frontserver1.common.exception.TokenCookieMissingException;
 import com.nhnacademy.frontserver1.common.exception.OrderWaitingException;
@@ -26,12 +28,20 @@ public class GlobalExceptionHandler {
         return "404";
     }
 
-    @ExceptionHandler(TokenCookieMissingException.class)
-    public ModelAndView handleTokenExpiredException(TokenCookieMissingException e) {
+    @ExceptionHandler(ExpireRefreshJwtException.class)
+    public ModelAndView handleExpireRefreshJwtException(ExpireRefreshJwtException e) {
 
-        log.error("TokenCookieMissingException 발생 :", e);
+        log.error("ExpireRefreshJwtException 발생 :", e);
 
         return new ModelAndView(new RedirectView("/auth/login"));
+    }
+
+    @ExceptionHandler({RefreshTokenFailedException.class, TokenCookieMissingException.class})
+    public ModelAndView handleRefreshTokenFailedException() {
+
+        RedirectView redirectView = new RedirectView("/auth/error");
+        redirectView.addStaticAttribute("cause", "알 수 없는 이유로 인해 인증 정보를 찾을 수 없습니다.");
+        return new ModelAndView(redirectView);
     }
 
     @ExceptionHandler(OrderWaitingException.class)

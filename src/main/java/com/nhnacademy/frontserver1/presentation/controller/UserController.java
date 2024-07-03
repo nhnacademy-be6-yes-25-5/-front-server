@@ -27,7 +27,7 @@ import java.time.LocalDate;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/users")
+//@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
@@ -65,7 +65,7 @@ public class UserController {
     }
 
     // 회원 정보 수정 페이지
-    @GetMapping("/info")
+    @GetMapping("/mypage/info")
     public String userInfo(Model model) {
 
         UserResponse user = userService.findByUser();
@@ -76,7 +76,7 @@ public class UserController {
     }
 
     // 회원 정보 수정
-    @PutMapping
+    @PutMapping("/mypage/info")
     public ResponseEntity<Void> updateUser(@RequestBody UpdateUserRequest userRequest,
                              Model model) {
 
@@ -87,14 +87,14 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/delete")
+    @GetMapping("/mypage/delete")
     public String userDelete(Model model) {
 
         return "mypage/mypage-delete";
     }
 
     // 회원 탈퇴
-    @DeleteMapping
+    @DeleteMapping("/mypage/delete")
     public ResponseEntity<Void> deleteUser(@RequestBody DeleteUserRequest userRequest) {
         userService.deleteUser(userRequest);
 
@@ -102,7 +102,7 @@ public class UserController {
     }
 
     // 회원 등급 페이지
-    @GetMapping("/grades")
+    @GetMapping("/mypage/grades")
     public String getUserGrades(Model model) {
 
         // todo : 회원 등급 가져오는 로직
@@ -115,7 +115,7 @@ public class UserController {
     }
 
     // 회원 현재 포인트와 포인트 이력 조회
-    @GetMapping("/points/logs")
+    @GetMapping("/mypage/point-logs")
     public String getUserPoints(@RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "15") int size,
                                 Model model) {
@@ -128,7 +128,7 @@ public class UserController {
         return "mypage/mypage-pointLogs";
     }
 
-    @GetMapping("/{userId}/addresses")
+    @GetMapping("/users/{userId}/addresses")
     public String getUserAddresses(@PathVariable Long userId, Model model) {
         Pageable pageable = PageRequest.of(0, 10);
         UsersResponse user = userService.getUserById(userId);

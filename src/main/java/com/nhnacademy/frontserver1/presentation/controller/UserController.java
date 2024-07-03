@@ -27,7 +27,6 @@ import java.time.LocalDate;
 
 @Controller
 @RequiredArgsConstructor
-//@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;

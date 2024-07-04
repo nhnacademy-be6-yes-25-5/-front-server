@@ -2,7 +2,7 @@ package com.nhnacademy.frontserver1.application.service.impl;
 
 import com.nhnacademy.frontserver1.application.service.OrderService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.AddressAdaptor;
-import com.nhnacademy.frontserver1.infrastructure.adaptor.BookAdapter;
+import com.nhnacademy.frontserver1.infrastructure.adaptor.BookAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.CartAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.CouponAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.OrderAdaptor;
@@ -43,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
     private final CartAdaptor cartAdaptor;
     private final AddressAdaptor addressAdaptor;
     private final UserAdaptor userAdaptor;
-    private final BookAdapter bookAdapter;
+    private final BookAdaptor bookAdaptor;
     private final CouponAdaptor couponAdaptor;
 
     @Override
@@ -75,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<ReadCartBookResponse> getOrderBook(Long bookId, Integer quantity) {
         if (Objects.nonNull(bookId) && Objects.nonNull(quantity)) {
-            BookResponse bookResponse = bookAdapter.findBookById(bookId);
+            BookResponse bookResponse = bookAdaptor.findBookById(bookId);
             ReadCartBookResponse readCartBookResponse = ReadCartBookResponse.from(bookResponse, quantity);
 
             return Collections.singletonList(readCartBookResponse);

@@ -1,7 +1,7 @@
 package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.CouponService;
-import com.nhnacademy.frontserver1.infrastructure.adaptor.BookAdapter;
+import com.nhnacademy.frontserver1.infrastructure.adaptor.BookAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyCategoryRequestDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.CategoryResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyCategoryResponseDTO;
@@ -24,7 +24,7 @@ import static org.springframework.data.domain.PageRequest.of;
 public class CouponPolicyCategoryController {
 
     private final CouponService couponService;
-    private final BookAdapter bookAdapter;
+    private final BookAdaptor bookAdapter;
 
     @GetMapping
     public String findAll(@RequestParam(defaultValue = "0") int page,

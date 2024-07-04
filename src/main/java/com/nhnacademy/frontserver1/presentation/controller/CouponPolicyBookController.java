@@ -1,15 +1,13 @@
 package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.CouponService;
-import com.nhnacademy.frontserver1.infrastructure.adaptor.BookAdapter;
+import com.nhnacademy.frontserver1.infrastructure.adaptor.BookAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyBookRequestDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.BookCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyBookResponseDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -26,7 +24,7 @@ public class CouponPolicyBookController {
 
     private final CouponService couponService;
 
-    private final BookAdapter bookAdapter;
+    private final BookAdaptor bookAdapter;
 
     @GetMapping
     public String findAll(@RequestParam(defaultValue = "0") int page,

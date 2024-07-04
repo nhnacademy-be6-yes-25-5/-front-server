@@ -45,7 +45,7 @@ public class HomeController {
     }
 
     @GetMapping("/product/list/{categoryId}")
-    public String bookCategory(Model model, @PathVariable Long categoryId, @PageableDefault(size = 8, page = 0) Pageable pageable){
+    public String bookCategory(Model model, @PathVariable Long categoryId, @PageableDefault(size = 10, page = 0) Pageable pageable){
 
         Page<BookResponse> bookList = bookService.getBookByCategoryId(categoryId, pageable);
         List<CategoryResponse> rootCategories = categoryService.findRootCategories();
@@ -53,18 +53,24 @@ public class HomeController {
         int startPage = Math.max(nowPage - 4, 0);
         int endPage = Math.min(nowPage + 5, bookList.getTotalPages() - 1);
 
+        if(bookList.getTotalPages() <= 10) {
+            startPage = 0;
+            endPage = bookList.getTotalPages() - 1;
+        } else {
+            if (startPage == 0) {
+                endPage = 9;
+            } else if (endPage == bookList.getTotalPages() -1) {
+                startPage = bookList.getTotalPages() - 10;
+            }
+        }
+
         model.addAttribute("bookList", bookList);
-        model.addAttribute("nowPage", nowPage + 1); // 현재 페이지 번호 (1부터 시작하도록 +1)
-        model.addAttribute("startPage", startPage + 1); // 시작 페이지 번호 (1부터 시작하도록 +1)
-        model.addAttribute("endPage", endPage + 1); // 끝 페이지 번호 (1부터 시작하도록 +1)
+        model.addAttribute("nowPage", nowPage + 1);
+        model.addAttribute("startPage", startPage + 1);
+        model.addAttribute("endPage", endPage + 1);
         model.addAttribute("totalPages", bookList.getTotalPages());
         model.addAttribute("categories", rootCategories);
 
         return "product/product-list";
-    }
-
-    @GetMapping("/product/grid/{categoryId}")
-    public String bookCategoryGrid(Model model, @PathVariable Long categoryId){
-        return "product-grids";
     }
 }

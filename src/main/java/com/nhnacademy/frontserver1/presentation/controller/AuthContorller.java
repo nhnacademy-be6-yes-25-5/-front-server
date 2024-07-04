@@ -2,14 +2,16 @@ package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.impl.AuthServiceImpl;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.LoginUserRequest;
-import com.nhnacademy.frontserver1.presentation.dto.response.user.AuthResponse;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * AuthController 클래스는 사용자 인증 관련 기능을 제공하는 Spring MVC 컨트롤러입니다.
@@ -23,6 +25,15 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthContorller {
+
+    @Value("${payco.client-id}")
+    private String clientId;
+
+    @Value("${payco.redirect-uri}")
+    private String redirectUri;
+
+    @Value("${provider.payco.authorization-uri}")
+    private String authorizationUri;
 
     private final AuthServiceImpl authService;
 
@@ -63,6 +74,18 @@ public class AuthContorller {
         return "redirect:/";
     }
 
+    @GetMapping("/login/payco")
+    public RedirectView requestPaycoAuth() throws UnsupportedEncodingException {
+
+        String authorizationUrl = authorizationUri + "?" +
+                "response_type=code" +
+                "&client_id=" + clientId +
+                "&redirect_uri=" + URLEncoder.encode(redirectUri, "UTF-8") +
+                "&serviceProviderCode=FRIENDS" +
+                "&userLocale=ko_KR";
+
+        return new RedirectView(authorizationUrl);
+    }
 
     /**
      * 토큰 테스트 페이지를 반환합니다.

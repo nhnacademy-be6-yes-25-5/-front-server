@@ -8422,3 +8422,24 @@ tr {
 .shipping-address-actions {
   text-align: right;
 }
+
+/*edit by chae*/
+.payco-btn {
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.payco-btn img {
+  width: 61%;
+  height: auto;
+  transition: filter 0.3s ease;
+}
+
+.payco-btn:hover img {
+  filter: brightness(0) invert(1);
+}
+
+/* 선택적: 버튼 배경색 변경 */
+.payco-btn:hover {
+  background-color: #fa2828; /* PAYCO의 대표색 */
+}

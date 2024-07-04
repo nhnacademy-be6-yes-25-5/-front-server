@@ -1,6 +1,13 @@
 spring:
   profiles:
     active: dev
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 3RDYkPs3KeIrCYnH9mljM_v
+            client-secret: u13B9N3PzPxx7JdQ8qovRelc
 jwt:
   access-token:
     expiration-ms: 18000

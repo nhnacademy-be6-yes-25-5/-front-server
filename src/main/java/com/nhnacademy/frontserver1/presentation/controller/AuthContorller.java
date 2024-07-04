@@ -53,25 +53,12 @@ public class AuthContorller {
      * 사용자 로그인을 처리합니다.
      *
      * @param loginUserRequest 로그인 요청 정보 (이메일과 비밀번호 포함)
-     * @param response HTTP 응답 객체
      * @return 로그인 성공 시 메인 페이지로의 리다이렉트 경로
      */
     @PostMapping("/login")
-    public String login(@ModelAttribute LoginUserRequest loginUserRequest, HttpServletResponse response) {
-        AuthResponse token = authService.loginUser(loginUserRequest);
+    public String login(@ModelAttribute LoginUserRequest loginUserRequest) {
 
-        Cookie accessTokenCookie = new Cookie("AccessToken", token.accessToken());
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setSecure(true); // HTTPS 연결에서만 전송
-        accessTokenCookie.setPath("/");
-
-        Cookie refreshTokenCookie = new Cookie("RefreshToken", token.refreshToken());
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setSecure(true); // HTTPS 연결에서만 전송
-        refreshTokenCookie.setPath("/");
-
-        response.addCookie(accessTokenCookie);
-        response.addCookie(refreshTokenCookie);
+        authService.loginUser(loginUserRequest);
 
         return "redirect:/";
     }

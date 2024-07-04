@@ -42,8 +42,6 @@ public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
 
         if (path.startsWith("/auth/login") || path.startsWith("/orders/none") || path.matches(".*/orders/.*/delivery.*")
                 || path.startsWith("/users/sign-up") || path.equals("/coupon/modal") || path.matches("/coupons/books/\\d+/coupons")) {
-        if (path.startsWith("/auth/login") || path.startsWith("/orders/none")
-                || path.startsWith("/users/sign-up")) {
             return;
         }
 

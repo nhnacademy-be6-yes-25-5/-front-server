@@ -26,15 +26,15 @@ public class TokenExtractorAspect {
 
             // 토큰 갱신시의 응답 헤더에서 토큰 가져오기
             HttpHeaders headers = responseEntity.getHeaders();
-            String accessToken = headers.getFirst("X-New-Access-Token");
-            String refreshToken = headers.getFirst("X-New-Refresh-Token");
+            String accessToken = headers.getFirst(HttpHeaders.AUTHORIZATION);
+            String refreshToken = headers.getFirst("Refresh-Token");
 
             // DispatcherServletContext에 토큰 저장
             RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
             if (requestAttributes instanceof ServletRequestAttributes) {
                 HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-                request.setAttribute("access_token", accessToken);
-                request.setAttribute("refresh_token", refreshToken);
+                request.setAttribute("AccessToken", accessToken);
+                request.setAttribute("RefreshToken", refreshToken);
             }
         }
     }

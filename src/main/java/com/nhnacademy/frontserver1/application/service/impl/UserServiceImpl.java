@@ -81,6 +81,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Boolean isEmailDuplicate(String email) {
+        return userAdaptor.checkEmail(email);
+    }
+
+    @Override
     public Page<UserAddressResponse> getUserAddresses(Long userId, Pageable pageable) {
         UsersResponse user = getUserById(userId);
         List<UserAddressResponse> addresses = user.addresses();

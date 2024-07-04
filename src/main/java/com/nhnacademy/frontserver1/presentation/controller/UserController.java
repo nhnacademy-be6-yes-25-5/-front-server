@@ -127,6 +127,11 @@ public class UserController {
         return "mypage/mypage-pointLogs";
     }
 
+    @GetMapping("/check-email")
+    public ResponseEntity<Boolean> checkEmail(@RequestParam String email) {
+        return ResponseEntity.ok(userService.isEmailDuplicate(email));
+    }
+
     @GetMapping("/users/{userId}/addresses")
     public String getUserAddresses(@PathVariable Long userId, Model model) {
         Pageable pageable = PageRequest.of(0, 10);

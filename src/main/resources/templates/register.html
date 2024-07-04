@@ -26,13 +26,15 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="userBirth">생년월일</label>
-                                    <input class="form-control" type="date" id="userBirth" name="userBirth" required>
+                                    <input class="form-control" type="date" id="userBirth" name="userBirth">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="userEmail">E-mail 주소</label>
                                     <input class="form-control" type="email" id="userEmail" name="userEmail" required>
+                                    <button type="button" class="btn btn-secondary" id="checkEmailButton">중복 체크</button>
+                                    <div id="emailCheckResult"></div>
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -91,7 +93,58 @@
 <!-- jQuery CDN 추가 -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- 인라인 JavaScript -->
+<!--    중복 이메일 체크-->
+    <script>
+        document.getElementById('checkEmailButton').addEventListener('click', function() {
+            const email = document.getElementById('userEmail').value.trim(); // 앞뒤 공백 제거
+            const emailCheckResult = document.getElementById('emailCheckResult');
+            const registerButton = document.getElementById('register-btn');
+
+            // 이메일 형식을 검증하는 정규표현식
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+            if (!email) {
+                emailCheckResult.textContent = '이메일을 입력해주세요.';
+                emailCheckResult.style.color = 'red';
+                registerButton.disabled = true;
+                return;
+            }
+
+            if (!emailPattern.test(email)) {
+                emailCheckResult.textContent = '올바른 이메일 형식이 아닙니다.';
+                emailCheckResult.style.color = 'red';
+                registerButton.disabled = true;
+                return;
+            }
+
+            $.ajax({
+                url: '/check-email',
+                type: 'GET',
+                data: { email: email },
+                success: function(response) {
+                    if (response === true) {
+                        emailCheckResult.textContent = '이미 사용 중인 이메일입니다.';
+                        emailCheckResult.style.color = 'red';
+                        registerButton.disabled = true;
+                    } else {
+                        emailCheckResult.textContent = '사용 가능한 이메일입니다.';
+                        emailCheckResult.style.color = 'green';
+                        registerButton.disabled = false;
+                    }
+                },
+                error: function() {
+                    emailCheckResult.textContent = '이메일 중복 체크 중 오류가 발생했습니다.';
+                    emailCheckResult.style.color = 'red';
+                    registerButton.disabled = true;
+                }
+            });
+        });
+    </script>
+
+
+
+
+    <!-- 인라인 JavaScript -->
 <script>
     const phoneInput = document.getElementById('userPhone');
 

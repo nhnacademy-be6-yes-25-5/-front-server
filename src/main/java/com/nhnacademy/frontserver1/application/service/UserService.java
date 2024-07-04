@@ -33,4 +33,8 @@ public interface UserService {
     Page<UserAddressResponse> getUserAddresses(Long userId, Pageable pageable);
 
     ReadUserInfoResponse getUserPointsAndGrade();
+
+    Boolean isEmailDuplicate(String email);
+
+    Page<CouponBoxResponse> getStateCouponBox(String couponState, Pageable pageable);
 }

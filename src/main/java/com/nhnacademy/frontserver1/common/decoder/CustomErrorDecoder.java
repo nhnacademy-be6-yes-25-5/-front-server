@@ -38,7 +38,7 @@ public class CustomErrorDecoder implements ErrorDecoder {
             case 401:
                 if (responseBody.contains("refresh 토큰이 만료되었습니다.")) {
                     return new ExpireRefreshJwtException(
-                            ErrorStatus.toErrorStatus("주문 완료 대기중", 301, LocalDateTime.now())
+                            ErrorStatus.toErrorStatus("토큰 만료", 401, LocalDateTime.now())
                     );
                 }
             case 404:

@@ -55,9 +55,9 @@ public class AdminBookController {
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("tagList", tagList);
         model.addAttribute("productList", bookResponseList);
-        model.addAttribute("nowPage", nowPage);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
+        model.addAttribute("nowPage", nowPage + 1);
+        model.addAttribute("startPage", startPage + 1);
+        model.addAttribute("endPage", endPage + 1);
 
         return "admin/product/admin-product";
     }

@@ -44,8 +44,8 @@ public class HomeController {
         return "index";
     }
 
-    @GetMapping("/product/list/{categoryId}")
-    public String bookCategory(Model model, @PathVariable Long categoryId, @PageableDefault(size = 10, page = 0) Pageable pageable){
+    @GetMapping("/category/{categoryId}")
+    public String bookCategory(Model model, @PathVariable Long categoryId, @PageableDefault(size = 9, page = 0) Pageable pageable){
 
         Page<BookResponse> bookList = bookService.getBookByCategoryId(categoryId, pageable);
         List<CategoryResponse> rootCategories = categoryService.findRootCategories();

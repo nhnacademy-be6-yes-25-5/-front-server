@@ -6,12 +6,7 @@ import lombok.Getter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Getter
 @Builder
-public class PointLogResponse {
-    private Long pointLogId;
-    private LocalDateTime pointLogUpdatedAt;
-    private String pointLogUsed;
-    private String pointLogUpdatedType;
-    private BigDecimal pointLogAmount;
+public record PointLogResponse(BigDecimal pointCurrent, String pointLogUpdatedType,
+                               BigDecimal pointLogAmount, LocalDateTime pointLogUpdatedAt) {
 }

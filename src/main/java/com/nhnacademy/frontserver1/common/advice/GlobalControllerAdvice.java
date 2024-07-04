@@ -1,8 +1,10 @@
-package com.nhnacademy.frontserver1.common.handler;
+package com.nhnacademy.frontserver1.common.advice;
 
+import com.nhnacademy.frontserver1.application.service.UserService;
 import com.nhnacademy.frontserver1.common.exception.FeignClientException;
-import com.nhnacademy.frontserver1.common.exception.TokenCookieMissingException;
 import com.nhnacademy.frontserver1.common.exception.OrderWaitingException;
+import com.nhnacademy.frontserver1.common.exception.TokenCookieMissingException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +15,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 @ControllerAdvice
+@RequiredArgsConstructor
 @Slf4j
-public class GlobalExceptionHandler {
+public class GlobalControllerAdvice {
+
+    private final UserService userService;
 
     @ExceptionHandler(FeignClientException.class)
     public String handleFeignClientException(FeignClientException e, Model model) {

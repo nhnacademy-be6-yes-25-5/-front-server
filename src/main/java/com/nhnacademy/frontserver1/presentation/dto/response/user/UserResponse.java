@@ -1,8 +1,12 @@
 package com.nhnacademy.frontserver1.presentation.dto.response.user;
 
-import com.nhnacademy.frontserver1.presentation.dto.response.address.UserAddressResponse;
+import lombok.Builder;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-
-public record UserResponse(Long userId, String userName, String userGrade, int userPoints, UserAddressResponse defaultAddress, List<UserAddressResponse> addresses) {}
+@Builder
+public record UserResponse(Long userId, String userName, String userPhone, String userEmail, LocalDate userBirth,
+                           LocalDateTime userRegisterDate, LocalDateTime userLastLoginDate,
+                           Long providerId, Long userStateId, Long userGradeId, String userPassword) {
+}

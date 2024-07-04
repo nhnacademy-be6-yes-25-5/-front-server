@@ -5,13 +5,13 @@ import com.nhnacademy.frontserver1.common.provider.CookieTokenProvider;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import java.util.List;
 
 /**
  * JWT 인증을 위한 Feign 요청 인터셉터입니다.
@@ -42,13 +42,21 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
         }
 
         List<String> tokens = cookieTokenProvider.getTokenFromCookie(request);
-        Optional<String> token = cookieTokenProvider.getTokenFromCookie(request);
-        if (token.isEmpty() && (path.matches(".*/orders/.*/delivery.*") || path.startsWith("/carts")
+        boolean allTokensEmpty = tokens == null
+            || tokens.isEmpty()
+            || tokens.stream().allMatch(String::isEmpty);
+
+
+        if (allTokensEmpty && (path.matches(".*/orders/.*/delivery.*") || path.startsWith("/users/cart-books")
             || path.startsWith("/detail") || path.startsWith("/books"))) {
             return ;
         }
 
-        if (!tokens.isEmpty()) {
+        if (allTokensEmpty && (path.startsWith("/users/cart-books") || request.getMethod().equalsIgnoreCase("POST"))) {
+            return ;
+        }
+
+        if (!allTokensEmpty) {
             String accessToken = tokens.get(0);
             String refreshToken = tokens.get(1);
             if (!(accessToken.isBlank() || refreshToken.isBlank())) {
@@ -57,10 +65,9 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
                 template.header("Refresh-Token", refreshToken);
                 log.debug("Adding RefreshToken header: {}", refreshToken);
             }
-            else {
-                log.warn("Authorization token is missing in the cookies.");
-                throw new TokenCookieMissingException();
-            }
+        } else {
+            log.warn("Authorization token is missing in the cookies.");
+            throw new TokenCookieMissingException();
         }
     }
 

@@ -6,7 +6,7 @@ import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookQuant
 import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.CategoryResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.coupon.BookCouponResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.coupon.BookCouponResponseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "bookAdapter", url = "${eureka.gateway}/books" , configuration = FeignClientConfig.class)
+@FeignClient(name = "bookAdapter", url = "${eureka.gateway}/books", configuration = FeignClientConfig.class)
 public interface BookAdapter {
 
     @GetMapping("/page")
@@ -43,8 +43,11 @@ public interface BookAdapter {
     Page<BookResponse> getBookByCategory(@PathVariable Long categoryId, Pageable pageable);
 
     @GetMapping("/search")
-    List<BookCouponResponse> findBooksByName(@RequestParam("query") String query);
+    List<BookCouponResponseDTO> findBooksByName(@RequestParam("query") String query);
 
     @GetMapping("/categories")
     List<CategoryResponse> findAllCategories();
+
+    @GetMapping("/categories/book/{bookId}")
+    List<Long> getCategoryIdsByBookId(@PathVariable("bookId") Long bookId);
 }

@@ -4,7 +4,6 @@ import com.nhnacademy.frontserver1.application.service.UserService;
 import com.nhnacademy.frontserver1.common.exception.FeignClientException;
 import com.nhnacademy.frontserver1.common.exception.OrderWaitingException;
 import com.nhnacademy.frontserver1.common.exception.TokenCookieMissingException;
-import com.nhnacademy.frontserver1.presentation.dto.response.user.ReadUserInfoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -44,10 +42,5 @@ public class GlobalControllerAdvice {
         log.warn("OrderWaitingException 발생: ", e);
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
             .body(e.getMessage());
-    }
-
-    @ModelAttribute("userInfo")
-    public ReadUserInfoResponse addUserInfo() {
-        return userService.getUserPointsAndGrade();
     }
 }

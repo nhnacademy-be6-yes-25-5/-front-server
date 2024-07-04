@@ -167,13 +167,34 @@
         </div>
     </div>
     <!-- End Order History Area -->
+
+    <!-- 주소 검색 API -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        document.getElementById('searchAddressBtn').addEventListener('click', function() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+                    // 예제를 참고하여 다양한 활용법을 확인해 보세요.
+                    // 우편번호와 주소 정보를 해당 필드에 넣습니다.
+                    document.getElementById('addressLine1').value = data.roadAddress; // 도로명 주소 사용
+                    // 필요하다면 지번 주소는 data.jibunAddress에서 사용할 수 있습니다.
+                    // 상세 주소 입력 필드로 포커스를 이동시킵니다.
+                    document.getElementById('addressDetail').focus();
+                }
+            }).open();
+        });
+    </script>
     <script>
         function setAsDefault(addressId) {
             // 기본 배송지 설정을 위한 AJAX 호출 로직을 여기에 추가합니다.
             console.log("Set address with ID " + addressId + " as default.");
         }
+
+        newPasswordInput.addEventListener('input', pwCheck);
+        confirmPasswordInput.addEventListener('input', pwCheck);
     </script>
 
-</div>
+</div>>
 </body>
 </html>

@@ -13,7 +13,6 @@ public record ReadAllUserOrderStatusResponse(String orderId,
                                              LocalDate orderCreatedAt,
                                              LocalDate orderDeliveryAt,
                                              BigDecimal amount,
-                                             OrderStatusType orderStatusType,
-                                             String role) {
+                                             OrderStatusType orderStatusType) {
 
 }

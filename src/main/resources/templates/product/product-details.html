@@ -29,6 +29,8 @@
                     </div>
                     <div class="col-lg-6 col-md-12 col-12">
                         <div class="product-info">
+                            <input type="hidden" id="bookId" th:value="${book.bookId()}">
+
                             <h2 th:text = "${book.bookName()}" class="title">GoPro Karma Camera Drone</h2>
                             <p th:text = "${book.bookAuthor()}" class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">Action
                                     cameras</a></p>
@@ -97,11 +99,13 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-12">
                                         <div class="wish-button">
-                                            <button class="btn" data-bs-toggle="modal" data-bs-target="#couponModal"><i class="lni lni-gift"></i> Receive Coupon</button>
+                                            <button class="btn" id="couponButton" data-bs-toggle="modal" data-bs-target="#couponModal">
+                                                <i class="lni lni-gift"></i> Receive Coupon
+                                            </button>
                                         </div>
                                     </div>
 
-                                    <!-- Coupon Modal -->
+                                    <!-- 쿠폰 모달 -->
                                     <div class="modal fade" id="couponModal" tabindex="-1" aria-labelledby="couponModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
@@ -110,7 +114,6 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <!-- 쿠폰 목록을 표시하는 내용 -->
                                                     <table class="table">
                                                         <thead>
                                                         <tr>
@@ -123,9 +126,9 @@
                                                         <tbody id="couponList">
                                                         <tr th:each="coupon : ${coupons}">
                                                             <td th:text="${coupon.couponName}"></td>
-                                                            <td th:text="${coupon.discountValue}"></td>
-                                                            <td th:text="${coupon.expiredAt}"></td>
-                                                            <td><button class="btn btn-primary">발급받기</button></td>
+                                                            <td th:text="${coupon.couponPolicyRate != null ? coupon.couponPolicyRate + '%' : coupon.couponPolicyDiscountValue}"></td>
+                                                            <td th:text="${#dates.format(coupon.couponExpiredAt, 'yyyy-MM-dd')}"></td>
+                                                            <td><button class="btn btn-primary claim-coupon-btn" th:data-coupon-id="${coupon.couponId}">발급받기</button></td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
@@ -377,6 +380,7 @@
     <script src="/js/tiny-slider.js"></script>
     <script src="/js/glightbox.min.js"></script>
     <script src="/js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script type="text/javascript">
@@ -387,14 +391,10 @@
             const imgs = document.querySelectorAll(".img");
             imgs.forEach(img => {
                 img.addEventListener("click", (e) => {
-                    //reset opacity
                     imgs.forEach(img => {
                         img.style.opacity = 1;
                     });
                     current.src = e.target.src;
-                    //adding class
-                    //current.classList.add("fade-in");
-                    //opacity
                     e.target.style.opacity = opacity;
                 });
             });
@@ -404,9 +404,52 @@
                 keyboard: false
             });
 
-            // 버튼 클릭 이벤트
-            document.querySelector('.wish-button button').addEventListener('click', function () {
-                myModal.show();
+            // 쿠폰 목록 표시 버튼 클릭 이벤트
+            document.getElementById('couponButton').addEventListener('click', function () {
+                var bookId = document.getElementById('bookId').value; // Hidden input field to store the bookId
+                $.ajax({
+                    url: '/coupons/books/' + bookId + '/coupons',
+                    method: 'GET',
+                    success: function(data) {
+                        var couponList = $('#couponList');
+                        couponList.empty();
+                        var couponIds = new Set();
+                        data.forEach(function(coupon) {
+                            if (!couponIds.has(coupon.couponId)) {
+                                couponIds.add(coupon.couponId);
+                                var row = '<tr>' +
+                                    '<td>' + coupon.couponName + '</td>' +
+                                    '<td>' + (coupon.couponPolicyRate ? coupon.couponPolicyRate + '%' : coupon.couponPolicyDiscountValue) + '</td>' +
+                                    '<td>' + new Date(coupon.couponExpiredAt).toLocaleString() + '</td>' +
+                                    '<td><button class="btn btn-primary claim-coupon-btn" data-coupon-id="' + coupon.couponId + '">발급받기</button></td>' +
+                                    '</tr>';
+                                couponList.append(row);
+                            }
+                        });
+
+                        // 쿠폰 발급 버튼 클릭 이벤트
+                        document.querySelectorAll('.claim-coupon-btn').forEach(button => {
+                            button.addEventListener('click', function () {
+                                var couponId = this.getAttribute('data-coupon-id');
+                                fetch('/coupons/claim', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/x-www-form-urlencoded',
+                                    },
+                                    body: new URLSearchParams({
+                                        'couponId': couponId
+                                    })
+                                }).then(response => {
+                                    if (response.ok) {
+                                        alert('쿠폰이 성공적으로 발급되었습니다.');
+                                    } else {
+                                        alert('쿠폰 발급에 실패하였습니다.');
+                                    }
+                                });
+                            });
+                        });
+                    }
+                });
             });
         });
     </script>

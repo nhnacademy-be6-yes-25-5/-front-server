@@ -5,6 +5,7 @@ import com.nhnacademy.frontserver1.presentation.dto.response.cart.CreateCartResp
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadCartBookResponse;
 import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -15,5 +16,5 @@ public interface CartAdaptor {
     List<ReadCartBookResponse> getCartBooks();
 
     @PostMapping("/cart-books")
-    CreateCartResponse createCart(CreateCartRequest createCartRequest);
+    ResponseEntity<CreateCartResponse> createCart(CreateCartRequest createCartRequest);
 }

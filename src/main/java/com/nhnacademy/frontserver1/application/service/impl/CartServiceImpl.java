@@ -15,6 +15,6 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CreateCartResponse createCart(CreateCartRequest createCartRequest) {
-        return cartAdaptor.createCart(createCartRequest);
+        return cartAdaptor.createCart(createCartRequest).getBody();
     }
 }

@@ -28,9 +28,9 @@ public class BookController {
     public String detail(Model model, @PathVariable Long bookId) {
         BookResponse book = bookService.getBook(bookId);
 
-        if (likesAdapter.exist(bookId)) {
-            model.addAttribute("like", likesAdapter.findByBookIdAndUserId(bookId));
-        }
+//        if (likesAdapter.exist(bookId)) {
+//            model.addAttribute("like", likesAdapter.findByBookIdAndUserId(bookId));
+//        }
         List<Long> categoryIds = bookService.getCategoryIdsByBookId(bookId);
 //        List<BookDetailCouponResponseDTO> coupons = couponService.getCoupons(bookId, categoryIds);
 //        model.addAttribute("coupons", coupons);

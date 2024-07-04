@@ -9,7 +9,7 @@ import com.nhnacademy.frontserver1.infrastructure.adaptor.OrderAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.PolicyAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.UserAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
-import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadCartBookResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadOrderNoneMemberRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;

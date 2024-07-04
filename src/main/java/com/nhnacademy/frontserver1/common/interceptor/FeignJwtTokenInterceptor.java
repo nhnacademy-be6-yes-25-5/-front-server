@@ -6,19 +6,21 @@ import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import java.util.Optional;
+
+import java.util.List;
 
 /**
  * JWT 인증을 위한 Feign 요청 인터셉터입니다.
  * 이 인터셉터는 쿠키에서 JWT 토큰을 추출하여 Feign 요청의 Authorization 헤더에 추가합니다.
  * Authorization 쿠키(토큰이 담겨있는 쿠키)가 없는 경우 NoTokenCookieException을 던져 로그인 페이지로 리디렉션합니다.
  */
+@Slf4j
 @RequiredArgsConstructor
-public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
+public class FeignJwtTokenInterceptor implements RequestInterceptor {
 
     private final CookieTokenProvider cookieTokenProvider;
 

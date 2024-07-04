@@ -36,14 +36,6 @@ public class GlobalControllerAdvice {
         return "404";
     }
 
-    @ExceptionHandler(TokenCookieMissingException.class)
-    public ModelAndView handleTokenExpiredException(TokenCookieMissingException e) {
-
-        log.error("error :", e);
-
-        return new ModelAndView(new RedirectView("/auth/login"));
-    }
-
     @ExceptionHandler({RefreshTokenFailedException.class, TokenCookieMissingException.class})
     public ModelAndView handleRefreshTokenFailedException() {
 

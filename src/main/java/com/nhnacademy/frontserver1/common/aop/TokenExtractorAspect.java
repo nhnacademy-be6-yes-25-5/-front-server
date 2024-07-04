@@ -24,7 +24,7 @@ public class TokenExtractorAspect {
         if (result instanceof ResponseEntity) {
             ResponseEntity<?> responseEntity = (ResponseEntity<?>) result;
 
-            // 응답 헤더에서 토큰 가져오기
+            // 토큰 갱신시의 응답 헤더에서 토큰 가져오기
             HttpHeaders headers = responseEntity.getHeaders();
             String accessToken = headers.getFirst("X-New-Access-Token");
             String refreshToken = headers.getFirst("X-New-Refresh-Token");

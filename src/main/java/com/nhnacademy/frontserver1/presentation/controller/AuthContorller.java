@@ -60,7 +60,6 @@ public class AuthContorller {
     public String login(@ModelAttribute LoginUserRequest loginUserRequest, HttpServletResponse response) {
         AuthResponse token = authService.loginUser(loginUserRequest);
 
-        // AccessToken을 헤더에 추가
         Cookie accessTokenCookie = new Cookie("AccessToken", token.accessToken());
         accessTokenCookie.setHttpOnly(true);
         accessTokenCookie.setSecure(true); // HTTPS 연결에서만 전송

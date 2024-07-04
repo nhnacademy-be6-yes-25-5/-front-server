@@ -1,6 +1,13 @@
 spring:
   profiles:
     active: dev
+jwt:
+  access-token:
+    expiration-ms: 18000
+    cookie-name: AccessToken
+  refresh-token:
+    expiration-ms: 8640000
+    cookie-name: RefreshToken
   mvc:
     hidden-method:
       filter:

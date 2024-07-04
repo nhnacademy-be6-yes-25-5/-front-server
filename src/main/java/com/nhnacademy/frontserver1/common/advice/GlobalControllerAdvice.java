@@ -1,8 +1,11 @@
 package com.nhnacademy.frontserver1.common.advice;
 
+import com.nhnacademy.frontserver1.common.exception.ExpireRefreshJwtException;
+import com.nhnacademy.frontserver1.common.exception.RefreshTokenFailedException;
 import com.nhnacademy.frontserver1.application.service.UserService;
 import com.nhnacademy.frontserver1.common.exception.FeignClientException;
 import com.nhnacademy.frontserver1.common.exception.OrderWaitingException;
+import lombok.RequiredArgsConstructor;
 import com.nhnacademy.frontserver1.common.exception.TokenCookieMissingException;
 import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +34,12 @@ public class GlobalControllerAdvice {
         return new ResponseEntity<>(errorStatus, errorStatus.toHttpStatus());
     }
 
-    @ExceptionHandler(TokenCookieMissingException.class)
-    public ModelAndView handleTokenExpiredException(TokenCookieMissingException e) {
+    @ExceptionHandler({RefreshTokenFailedException.class, TokenCookieMissingException.class})
+    public ModelAndView handleRefreshTokenFailedException() {
 
-        log.error("error :", e);
-
-        return new ModelAndView(new RedirectView("/auth/login"));
+        RedirectView redirectView = new RedirectView("/auth/error");
+        redirectView.addStaticAttribute("cause", "알 수 없는 이유로 인해 인증 정보를 찾을 수 없습니다.");
+        return new ModelAndView(redirectView);
     }
 
     @ExceptionHandler(OrderWaitingException.class)

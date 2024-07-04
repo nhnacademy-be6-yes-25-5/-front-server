@@ -1,6 +1,8 @@
 package com.nhnacademy.frontserver1.common.decoder;
 
 import com.nhnacademy.frontserver1.common.exception.FeignClientException;
+import com.nhnacademy.frontserver1.common.exception.RefreshTokenFailedException;
+import com.nhnacademy.frontserver1.common.exception.ExpireRefreshJwtException;
 import com.nhnacademy.frontserver1.common.exception.OrderWaitingException;
 import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
 import feign.Response;
@@ -33,6 +35,12 @@ public class CustomErrorDecoder implements ErrorDecoder {
             case 400:
                 log.error("클라이언트 요청에서 에러가 발생하였습니다. 상태 코드: 400, 응답 본문: {}", responseBody);
                 break;
+            case 401:
+                if (responseBody.contains("refresh 토큰이 만료되었습니다.")) {
+                    return new ExpireRefreshJwtException(
+                            ErrorStatus.toErrorStatus("주문 완료 대기중", 301, LocalDateTime.now())
+                    );
+                }
             case 404:
                 if (methodKey.contains("findOrderStatusByOrderId")) {
                     return new OrderWaitingException(
@@ -40,6 +48,12 @@ public class CustomErrorDecoder implements ErrorDecoder {
                     );
                 }
                 log.error("리소스를 찾을 수 없습니다. 상태 코드: 404, 응답 본문: {}", responseBody);
+
+                if (responseBody.contains("토큰 갱신 중 오류가 발생했습니다.")) {
+                    return new RefreshTokenFailedException(
+                            ErrorStatus.toErrorStatus("주문 완료 대기중", 301, LocalDateTime.now())
+                    );
+                }
                 break;
             case 500:
                 log.error("서버에서 에러가 발생하였습니다. 상태 코드: 500, 응답 본문: {}", responseBody);

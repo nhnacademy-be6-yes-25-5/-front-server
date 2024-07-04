@@ -4,6 +4,7 @@ import com.nhnacademy.frontserver1.application.service.UserService;
 import com.nhnacademy.frontserver1.common.exception.FeignClientException;
 import com.nhnacademy.frontserver1.common.exception.OrderWaitingException;
 import com.nhnacademy.frontserver1.common.exception.TokenCookieMissingException;
+import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.ReadUserInfoResponse;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -26,11 +27,12 @@ public class GlobalControllerAdvice {
     private final UserService userService;
 
     @ExceptionHandler(FeignClientException.class)
-    public String handleFeignClientException(FeignClientException e, Model model) {
+    public ResponseEntity<ErrorStatus> handleFeignClientException(FeignClientException e, Model model) {
+        ErrorStatus errorStatus = e.getErrorStatus();
 
         log.error("error :", e);
 
-        return "404";
+        return new ResponseEntity<>(errorStatus, errorStatus.toHttpStatus());
     }
 
     @ExceptionHandler(TokenCookieMissingException.class)

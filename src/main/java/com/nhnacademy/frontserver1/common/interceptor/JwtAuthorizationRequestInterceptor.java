@@ -46,7 +46,8 @@ public class JwtAuthorizationRequestInterceptor implements RequestInterceptor {
         }
 
         Optional<String> token = cookieTokenProvider.getTokenFromCookie(request);
-        if (token.isEmpty() && path.matches(".*/orders/.*/delivery.*")) {
+        if (token.isEmpty() && (path.matches(".*/orders/.*/delivery.*") || path.startsWith("/carts")
+            || path.startsWith("/detail") || path.startsWith("/books"))) {
             return ;
         }
 

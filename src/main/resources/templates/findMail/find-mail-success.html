@@ -1,36 +1,25 @@
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
-    <body>
-        <div th:fragment="content">
-
-            <!-- Start Breadcrumbs Component -->
-            <div th:replace="~{fragments/breadcrumbs :: breadcrumbs}"></div>
-            <!-- End Breadcrumbs Component -->
-
-            <!-- Start Email Found Area -->
-            <div class="account-login section">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-12">
-                            <div class="register-form">
-                                <div class="title">
-                                    <h3>Email Found</h3>
-                                    <p>We found the following email associated with your account:</p>
-                                </div>
-                                <div class="email-info">
-                                    <p><strong>Email:</strong> youremail1@example.com</p>
-                                    <p><strong>Email:</strong> youremail2@example.com</p>
-                                </div>
-                                <div class="button">
-                                    <a href="#" class="btn">Login Now</a>
-                                </div>
-                                <p class="outer-link">Forgot your password? <a href="#">Reset Password</a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End Email Found Area -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Email Success</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<div th:fragment="content">
+    <div class="container">
+        <h2>Email Found</h2>
+        <p>We found the following email associated with your account:</p>
+        <ul class="email-list">
+            <li th:each="email : ${emails}" th:text="${email.userEmail}"></li>
+        </ul>
+        <div class="actions">
+            <a href="/login" class="btn link-btn">Login Now</a>
+            <p>Forgot your password?</p>
+            <a href="/set-new-password" class="btn link-btn">Reset Password</a>
         </div>
-    </body>
+    </div>
+</div>
+</body>
 </html>

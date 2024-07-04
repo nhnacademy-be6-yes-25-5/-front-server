@@ -24,3 +24,6 @@ nhn:
 naverapi:
   secret: ${NAVER_SECRET}
   id: ${NAVER_ID}
+
+payco:
+  redirect-url: https://${EUREKA_SERVER_HOSTNAME}/

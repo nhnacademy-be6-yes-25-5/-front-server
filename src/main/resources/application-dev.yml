@@ -28,3 +28,6 @@ naverapi:
 
 #app:
 #  mode: development
+
+payco:
+  redirect-url: http://localhost:8040/

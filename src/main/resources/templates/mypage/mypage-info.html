@@ -39,7 +39,8 @@
                                             </div>
                                             <div class="form-group input-group">
                                                 <label for="userBirth">생일</label>
-                                                <input class="form-control" type="date" name="userBirth" id="userBirth" th:field="*{user.userBirth}">
+                                                <input class="form-control" type="date" id="userBirth" name="userBirth" th:value="${#temporals.format(user.userBirth, 'yyyy-MM-dd')}">
+
                                             </div>
                                             <div class="form-group input-group">
                                                 <label for="userPassword">현재 비밀번호</label>

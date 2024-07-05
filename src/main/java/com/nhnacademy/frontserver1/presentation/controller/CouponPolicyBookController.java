@@ -3,7 +3,7 @@ package com.nhnacademy.frontserver1.presentation.controller;
 import com.nhnacademy.frontserver1.application.service.CouponService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.BookAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.coupon.CouponPolicyBookRequestDTO;
-import com.nhnacademy.frontserver1.presentation.dto.response.coupon.BookCouponResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.coupon.BookCouponResponseDTO;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyBookResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -48,7 +48,7 @@ public class CouponPolicyBookController {
 
     @GetMapping("/search")
     public String searchBooks(@RequestParam(value = "query", required = false, defaultValue = "") String query, Model model) {
-        List<BookCouponResponse> books = bookAdapter.findBooksByName(query);
+        List<BookCouponResponseDTO> books = bookAdapter.findBooksByName(query);
         model.addAttribute("bookList", books);
         model.addAttribute("keyword", query);
         return "admin/policy/admin-policy-coupon-book-search";

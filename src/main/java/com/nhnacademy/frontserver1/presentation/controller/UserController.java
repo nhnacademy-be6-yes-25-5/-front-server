@@ -147,7 +147,7 @@ public class UserController {
         return "mypage/mypage-address";
     }
 
-    private static final Logger logger = Logger.getLogger(UserController.class.getName());
+  //  private static final Logger logger = Logger.getLogger(UserController.class.getName());
 
     @GetMapping("/find-email")
     public String showFindEmailForm() {
@@ -159,9 +159,9 @@ public class UserController {
         try{
 
             // 입력 값 로그 출력
-            logger.info("프론트 Received name: " + name);
-            logger.info("프론트 Received phone: " + phone);
-            logger.info("프론트 Pageable: " + pageable);
+//            logger.info("프론트 Received name: " + name);
+//            logger.info("프론트 Received phone: " + phone);
+//            logger.info("프론트 Pageable: " + pageable);
             List<FindUserResponse> emails = userService.findAllUserEmailByUserNameByUserPhone(name, phone, pageable);
 
 
@@ -189,16 +189,16 @@ public class UserController {
 
     }
 
-    @ExceptionHandler(Exception.class)
-    public ModelAndView handleException(Exception ex) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("파인드메일페일이안되는이유 message", ex.getMessage());
-        modelAndView.setViewName("error/500");
-        return modelAndView;
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ModelAndView handleException(Exception ex) {
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.addObject("파인드메일페일이안되는이유 message", ex.getMessage());
+//        modelAndView.setViewName("error/500");
+//        return modelAndView;
+//    }
     //
-    @GetMapping("/login")
-    public String showLoginForm(){
-        return "login";
-    }
+//    @GetMapping("/login")
+//    public String showLoginForm(){
+//        return "login";
+//    }
 }

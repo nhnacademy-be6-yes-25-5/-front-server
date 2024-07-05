@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
 
 
 
-    private static final Logger logger = Logger.getLogger(UserService.class.getName());
+ //   private static final Logger logger = Logger.getLogger(UserService.class.getName());
     public List<FindUserResponse> findAllUserEmailByUserNameByUserPhone(String name, String phone, Pageable pageable) {
         try {
             FindEmailRequest request = FindEmailRequest.builder()
@@ -103,12 +103,12 @@ public class UserServiceImpl implements UserService {
                     .phone(phone)
                     //.pageable(pageable)
                     .build();
-            logger.info("프론트 Request: " + request.toString());
+            //logger.info("프론트 Request: " + request.toString());
             return userAdaptor.findByEmail(request, pageable);
 
         } catch (Exception e) {
 
-            logger.severe("프론트 Error in findAllUserEmailByUserNameByUserPhone: " + e.getMessage());
+          //  logger.severe("프론트 Error in findAllUserEmailByUserNameByUserPhone: " + e.getMessage());
             e.printStackTrace();
             throw e;
 

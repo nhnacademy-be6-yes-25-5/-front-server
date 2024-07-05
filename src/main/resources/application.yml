@@ -1,8 +1,6 @@
 spring:
   profiles:
     active: dev
-
-
 jwt:
   access-token:
     expiration-ms: 18000

@@ -1,0 +1,43 @@
+.email-list {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0;
+}
+
+/* Actions section styles */
+.actions {
+    margin-top: 20px;
+}
+
+/* Button styles */
+.actions .btn {
+    display: inline-block;
+    padding: 10px 15px;
+    margin: 5px;
+    text-decoration: none;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.actions .btn:hover {
+    background-color: #0056b3;
+}
+
+/* Link button styles */
+.actions .link-btn {
+    background: none;
+    color: #007bff;
+    text-decoration: underline;
+    padding: 0;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.actions .link-btn:hover {
+    color: #0056b3;
+}

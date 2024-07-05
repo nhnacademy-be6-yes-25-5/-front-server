@@ -91,16 +91,16 @@
                         <nav aria-label="Page navigation example">
                             <ul class="pagination">
                                 <li class="page-item">
-                                    <a class="page-link" th:href="@{/admin/product(page = ${nowPage - 1})}" aria-label="Previous">
+                                    <a class="page-link" th:href="@{/admin/product(page = ${nowPage - 2})}" aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
                                 <th:block th:each = "page : ${#numbers.sequence(startPage, endPage)}">
                                     <li class="page-item"><a class="page-link" th:if="${page == nowPage}" th:text = "${page}">1</a></li>
-                                    <li class="page-item"><a th:if="${page != nowPage}" th:text = "${page}" class="page-link" th:href="@{/admin/product(page = ${page - 1})}">1</a></li>
+                                    <li class="page-item"><a th:if="${page != nowPage}" th:text = "${page}" class="page-link" th:href="@{/admin/tag(page = ${page - 1})}">1</a></li>
                                 </th:block>
                                 <li class="page-item">
-                                    <a class="page-link" th:href="@{/admin/product(page = ${nowPage + 1})}" aria-label="Next">
+                                    <a class="page-link" th:href="@{/admin/tag(page = ${nowPage})}" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>
@@ -127,13 +127,6 @@
                                 <div class="mb-3">
                                     <label for="addtagName" class="form-label">태그 이름</label>
                                     <input type="text" class="form-control" id="addtagName" name = "tagName"  required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="parenttagId" class="form-label">부모 태그</label>
-                                    <select name="parenttagId" class="form-select" id="parenttagId" >
-                                        <option th:value= "-1"> 선택하지 않음 </option>
-                                        <option th:each="tag : ${tagList}" th:value="${tag.tagId()}" th:text="${tag.tagName()}"></option>
-                                    </select>
                                 </div>
                             </div>
                             <div class="modal-footer">

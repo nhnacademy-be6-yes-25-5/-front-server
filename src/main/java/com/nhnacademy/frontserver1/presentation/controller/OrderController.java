@@ -43,8 +43,9 @@ public class OrderController {
     private static final String MEMBER = "MEMBER";
 
     @GetMapping("/checkout")
-    public String findAllCheckout(Model model, Pageable pageable, @RequestParam(required = false) Long bookId, @RequestParam(required = false) Integer quantity) {
-        List<ReadCartBookResponse> cartBookResponses = orderService.getOrderBook(bookId, quantity);
+    public String findAllCheckout(Model model, Pageable pageable,
+        @RequestParam List<Long> bookIdList, @RequestParam List<Integer> quantities) {
+        List<ReadCartBookResponse> cartBookResponses = orderService.getOrderBook(bookIdList, quantities);
         ReadOrderUserInfoResponse orderUserInfoResponse = orderService.getUserInfo();
         Integer totalAmount = getTotalAmount(cartBookResponses);
 

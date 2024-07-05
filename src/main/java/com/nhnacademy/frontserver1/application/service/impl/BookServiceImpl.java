@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.frontserver1.application.service.BookService;
 import com.nhnacademy.frontserver1.common.exception.ApplicationException;
 import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
-import com.nhnacademy.frontserver1.infrastructure.adaptor.BookAdapter;
+import com.nhnacademy.frontserver1.infrastructure.adaptor.BookAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.book.CreateBookRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookAPIResponse;
@@ -37,7 +37,7 @@ public class BookServiceImpl implements BookService {
     @Value("${naverapi.id}")
     private String clientId;
 
-    private final BookAdapter bookAdapter;
+    private final BookAdaptor bookAdapter;
 
     @Override
     public List<BookAPIResponse> searchBooks(String keyword) {

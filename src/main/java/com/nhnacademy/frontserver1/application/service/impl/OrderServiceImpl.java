@@ -2,20 +2,21 @@ package com.nhnacademy.frontserver1.application.service.impl;
 
 import com.nhnacademy.frontserver1.application.service.OrderService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.AddressAdaptor;
-import com.nhnacademy.frontserver1.infrastructure.adaptor.BookAdapter;
+import com.nhnacademy.frontserver1.infrastructure.adaptor.BookAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.CartAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.CouponAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.OrderAdaptor;
+import com.nhnacademy.frontserver1.infrastructure.adaptor.OrderBookAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.PolicyAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.UserAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
-import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadOrderNoneMemberRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderRequest;
-import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMaximumDiscountCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMyOrderHistoryResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderBookInfoResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDeliveryInfoResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDetailResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderStatusResponse;
@@ -25,10 +26,9 @@ import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadPurePrice
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.UpdateOrderResponse;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,7 +43,8 @@ public class OrderServiceImpl implements OrderService {
     private final CartAdaptor cartAdaptor;
     private final AddressAdaptor addressAdaptor;
     private final UserAdaptor userAdaptor;
-    private final BookAdapter bookAdapter;
+    private final BookAdaptor bookAdaptor;
+    private final OrderBookAdaptor orderBookAdaptor;
     private final CouponAdaptor couponAdaptor;
 
     @Override
@@ -73,15 +74,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<ReadCartBookResponse> getOrderBook(Long bookId, Integer quantity) {
-        if (Objects.nonNull(bookId) && Objects.nonNull(quantity)) {
-            BookResponse bookResponse = bookAdapter.findBookById(bookId);
-            ReadCartBookResponse readCartBookResponse = ReadCartBookResponse.from(bookResponse, quantity);
+    public List<ReadCartBookResponse> getOrderBook(List<Long> bookIdList, List<Integer> quantities) {
+        List<ReadOrderBookInfoResponse> orderBookInfoResponses = orderBookAdaptor.getBooksByBookIdList(bookIdList);
 
-            return Collections.singletonList(readCartBookResponse);
+        List<ReadCartBookResponse> cartBookResponses = new ArrayList<>();
+        for (ReadOrderBookInfoResponse orderBookInfoResponse : orderBookInfoResponses) {
+            Long bookId = orderBookInfoResponse.bookId();
+            Integer quantity = quantities.get(bookIdList.indexOf(bookId));
+
+            ReadCartBookResponse cartBookResponse = ReadCartBookResponse.of(orderBookInfoResponse,
+                quantity);
+            cartBookResponses.add(cartBookResponse);
         }
 
-        return cartAdaptor.getCartBooks();
+        return cartBookResponses;
     }
 
     @Override

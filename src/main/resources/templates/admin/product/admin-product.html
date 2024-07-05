@@ -79,15 +79,15 @@
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="name" class="form-label">책 제목</label>
-                                                                <input th:value="${product.bookName()}" type="text" class="form-control" id="name" name="bookName" required>
+                                                                <input th:value="${product.bookName()}" type="text" class="form-control" id="name" name="bookName" minlength="1" required>
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="price" class="form-label">정가</label>
-                                                                <input th:value="${product.bookPrice()}" type="number" class="form-control" id="price" name="bookPrice" required>
+                                                                <input th:value="${product.bookPrice()}" type="number" class="form-control" id="price" name="bookPrice" min="0" required>
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="sellingPrice" class="form-label">판매가격</label>
-                                                                <input th:value="${product.bookSellingPrice()}" type="number" class="form-control" id="sellingPrice" name = "bookSellingPrice" required>
+                                                                <input th:value="${product.bookSellingPrice()}" type="number" class="form-control" id="sellingPrice" name = "bookSellingPrice" min="0" required>
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="publisher" class="form-label">출판사</label>
@@ -95,7 +95,7 @@
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="quantity" class="form-label">재고</label>
-                                                                <input th:value="${product.bookQuantity()}" type="number" class="form-control" id="quantity" name = "quantity" required>
+                                                                <input th:value="${product.bookQuantity()}" type="number" class="form-control" id="quantity" name = "quantity" min="0" required>
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="imageUrl" class="form-label">이미지</label>
@@ -116,12 +116,12 @@
                                                             <div class="mb-3">
                                                                 <label for="tags" class="form-label">태그</label>
                                                                 <select name="tagIdList" class="form-select" id="tags" multiple>
-                                                                    <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}"></option>
+                                                                    <option th:each="tag : ${tagList}" th:value="${tag.tagId()}" th:text="${tag.tagName()}"></option>
                                                                 </select>
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="isbn" class="form-label">ISBN</label>
-                                                                <input th:value="${product.bookIsbn()}" type="text" class="form-control" id="isbn" name="bookIsbn" required>
+                                                                <input th:value="${product.bookIsbn()}" type="text" class="form-control" id="isbn" name="bookIsbn" minlength="10" maxlength="13" required>
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="publishDate" class="form-label">출판 일시</label>
@@ -207,7 +207,7 @@
                         <nav aria-label="Page navigation example">
                             <ul class="pagination">
                                 <li class="page-item">
-                                    <a class="page-link" th:href="@{/admin/product(page = ${nowPage - 1})}" aria-label="Previous">
+                                    <a class="page-link" th:href="@{/admin/product(page = ${nowPage - 2})}" aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
@@ -216,7 +216,7 @@
                                     <li class="page-item"><a th:if="${page != nowPage}" th:text = "${page}" class="page-link" th:href="@{/admin/product(page = ${page - 1})}">1</a></li>
                                 </th:block>
                                 <li class="page-item">
-                                    <a class="page-link" th:href="@{/admin/product(page = ${nowPage + 1})}" aria-label="Next">
+                                    <a class="page-link" th:href="@{/admin/product(page = ${nowPage})}" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>
@@ -254,19 +254,19 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="addPrice" class="form-label">정가</label>
-                                    <input type="number" class="form-control" id="addPrice" name= "bookPrice"  required>
+                                    <input type="number" class="form-control" id="addPrice" name= "bookPrice" min="0" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="addSellingPrice" class="form-label">판매 가격</label>
-                                    <input type="number" class="form-control" id="addSellingPrice" name ="bookSellingPrice"  required>
+                                    <input type="number" class="form-control" id="addSellingPrice" name ="bookSellingPrice" min="0" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="addPublisher" class="form-label">출판사</label>
-                                    <input type="text" class="form-control" id="addPublisher" name="bookPublisher" required>
+                                    <input type="text" class="form-control" id="addPublisher" name="bookPublisher">
                                 </div>
                                 <div class="mb-3">
                                     <label for="addQuantity" class="form-label">재고</label>
-                                    <input type="number" class="form-control" id="addQuantity" name ="quantity" required>
+                                    <input type="number" class="form-control" id="addQuantity" name ="quantity" min="0" required>
                                 </div>
 <!--                                <div class="mb-3">-->
 <!--                                    <label for="addImageUrl" class="form-label">이미지 URL</label>-->
@@ -280,7 +280,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="addAuthor" class="form-label">작가</label>
-                                    <input type="text" class="form-control" id="addAuthor" name="bookAuthor" required>
+                                    <input type="text" class="form-control" id="addAuthor" name="bookAuthor">
                                 </div>
                                 <div class="mb-3">
                                     <label for="addCategory" class="form-label">카테고리</label>
@@ -290,17 +290,17 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="addTags" class="form-label">태그</label>
-                                    <select class="form-select" id="addTags"  multiple>
+                                    <select name="tagIdList" class="form-select" id="addTags"  multiple>
                                         <option th:each="tag : ${tagList}" th:value="${tag.tagId()}" th:text="${tag.tagName()}"></option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="addIsbn" class="form-label">ISBN</label>
-                                    <input type="text" class="form-control" id="addIsbn" name="bookIsbn" required>
+                                    <input type="text" class="form-control" id="addIsbn" name="bookIsbn" minlength="10" maxlength="13" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="addPublishDate" class="form-label">출판 일시</label>
-                                    <input type="date" class="form-control" id="addPublishDate" name="bookPublishDate" required>
+                                    <input type="date" class="form-control" id="addPublishDate" name="bookPublishDate">
                                 </div>
                                 <div class="form-check form-switch">
                                     <input type="hidden" name="_bookIsPackable" value="on">

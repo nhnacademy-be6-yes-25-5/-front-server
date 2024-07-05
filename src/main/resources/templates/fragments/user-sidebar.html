@@ -7,15 +7,19 @@
       <div class="user-grade">
         <span>회원 등급:</span>
         <span class="grade">
-          <span th:if="${userInfo.gradeId == 1}">일반회원</span>
-          <span th:if="${userInfo.gradeId == 2}">로얄회원</span>
-          <span th:if="${userInfo.gradeId == 3}">골드회원</span>
-          <span th:if="${userInfo.gradeId == 4}">플래티넘회원</span>
+          <span th:if="${userInfo == null}">비회원</span>
+          <span th:if="${userInfo != null}">
+            <span th:if="${userInfo.gradeId == 1}">일반회원</span>
+            <span th:if="${userInfo.gradeId == 2}">로얄회원</span>
+            <span th:if="${userInfo.gradeId == 3}">골드회원</span>
+            <span th:if="${userInfo.gradeId == 4}">플래티넘회원</span>
+          </span>
         </span>
       </div>
       <div class="user-points">
         <span>잔여 포인트:</span>
-        <span class="points" th:text="${#numbers.formatInteger(userInfo.points, 0)} + 'P'">1,000P</span>
+        <span th:if="${userInfo != null}" class="points" th:text="${#numbers.formatInteger(userInfo.points, 0)} + 'P'">1,000P</span>
+        <span th:if="${userInfo == null}" class="points">0P</span>
       </div>
     </div>
     <ul class="nav nav-tabs flex-column">
@@ -23,16 +27,19 @@
         <a class="nav-link active" href="/mypage/orders">주문 내역</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">쿠폰함</a>
+        <a class="nav-link" href="/mypage/coupons">쿠폰함</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/users/info">정보 수정</a>
+        <a class="nav-link" href="/mypage/info">정보 수정</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">나의 리뷰</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">배송지 정보</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/mypage/point-logs">포인트 이력</a>
       </li>
     </ul>
   </div>

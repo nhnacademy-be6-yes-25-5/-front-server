@@ -2,10 +2,7 @@ package com.nhnacademy.frontserver1.application.service.impl;
 
 import com.nhnacademy.frontserver1.application.service.UserService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.UserAdaptor;
-import com.nhnacademy.frontserver1.presentation.dto.request.user.CreateUserRequest;
-import com.nhnacademy.frontserver1.presentation.dto.request.user.DeleteUserRequest;
-import com.nhnacademy.frontserver1.presentation.dto.request.user.PointPolicyRequest;
-import com.nhnacademy.frontserver1.presentation.dto.request.user.UpdateUserRequest;
+import com.nhnacademy.frontserver1.presentation.dto.request.user.*;
 import com.nhnacademy.frontserver1.presentation.dto.response.point.PointLogResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.point.PointPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.*;
@@ -13,6 +10,8 @@ import com.nhnacademy.frontserver1.presentation.dto.response.address.UserAddress
 
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -79,6 +78,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Boolean isEmailDuplicate(String email) {
+        return userAdaptor.checkEmail(email);
+    }
+
+    @Override
     public Page<UserAddressResponse> getUserAddresses(Long userId, Pageable pageable) {
         UsersResponse user = getUserById(userId);
         List<UserAddressResponse> addresses = user.addresses();
@@ -92,5 +96,34 @@ public class UserServiceImpl implements UserService {
         List<UserAddressResponse> pagedAddresses = addresses.subList(start, end);
 
         return new PageImpl<>(pagedAddresses, pageable, addresses.size());
+    }
+
+
+
+    private static final Logger logger = Logger.getLogger(UserService.class.getName());
+    public List<FindUserResponse> findAllUserEmailByUserNameByUserPhone(String name, String phone, Pageable pageable) {
+        try {
+            FindEmailRequest request = FindEmailRequest.builder()
+                    .name(name)
+                    .phone(phone)
+                    //.pageable(pageable)
+                    .build();
+            logger.info("프론트 Request: " + request.toString());
+            return userAdaptor.findByEmail(request, pageable);
+
+        } catch (Exception e) {
+
+            logger.severe("프론트 Error in findAllUserEmailByUserNameByUserPhone: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+
+
+        }
+
+    }
+
+    @Override
+    public Page<CouponBoxResponse> getStateCouponBox(String couponState, Pageable pageable) {
+        return userAdaptor.getStateCouponBox(couponState, pageable);
     }
 }

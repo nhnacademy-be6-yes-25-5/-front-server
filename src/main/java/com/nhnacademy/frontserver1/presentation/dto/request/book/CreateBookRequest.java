@@ -1,9 +1,6 @@
 package com.nhnacademy.frontserver1.presentation.dto.request.book;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -33,11 +30,14 @@ public record CreateBookRequest (
         Date bookPublishDate,
 
         @NotNull(message = "책 가격은 필수 입력 항목입니다.")
+        @Positive
         BigDecimal bookPrice,
 
+        @Positive
         @NotNull(message = "책 판매 가격은 필수 입력 항목입니다.")
         BigDecimal bookSellingPrice,
 
+        @Positive
         @NotNull(message = "수량은 필수 입력 항목입니다.")
         Integer quantity,
 

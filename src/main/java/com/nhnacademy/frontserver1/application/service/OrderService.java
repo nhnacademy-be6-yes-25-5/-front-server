@@ -30,7 +30,7 @@ public interface OrderService {
 
     List<ReadTakeoutResponse> findAllTakeout();
 
-    List<ReadCartBookResponse> getOrderBook(Long bookId, Integer quantity);
+    List<ReadCartBookResponse> getOrderBook(List<Long> bookIdList, List<Integer> quantities);
 
     ReadOrderStatusResponse getOrderStatusByOrderId(String orderId);
 

@@ -11,35 +11,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-2">
-                    <div class="sidebar">
-                        <div class="user-info">
-                            <div class="user-grade">
-                                <span>회원 등급:</span>
-                                <span class="grade">일반회원</span>
-                            </div>
-                            <div class="user-points">
-                                <span>잔여 포인트:</span>
-                                <span class="points" th:text="${currentPoint}">0P</span>
-                            </div>
-                        </div>
-                        <ul class="nav nav-tabs flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#">주문 내역</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">쿠폰함</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/users/info">정보 수정</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">나의 리뷰</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">배송지 정보</a>
-                            </li>
-                        </ul>
-                    </div>
+                    <div th:replace="~{fragments/user-sidebar :: user-sidebar}"></div>
                 </div>
                 <div class="col-lg-10">
                     <div class="container">
@@ -51,7 +23,7 @@
                                         <p>회원님의 포인트 사용 이력을 조회할 수 있습니다.</p>
                                     </div>
                                     <div class="points">
-                                        현재 포인트: <span id="currentPoint" th:text="${currentPoint}">0</span>
+                                        현재 포인트: <span id="currentPoint" th:text="${currentPoint.intValue()} + 'P'">0</span>
                                     </div>
 <!--                                    <h2>Your Point History</h2>-->
                                     <div th:if="${not #lists.isEmpty(pointLogs.content)}">
@@ -79,14 +51,14 @@
                                         <nav aria-label="Page navigation">
                                             <ul class="pagination">
                                                 <li class="page-item" th:class="${pointLogs.first} ? 'disabled' : ''">
-                                                    <a class="page-link" th:href="@{/users/points/logs(page=0)}">&laquo;</a>
+                                                    <a class="page-link" th:href="@{/mypage/point-logs(page=0)}">&laquo;</a>
                                                 </li>
                                                 <li th:each="page : ${#numbers.sequence(0, pointLogs.totalPages - 1)}"
                                                     class="page-item" th:class="${pointLogs.number == page} ? 'active' : ''">
-                                                    <a class="page-link" th:href="@{/users/points/logs(page=${page})}" th:text="${page + 1}"></a>
+                                                    <a class="page-link" th:href="@{/mypage/point-logs(page=${page})}" th:text="${page + 1}"></a>
                                                 </li>
                                                 <li class="page-item" th:class="${pointLogs.last} ? 'disabled' : ''">
-                                                    <a class="page-link" th:href="@{/users/points/logs(page=${pointLogs.totalPages - 1})}">&raquo;</a>
+                                                    <a class="page-link" th:href="@{/mypage/point-logs(page=${pointLogs.totalPages - 1})}">&raquo;</a>
                                                 </li>
                                             </ul>
                                         </nav>

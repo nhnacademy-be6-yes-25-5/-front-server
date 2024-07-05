@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @FeignClient(name = "bookAdapter", url = "${eureka.gateway}/books", configuration = FeignClientConfig.class)
-public interface BookAdapter {
+public interface BookAdaptor {
 
     @GetMapping("/page")
     Page<BookResponse> findAllBooks(Pageable pageable);

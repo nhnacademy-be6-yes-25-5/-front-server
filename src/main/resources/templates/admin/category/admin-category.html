@@ -1,3 +1,6 @@
+
+
+
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/admin-layout :: admin-layout(~{::content})}">
 <body>
 <div th:fragment="content">
@@ -13,6 +16,38 @@
                                 Add Category
                             </button>
                         </div>
+
+                        <nav class="navbar navbar-expand-lg">
+                            <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
+                                <ul id="nav" class="navbar-nav ms-auto">
+                                    <!-- 카테고리 반복 처리 -->
+                                    <li class="nav-item" th:each="category, categoryIndex : ${categories}">
+                                        <!-- 소메뉴가 있는 경우 (null이 아니고 비어있지 않은 경우) -->
+                                        <th:block th:if="${category.subCategories != null && !category.subCategories.isEmpty()}">
+                                            <a href="#" class="dd-menu collapsed"
+                                               th:class="${categoryIndex.index == 0} ? 'active dd-menu collapsed' : 'dd-menu collapsed'"
+                                               data-bs-toggle="collapse" th:data-bs-target="'#submenu-' + ${categoryIndex.index + 1}"
+                                               aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                                               th:text="${category.categoryName}"></a>
+
+                                            <!-- 소메뉴 목록 -->
+                                            <ul class="sub-menu collapse" th:id="'submenu-' + ${categoryIndex.index + 1}">
+                                                <li class="nav-item" th:each="subCategory : ${category.subCategories}">
+                                                    <a th:text="${subCategory.categoryName}"></a>
+                                                </li>
+                                            </ul>
+                                        </th:block>
+
+                                        <!-- 소메뉴가 없는 경우 (null이거나 비어있는 경우) -->
+                                        <th:block th:unless="${category.subCategories != null && !category.subCategories.isEmpty()}">
+                                            <a th:text="${category.categoryName}"></a>
+                                        </th:block>
+                                    </li>
+                                    <!-- /카테고리 반복 처리 -->
+
+                                </ul>
+                            </div> <!-- navbar collapse -->
+                        </nav>
 
                         <table class="table table-striped table-hover">
                             <thead>
@@ -98,16 +133,16 @@
                         <nav aria-label="Page navigation example">
                             <ul class="pagination">
                                 <li class="page-item">
-                                    <a class="page-link" th:href="@{/admin/product(page = ${nowPage - 1})}" aria-label="Previous">
+                                    <a class="page-link" th:href="@{/admin/category(page = ${nowPage - 2})}" aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
                                 <th:block th:each = "page : ${#numbers.sequence(startPage, endPage)}">
                                     <li class="page-item"><a class="page-link" th:if="${page == nowPage}" th:text = "${page}">1</a></li>
-                                    <li class="page-item"><a th:if="${page != nowPage}" th:text = "${page}" class="page-link" th:href="@{/admin/product(page = ${page - 1})}">1</a></li>
+                                    <li class="page-item"><a th:if="${page != nowPage}" th:text = "${page}" class="page-link" th:href="@{/admin/category(page = ${page - 1})}">1</a></li>
                                 </th:block>
                                 <li class="page-item">
-                                    <a class="page-link" th:href="@{/admin/product(page = ${nowPage + 1})}" aria-label="Next">
+                                    <a class="page-link" th:href="@{/admin/category(page = ${nowPage})}" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>

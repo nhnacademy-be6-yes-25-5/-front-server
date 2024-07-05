@@ -3,6 +3,7 @@ package com.nhnacademy.frontserver1.application.service.impl;
 import com.nhnacademy.frontserver1.application.service.AuthService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.AuthAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.LoginUserRequest;
+import com.nhnacademy.frontserver1.presentation.dto.response.user.AuthResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -28,8 +29,8 @@ public class AuthServiceImpl implements AuthService {
      * @return 생성된 인증 토큰
      */
     @Override
-    public String loginUser(LoginUserRequest loginUserRequest) {
-        ResponseEntity<String> response = authAdaptor.findLoginUserByEmail(loginUserRequest);
+    public AuthResponse loginUser(LoginUserRequest loginUserRequest) {
+        ResponseEntity<AuthResponse> response = authAdaptor.findLoginUserByEmail(loginUserRequest);
         return response.getBody();
     }
 
@@ -42,6 +43,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String testToken() {
         ResponseEntity<String> response = authAdaptor.tokenTest();
+
         return response.getBody();
     }
 }

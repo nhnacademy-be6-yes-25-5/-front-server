@@ -1,35 +1,66 @@
 package com.nhnacademy.frontserver1.common.provider;
 
-import com.nhnacademy.frontserver1.common.exception.TokenCookieMissingException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import java.util.Optional;
+import java.util.Arrays;
+import java.util.List;
 
+@Slf4j
 @Component
 public class CookieTokenProvider {
 
-    /**
-     * HttpServletRequest의 쿠키에서 'Authorization' 토큰을 추출합니다.
-     *
-     * @param request 현재 HTTP 요청
-     * @return 쿠키에서 추출한 토큰. 토큰이 없으면 빈 Optional을 반환합니다.
-     */
-    public Optional<String> getTokenFromCookie(HttpServletRequest request) {
+    @Value("${jwt.access-token.cookie-name}")
+    private String accessTokenCookieName;
 
+    @Value("${jwt.refresh-token.cookie-name}")
+    private String refreshTokenCookieName;
+
+    @Value("${jwt.access-token.expiration-ms}")
+    private int accessTokenExpiration;
+
+    @Value("${jwt.refresh-token.expiration-ms}")
+    private int refreshTokenExpiration;
+
+    public List<String> getTokenFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("Authorization")) {
-
-                    return Optional.of(cookie.getValue());
-                }
-            }
-            throw new TokenCookieMissingException();
+        if (cookies == null) {
+            return List.of("", "");
         }
 
-        return Optional.empty();
+        String accessToken = Arrays.stream(cookies)
+                .filter(cookie -> cookie.getName().equals(accessTokenCookieName))
+                .map(Cookie::getValue)
+                .findFirst()
+                .orElse("");
+
+        String refreshToken = Arrays.stream(cookies)
+                .filter(cookie -> cookie.getName().equals(refreshTokenCookieName))
+                .map(Cookie::getValue)
+                .findFirst()
+                .orElse("");
+
+        return List.of(accessToken, refreshToken);
+    }
+
+    public void addAccessTokenToCookie(HttpServletResponse response, String accessToken) {
+        addTokenToCookie(response, accessTokenCookieName, accessToken, accessTokenExpiration);
+    }
+
+    public void addRefreshTokenToCookie(HttpServletResponse response, String refreshToken) {
+        addTokenToCookie(response, refreshTokenCookieName, refreshToken, refreshTokenExpiration);
+    }
+
+    private void addTokenToCookie(HttpServletResponse response, String name, String value, int maxAge) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(maxAge);
+        response.addCookie(cookie);
     }
 
 }

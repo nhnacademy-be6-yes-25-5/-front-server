@@ -48,7 +48,10 @@
           </li>
         </ul>
         <!-- Button trigger modal -->
-        <button type="button" class="btn review-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="btn review-btn" data-bs-toggle="modal" data-bs-target="#exampleModal" th:if="${userInfo != null}">
+          리뷰 작성하기
+        </button>
+        <button type="button" class="btn review-btn" th:if="${userInfo == null}" onclick="alert('로그인을 먼저 해주세요.')">
           리뷰 작성하기
         </button>
       </div>
@@ -124,18 +127,19 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
+          <input type="hidden" id="bookId" th:value="${book.bookId()}">
           <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="review-name">이름</label>
-                <input class="form-control" type="text" id="review-name" th:value="${userInfo != null ? userInfo.name : ''}" th:disabled="${userInfo == null}">
+                <input class="form-control" type="text" id="review-name" th:value="${userInfo != null ? userInfo.name : ''}" th:disabled="${userInfo == null}" readonly>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
-                <label for="review-subject">주제</label>
+                <label for="review-subject">제목</label>
                 <input class="form-control" type="text" id="review-subject">
               </div>
             </div>
@@ -156,6 +160,11 @@
             <label for="review-message">리뷰 내용</label>
             <textarea class="form-control" id="review-message" rows="8" required></textarea>
           </div>
+          <div class="form-group">
+            <label for="review-images">사진 업로드</label>
+            <input type="file" class="form-control" id="review-images" multiple accept="image/*" onchange="previewImages()">
+          </div>
+          <div class="form-group" id="preview-container"></div>
         </div>
         <div class="modal-footer button">
           <button type="button" class="btn" th:if="${userInfo != null}" onclick="submitReview()">리뷰 제출</button>
@@ -165,6 +174,80 @@
     </div>
   </div>
   <!-- End Review Modal -->
+
+  <script>
+    function checkLoginStatus() {
+      const userInfo = /*[[${userInfo}]]*/ null;
+      if (!userInfo) {
+        alert('로그인을 먼저 해주세요.');
+      }
+    }
+
+    function submitReview() {
+      const reviewName = document.getElementById('review-name').value;
+      const reviewSubject = document.getElementById('review-subject').value;
+      const reviewRating = document.getElementById('review-rating').value;
+      const reviewMessage = document.getElementById('review-message').value;
+      const reviewImages = document.getElementById('review-images').files;
+      const bookId = document.getElementById('bookId').value;
+
+      if (!reviewName || !reviewSubject || !reviewRating || !reviewMessage) {
+        alert('모든 필드를 작성해주세요.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('review', new Blob([JSON.stringify({
+        name: reviewName,
+        subject: reviewSubject,
+        rating: reviewRating,
+        message: reviewMessage,
+        bookId: bookId
+      })], { type: 'application/json' }));
+
+      for (let i = 0; i < reviewImages.length; i++) {
+        formData.append('images', reviewImages[i]);
+      }
+
+      fetch('/reviews', {
+        method: 'POST',
+        body: formData,
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('리뷰 작성에 실패했습니다.');
+        }
+
+        alert('리뷰가 성공적으로 작성하였습니다.');
+        location.reload();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('리뷰 작성에 실패했습니다.');
+      });
+    }
+
+    function previewImages() {
+      const previewContainer = document.getElementById('preview-container');
+      previewContainer.innerHTML = '';
+
+      const files = document.getElementById('review-images').files;
+
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.style.maxWidth = '100px';
+          img.style.margin = '10px';
+          previewContainer.appendChild(img);
+        };
+
+        reader.readAsDataURL(file);
+      });
+    }
+  </script>
 </div>
 </body>
 </html>

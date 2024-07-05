@@ -30,7 +30,7 @@
                                             <a class="nav-link" id="used-tab" data-bs-toggle="tab" href="#used" role="tab" aria-controls="used" aria-selected="false">사용한 쿠폰</a>
                                         </li>
                                         <li class="nav-item" role="presentation">
-                                            <a class="nav-link" id="history-tab" data-bs-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="false">발급 내역</a>
+                                            <a class="nav-link" id="history-tab" data-bs-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="false">만료된 쿠폰</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content" id="couponTabContent">
@@ -50,7 +50,7 @@
                                                     <tr th:each="coupon : ${activeCoupons}">
                                                         <td th:text="${coupon.couponName}"></td>
                                                         <td th:text="${coupon.couponMinAmount} + ' / ' + ${#dates.format(coupon.CouponExpiredAt, 'yyyy-MM-dd')}"></td>
-                                                        <td th:text="${coupon.couponDiscountRate} + '%'"></td>
+                                                        <td th:text="${coupon.couponDiscountRate != null ? coupon.couponDiscountRate + '%' : coupon.couponDiscountAmount}"></td>
                                                         <td th:text="${#dates.format(coupon.couponCreatedAt, 'yyyy-MM-dd')}"></td>
                                                     </tr>
                                                     </tbody>
@@ -82,7 +82,7 @@
                                                     <tr th:each="coupon : ${usedCoupons}">
                                                         <td th:text="${coupon.couponName}"></td>
                                                         <td th:text="${coupon.couponMinAmount} + ' / ' + ${#dates.format(coupon.CouponExpiredAt, 'yyyy-MM-dd')}"></td>
-                                                        <td th:text="${coupon.couponDiscountRate} + '%'"></td>
+                                                        <td th:text="${coupon.couponDiscountRate != null ? coupon.couponDiscountRate + '%' : coupon.couponDiscountAmount}"></td>
                                                         <td th:text="${#dates.format(coupon.userCouponUsedAt, 'yyyy-MM-dd')}"></td>
                                                     </tr>
                                                     </tbody>
@@ -114,7 +114,7 @@
                                                     <tr th:each="coupon : ${expiredCoupons}">
                                                         <td th:text="${coupon.couponName}"></td>
                                                         <td th:text="${coupon.couponMinAmount} + ' / ' + ${#dates.format(coupon.CouponExpiredAt, 'yyyy-MM-dd')}"></td>
-                                                        <td th:text="${coupon.couponDiscountRate} + '%'"></td>
+                                                        <td th:text="${coupon.couponDiscountRate != null ? coupon.couponDiscountRate + '%' : coupon.couponDiscountAmount}"></td>
                                                         <td th:text="${#dates.format(coupon.couponCreatedAt, 'yyyy-MM-dd')}"></td>
                                                     </tr>
                                                     </tbody>

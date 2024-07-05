@@ -57,7 +57,7 @@ public interface UserAdaptor {
     Boolean checkEmail(@RequestParam String email);
 
     @GetMapping("/coupons/state")
-    Page<CouponBoxResponse> getStateCouponBox(String couponState, Pageable pageable);
+    Page<CouponBoxResponse> getStateCouponBox(@RequestParam String couponState, Pageable pageable);
 
 //    @GetMapping("/coupons/active")
 //    Page<CouponBoxResponse> getActiveCouponBox(Pageable pageable);

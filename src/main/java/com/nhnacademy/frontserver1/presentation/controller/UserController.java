@@ -5,13 +5,11 @@ import com.nhnacademy.frontserver1.presentation.dto.request.user.CreateUserReque
 import com.nhnacademy.frontserver1.presentation.dto.request.user.DeleteUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.UpdateUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.point.PointLogResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.user.UpdateUserResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.user.UserGradeResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.user.*;
 import com.nhnacademy.frontserver1.presentation.dto.response.address.UserAddressResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.user.UserResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.user.UsersResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +17,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -77,7 +78,7 @@ public class UserController {
     // 회원 정보 수정
     @PutMapping("/mypage/info")
     public ResponseEntity<Void> updateUser(@RequestBody UpdateUserRequest userRequest,
-                             Model model) {
+                                           Model model) {
 
         UpdateUserResponse user = userService.updateUser(userRequest);
 
@@ -148,5 +149,22 @@ public class UserController {
         model.addAttribute("pageSize", addressPage.getSize());
 
         return "mypage/mypage-address";
+    }
+
+    @GetMapping("/mypage/coupons")
+    public String getActiveUserCoupons(@RequestParam(defaultValue = "0") int page,
+                                       @RequestParam(defaultValue = "15") int size,
+                                       Model model) {
+
+        Page<CouponBoxResponse> activeCoupons = userService.getStateCouponBox("ACTIVE", PageRequest.of(page, size));
+        Page<CouponBoxResponse> usedCoupons = userService.getStateCouponBox("USED", PageRequest.of(page, size));
+        Page<CouponBoxResponse> expiredCoupons = userService.getStateCouponBox("EXPIRED", PageRequest.of(page, size));
+
+
+        model.addAttribute("activeCoupons", activeCoupons);
+        model.addAttribute("usedCoupons", usedCoupons);
+        model.addAttribute("expiredCoupons", expiredCoupons);
+
+        return "mypage/mypage-coupon";
     }
 }

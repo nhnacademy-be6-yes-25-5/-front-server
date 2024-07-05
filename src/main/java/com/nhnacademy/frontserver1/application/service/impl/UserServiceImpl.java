@@ -100,4 +100,9 @@ public class UserServiceImpl implements UserService {
 
         return new PageImpl<>(pagedAddresses, pageable, addresses.size());
     }
+
+    @Override
+    public Page<CouponBoxResponse> getStateCouponBox(String couponState, Pageable pageable) {
+        return userAdaptor.getStateCouponBox(couponState, pageable);
+    }
 }

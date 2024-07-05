@@ -49,12 +49,28 @@ public class PaycoController {
     public String handleAuthorizationCallback(@RequestParam("code") String authorizationCode,
                                               HttpServletRequest request,
                                               Model model) {
-        CreateAccessTokenResponse response = paycoService.getAccessToken("authorization_code", clientId, clientSecret, authorizationCode);
-        String accessToken = response.accessTokenSecret();
+        // 5. Authorization Code 받음
+        CreateAccessTokenResponse tokenResponse = paycoService.getAccessToken("authorization_code", clientId, clientSecret, authorizationCode);
+        String accessToken = tokenResponse.accessToken();
+
+        // 7-8. Access Token 요청 및 받음
+        // 9. 인증 완료 및 로그인 성공
         CreatePaycoInfoResponse paycoInfo = paycoService.getPaycoInfo(clientId, accessToken);
 
+        // 사용자 정보 세션에 저장
+        request.getSession().setAttribute("paycoUser", paycoInfo);
 
-        return "index";
+        // 10. 서비스 요청 (예: 메인 페이지로 리다이렉트)
+        return "redirect:/main";
+    }
+
+    @GetMapping("/main")
+    public String mainPage(HttpServletRequest request, Model model) {
+        CreatePaycoInfoResponse paycoUser = (CreatePaycoInfoResponse) request.getSession().getAttribute("paycoUser");
+        if (paycoUser != null) {
+            model.addAttribute("user", paycoUser);
+        }
+        return "main";
     }
 
 }

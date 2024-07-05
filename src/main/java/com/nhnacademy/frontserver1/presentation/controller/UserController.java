@@ -10,6 +10,7 @@ import com.nhnacademy.frontserver1.presentation.dto.response.user.*;
 import com.nhnacademy.frontserver1.presentation.dto.response.address.UserAddressResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -25,10 +25,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Logger;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
@@ -66,7 +69,7 @@ public class UserController {
     }
 
     // 회원 정보 수정 페이지
-    @GetMapping("/info")
+    @GetMapping("/mypage/info")
     public String userInfo(Model model) {
 
         UserResponse user = userService.findByUser();
@@ -77,9 +80,9 @@ public class UserController {
     }
 
     // 회원 정보 수정
-    @PutMapping
+    @PutMapping("/mypage/info")
     public ResponseEntity<Void> updateUser(@RequestBody UpdateUserRequest userRequest,
-                             Model model) {
+                                           Model model) {
 
         UpdateUserResponse user = userService.updateUser(userRequest);
 
@@ -88,14 +91,14 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/delete")
+    @GetMapping("/mypage/delete")
     public String userDelete(Model model) {
 
         return "mypage/mypage-delete";
     }
 
     // 회원 탈퇴
-    @DeleteMapping
+    @DeleteMapping("/mypage/delete")
     public ResponseEntity<Void> deleteUser(@RequestBody DeleteUserRequest userRequest) {
         userService.deleteUser(userRequest);
 
@@ -103,7 +106,7 @@ public class UserController {
     }
 
     // 회원 등급 페이지
-    @GetMapping("/grades")
+    @GetMapping("/mypage/grades")
     public String getUserGrades(Model model) {
 
         // todo : 회원 등급 가져오는 로직
@@ -116,7 +119,7 @@ public class UserController {
     }
 
     // 회원 현재 포인트와 포인트 이력 조회
-    @GetMapping("/points/logs")
+    @GetMapping("/mypage/point-logs")
     public String getUserPoints(@RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "15") int size,
                                 Model model) {
@@ -129,7 +132,12 @@ public class UserController {
         return "mypage/mypage-pointLogs";
     }
 
-    @GetMapping("/{userId}/addresses")
+    @GetMapping("/check-email")
+    public ResponseEntity<Boolean> checkEmail(@RequestParam String email) {
+        return ResponseEntity.ok(userService.isEmailDuplicate(email));
+    }
+
+    @GetMapping("/users/{userId}/addresses")
     public String getUserAddresses(@PathVariable Long userId, Model model) {
         Pageable pageable = PageRequest.of(0, 10);
         UsersResponse user = userService.getUserById(userId);
@@ -149,19 +157,14 @@ public class UserController {
 
     private static final Logger logger = Logger.getLogger(UserController.class.getName());
 
-    @GetMapping("/find-email")
+    @GetMapping("/users/find-email")
     public String showFindEmailForm() {
         return "findMail/find-mail";
     }
 
-    @PostMapping("/find-email")
+    @PostMapping("/users/find-email")
     public String findEmail(@RequestParam String name, @RequestParam String phone, Pageable pageable, Model model) {
         try{
-
-            // 입력 값 로그 출력
-            logger.info("프론트 Received name: " + name);
-            logger.info("프론트 Received phone: " + phone);
-            logger.info("프론트 Pageable: " + pageable);
             List<FindUserResponse> emails = userService.findAllUserEmailByUserNameByUserPhone(name, phone, pageable);
 
 
@@ -189,16 +192,20 @@ public class UserController {
 
     }
 
-    @ExceptionHandler(Exception.class)
-    public ModelAndView handleException(Exception ex) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("파인드메일페일이안되는이유 message", ex.getMessage());
-        modelAndView.setViewName("error/500");
-        return modelAndView;
-    }
-    //
-    @GetMapping("/login")
-    public String showLoginForm(){
-        return "login";
+    @GetMapping("/mypage/coupons")
+    public String getActiveUserCoupons(@RequestParam(defaultValue = "0") int page,
+                                       @RequestParam(defaultValue = "15") int size,
+                                       Model model) {
+
+        Page<CouponBoxResponse> activeCoupons = userService.getStateCouponBox("ACTIVE", PageRequest.of(page, size));
+        Page<CouponBoxResponse> usedCoupons = userService.getStateCouponBox("USED", PageRequest.of(page, size));
+        Page<CouponBoxResponse> expiredCoupons = userService.getStateCouponBox("EXPIRED", PageRequest.of(page, size));
+
+
+        model.addAttribute("activeCoupons", activeCoupons);
+        model.addAttribute("usedCoupons", usedCoupons);
+        model.addAttribute("expiredCoupons", expiredCoupons);
+
+        return "mypage/mypage-coupon";
     }
 }

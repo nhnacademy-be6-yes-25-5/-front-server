@@ -37,4 +37,8 @@ public interface UserService {
     ReadUserInfoResponse getUserPointsAndGrade();
 
     List<FindUserResponse> findAllUserEmailByUserNameByUserPhone(String name, String phone, Pageable pageable);
+
+    Boolean isEmailDuplicate(String email);
+
+    Page<CouponBoxResponse> getStateCouponBox(String couponState, Pageable pageable);
 }

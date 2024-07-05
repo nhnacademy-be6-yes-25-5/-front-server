@@ -58,4 +58,9 @@ public interface UserAdaptor {
     @PostMapping("find/email")
     List<FindUserResponse> findByEmail(@RequestBody FindEmailRequest emailRequest, @RequestParam Pageable pageable);
 
+    @GetMapping("/check-email")
+    Boolean checkEmail(@RequestParam String email);
+
+    @GetMapping("/coupons/state")
+    Page<CouponBoxResponse> getStateCouponBox(@RequestParam String couponState, Pageable pageable);
 }

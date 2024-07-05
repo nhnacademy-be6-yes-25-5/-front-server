@@ -16,7 +16,8 @@
                         <div class="product-images">
                             <main id="gallery">
                                 <div class="main-img">
-                                    <img th:src="${book.bookImage()}" id="current" alt="#">
+                                    <img th:if="${book.bookImage() != null}" th:src="@{${book.bookImage()}}">
+                                    <img th:if="${book.bookImage() == null || book.bookImage().isEmpty()}" src="/images/logo/logo.png" alt="Default Book Image">
                                 </div>
                                 <div class="images">
                                     <img src="https://via.placeholder.com/1000x670" class="img" alt="#">

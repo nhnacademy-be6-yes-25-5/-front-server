@@ -2,6 +2,7 @@ package com.nhnacademy.frontserver1.application.service.impl;
 
 import com.nhnacademy.frontserver1.application.service.OrderService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.AddressAdaptor;
+import com.nhnacademy.frontserver1.infrastructure.adaptor.BookAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.CartAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.CouponAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.OrderAdaptor;
@@ -42,6 +43,7 @@ public class OrderServiceImpl implements OrderService {
     private final CartAdaptor cartAdaptor;
     private final AddressAdaptor addressAdaptor;
     private final UserAdaptor userAdaptor;
+    private final BookAdaptor bookAdaptor;
     private final OrderBookAdaptor orderBookAdaptor;
     private final CouponAdaptor couponAdaptor;
 

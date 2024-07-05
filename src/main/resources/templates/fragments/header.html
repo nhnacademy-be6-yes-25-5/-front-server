@@ -117,8 +117,8 @@
                             <li>
                                 <a th:href="@{'/category/' + ${category.categoryId()}}" th:text="${category.categoryName()}"></a>
                                 <!-- 소분류가 있을 때만 아이콘을 표시합니다. -->
-                                <i class="lni lni-chevron-right" th:if="${!category.subCategories().isEmpty()}"></i>
-                                <ul class="inner-sub-category" th:if="${!category.subCategories().isEmpty()}">
+                                <i class="lni lni-chevron-right" th:if="${category.subCategories() != null}"></i>
+                                <ul class="inner-sub-category" th:if="${category.subCategories() != null}">
                                     <li th:each="subCategory : ${category.subCategories()}">
                                         <a th:href="@{'/category/' + ${subCategory.categoryId()}}" th:text="${subCategory.categoryName()}"></a>
                                     </li>
@@ -133,27 +133,32 @@
                         <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                             <ul id="nav" class="navbar-nav ms-auto">
                                 <li class="nav-item">
-                                    <a href="#" aria-label="Toggle navigation">Home</a>
+                                    <a href="/" aria-label="Toggle navigation">Home</a>
                                 </li>
 
                                 <!-- 카테고리 반복 처리 -->
                                 <li class="nav-item" th:each="category, categoryIndex : ${categories}">
-                                    <!-- 소메뉴 있는 경우 -->
-                                    <a class="dd-menu" href="javascript:void(0)"
-                                       th:class="${categoryIndex.index == 0} ? 'active collapsed' : 'collapsed'"
-                                       data-bs-toggle="collapse" th:data-bs-target="'#submenu-' + ${categoryIndex.index + 1}"
-                                       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
-                                       th:text="${category.categoryName}"></a>
+                                    <!-- 소메뉴가 있는 경우 (null이 아니고 비어있지 않은 경우) -->
+                                    <th:block th:if="${category.subCategories != null && !category.subCategories.isEmpty()}">
+                                        <a href="#" class="dd-menu collapsed"
+                                           th:class="${categoryIndex.index == 0} ? 'active dd-menu collapsed' : 'dd-menu collapsed'"
+                                           data-bs-toggle="collapse" th:data-bs-target="'#submenu-' + ${categoryIndex.index + 1}"
+                                           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                                           th:onclick="'location.href=\'/category/' + ${category.categoryId} + '\'; event.preventDefault();'"
+                                           th:text="${category.categoryName}"></a>
 
-                                    <!-- 소메뉴 목록 -->
-                                    <ul class="sub-menu collapse" th:if="${!category.subCategories.isEmpty()}" th:id="'submenu-' + ${categoryIndex.index + 1}">
-                                        <li class="nav-item" th:each="subCategory : ${category.subCategories}">
-                                            <a href="#" th:text="${subCategory.categoryName}"></a>
-                                        </li>
-                                    </ul>
+                                        <!-- 소메뉴 목록 -->
+                                        <ul class="sub-menu collapse" th:id="'submenu-' + ${categoryIndex.index + 1}">
+                                            <li class="nav-item" th:each="subCategory : ${category.subCategories}">
+                                                <a th:href="@{'/category/' + ${subCategory.categoryId}}" th:text="${subCategory.categoryName}"></a>
+                                            </li>
+                                        </ul>
+                                    </th:block>
 
-                                    <!-- 소메뉴가 없는 경우 -->
-                                    <a th:unless="${category.subCategories}" th:href="#" th:text="${category.categoryName}"></a>
+                                    <!-- 소메뉴가 없는 경우 (null이거나 비어있는 경우) -->
+                                    <th:block th:unless="${category.subCategories != null && !category.subCategories.isEmpty()}">
+                                        <a th:href="@{'/category/' + ${category.categoryId}}" th:text="${category.categoryName}"></a>
+                                    </th:block>
                                 </li>
                                 <!-- /카테고리 반복 처리 -->
 

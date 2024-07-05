@@ -8324,7 +8324,8 @@ tr {
 }
 
 .user-grade,
-.user-points {
+.user-points,
+.user-name{
   display: flex;
   align-items: center;
   margin-bottom: 5px;

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<body>
+<div th:fragment="review">
+  <div class="row">
+    <div class="col-lg-4 col-12">
+      <div class="single-block give-review">
+        <h4>4.5 (전체)</h4>
+        <ul>
+          <li>
+            <span>5 별 - 38</span>
+            <i class="lni lni-star-filled"></i>
+            <i class="lni lni-star-filled"></i>
+            <i class="lni lni-star-filled"></i>
+            <i class="lni lni-star-filled"></i>
+            <i class="lni lni-star-filled"></i>
+          </li>
+          <li>
+            <span>4 별 - 10</span>
+            <i class="lni lni-star-filled"></i>
+            <i class="lni lni-star-filled"></i>
+            <i class="lni lni-star-filled"></i>
+            <i class="lni lni-star-filled"></i>
+            <i class="lni lni-star"></i>
+          </li>
+          <li>
+            <span>3 별 - 3</span>
+            <i class="lni lni-star-filled"></i>
+            <i class="lni lni-star-filled"></i>
+            <i class="lni lni-star"></i>
+            <i class="lni lni-star"></i>
+          </li>
+          <li>
+            <span>2 별 - 1</span>
+            <i class="lni lni-star-filled"></i>
+            <i class="lni lni-star-filled"></i>
+            <i class="lni lni-star"></i>
+            <i class="lni lni-star"></i>
+            <i class="lni lni-star"></i>
+          </li>
+          <li>
+            <span>1 별 - 0</span>
+            <i class="lni lni-star-filled"></i>
+            <i class="lni lni-star"></i>
+            <i class="lni lni-star"></i>
+            <i class="lni lni-star"></i>
+            <i class="lni lni-star"></i>
+          </li>
+        </ul>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn review-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          리뷰 작성하기
+        </button>
+      </div>
+    </div>
+    <div class="col-lg-8 col-12">
+      <div class="single-block">
+        <div class="reviews">
+          <h4 class="title">최근 리뷰</h4>
+          <!-- Start Single Review -->
+          <div class="single-review">
+            <img src="https://via.placeholder.com/150x150" alt="#">
+            <div class="review-info">
+              <h4>가격 대비 훌륭한 품질
+                <span>제이콥 해먼드</span>
+              </h4>
+              <ul class="stars">
+                <li><i class="lni lni-star-filled"></i></li>
+                <li><i class="lni lni-star-filled"></i></li>
+                <li><i class="lni lni-star-filled"></i></li>
+                <li><i class="lni lni-star-filled"></i></li>
+                <li><i class="lni lni-star-filled"></i></li>
+              </ul>
+              <p>로렘 입숨 돌로르 시트 아메트, 콘섹테투르 아디피시싱 엘리트...</p>
+            </div>
+          </div>
+          <!-- End Single Review -->
+          <!-- Start Single Review -->
+          <div class="single-review">
+            <img src="https://via.placeholder.com/150x150" alt="#">
+            <div class="review-info">
+              <h4>남편이 새...
+                <span>알렉스 자자</span>
+              </h4>
+              <ul class="stars">
+                <li><i class="lni lni-star-filled"></i></li>
+                <li><i class="lni lni-star-filled"></i></li>
+                <li><i class="lni lni-star-filled"></i></li>
+                <li><i class="lni lni-star-filled"></i></li>
+                <li><i class="lni lni-star"></i></li>
+              </ul>
+              <p>로렘 입숨 돌로르 시트 아메트, 콘섹테투르 아디피시싱 엘리트...</p>
+            </div>
+          </div>
+          <!-- End Single Review -->
+          <!-- Start Single Review -->
+          <div class="single-review">
+            <img src="https://via.placeholder.com/150x150" alt="#">
+            <div class="review-info">
+              <h4>내가 좋아하는 품질...
+                <span>제이콥 해먼드</span>
+              </h4>
+              <ul class="stars">
+                <li><i class="lni lni-star-filled"></i></li>
+                <li><i class="lni lni-star-filled"></i></li>
+                <li><i class="lni lni-star-filled"></i></li>
+                <li><i class="lni lni-star-filled"></i></li>
+                <li><i class="lni lni-star-filled"></i></li>
+              </ul>
+              <p>로렘 입숨 돌로르 시트 아메트, 콘섹테투르 아디피시싱 엘리트...</p>
+            </div>
+          </div>
+          <!-- End Single Review -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Review Modal -->
+  <div class="modal fade review-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">리뷰 남기기</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="review-name">이름</label>
+                <input class="form-control" type="text" id="review-name" th:value="${userInfo != null ? userInfo.name : ''}" th:disabled="${userInfo == null}">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="review-subject">주제</label>
+                <input class="form-control" type="text" id="review-subject">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="review-rating">평점</label>
+                <select class="form-control" id="review-rating">
+                  <option>5</option>
+                  <option>4</option>
+                  <option>3</option>
+                  <option>2</option>
+                  <option>1</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="review-message">리뷰 내용</label>
+            <textarea class="form-control" id="review-message" rows="8" required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer button">
+          <button type="button" class="btn" th:if="${userInfo != null}" onclick="submitReview()">리뷰 제출</button>
+          <button type="button" class="btn" th:if="${userInfo == null}" onclick="alert('로그인을 먼저 해주세요.')">리뷰 제출</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Review Modal -->
+</div>
+</body>
+</html>

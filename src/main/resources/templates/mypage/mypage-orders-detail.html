@@ -4,30 +4,6 @@
   <title>주문 상세</title>
   <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
   <link rel="stylesheet" th:href="@{/css/styles.css}">
-  <style>
-    .order-details {
-      background-color: #f8f9fa;
-      border-radius: 8px;
-      padding: 20px;
-    }
-    .order-info {
-      background-color: #ffffff;
-      border: 1px solid #dee2e6;
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 20px;
-    }
-    .order-info p {
-      margin: 0;
-    }
-    .card-title span {
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-    .btn-custom {
-      margin-right: 10px;
-    }
-  </style>
 </head>
 <body>
 <div th:fragment="content" class="container mt-5">
@@ -56,7 +32,7 @@
           </div>
           <div class="btn-group">
             <button class="btn btn-secondary btn-custom" th:data-order-id="${order.orderId}" onclick="location.href='/orders/' + this.getAttribute('data-order-id') + '/delivery'">배송조회</button>
-            <button class="btn btn-outline-secondary btn-custom">리뷰 작성하기</button>
+            <button class="btn btn-outline-secondary btn-custom" onclick="location.href='/reviews'">리뷰 작성하기</button>
             <button class="btn btn-warning btn-custom" th:if="${order.orderStatusType.name == 'DONE'}" th:disabled="${noneMember != null}" onclick="changeOrderStatus('RETURN')">반품</button>
             <button class="btn btn-danger btn-custom" th:if="${order.orderStatusType.name == 'WAIT'}" th:disabled="${noneMember != null}" onclick="changeOrderStatus('CANCEL')">결제취소</button>
             <button class="btn btn-info btn-custom" th:if="${order.orderStatusType.name == 'RETURN'}" th:disabled="${noneMember != null}" onclick="changeOrderStatus('REFUND')">환불</button>

@@ -4,6 +4,15 @@
 <div th:fragment="user-sidebar">
   <div class="sidebar">
     <div class="user-info">
+      <div class="user-name">
+        <span>회원명:</span>
+        <span class="grade">
+          <span th:if="${userInfo == null}">비회원</span>
+          <span th:if="${userInfo != null}">
+            <span th:text="${userInfo.name}"></span>
+          </span>
+        </span>
+      </div>
       <div class="user-grade">
         <span>회원 등급:</span>
         <span class="grade">

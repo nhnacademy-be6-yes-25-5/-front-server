@@ -1,35 +1,23 @@
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
-    <body>
-        <div th:fragment="content">
-
-            <!-- Start Breadcrumbs Component -->
-            <div th:replace="~{fragments/breadcrumbs :: breadcrumbs}"></div>
-            <!-- End Breadcrumbs Component -->
-
-            <!-- Start Email Not Found Area -->
-            <div class="account-login section">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-12">
-                            <div class="register-form">
-                                <div class="title">
-                                    <h3>Email Not Found</h3>
-                                    <p>We couldn't find an email associated with the provided information.</p>
-                                </div>
-                                <div class="error-info">
-                                    <p>Please double-check your name and phone number and try again.</p>
-                                </div>
-                                <div class="button">
-                                    <a href="#" class="btn">Try Again</a>
-                                </div>
-                                <p class="outer-link">Want to create a new account? <a href="#">Register Now</a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        <!-- End Email Not Found Area -->
-        </div>
-    </body>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Not Found</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<div th:fragment="content">
+    <div class="container">
+        <h2>Email Not Found</h2>
+        <p>We couldn't find an email associated with the provided information.</p>
+        <p>Please double-check your name and phone number and try again.</p>
+        <form action="/users/find-email" method="get">
+            <input type="hidden" name="name" th:value="${name}">
+            <input type="hidden" name="phone" th:value="${phone}">
+            <button type="submit" class="btn">Try Again</button>
+        </form>
+        <p>Want to create a new account? <a href="/register">Register Now</a></p>
+    </div>
+</body>
 </html>

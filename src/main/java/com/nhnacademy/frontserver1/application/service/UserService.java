@@ -11,6 +11,8 @@ import com.nhnacademy.frontserver1.presentation.dto.response.user.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 
 public interface UserService {
 
@@ -33,4 +35,6 @@ public interface UserService {
     Page<UserAddressResponse> getUserAddresses(Long userId, Pageable pageable);
 
     ReadUserInfoResponse getUserPointsAndGrade();
+
+    List<FindUserResponse> findAllUserEmailByUserNameByUserPhone(String name, String phone, Pageable pageable);
 }

@@ -27,7 +27,6 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
     /**
      * Feign 요청에 JWT 토큰을 추가합니다.
      * '/auth/login' 경로에 대한 요청은 인증이 필요하지 않으므로 토큰을 추가하지 않습니다.
-     *
      * @param template Feign 요청 템플릿
      */
     @Override

@@ -11,35 +11,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-2">
-                    <div class="sidebar">
-                        <div class="user-info">
-                            <div class="user-grade">
-                                <span>회원 등급:</span>
-                                <span class="grade">일반회원</span>
-                            </div>
-                            <div class="user-points">
-                                <span>잔여 포인트:</span>
-                                <span class="points" th:text="${currentPoint}">0P</span>
-                            </div>
-                        </div>
-                        <ul class="nav nav-tabs flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#">주문 내역</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">쿠폰함</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/mypage/info">정보 수정</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">나의 리뷰</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">배송지 정보</a>
-                            </li>
-                        </ul>
-                    </div>
+                    <div th:replace="~{fragments/user-sidebar :: user-sidebar}"></div>
                 </div>
                 <div class="col-lg-10">
                     <div class="container">

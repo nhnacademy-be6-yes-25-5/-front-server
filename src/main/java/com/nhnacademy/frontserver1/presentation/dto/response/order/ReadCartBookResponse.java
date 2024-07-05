@@ -1,4 +1,4 @@
-package com.nhnacademy.frontserver1.presentation.dto.request.order;
+package com.nhnacademy.frontserver1.presentation.dto.response.order;
 
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
 import java.math.BigDecimal;
@@ -11,7 +11,8 @@ public record ReadCartBookResponse(Long cartBookId,
                                    BigDecimal bookPrice,
                                    int cartBookQuantity,
                                    Long userId,
-                                   Boolean bookIsPackable) {
+                                   Boolean bookIsPackable,
+                                   String bookImage) {
 
     public static ReadCartBookResponse from(BookResponse bookResponse, Integer quantity) {
         return ReadCartBookResponse.builder()
@@ -21,6 +22,17 @@ public record ReadCartBookResponse(Long cartBookId,
             .cartBookQuantity(quantity)
             .cartBookQuantity(1)
             .bookIsPackable(bookResponse.bookIsPackable())
+            .build();
+    }
+
+    public static ReadCartBookResponse of(ReadOrderBookInfoResponse orderBookInfoResponse, Integer quantity) {
+        return ReadCartBookResponse.builder()
+            .bookId(orderBookInfoResponse.bookId())
+            .bookName(orderBookInfoResponse.bookName())
+            .bookPrice(orderBookInfoResponse.bookPrice())
+            .cartBookQuantity(quantity)
+            .bookIsPackable(orderBookInfoResponse.bookIsPackable())
+            .bookImage(orderBookInfoResponse.bookImage())
             .build();
     }
 }

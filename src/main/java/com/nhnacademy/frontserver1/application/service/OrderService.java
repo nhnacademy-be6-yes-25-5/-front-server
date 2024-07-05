@@ -1,7 +1,7 @@
 package com.nhnacademy.frontserver1.application.service;
 
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
-import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadCartBookResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadOrderNoneMemberRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
@@ -30,7 +30,7 @@ public interface OrderService {
 
     List<ReadTakeoutResponse> findAllTakeout();
 
-    List<ReadCartBookResponse> getOrderBook(Long bookId, Integer quantity);
+    List<ReadCartBookResponse> getOrderBook(List<Long> bookIdList, List<Integer> quantities);
 
     ReadOrderStatusResponse getOrderStatusByOrderId(String orderId);
 

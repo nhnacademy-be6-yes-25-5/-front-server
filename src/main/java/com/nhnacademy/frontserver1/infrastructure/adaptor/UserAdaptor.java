@@ -2,6 +2,7 @@ package com.nhnacademy.frontserver1.infrastructure.adaptor;
 
 import com.nhnacademy.frontserver1.presentation.dto.request.user.CreateUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.DeleteUserRequest;
+import com.nhnacademy.frontserver1.presentation.dto.request.user.FindEmailRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.UpdateUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.point.PointLogResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.*;
@@ -53,18 +54,13 @@ public interface UserAdaptor {
     @GetMapping("/point-logs")
     Page<PointLogResponse> getUserPointLogs(Pageable pageable);
 
+
+    @PostMapping("find/email")
+    List<FindUserResponse> findByEmail(@RequestBody FindEmailRequest emailRequest, @RequestParam Pageable pageable);
+
     @GetMapping("/check-email")
     Boolean checkEmail(@RequestParam String email);
 
     @GetMapping("/coupons/state")
     Page<CouponBoxResponse> getStateCouponBox(@RequestParam String couponState, Pageable pageable);
-
-//    @GetMapping("/coupons/active")
-//    Page<CouponBoxResponse> getActiveCouponBox(Pageable pageable);
-//
-//    @GetMapping("/coupons/used")
-//    Page<CouponBoxResponse> getUsedCouponBox(Pageable pageable);
-//
-//    @GetMapping("/coupons/expired")
-//    Page<CouponBoxResponse> getExpiredCouponBox(Pageable pageable);
 }

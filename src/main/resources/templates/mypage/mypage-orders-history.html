@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<head>
+    <title>Order History</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
 <body>
 <div th:fragment="content">
 
@@ -67,6 +71,7 @@
                                             <option value="WAIT">대기</option>
                                             <option value="DELIVERING">배송 중</option>
                                             <option value="DONE">완료</option>
+                                            <option value="RETURN">반품</option>
                                             <option value="REFUND">환불</option>
                                             <option value="CANCEL">취소</option>
                                         </select>
@@ -86,17 +91,17 @@
                                             </thead>
                                             <tbody>
                                             <tr th:each="order : ${orders.content}">
-                                                <td><a th:href="@{/orders/{orderId}(orderId=${order.orderId})}" th:text="${order.orderId}">1234567890</a></td>
+                                                <td><a th:href="@{/mypage/orders/{orderId}(orderId=${order.orderId})}" th:text="${order.orderId}">1234567890</a></td>
                                                 <td th:text="${#temporals.format(order.orderCreatedAt, 'yyyy-MM-dd')}">2023-06-10</td>
                                                 <td>
                                                     <span th:text="${order.bookNames.get(0)}">Product 1</span>
-                                                    <span th:if="${#lists.size(order.bookNames) > 1}" th:text="' 외 ' + (#lists.size(order.bookNames) - 1) + '개'"> 외 1개</span>
+                                                    <span th:if="${#lists.size(order.bookNames) > 1}" th:text="' 외 ' + ${#lists.size(order.bookNames) - 1} + '개'"> 외 1개</span>
                                                 </td>
                                                 <td th:text="${order.quantities.size()}">3</td>
                                                 <td th:text="${order.orderTotalAmount}">$99.99</td>
                                                 <td th:text="#{${'order.status.' + order.orderStatus}}">출고처리중</td>
                                                 <td>
-                                                    <a th:href="@{/orders/{orderId}/delivery(orderId=${order.orderId})}" class="btn btn-sm btn-primary">배송 조회</a>
+                                                    <a th:href="@{/mypage/orders/{orderId}/delivery(orderId=${order.orderId})}" class="btn btn-sm btn-primary">배송 조회</a>
                                                 </td>
                                             </tr>
                                             </tbody>

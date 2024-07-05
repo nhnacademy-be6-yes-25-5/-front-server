@@ -37,16 +37,27 @@ public class AdminBookController {
         List<TagResponse> tagList = tagService.findAllTags();
         Page<BookResponse> bookResponseList = bookService.findAllBooks(pageable);
 
-        int nowPage = bookResponseList.getPageable().getPageNumber() + 1;
-        int startPage = Math.max(nowPage - 4, 1);
-        int endPage = Math.min(nowPage + 5, bookResponseList.getTotalPages());
+        int nowPage = bookResponseList.getPageable().getPageNumber();
+        int startPage = Math.max(nowPage - 4, 0);
+        int endPage = Math.min(nowPage + 5, bookResponseList.getTotalPages() -1);
+
+        if(bookResponseList.getTotalPages() <= 10) {
+            startPage = 0;
+            endPage = bookResponseList.getTotalPages() - 1;
+        } else {
+            if (startPage == 0) {
+                endPage = 9;
+            } else if (endPage == bookResponseList.getTotalPages() -1) {
+                startPage = bookResponseList.getTotalPages() - 10;
+            }
+        }
 
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("tagList", tagList);
         model.addAttribute("productList", bookResponseList);
-        model.addAttribute("nowPage", nowPage);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
+        model.addAttribute("nowPage", nowPage + 1);
+        model.addAttribute("startPage", startPage + 1);
+        model.addAttribute("endPage", endPage + 1);
 
         return "admin/product/admin-product";
     }

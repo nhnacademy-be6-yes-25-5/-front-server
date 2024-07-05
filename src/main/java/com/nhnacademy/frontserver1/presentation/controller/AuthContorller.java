@@ -2,16 +2,14 @@ package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.impl.AuthServiceImpl;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.LoginUserRequest;
+import com.nhnacademy.frontserver1.presentation.dto.response.user.AuthResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * AuthController 클래스는 사용자 인증 관련 기능을 제공하는 Spring MVC 컨트롤러입니다.
@@ -39,23 +37,32 @@ public class AuthContorller {
     }
 
     /**
+     * 인증 실패 로그인 페이질를 반환합니다.
+     *
+     * @return 인증 실패 로그인 페이지의 view 이름
+     */
+    @GetMapping("/error")
+    public String showErrorPage(@RequestParam(required = false) String cause, Model model) {
+        if (cause != null) {
+            model.addAttribute("cause", cause);
+        }
+        return "error/auth-fail";
+    }
+
+    /**
      * 사용자 로그인을 처리합니다.
      *
      * @param loginUserRequest 로그인 요청 정보 (이메일과 비밀번호 포함)
-     * @param response HTTP 응답 객체
      * @return 로그인 성공 시 메인 페이지로의 리다이렉트 경로
      */
     @PostMapping("/login")
-    public String login(@ModelAttribute LoginUserRequest loginUserRequest, HttpServletResponse response) {
-        String token = authService.loginUser(loginUserRequest);
+    public String login(@ModelAttribute LoginUserRequest loginUserRequest) {
 
-        Cookie authCookie = new Cookie("Authorization", token);
-        authCookie.setHttpOnly(true);
-        authCookie.setPath("/");
-        response.addCookie(authCookie);
+        authService.loginUser(loginUserRequest);
 
         return "redirect:/";
     }
+
 
     /**
      * 토큰 테스트 페이지를 반환합니다.

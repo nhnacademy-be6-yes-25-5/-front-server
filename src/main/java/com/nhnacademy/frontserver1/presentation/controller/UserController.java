@@ -59,6 +59,7 @@ public class UserController {
                 .userPhone(userPhone)
                 .userPassword(userPassword)
                 .userConfirmPassword(userConfirmPassword)
+                .providerName("LOCAL")
                 .build();
 
         UserResponse userResponse = userService.signUp(userRequest);

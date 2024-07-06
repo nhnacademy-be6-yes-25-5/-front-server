@@ -5815,7 +5815,7 @@ blockquote span {
 .product-details-info .reviews .single-review .review-user-name {
   position: absolute;
   left: 0;
-  top: 8%;
+  top: 10%;
 }
 
 @media (max-width: 767px) {

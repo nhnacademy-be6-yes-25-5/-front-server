@@ -53,7 +53,7 @@
           </li>
         </ul>
         <!-- Button trigger modal -->
-        <button type="button" class="btn review-btn" data-bs-toggle="modal" data-bs-target="#exampleModal" th:if="${userInfo != null}">
+        <button type="button" class="btn review-btn" th:if="${userInfo != null}" onclick="openReviewModal()">
           리뷰 작성하기
         </button>
         <button type="button" class="btn review-btn" th:if="${userInfo == null}" onclick="alert('로그인을 먼저 해주세요.')">
@@ -91,8 +91,8 @@
                     </div>
                     <p th:text="${review.content}"></p>
                     <div th:if="${userInfo != null && review.userId == userInfo.userId}" class="review-buttons">
-                      <a onclick="editReview('${review.reviewId}', '${review.title}', '${review.content}', '${review.rating}')">수정</a>
-                      <a onclick="deleteReview('${review.reviewId}')">삭제</a>
+                      <a href="javascript:void(0);" th:data-review-id="${review.reviewId}" th:data-review-title="${review.title}" th:data-review-content="${review.content}" th:data-review-rating="${review.rating}" onclick="editReview(this)">수정</a>
+                      <a href="javascript:void(0);" th:data-review-id="${review.reviewId}" onclick="deleteReview(this)">삭제</a>
                     </div>
                   </div>
                 </div>

@@ -17,9 +17,11 @@
                             <p>Registration takes less than a minute but gives you full control over your orders.</p>
                         </div>
                         <form class="row" method="post" action="/additional-info" id="registerForm">
+                        <form class="row" method="post" action="/sign-up/payco" id="registerForm">
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="userName">이름</label>
+                                    <input class="form-control" type="text" id="userName" name="userName" required>
                                     <input class="form-control" type="text" id="userName" name="userName"
                                            th:value="${paycoInfo.name}"
                                            th:readonly="${paycoInfo.name != null}"
@@ -34,16 +36,20 @@
                                            th:readonly="${paycoInfo.birthdayMMdd != null}"
                                            th:required="${paycoInfo.birthdayMMdd == null}"
                                            pattern="\d{4}" title="MMDD 형식으로 입력해주세요">
+                                    <input class="form-control" type="date" id="userBirth" name="userBirth" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="userEmail">Payco 식별 ID</label>
+                                    <input class="form-control" type="text" id="userEmail" name="userEmail" required>
+                                    <button type="button" class="btn btn-secondary" id="checkEmailButton">중복 체크</button>
+                                    <div id="emailCheckResult"></div>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="userPhone">휴대전화 번호</label>
-                                    <input class="form-control" type="tel" id="userPhone" name="userPhone"
-                                           th:value="${paycoInfo.mobile}"
-                                           th:readonly="${paycoInfo.mobile != null}"
-                                           th:required="${paycoInfo.mobile == null}"
-                                           pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" title="000-0000-0000 형식으로 입력해주세요">
                                 </div>
                             </div>
                             <div id="pwConfirm" class="col-12"></div>
@@ -79,10 +85,8 @@
         </div>
     </div>
 
-
-
-<!-- jQuery CDN 추가 -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- jQuery CDN 추가 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!--    중복 이메일 체크-->
     <script>
@@ -91,18 +95,8 @@
             const emailCheckResult = document.getElementById('emailCheckResult');
             const registerButton = document.getElementById('register-btn');
 
-            // 이메일 형식을 검증하는 정규표현식
-            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
             if (!email) {
                 emailCheckResult.textContent = '이메일을 입력해주세요.';
-                emailCheckResult.style.color = 'red';
-                registerButton.disabled = true;
-                return;
-            }
-
-            if (!emailPattern.test(email)) {
-                emailCheckResult.textContent = '올바른 이메일 형식이 아닙니다.';
                 emailCheckResult.style.color = 'red';
                 registerButton.disabled = true;
                 return;
@@ -120,7 +114,7 @@
                     } else {
                         emailCheckResult.textContent = '사용 가능한 이메일입니다.';
                         emailCheckResult.style.color = 'green';
-                        registerButton.disabled = false;
+                        checkFormValidity(); // 이메일 중복 체크 통과 시 버튼 활성화 여부 확인
                     }
                 },
                 error: function() {
@@ -130,74 +124,56 @@
                 }
             });
         });
+
+        document.getElementById('userEmail').addEventListener('input', function() {
+            const emailCheckResult = document.getElementById('emailCheckResult');
+            emailCheckResult.textContent = '';
+            registerButton.disabled = true;
+        });
     </script>
 
-
-
-
     <!-- 인라인 JavaScript -->
-<script>
-    const phoneInput = document.getElementById('userPhone');
+    <script>
+        const phoneInput = document.getElementById('userPhone');
 
-    phoneInput.addEventListener('input', function(e) {
-        let formatted = '';
-        const input = e.target.value.replace(/\D/g, ''); // 숫자 이외의 문자 제거
+        phoneInput.addEventListener('input', function(e) {
+            let formatted = '';
+            const input = e.target.value.replace(/\D/g, ''); // 숫자 이외의 문자 제거
 
-        if (input.length > 0) {
-            formatted = input.substring(0, 3);
-            if (input.length > 3) {
-                formatted += '-' + input.substring(3, 7);
+            if (input.length > 0) {
+                formatted = input.substring(0, 3);
+                if (input.length > 3) {
+                    formatted += '-' + input.substring(3, 7);
+                }
+                if (input.length > 7) {
+                    formatted += '-' + input.substring(7, 11);
+                }
             }
-            if (input.length > 7) {
-                formatted += '-' + input.substring(7, 11);
-            }
-        }
 
-        e.target.value = formatted;
-    });
-
-    // 비밀번호 확인하는 JS
-    const userPasswordInput = document.getElementById('userPassword');
-    const userConfirmPasswordInput = document.getElementById('userConfirmPassword');
-    const pwConfirmElement = document.getElementById('pwConfirm');
-    const registerButton = document.getElementById('register-btn');
-    const registerForm = document.getElementById('registerForm');
-
-    function checkPassword() {
-        if (userPasswordInput.value === userConfirmPasswordInput.value) {
-            pwConfirmElement.textContent = '비밀번호 일치';
-            pwConfirmElement.style.color = 'green';
-            registerButton.disabled = false; // 비밀번호가 일치하면 버튼 활성화
-        } else {
-            pwConfirmElement.textContent = '비밀번호 불일치';
-            pwConfirmElement.style.color = 'red';
-            registerButton.disabled = true; // 비밀번호가 일치하지 않으면 버튼 비활성화
-        }
-    }
-
-    userConfirmPasswordInput.addEventListener('keyup', checkPassword);
-
-    // 회원가입 성공 모달 표시 및 폼 제출
-    registerForm.addEventListener('submit', function(event) {
-        if (userPasswordInput.value !== userConfirmPasswordInput.value) {
-            event.preventDefault(); // 폼 기본 제출 방지
-            pwConfirmElement.textContent = '비밀번호 불일치';
-            pwConfirmElement.style.color = 'red';
-            return;
-        }
-
-        // 비밀번호가 일치할 때만 모달 표시
-        $('#registrationSuccessModal').modal('show'); // 모달 표시
-
-        // 모달이 닫힐 때 폼 제출
-        $('#registrationSuccessModal').on('hidden.bs.modal', function () {
-            registerForm.submit();
+            e.target.value = formatted;
         });
 
-        // 폼 제출 후에는 리다이렉트를 막고 추가적인 작업을 수행할 수 있음
-        event.preventDefault();
-    });
-</script>
+
+        function checkFormValidity() {
+            const emailCheckResult = document.getElementById('emailCheckResult');
+            registerButton.disabled = emailCheckResult.style.color !== 'green';
+        }
+
+        // 회원가입 성공 모달 표시 및 폼 제출
+        registerForm.addEventListener('submit', function(event) {
+
+            // 비밀번호가 일치할 때만 모달 표시
+            $('#registrationSuccessModal').modal('show'); // 모달 표시
+
+            // 모달이 닫힐 때 폼 제출
+            $('#registrationSuccessModal').on('hidden.bs.modal', function () {
+                registerForm.submit();
+            });
+
+            // 폼 제출 후에는 리다이렉트를 막고 추가적인 작업을 수행할 수 있음
+            event.preventDefault();
+        });
+    </script>
 </div>
 </body>
 </html>

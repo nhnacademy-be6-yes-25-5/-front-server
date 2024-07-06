@@ -1,0 +1,29 @@
+.review-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.review-images {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.review-images img {
+  max-width: 100px;
+  margin: 5px;
+}
+
+.stars {
+  display: flex;
+}
+
+.stars li {
+  list-style: none;
+}
+
+.single-review {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+}

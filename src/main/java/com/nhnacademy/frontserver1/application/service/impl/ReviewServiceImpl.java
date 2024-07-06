@@ -5,8 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.frontserver1.application.service.ReviewService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.ReviewAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.review.CreateReviewRequest;
+import com.nhnacademy.frontserver1.presentation.dto.response.review.ReadReviewRatingResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.review.ReadReviewResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,5 +29,15 @@ public class ReviewServiceImpl implements ReviewService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Page<ReadReviewResponse> getReviews(Long bookId, Pageable pageable) {
+        return reviewAdaptor.getReviewByPaging(bookId, pageable);
+    }
+
+    @Override
+    public List<ReadReviewRatingResponse> getReviewRatings(Long bookId) {
+        return reviewAdaptor.getReviewRatings(bookId);
     }
 }

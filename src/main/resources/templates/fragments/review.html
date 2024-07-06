@@ -1,50 +1,55 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
 <body>
 <div th:fragment="review">
   <div class="row">
     <div class="col-lg-4 col-12">
       <div class="single-block give-review">
-        <h4>4.5 (전체)</h4>
+        <h4 th:if="${averageRating == 0}">리뷰 없음</h4>
+        <h4 th:if="${averageRating != 0}" th:text="${averageRating} + ' (전체)'"></h4>
         <ul>
           <li>
-            <span>5 별 - 38</span>
-            <i class="lni lni-star-filled"></i>
-            <i class="lni lni-star-filled"></i>
-            <i class="lni lni-star-filled"></i>
-            <i class="lni lni-star-filled"></i>
-            <i class="lni lni-star-filled"></i>
+            <span th:text="'5 별 - ' + ${ratingCounts[4]}"></span>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
           </li>
           <li>
-            <span>4 별 - 10</span>
-            <i class="lni lni-star-filled"></i>
-            <i class="lni lni-star-filled"></i>
-            <i class="lni lni-star-filled"></i>
-            <i class="lni lni-star-filled"></i>
-            <i class="lni lni-star"></i>
+            <span th:text="'4 별 - ' + ${ratingCounts[3]}"></span>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
           </li>
           <li>
-            <span>3 별 - 3</span>
-            <i class="lni lni-star-filled"></i>
-            <i class="lni lni-star-filled"></i>
-            <i class="lni lni-star"></i>
-            <i class="lni lni-star"></i>
+            <span th:text="'3 별 - ' + ${ratingCounts[2]}"></span>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+            <i class="far fa-star"></i>
           </li>
           <li>
-            <span>2 별 - 1</span>
-            <i class="lni lni-star-filled"></i>
-            <i class="lni lni-star-filled"></i>
-            <i class="lni lni-star"></i>
-            <i class="lni lni-star"></i>
-            <i class="lni lni-star"></i>
+            <span th:text="'2 별 - ' + ${ratingCounts[1]}"></span>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+            <i class="far fa-star"></i>
+            <i class="far fa-star"></i>
           </li>
           <li>
-            <span>1 별 - 0</span>
-            <i class="lni lni-star-filled"></i>
-            <i class="lni lni-star"></i>
-            <i class="lni lni-star"></i>
-            <i class="lni lni-star"></i>
-            <i class="lni lni-star"></i>
+            <span th:text="'1 별 - ' + ${ratingCounts[0]}"></span>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+            <i class="far fa-star"></i>
+            <i class="far fa-star"></i>
+            <i class="far fa-star"></i>
           </li>
         </ul>
         <!-- Button trigger modal -->
@@ -60,60 +65,59 @@
       <div class="single-block">
         <div class="reviews">
           <h4 class="title">최근 리뷰</h4>
-          <!-- Start Single Review -->
-          <div class="single-review">
-            <img src="https://via.placeholder.com/150x150" alt="#">
-            <div class="review-info">
-              <h4>가격 대비 훌륭한 품질
-                <span>제이콥 해먼드</span>
-              </h4>
-              <ul class="stars">
-                <li><i class="lni lni-star-filled"></i></li>
-                <li><i class="lni lni-star-filled"></i></li>
-                <li><i class="lni lni-star-filled"></i></li>
-                <li><i class="lni lni-star-filled"></i></li>
-                <li><i class="lni lni-star-filled"></i></li>
-              </ul>
-              <p>로렘 입숨 돌로르 시트 아메트, 콘섹테투르 아디피시싱 엘리트...</p>
-            </div>
+          <div id="review-list">
+            <th:block th:if="${reviews == null or #lists.isEmpty(reviews.content)}">
+              <p th:text="'작성된 리뷰가 없습니다.'"></p>
+            </th:block>
+            <th:block th:if="${reviews != null && reviews.content != null}">
+              <div th:each="review : ${reviews.content}">
+                <div class="single-review">
+                  <span class="review-user-name" th:text="${review.userName}"></span>
+                  <div class="review-info">
+                    <h4 th:text="${review.title}"></h4>
+                    <ul class="stars">
+                      <li th:each="star, stat : ${#numbers.sequence(1, review.rating)}">
+                        <i class="fas fa-star"></i>
+                      </li>
+                      <th:block th:if="${review.rating < 5}">
+                        <li th:each="star, stat : ${#numbers.sequence(1, 5 - review.rating)}">
+                          <i class="far fa-star"></i>
+                        </li>
+                      </th:block>
+                      <span class="review-review-time" th:text="${review.reviewTime}"></span>
+                    </ul>
+                    <div class="review-images-container" th:if="${!#lists.isEmpty(review.reviewImageUrls)}">
+                      <img th:each="reviewImageUrl : ${review.reviewImageUrls}" th:src="${reviewImageUrl}" alt="#">
+                    </div>
+                    <p th:text="${review.content}"></p>
+                    <div th:if="${userInfo != null && review.userId == userInfo.userId}" class="review-buttons">
+                      <a onclick="editReview('${review.reviewId}', '${review.title}', '${review.content}', '${review.rating}')">수정</a>
+                      <a onclick="deleteReview('${review.reviewId}')">삭제</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div th:if="${reviews.totalPages > 1}">
+                <ul class="pagination">
+                  <li th:classappend="${reviews.first ? 'disabled' : ''}">
+                    <a th:href="@{|/books/${bookId}?page=0|}" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+                  </li>
+                  <li th:classappend="${reviews.first ? 'disabled' : ''}">
+                    <a th:href="@{|/books/${bookId}?page=${reviews.number - 1}|}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                  </li>
+                  <li th:each="i : ${#numbers.sequence(1, reviews.totalPages)}" th:classappend="${i - 1 == reviews.number ? 'active' : ''}">
+                    <a th:href="@{|/books/${bookId}?page=${i - 1}|}" th:text="${i}"></a>
+                  </li>
+                  <li th:classappend="${reviews.last ? 'disabled' : ''}">
+                    <a th:href="@{|/books/${bookId}?page=${reviews.number + 1}|}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+                  </li>
+                  <li th:classappend="${reviews.last ? 'disabled' : ''}">
+                    <a th:href="@{|/books/${bookId}?page=${reviews.totalPages - 1}|}" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+                  </li>
+                </ul>
+              </div>
+            </th:block>
           </div>
-          <!-- End Single Review -->
-          <!-- Start Single Review -->
-          <div class="single-review">
-            <img src="https://via.placeholder.com/150x150" alt="#">
-            <div class="review-info">
-              <h4>남편이 새...
-                <span>알렉스 자자</span>
-              </h4>
-              <ul class="stars">
-                <li><i class="lni lni-star-filled"></i></li>
-                <li><i class="lni lni-star-filled"></i></li>
-                <li><i class="lni lni-star-filled"></i></li>
-                <li><i class="lni lni-star-filled"></i></li>
-                <li><i class="lni lni-star"></i></li>
-              </ul>
-              <p>로렘 입숨 돌로르 시트 아메트, 콘섹테투르 아디피시싱 엘리트...</p>
-            </div>
-          </div>
-          <!-- End Single Review -->
-          <!-- Start Single Review -->
-          <div class="single-review">
-            <img src="https://via.placeholder.com/150x150" alt="#">
-            <div class="review-info">
-              <h4>내가 좋아하는 품질...
-                <span>제이콥 해먼드</span>
-              </h4>
-              <ul class="stars">
-                <li><i class="lni lni-star-filled"></i></li>
-                <li><i class="lni lni-star-filled"></i></li>
-                <li><i class="lni lni-star-filled"></i></li>
-                <li><i class="lni lni-star-filled"></i></li>
-                <li><i class="lni lni-star-filled"></i></li>
-              </ul>
-              <p>로렘 입숨 돌로르 시트 아메트, 콘섹테투르 아디피시싱 엘리트...</p>
-            </div>
-          </div>
-          <!-- End Single Review -->
         </div>
       </div>
     </div>
@@ -127,7 +131,8 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <input type="hidden" id="bookId" th:value="${book.bookId()}">
+          <input type="hidden" id="bookId" th:value="${bookId}">
+          <input type="hidden" id="reviewId" value="">
           <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
@@ -164,90 +169,16 @@
             <label for="review-images">사진 업로드</label>
             <input type="file" class="form-control" id="review-images" multiple accept="image/*" onchange="previewImages()">
           </div>
-          <div class="form-group" id="preview-container"></div>
+          <div class="form-group preview-container" id="preview-container"></div>
         </div>
         <div class="modal-footer button">
           <button type="button" class="btn" th:if="${userInfo != null}" onclick="submitReview()">리뷰 제출</button>
-          <button type="button" class="btn" th:if="${userInfo == null}" onclick="alert('로그인을 먼저 해주세요.')">리뷰 제출</button>
+          <button type="button" class="btn" th:if="${userInfo == null}" onclick="alert('로그인을 먼저 해주세요.')">리뷰 작성하기</button>
         </div>
       </div>
     </div>
   </div>
   <!-- End Review Modal -->
-
-  <script>
-    function checkLoginStatus() {
-      const userInfo = /*[[${userInfo}]]*/ null;
-      if (!userInfo) {
-        alert('로그인을 먼저 해주세요.');
-      }
-    }
-
-    function submitReview() {
-      const reviewName = document.getElementById('review-name').value;
-      const reviewSubject = document.getElementById('review-subject').value;
-      const reviewRating = document.getElementById('review-rating').value;
-      const reviewMessage = document.getElementById('review-message').value;
-      const reviewImages = document.getElementById('review-images').files;
-      const bookId = document.getElementById('bookId').value;
-
-      if (!reviewName || !reviewSubject || !reviewRating || !reviewMessage) {
-        alert('모든 필드를 작성해주세요.');
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append('review', new Blob([JSON.stringify({
-        name: reviewName,
-        subject: reviewSubject,
-        rating: reviewRating,
-        message: reviewMessage,
-        bookId: bookId
-      })], { type: 'application/json' }));
-
-      for (let i = 0; i < reviewImages.length; i++) {
-        formData.append('images', reviewImages[i]);
-      }
-
-      fetch('/reviews', {
-        method: 'POST',
-        body: formData,
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('리뷰 작성에 실패했습니다.');
-        }
-
-        alert('리뷰가 성공적으로 작성하였습니다.');
-        location.reload();
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('리뷰 작성에 실패했습니다.');
-      });
-    }
-
-    function previewImages() {
-      const previewContainer = document.getElementById('preview-container');
-      previewContainer.innerHTML = '';
-
-      const files = document.getElementById('review-images').files;
-
-      Array.from(files).forEach(file => {
-        const reader = new FileReader();
-
-        reader.onload = function(e) {
-          const img = document.createElement('img');
-          img.src = e.target.result;
-          img.style.maxWidth = '100px';
-          img.style.margin = '10px';
-          previewContainer.appendChild(img);
-        };
-
-        reader.readAsDataURL(file);
-      });
-    }
-  </script>
 </div>
 </body>
 </html>

@@ -1,11 +1,15 @@
 package com.nhnacademy.frontserver1.infrastructure.adaptor;
 
 import com.nhnacademy.frontserver1.common.config.FeignClientConfig;
+import com.nhnacademy.frontserver1.presentation.dto.request.order.CancelOrderRequest;
+import com.nhnacademy.frontserver1.presentation.dto.response.admin.CancelOrderResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.admin.ReadAllUserOrderCancelStatusResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.admin.ReadAllUserOrderStatusResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.admin.UpdateOrderStatusRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,7 +23,13 @@ public interface AdminOrderAdaptor {
     Page<ReadAllUserOrderStatusResponse> getAllUserOrderStatusByPaging(Pageable pageable,
         @RequestParam(required = false) String role);
 
-    @PutMapping("/{orderId}/admin")
+    @PutMapping("/admin/{orderId}")
     void updateOrderStatusByOrderId(@PathVariable String orderId,
         @RequestBody UpdateOrderStatusRequest updateOrderStatusRequests);
+
+    @GetMapping("/admin/refund")
+    Page<ReadAllUserOrderCancelStatusResponse> getAllUserOrderCancelStatusByPaging(Pageable pageable);
+
+    @PutMapping("/admin/{orderId}/refund")
+    ResponseEntity<CancelOrderResponse> cancelOrderByOrderId(@PathVariable String orderId, @RequestBody CancelOrderRequest request);
 }

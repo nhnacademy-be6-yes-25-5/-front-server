@@ -3,7 +3,9 @@ package com.nhnacademy.frontserver1.common.config;
 import com.nhnacademy.frontserver1.common.provider.CookieTokenProvider;
 import com.nhnacademy.frontserver1.common.interceptor.FeignJwtTokenInterceptor;
 import com.nhnacademy.frontserver1.common.decoder.CustomErrorDecoder;
+import feign.codec.Encoder;
 import feign.codec.ErrorDecoder;
+import feign.form.spring.SpringFormEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,5 +22,10 @@ public class FeignClientConfig {
             CookieTokenProvider cookieTokenProvider) {
         return new FeignJwtTokenInterceptor(cookieTokenProvider);
     }
+
+//    @Bean
+//    public Encoder feignFormEncoder() {
+//        return new SpringFormEncoder();
+//    }
 
 }

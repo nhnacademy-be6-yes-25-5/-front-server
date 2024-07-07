@@ -47,7 +47,7 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
 
 
         if (allTokensEmpty && (path.matches(".*/orders/.*/delivery.*") || path.startsWith("/users/cart-books")
-            || path.startsWith("/detail") || path.startsWith("/books") || path.matches("/coupons"))) {
+            || path.startsWith("/detail") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/reviews/books"))) {
             return ;
         }
 

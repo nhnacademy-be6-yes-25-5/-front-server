@@ -35,7 +35,15 @@
             <button class="btn btn-outline-secondary btn-custom" onclick="location.href='/reviews'">리뷰 작성하기</button>
             <button class="btn btn-warning btn-custom" th:if="${order.orderStatusType.name == 'DONE'}" th:disabled="${noneMember != null}" onclick="changeOrderStatus('RETURN')">반품</button>
             <button class="btn btn-danger btn-custom" th:if="${order.orderStatusType.name == 'WAIT'}" th:disabled="${noneMember != null}" onclick="changeOrderStatus('CANCEL')">결제취소</button>
-            <button class="btn btn-info btn-custom" th:if="${order.orderStatusType.name == 'RETURN'}" th:disabled="${noneMember != null}" onclick="changeOrderStatus('REFUND')">환불</button>
+            <button class="btn btn-info btn-custom" th:if="${order.orderStatusType.name == 'RETURN' }" th:disabled="${noneMember != null} or ${order.cancelStatus.name != 'NONE'}" onclick="changeOrderStatus('REFUND')">환불 요청</button>
+          </div>
+          <div th:if="${order.cancelStatus.name != 'NONE'}" class="mt-4">
+            <p>
+              <strong>환불 상태:</strong>
+              <span th:if="${order.cancelStatus.name == 'WAIT'}">환불 승인 대기중</span>
+              <span th:if="${order.cancelStatus.name == 'ACCESS'}">환불 승인</span>
+              <span th:if="${order.cancelStatus.name == 'DENIED'}">환불 거부</span>
+            </p>
           </div>
         </div>
       </div>
@@ -87,7 +95,21 @@
         }
       })
       .then(data => {
-        alert('주문 상태가 성공적으로 변경되었습니다.');
+        let message;
+        switch(status) {
+          case 'RETURN':
+            message = '반품 요청이 성공적으로 처리되었습니다.';
+            break;
+          case 'CANCEL':
+            message = '결제 취소가 성공적으로 처리되었습니다.';
+            break;
+          case 'REFUND':
+            message = '환불 요청이 성공적으로 처리되었습니다.';
+            break;
+          default:
+            message = '주문 상태가 성공적으로 변경되었습니다.';
+        }
+        alert(message);
         location.reload();
       })
       .catch(error => {

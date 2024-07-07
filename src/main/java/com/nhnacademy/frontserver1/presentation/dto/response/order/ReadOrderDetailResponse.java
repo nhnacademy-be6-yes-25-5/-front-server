@@ -1,5 +1,6 @@
 package com.nhnacademy.frontserver1.presentation.dto.response.order;
 
+import com.nhnacademy.frontserver1.domain.CancelStatus;
 import com.nhnacademy.frontserver1.presentation.dto.response.admin.enumtype.OrderStatusType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -30,6 +31,7 @@ public record ReadOrderDetailResponse(String orderId,
                                       BigDecimal points,
                                       List<String> bookNames,
                                       List<Integer> quantities,
-                                      List<BigDecimal> bookPrices) {
+                                      List<BigDecimal> bookPrices,
+                                      CancelStatus cancelStatus) {
 
 }

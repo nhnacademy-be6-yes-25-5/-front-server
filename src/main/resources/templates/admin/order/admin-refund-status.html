@@ -68,7 +68,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.status === "ACCESS") {
-                    alert('환불 요청이 성공적으로 승인되었습니다.');
+                    alert('환불 요청이 승인되었습니다.');
                 } else if (data.status === "DENIED") {
                     alert('환불 요청이 거부되었습니다.');
                 }

@@ -1,8 +1,8 @@
 package com.nhnacademy.frontserver1.application.service.impl;
 
 import com.nhnacademy.frontserver1.application.service.OrderService;
+import com.nhnacademy.frontserver1.application.service.dto.request.ReadMaximumDiscountCouponRequest;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.AddressAdaptor;
-import com.nhnacademy.frontserver1.infrastructure.adaptor.CouponAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.OrderAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.OrderBookAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.PolicyAdaptor;
@@ -44,7 +44,6 @@ public class OrderServiceImpl implements OrderService {
     private final UserAdaptor userAdaptor;
     private final UserCouponAdaptor userCouponAdaptor;
     private final OrderBookAdaptor orderBookAdaptor;
-    private final UserCouponAdaptor userCouponAdaptor;
 
     @Override
     public CreateOrderResponse createPreOrder(CreateOrderRequest request) {
@@ -107,7 +106,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ReadMaximumDiscountCouponResponse getMaxDiscountCoupon(Integer totalAmount) {
 //        ReadMaximumDiscountCouponRequest request = ReadMaximumDiscountCouponRequest.from(totalAmount);
-//        return couponAdaptor.getMaxDiscountCouponByTotalAmount(request);
+//        return userCouponAdaptor.getMaxDiscountCouponByTotalAmount(request);
 
         return ReadMaximumDiscountCouponResponse.fromTest();
     }
@@ -146,6 +145,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<ReadUserCouponResponse> getUserCoupons() {
-        Page<> userCouponAdaptor.getAllUserCoupon
+        return userCouponAdaptor.getAllUserCoupons();
     }
 }

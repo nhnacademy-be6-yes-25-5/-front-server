@@ -5,6 +5,9 @@ import com.nhnacademy.frontserver1.presentation.dto.request.user.LoginUserReques
 import com.nhnacademy.frontserver1.presentation.dto.response.auth.CreateAccessTokenResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.auth.DeleteAccessTokenResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.auth.CreatePaycoInfoResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.user.AuthResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -71,26 +74,45 @@ public class PaycoServiceImpl {
         return value != null ? value : defaultValue;
     }
 
-    public boolean isNewPaycoLogin(Member paycoInfo) {
-        CreateUserRequest request = CreateUserRequest.builder().userName(paycoInfo.name())
+    public AuthResponse processPaycoLogin(Member paycoInfo) {
+        CreateUserRequest request = CreateUserRequest.builder()
+                .userName(paycoInfo.name())
                 .userBirth(parseBirthday(paycoInfo.birthdayMMdd()))
                 .userEmail(paycoInfo.id())
-                .userPhone(paycoInfo.mobile())
+                .userPhone(formatPhoneNumber(paycoInfo.mobile()))
                 .userPassword(paycoInfo.id())
                 .userConfirmPassword(paycoInfo.id())
+                .providerName("PAYCO")
                 .build();
+
         if (userAdaptor.checkEmail(paycoInfo.id())) {
-            //회원정보가 있으면(true) 로그인 요청
+            // 회원 정보가 있으면 로그인 요청
             LoginUserRequest loginUserRequest = LoginUserRequest.builder()
-                                                                .email(request.userEmail())
-                                                                .password(request.userPassword())
-                                                                .build();
-            authAdaptor.findLoginUserByEmail(loginUserRequest);
-            return false;
+                    .email(request.userEmail())
+                    .password(request.userPassword())
+                    .build();
+            return authAdaptor.findLoginUserByEmail(loginUserRequest).getBody();
         } else {
-            //회원정보가 없으면 회원가입
+            // 회원 정보가 없으면 회원가입 후 로그인 요청
             userAdaptor.signUp(request);
-            return true;
+            LoginUserRequest loginUserRequest = LoginUserRequest.builder()
+                    .email(request.userEmail())
+                    .password(request.userPassword())
+                    .build();
+            return authAdaptor.findLoginUserByEmail(loginUserRequest).getBody();
+        }
+    }
+
+    private String formatPhoneNumber(String phoneNumber) {
+        phoneNumber = phoneNumber.replaceAll("\\D", "");
+
+        if (phoneNumber.length() == 11) {
+            return "010-" + phoneNumber.substring(3, 7) + "-" + phoneNumber.substring(7);
+        } else if (phoneNumber.length() > 11) {
+            phoneNumber = phoneNumber.substring(phoneNumber.length() - 11);
+            return "010-" + phoneNumber.substring(3, 7) + "-" + phoneNumber.substring(7);
+        } else {
+            return phoneNumber;
         }
     }
 

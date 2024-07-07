@@ -4,6 +4,7 @@ import com.nhnacademy.frontserver1.application.service.BookService;
 import com.nhnacademy.frontserver1.application.service.CategoryService;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.CategoryResponse;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +32,12 @@ public class HomeController {
     private String port;
 
     @GetMapping
-    public String index(Model model){
+    public String index(Model model, HttpServletRequest request){
+
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+
+        }
 
         List<CategoryResponse> rootCategories = categoryService.findRootCategories();
         List<BookResponse> bookList = bookService.findAllBooks();

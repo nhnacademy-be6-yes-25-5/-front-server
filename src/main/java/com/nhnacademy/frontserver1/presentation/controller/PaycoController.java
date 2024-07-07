@@ -1,7 +1,11 @@
 package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.impl.UserServiceImpl;
+import com.nhnacademy.frontserver1.application.service.impl.AuthServiceImpl;
+import com.nhnacademy.frontserver1.presentation.dto.response.user.AuthResponse;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -25,6 +29,7 @@ public class PaycoController {
 
     private final PaycoServiceImpl paycoService;
     private final UserServiceImpl userServiceImpl;
+    private final AuthServiceImpl authServiceImpl;
 
     @Value("${payco.client-id}")
     private String clientId;
@@ -53,23 +58,34 @@ public class PaycoController {
 
     @GetMapping("/callback")
     public String handleAuthorizationCallback(@RequestParam("code") String authorizationCode,
-                                              HttpServletRequest request) {
+                                              HttpServletRequest request,
+                                              HttpServletResponse response) {
         CreateAccessTokenResponse tokenResponse = paycoService.getAccessToken("authorization_code", clientId, clientSecret, authorizationCode);
         String accessToken = tokenResponse.accessToken();
 
         Member paycoInfo = paycoService.getPaycoInfo(clientId, accessToken);
         request.getSession().setAttribute("paycoInfo", paycoInfo);
 
-        if (paycoService.isRequiredInfoMissing(paycoInfo)) {
+        AuthResponse authResponse = paycoService.processPaycoLogin(paycoInfo);
 
+        // 토큰 쿠키 설정
+        addTokenCookie(response, "AccessToken", authResponse.accessToken());
+        addTokenCookie(response, "RefreshToken", authResponse.refreshToken());
+
+        if (paycoService.isRequiredInfoMissing(paycoInfo)) {
             return "redirect:/additional-info";
         } else {
-            if (paycoService.isNewPaycoLogin(paycoInfo)) {
+            return "index";
+        }
+    }
 
-                return "redirect:/auth/login";
-            }
-
-            return "redirect:/";
+    private void addTokenCookie(HttpServletResponse response, String name, String token) {
+        if (token != null) {
+            Cookie cookie = new Cookie(name, token);
+            cookie.setHttpOnly(true);
+            cookie.setSecure(true);
+            cookie.setPath("/");
+            response.addCookie(cookie);
         }
     }
 

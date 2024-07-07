@@ -36,13 +36,13 @@ public class TokenCookieInjectorAspect {
             HttpServletResponse response = ((ServletRequestAttributes) requestAttributes).getResponse();
 
             String accessToken = (String) request.getAttribute("AccessToken");
-            if (accessToken != null) {
-                accessToken = accessToken.replace("Bearer ", "");
-            }
             String refreshToken = (String) request.getAttribute("RefreshToken");
 
-            addTokenCookie(response, "AccessToken", accessToken);
-            addTokenCookie(response, "RefreshToken", refreshToken);
+            if (accessToken != null && !accessToken.isEmpty() && refreshToken != null && !refreshToken.isEmpty()) {
+                accessToken = accessToken.replace("Bearer ", "");
+                addTokenCookie(response, "AccessToken", accessToken);
+                addTokenCookie(response, "RefreshToken", refreshToken);
+            }
         }
 
         return result;

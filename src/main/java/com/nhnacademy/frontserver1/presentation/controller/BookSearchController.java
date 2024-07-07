@@ -5,10 +5,10 @@ import com.nhnacademy.frontserver1.presentation.dto.request.book.BookSearchReque
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookIndexResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 
 @Controller
@@ -17,58 +17,45 @@ public class BookSearchController {
 
     private final BookSearchAdaptor bookSearchAdaptor;
 
-    @PostMapping("/searchAll")
-    public String searchAll(Model model, @ModelAttribute BookSearchRequest request) {
+    @GetMapping("/search")
+    public String search(Model model, @RequestParam String keyword, @RequestParam(name = "option") String option, Pageable pageable) {
 
-        Page<BookIndexResponse> bookIndexList = bookSearchAdaptor.searchAll(request);
+        if(option.equals("name")) {
 
-        model.addAttribute("bookIndexList", bookIndexList);
+            Page<BookIndexResponse> bookIndexList = bookSearchAdaptor.searchByName(keyword, pageable);
 
-        return "";
+            model.addAttribute("bookList", bookIndexList);
 
-    }
+        } else if(option.equals("description")) {
 
-    @PostMapping("/searchByName")
-    public String searchByName(Model model, @ModelAttribute BookSearchRequest request) {
+            Page<BookIndexResponse> bookIndexList = bookSearchAdaptor.searchByDescription(keyword, pageable);
 
-        Page<BookIndexResponse> bookIndexList = bookSearchAdaptor.searchByName(request);
+            model.addAttribute("bookList", bookIndexList);
+        } else if(option.equals("author")) {
 
-        model.addAttribute("bookIndexList", bookIndexList);
+            Page<BookIndexResponse> bookIndexList = bookSearchAdaptor.searchByAuthorName(keyword, pageable);
 
-        return "";
+            model.addAttribute("bookList", bookIndexList);
 
-    }
+        } else if(option.equals("tag")) {
 
-    @PostMapping("/searchByDescription")
-    public String searchByDescription(Model model, @ModelAttribute BookSearchRequest request) {
+            Page<BookIndexResponse> bookIndexList = bookSearchAdaptor.searchByTagName(keyword, pageable);
 
-        Page<BookIndexResponse> bookIndexList = bookSearchAdaptor.searchByDescription(request);
+            model.addAttribute("bookList", bookIndexList);
 
-        model.addAttribute("bookIndexList", bookIndexList);
+        } else if(option.equals("category")) {
 
-        return "";
+            Page<BookIndexResponse> bookIndexList = bookSearchAdaptor.searchByCategoryName(keyword, pageable);
 
-    }
+            model.addAttribute("bookList", bookIndexList);
+        } else {
 
-    @PostMapping("/searchByTagName")
-    public String searchByTagName(Model model, @ModelAttribute BookSearchRequest request) {
+            Page<BookIndexResponse> bookIndexList = bookSearchAdaptor.searchAll(keyword, pageable);
 
-        Page<BookIndexResponse> bookIndexList = bookSearchAdaptor.searchByTagName(request);
+            model.addAttribute("bookList", bookIndexList);
 
-        model.addAttribute("bookIndexList", bookIndexList);
+        }
 
-        return "";
-
-    }
-
-    @PostMapping("/searchByAuthorName")
-    public String searchByAuthorName(Model model, @ModelAttribute BookSearchRequest request) {
-
-        Page<BookIndexResponse> bookIndexList = bookSearchAdaptor.searchByAuthorName(request);
-
-        model.addAttribute("booxIndexList", bookIndexList);
-
-        return "";
-
+        return "product/product-list";
     }
 }

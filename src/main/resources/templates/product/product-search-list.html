@@ -236,7 +236,6 @@
                                                 </div>
                                                 <div class="col-lg-8 col-md-8 col-12">
                                                     <div class="product-info">
-                                                        <span th:text = "${book.bookAuthor()}" class="category">Watches</span>
                                                         <h4 class="title">
                                                             <a th:text = "${book.bookName()}" th:href="@{'/detail/' + ${book.bookId()}}">Xiaomi Mi Band 5</a>
                                                         </h4>
@@ -267,19 +266,19 @@
                                     <ul class="pagination-list">
                                         <!-- Previous Page Link -->
                                         <li th:class="${nowPage == 1} ? 'disabled' : ''">
-                                            <a th:if="${nowPage != 1}" th:href="@{/category/{categoryId}(categoryId=${categoryId}, page=${nowPage - 1})}">&laquo;</a>
+                                            <a th:if="${nowPage != 1}" th:href="@{/search(option=${option}, keyword=${keyword} , page=${nowPage - 1})}">&laquo;</a>
                                         </li>
 
                                         <!-- Page Links -->
                                         <th:block th:each="pageNum : ${#numbers.sequence(startPage, endPage)}">
                                             <li th:class="${pageNum == nowPage} ? 'active' : ''">
-                                                <a th:href="@{/category/{categoryId}(categoryId=${categoryId}, page=${pageNum - 1})}" th:text="${pageNum}"></a>
+                                                <a th:href="@{/search(option=${option}, keyword=${keyword}, page=${pageNum - 1})}" th:text="${pageNum}"></a>
                                             </li>
                                         </th:block>
 
                                         <!-- Next Page Link -->
                                         <li th:class="${nowPage == totalPages} ? 'disabled' : ''">
-                                            <a th:if="${nowPage != totalPages}" th:href="@{/category/{categoryId}(categoryId=${categoryId}, page=${nowPage + 1})}">&raquo;</a>
+                                            <a th:if="${nowPage != totalPages}" th:href="@{/search(option=${option}, keyword=${keyword}, page=${nowPage + 1})}">&raquo;</a>
                                         </li>
                                     </ul>
                                 </div>

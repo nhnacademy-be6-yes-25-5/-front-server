@@ -1,12 +1,13 @@
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mail Failed</title>
+  <link rel="stylesheet" href="/css/main.css">
+</head>
 <body>
 <div th:fragment="content">
-
-  <!-- Start Breadcrumbs Component -->
-  <div th:replace="~{fragments/breadcrumbs :: breadcrumbs}"></div>
-  <!-- End Breadcrumbs Component -->
-
-  <!-- Start Error Area -->
   <div class="error-area">
     <div class="d-table">
       <div class="d-table-cell">
@@ -14,28 +15,15 @@
           <div class="error-content">
             <i class="lni lni-warning"></i>
             <h2>오류가 발생했습니다</h2>
-            <p>죄송합니다. 오류가 발생했습니다. 잠시 후 다시 시도하거나 고객 지원에 문의해주세요.</p>
+            <p>입력하신 이메일에 맞는 계정이 존재하지 않습니다.</p>
             <div class="button">
-              <a href="#" class="btn">홈으로 돌아가기</a>
+              <a href="/" class="btn">홈으로 돌아가기</a>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <!-- End Error Area -->
-
-  <!-- ========================= JS here ========================= -->
-  <script>
-    window.onload = function () {
-      window.setTimeout(fadeout, 500);
-    }
-
-    function fadeout() {
-      document.querySelector('.preloader').style.opacity = '0';
-      document.querySelector('.preloader').style.display = 'none';
-    }
-  </script>
 </div>
 </body>
 </html>

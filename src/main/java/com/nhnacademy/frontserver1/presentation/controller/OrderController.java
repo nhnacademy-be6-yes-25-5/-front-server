@@ -140,7 +140,7 @@ public class OrderController {
         return "order/address-popup";
     }
 
-    @GetMapping("/orders/couponPopup")
+    @GetMapping("/coupons")
     public String getCouponPopup(Model model) {
         List<ReadUserCouponResponse> coupons = orderService.getUserCoupons();
         model.addAttribute("coupons", coupons);

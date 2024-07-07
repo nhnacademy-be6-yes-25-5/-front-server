@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html class="no-js" lang="zxx" xmlns:th="http://www.thymeleaf.org">
-
 <head>
   <meta charset="utf-8"/>
   <meta http-equiv="x-ua-compatible" content="ie=edge"/>
@@ -216,6 +215,7 @@
           <button onclick="openCouponPopup()" th:disabled="${userInfo.role == 'NONE_MEMBER'}">쿠폰 목록 보기</button>
           <input type="text" id="selectedCoupon" readonly th:disabled="${userInfo.role == 'NONE_MEMBER'}">
           <input type="hidden" id="couponDiscount" value="0" th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.discountAmount : 0}">
+          <input type="hidden" id="couponDiscountRate" value="0">
           <input type="hidden" id="couponId" th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.couponId : ''}">
           <div class="checkout-sidebar-price-table mt-30">
             <h5 class="title">Pricing Table</h5>
@@ -293,15 +293,24 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
   function updateTotalPrice() {
-    const totalAmount = parseInt(document.getElementById('totalAmount').innerText.replace('원', '')) || 0;
+    const totalAmountElement = document.getElementById('totalAmount');
+    const totalAmount = parseInt(totalAmountElement.innerText.replace('원', '')) || 0;
     const shippingFee = parseInt(document.getElementById('shippingFee').innerText.replace('원', '')) || 0;
-    const discountAmount = parseInt(document.getElementById('couponDiscount').value, 10) || 0;
+    const discountAmountElement = document.getElementById('couponDiscount');
+    const discountRateElement = document.getElementById('couponDiscountRate');
+    const discountAmount = parseInt(discountAmountElement.value) || 0;
+    const discountRate = parseFloat(discountRateElement.value) || 0;
     const takeoutSelect = document.getElementById('takeoutType');
     const selectedOption = takeoutSelect.options[takeoutSelect.selectedIndex];
     const takeoutPrice = parseInt(selectedOption.getAttribute('data-price'), 10) || 0;
     let pointsDiscount = parseInt(document.getElementById('points').value, 10) || 0;
 
-    const totalPriceBeforePoints = totalAmount - discountAmount + shippingFee + takeoutPrice;
+    let calculatedDiscount = discountAmount;
+    if (discountAmount === 0 && discountRate > 0) {
+      calculatedDiscount = totalAmount * (discountRate / 100);
+    }
+
+    const totalPriceBeforePoints = totalAmount - calculatedDiscount + shippingFee + takeoutPrice;
 
     if (pointsDiscount > totalPriceBeforePoints) {
       pointsDiscount = totalPriceBeforePoints;
@@ -313,8 +322,8 @@
 
     const totalPrice = totalPriceBeforePoints - pointsDiscount;
 
-    document.getElementById('discountAmount').innerText = discountAmount + '원';
-    document.getElementById('totalPriceValue').innerText = totalPrice + '원';
+    document.getElementById('discountAmount').innerText = calculatedDiscount.toFixed(0) + '원';
+    document.getElementById('totalPriceValue').innerText = totalPrice.toFixed(0) + '원';
   }
 
   function daumPost() {
@@ -477,7 +486,7 @@
   }
 
   function openCouponPopup() {
-    const popup = window.open(`/orders/coupon`, '쿠폰 목록', 'width=600,height=400');
+    const popup = window.open(`/orders/coupons`, '쿠폰 목록', 'width=600,height=400');
     popup.onunload = function () {
       if (popup.selectedCoupon) {
         document.getElementById('selectedCoupon').value = popup.selectedCoupon;

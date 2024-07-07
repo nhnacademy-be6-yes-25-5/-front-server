@@ -9,11 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,9 +47,10 @@ public class HomeController {
     }
 
     @GetMapping("/category/{categoryId}")
-    public String bookCategory(Model model, @PathVariable Long categoryId, @PageableDefault(size = 9, page = 0) Pageable pageable){
+    public String bookCategory(Model model, @PathVariable Long categoryId, @PageableDefault(size = 9, page = 0) Pageable pageable,
+                               @RequestParam(defaultValue = "popularity") String sortString ){
 
-        Page<BookResponse> bookList = bookService.getBookByCategoryId(categoryId, pageable);
+        Page<BookResponse> bookList = bookService.getBookByCategoryId(categoryId, pageable, sortString);
         List<CategoryResponse> rootCategories = categoryService.findRootCategories();
         int nowPage = bookList.getNumber();
         int startPage = Math.max(nowPage - 4, 0);

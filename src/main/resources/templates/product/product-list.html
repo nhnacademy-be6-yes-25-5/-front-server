@@ -274,19 +274,19 @@
                                     <ul class="pagination-list">
                                         <!-- Previous Page Link -->
                                         <li th:class="${nowPage == 1} ? 'disabled' : ''">
-                                            <a th:if="${nowPage != 1}" th:href="@{/category/{categoryId}(categoryId=${categoryId}, page=${nowPage - 1})}">&laquo;</a>
+                                            <a th:if="${nowPage != 1}" th:href="@{/category/{categoryId}(categoryId=${categoryId}, page=${nowPage - 1}, sortString=${sortString})}">&laquo;</a>
                                         </li>
 
                                         <!-- Page Links -->
                                         <th:block th:each="pageNum : ${#numbers.sequence(startPage, endPage)}">
                                             <li th:class="${pageNum == nowPage} ? 'active' : ''">
-                                                <a th:href="@{/category/{categoryId}(categoryId=${categoryId}, page=${pageNum - 1})}" th:text="${pageNum}"></a>
+                                                <a th:href="@{/category/{categoryId}(categoryId=${categoryId}, page=${pageNum - 1}, sortString=${sortString})}" th:text="${pageNum}"></a>
                                             </li>
                                         </th:block>
 
                                         <!-- Next Page Link -->
                                         <li th:class="${nowPage == totalPages} ? 'disabled' : ''">
-                                            <a th:if="${nowPage != totalPages}" th:href="@{/category/{categoryId}(categoryId=${categoryId}, page=${nowPage + 1})}">&raquo;</a>
+                                            <a th:if="${nowPage != totalPages}" th:href="@{/category/{categoryId}(categoryId=${categoryId}, page=${nowPage + 1}, sortString=${sortString})}">&raquo;</a>
                                         </li>
                                     </ul>
                                 </div>

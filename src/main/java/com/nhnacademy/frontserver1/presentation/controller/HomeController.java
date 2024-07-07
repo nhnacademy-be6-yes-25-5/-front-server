@@ -67,6 +67,7 @@ public class HomeController {
             }
         }
 
+        model.addAttribute("sortString", sortString);
         model.addAttribute("bookList", bookList);
         model.addAttribute("nowPage", nowPage + 1);
         model.addAttribute("startPage", startPage + 1);

@@ -1,10 +1,8 @@
 package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.impl.AuthServiceImpl;
+import com.nhnacademy.frontserver1.application.service.impl.PaycoServiceImpl;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.LoginUserRequest;
-import com.nhnacademy.frontserver1.presentation.dto.response.user.AuthResponse;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -25,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthContorller {
 
     private final AuthServiceImpl authService;
+    private final PaycoServiceImpl paycoService;
 
     /**
      * 로그인 페이지를 반환합니다.
@@ -62,7 +61,6 @@ public class AuthContorller {
 
         return "redirect:/";
     }
-
 
     /**
      * 토큰 테스트 페이지를 반환합니다.

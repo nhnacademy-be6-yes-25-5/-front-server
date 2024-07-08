@@ -11,8 +11,11 @@
                             Hello
                         </div>
                         <ul class="user-login">
-                            <li>
+                            <li th:if="${AccessToken == null || RefreshToken == null}">
                                 <a href="/auth/login">Sign In</a>
+                            </li>
+                            <li th:if="${AccessToken != null && RefreshToken != null}">
+                                <a href="/logout">Logout</a>
                             </li>
                             <li>
                                 <a href="/sign-up">Register</a>

@@ -6,6 +6,6 @@ import java.time.LocalDate;
 
 @Builder
 public record CreateUserRequest(String userName, LocalDate userBirth, String userEmail,
-                                String userPhone, String userPassword, String userConfirmPassword) {
+                                String userPhone, String userPassword, String userConfirmPassword, String providerName) {
 }
 

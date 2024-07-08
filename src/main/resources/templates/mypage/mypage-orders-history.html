@@ -6,7 +6,6 @@
 </head>
 <body>
 <div th:fragment="content">
-
     <!-- Start Breadcrumbs Component -->
     <div th:replace="~{fragments/breadcrumbs :: breadcrumbs}"></div>
     <!-- End Breadcrumbs Component -->
@@ -119,6 +118,26 @@
     </div>
     <!-- End Order History Area -->
 
+    <script>
+        function calculateDateRange(recordedAt) {
+            const recordedDate = new Date(recordedAt);
+            const priorDate = new Date(recordedDate);
+            priorDate.setMonth(recordedDate.getMonth() - 3);
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+            return {
+                recordedDate: recordedDate.toLocaleDateString('ko-KR', options),
+                priorDate: priorDate.toLocaleDateString('ko-KR', options)
+            };
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const recordedAt = /*[[${recordedAt}]]*/ '2024-07-08';
+            const dates = calculateDateRange(recordedAt);
+            document.querySelectorAll('.amount-text span:nth-child(2)').forEach(function (element) {
+                element.textContent = `(${dates.priorDate} ~ ${dates.recordedDate})`;
+            });
+        });
+    </script>
 </div>
 
 </body>

@@ -40,7 +40,7 @@ public interface BookAdaptor {
     ResponseEntity<Void> deleteBook(@PathVariable("bookId") Long bookId);
 
     @GetMapping("/category/{categoryId}/page")
-    Page<BookResponse> getBookByCategory(@PathVariable Long categoryId, Pageable pageable);
+    Page<BookResponse> getBookByCategory(@PathVariable Long categoryId, Pageable pageable, @RequestParam String sortString);
 
     @GetMapping("/search")
     List<BookCouponResponseDTO> findBooksByName(@RequestParam("query") String query);

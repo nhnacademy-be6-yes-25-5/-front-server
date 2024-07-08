@@ -2,15 +2,16 @@ package com.nhnacademy.frontserver1.infrastructure.adaptor;
 
 import com.nhnacademy.frontserver1.common.jwt.annotation.SkipTokenInjection;
 import com.nhnacademy.frontserver1.presentation.dto.request.auth.CreateAccessTokenRequest;
+import com.nhnacademy.frontserver1.presentation.dto.request.dormant.CreateAuthNumberRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.dormant.SubmitAuthNumberRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.LoginUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.auth.CreateAccessTokenResponse;
-import com.nhnacademy.frontserver1.presentation.dto.request.dormant.CreateAuthNumberRequest;
-import com.nhnacademy.frontserver1.presentation.dto.response.dormant.CreateAuthNumberRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.AuthResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "authAdaptor", url = "${eureka.gateway}/auth")
 public interface AuthAdaptor {

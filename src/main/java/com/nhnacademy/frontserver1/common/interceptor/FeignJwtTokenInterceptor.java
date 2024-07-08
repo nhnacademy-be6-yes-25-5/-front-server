@@ -37,7 +37,7 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
 
         if (path.equals("/") || path.startsWith("/auth/login") || path.startsWith("/orders/none") || path.startsWith("/category") || path.startsWith("/search")
           || path.startsWith("/sign-up") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/check-email")
-                || path.startsWith("/auth/dormant") || path.startsWith("/detail")) || path.startsWith("/users/sign-up") || path.equals("/callback")) {
+                || path.startsWith("/auth/dormant") || path.startsWith("/detail") || path.startsWith("/users/sign-up") || path.equals("/callback")) {
 
             return;
         }

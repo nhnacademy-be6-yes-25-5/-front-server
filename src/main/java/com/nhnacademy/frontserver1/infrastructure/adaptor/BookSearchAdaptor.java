@@ -15,21 +15,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface BookSearchAdaptor {
 
     @GetMapping("/searchAll")
-    Page<BookIndexResponse> searchAll(@RequestParam String keyword, Pageable pageable);
+    Page<BookIndexResponse> searchAll(@RequestParam String keyword, Pageable pageable, @RequestParam(defaultValue = "popularity") String sortString);
 
     @GetMapping("/searchByName")
-    Page<BookIndexResponse> searchByName(@RequestParam String keyword, Pageable pageable);
+    Page<BookIndexResponse> searchByName(@RequestParam String keyword, Pageable pageable, @RequestParam(defaultValue = "popularity") String sortString);
 
     @GetMapping("/searchByDescription")
-    Page<BookIndexResponse> searchByDescription(@RequestParam String keyword, Pageable pageable);
+    Page<BookIndexResponse> searchByDescription(@RequestParam String keyword, Pageable pageable, @RequestParam(defaultValue = "popularity") String sortString);
 
     @GetMapping("/searchByTagName")
-    Page<BookIndexResponse> searchByTagName(@RequestParam String keyword, Pageable pageable);
+    Page<BookIndexResponse> searchByTagName(@RequestParam String keyword, Pageable pageable, @RequestParam(defaultValue = "popularity") String sortString);
 
     @GetMapping("/searchByAuthorName")
-    Page<BookIndexResponse> searchByAuthorName(@RequestParam String keyword, Pageable pageable);
+    Page<BookIndexResponse> searchByAuthorName(@RequestParam String keyword, Pageable pageable, @RequestParam(defaultValue = "popularity") String sortString);
 
     @GetMapping("/searchByCategoryName")
-    Page<BookIndexResponse> searchByCategoryName(@RequestParam String keyword, Pageable pageable);
+    Page<BookIndexResponse> searchByCategoryName(@RequestParam String keyword, Pageable pageable, @RequestParam(defaultValue = "popularity") String sortString);
 }
 

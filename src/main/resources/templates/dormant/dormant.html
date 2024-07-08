@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<head>
+  <meta charset="UTF-8">
+  <title>휴면 해제</title>
+</head>
+<body>
+<div th:fragment="content" class="container">
+  <div class="section">
+    <h1>휴면 회원</h1>
+    <p>최근 로그인한 날짜를 기준으로 3달 이전이면 휴면 상태가 됩니다.</p>
+
+    <!-- 이메일과 비밀번호 입력 폼 -->
+    <form id="dormantForm" th:action="@{/dormant/unlock}" method="post" class="dormant-form">
+      <div class="form-group">
+        <label for="email">이메일</label>
+        <input type="email" id="email" name="email" required class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="password">비밀번호</label>
+        <input type="password" id="password" name="password" required class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="verificationCode">인증번호</label>
+        <input type="text" id="verificationCode" name="verificationCode" required class="form-control">
+      </div>
+
+      <!-- 인증번호 받기 버튼 -->
+      <div class="form-group">
+        <button type="button" id="getVerificationCodeBtn" class="btn btn-primary">인증번호 받기</button>
+      </div>
+
+      <!-- 타이머 표시 -->
+      <div id="timer" style="display: none;">3:00</div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

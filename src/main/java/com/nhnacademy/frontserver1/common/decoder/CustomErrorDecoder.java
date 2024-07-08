@@ -1,5 +1,6 @@
 package com.nhnacademy.frontserver1.common.decoder;
 
+import com.nhnacademy.frontserver1.common.exception.DormantAccountException;
 import com.nhnacademy.frontserver1.common.exception.FeignClientException;
 import com.nhnacademy.frontserver1.common.exception.RefreshTokenFailedException;
 import com.nhnacademy.frontserver1.common.exception.ExpireRefreshJwtException;
@@ -40,6 +41,12 @@ public class CustomErrorDecoder implements ErrorDecoder {
                     return new ExpireRefreshJwtException(
                             ErrorStatus.toErrorStatus("토큰 만료", 401, LocalDateTime.now())
                     );
+                }
+
+            case 403:
+                if (responseBody.contains("휴면")) {
+                    return new DormantAccountException(
+                        ErrorStatus.toErrorStatus("로그인한 유저가 휴면상태입니다.", 403, LocalDateTime.now()));
                 }
             case 404:
                 if (methodKey.contains("findOrderStatusByOrderId")) {

@@ -15,6 +15,7 @@ import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUser
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadPurePriceResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadUserCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.UpdateOrderResponse;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -51,4 +52,6 @@ public interface OrderService {
     ReadOrderDetailResponse getMyOrderByOrderId(String orderId);
 
     ReadOrderDetailResponse findOrderNoneMemberByOrderIdAndEmail(ReadOrderNoneMemberRequest request);
+
+    List<ReadUserCouponResponse> getUserCoupons();
 }

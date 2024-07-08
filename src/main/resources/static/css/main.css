@@ -5800,13 +5800,22 @@ blockquote span {
   margin-bottom: 0;
 }
 
-.product-details-info .reviews .single-review img {
-  height: 60px;
-  width: 60px;
-  border-radius: 50%;
+/* 필요하지 않아 주석처리 하였습니다.
+* by @bbbbooo
+*/
+/*.product-details-info .reviews .single-review img {*/
+/*  height: 60px;*/
+/*  width: 60px;*/
+/*  border-radius: 50%;*/
+/*  position: absolute;*/
+/*  left: 0;*/
+/*  top: 0;*/
+/*}*/
+
+.product-details-info .reviews .single-review .review-user-name {
   position: absolute;
   left: 0;
-  top: 0;
+  top: 10%;
 }
 
 @media (max-width: 767px) {
@@ -5814,6 +5823,34 @@ blockquote span {
     height: 40px;
     width: 40px;
   }
+}
+
+.product-details-info .reviews .single-review .review-info .review-buttons {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.product-details-info .reviews .single-review .review-info .review-buttons a {
+  color: #6c757d;
+  margin-left: 10px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.product-details-info .reviews .single-review .review-info .review-buttons a:hover {
+  text-decoration: underline;
+}
+
+.product-details-info .reviews .single-review .review-info .review-images-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.product-details-info .reviews .single-review .review-info .review-images-container img {
+  max-width: 100px;
+  margin: 5px;
 }
 
 .product-details-info .reviews .single-review .review-info {
@@ -8324,7 +8361,8 @@ tr {
 }
 
 .user-grade,
-.user-points {
+.user-points,
+.user-name{
   display: flex;
   align-items: center;
   margin-bottom: 5px;

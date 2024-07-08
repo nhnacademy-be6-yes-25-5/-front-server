@@ -2,8 +2,26 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <div th:fragment="user-sidebar">
-  <div class="sidebar">
+  <div class="sidebar" style="position: relative;">
+    <div class="tooltip-icon">등급별 혜택 확인
+      <div class="tooltiptext">
+        <strong>순수 주문 금액 (3개월 기준)</strong><br>주문금액 - (쿠폰 + 배송비 + 취소금액 + 포장비)<br><br>
+        <strong>일반회원</strong><br>순수 주문 금액 : 10만원 이상<br>순수금액의 1% 포인트 적립<br><br>
+        <strong>로얄회원</strong><br>순수 주문 금액 : 10만원 ~ 20만원<br>순수금액 * 2% 포인트 적립<br><br>
+        <strong>골드회원</strong><br>순수 주문 금액 : 20만원 ~ 30만원<br>순수금액 * 3% 포인트 적립<br><br>
+        <strong>플래티넘회원</strong><br>순수 주문 금액 : 30만원 이상<br>순수금액 * 3% 포인트 적립
+      </div>
+    </div>
     <div class="user-info">
+      <div class="user-name">
+        <span>회원명:</span>
+        <span class="grade">
+          <span th:if="${userInfo == null}">비회원</span>
+          <span th:if="${userInfo != null}">
+            <span th:text="${userInfo.name}"></span>
+          </span>
+        </span>
+      </div>
       <div class="user-grade">
         <span>회원 등급:</span>
         <span class="grade">

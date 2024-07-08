@@ -1,6 +1,9 @@
 package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.AdminOrderService;
+import com.nhnacademy.frontserver1.presentation.dto.request.order.CancelOrderRequest;
+import com.nhnacademy.frontserver1.presentation.dto.response.admin.CancelOrderResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.admin.ReadAllUserOrderCancelStatusResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.admin.ReadAllUserOrderStatusResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.admin.UpdateOrderStatusRequest;
 import java.util.List;
@@ -8,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,12 +50,21 @@ public class AdminOrderController {
     }
 
     @GetMapping("/cancel")
-    public String getAdminOrderCancelPage(Model model) {
+    public String getAdminOrderCancelPage() {
         return "admin/order/admin-cancel-status";
     }
 
     @GetMapping("/refund")
-    public String getAdminOrderRefundPage(Model model) {
+    public String getAdminOrderRefundPage(Model model, Pageable pageable) {
+        Page<ReadAllUserOrderCancelStatusResponse> responses = adminOrderservice.getAllUserOrderCancelStatus(pageable);
+
+        model.addAttribute("orders", responses);
+
         return "admin/order/admin-refund-status";
+    }
+
+    @PutMapping("/{orderId}/refund")
+    public ResponseEntity<CancelOrderResponse> cancelOrder(@PathVariable String orderId, @RequestBody CancelOrderRequest request) {
+        return ResponseEntity.ok(adminOrderservice.cancelOrder(orderId, request));
     }
 }

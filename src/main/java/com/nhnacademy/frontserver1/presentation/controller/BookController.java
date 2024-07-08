@@ -35,6 +35,7 @@ public class BookController {
 //        if (likesAdapter.exist(bookId)) {
 //            model.addAttribute("like", likesAdapter.findByBookIdAndUserId(bookId));
 //        }
+
         List<Long> categoryIds = bookService.getCategoryIdsByBookId(bookId);
         List<BookDetailCouponResponseDTO> coupons = couponService.getCoupons(bookId, categoryIds);
         model.addAttribute("coupons", coupons);

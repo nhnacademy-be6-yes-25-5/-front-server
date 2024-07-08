@@ -5,14 +5,12 @@ import com.nhnacademy.frontserver1.common.provider.CookieTokenProvider;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import java.util.List;
 
 /**
  * JWT 인증을 위한 Feign 요청 인터셉터입니다.
@@ -37,7 +35,8 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
         String path = request.getServletPath();
 
         if (path.equals("/") || path.startsWith("/auth/login") || path.startsWith("/orders/none")
-                || path.startsWith("/users/sign-up") || path.startsWith("/books") || path.equals("/callback")) {
+                || path.startsWith("/sign-up") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/check-email")
+        || path.startsWith("/auth/dormant") || path.startsWith("/users/sign-up") || path.equals("/callback")) {
             return;
         }
 
@@ -48,7 +47,7 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
 
 
         if (allTokensEmpty && (path.matches(".*/orders/.*/delivery.*") || path.startsWith("/users/cart-books")
-            || path.startsWith("/detail") || path.startsWith("/books") || path.matches("/coupons"))) {
+            || path.startsWith("/detail") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/reviews/books"))) {
             return ;
         }
 

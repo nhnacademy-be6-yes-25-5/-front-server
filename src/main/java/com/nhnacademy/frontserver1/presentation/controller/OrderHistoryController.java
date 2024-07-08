@@ -26,7 +26,8 @@ public class OrderHistoryController {
         Page<ReadMyOrderHistoryResponse> readMyOrderHistoryResponses = orderService.getMyOrders(pageable);
         ReadPurePriceResponse purePriceResponse = orderService.getPurePrice();
 
-        model.addAttribute("purePrice", purePriceResponse.purePrice());
+        model.addAttribute("purePrice", purePriceResponse.purePrice().intValue());
+        model.addAttribute("recordedAt", purePriceResponse.recordedAt().toString());
         model.addAttribute("orders", readMyOrderHistoryResponses);
 
         return "mypage/mypage-orders-history";

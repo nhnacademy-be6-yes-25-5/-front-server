@@ -1,11 +1,9 @@
 package com.nhnacademy.frontserver1.common.advice;
 
-import com.nhnacademy.frontserver1.common.exception.ExpireRefreshJwtException;
-import com.nhnacademy.frontserver1.common.exception.RefreshTokenFailedException;
-import com.nhnacademy.frontserver1.application.service.UserService;
+import com.nhnacademy.frontserver1.common.exception.DormantAccountException;
 import com.nhnacademy.frontserver1.common.exception.FeignClientException;
 import com.nhnacademy.frontserver1.common.exception.OrderWaitingException;
-import lombok.RequiredArgsConstructor;
+import com.nhnacademy.frontserver1.common.exception.RefreshTokenFailedException;
 import com.nhnacademy.frontserver1.common.exception.TokenCookieMissingException;
 import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +19,6 @@ import org.springframework.web.servlet.view.RedirectView;
 @RequiredArgsConstructor
 @Slf4j
 public class GlobalControllerAdvice {
-
-    private final UserService userService;
 
     @ExceptionHandler(FeignClientException.class)
     public ResponseEntity<ErrorStatus> handleFeignClientException(FeignClientException e, Model model) {
@@ -46,5 +42,12 @@ public class GlobalControllerAdvice {
         log.warn("OrderWaitingException 발생: ", e);
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
             .body(e.getMessage());
+    }
+
+    @ExceptionHandler(DormantAccountException.class)
+    public String handleDormantAccountException(DormantAccountException e) {
+        log.info("유저가 휴면 페이지로 리다이렉트됩니다.");
+        
+        return "redirect:/dormant";
     }
 }

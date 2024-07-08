@@ -38,5 +38,3 @@ provider:
     authorization-uri: https://id.payco.com/oauth2.0/authorize
     token-uri: https://id.payco.com/oauth2.0/token
     logout-uri: https://id.payco.com/oauth2.0/logout
-    member-info-uri: https://apis-payco.krp.toastoven.net/payco/friends/find_member_v2.json
-    user-name-attribute: email

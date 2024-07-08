@@ -118,9 +118,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public ReadPurePriceResponse getPurePrice() {
-//        return userAdaptor.getPurePrice();
+        return userAdaptor.getPurePrice();
 
-        return ReadPurePriceResponse.fromTest();
+//        return ReadPurePriceResponse.fromTest();
     }
 
     @Override

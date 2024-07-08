@@ -1,73 +1,53 @@
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/admin-layout :: admin-layout(~{::content})}">
+<head>
+    <title>환불 주문 관리</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
 <body>
 <div th:fragment="content">
-    <h1 class="mt-4">반품 주문 관리</h1>
+    <h1 class="mt-4">환불 주문 관리</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">반품 주문 관리</li>
+        <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+        <li class="breadcrumb-item active">환불 주문 관리</li>
     </ol>
 
     <div class="container-fluid">
         <div class="card mb-4">
             <div class="card-header">
-                반품 주문 목록
+                환불 주문 목록
             </div>
             <div class="card-body">
                 <table class="table table-striped">
                     <thead>
                     <tr>
                         <th>주문번호</th>
-                        <th>회원명</th>
+                        <th>회원 ID</th>
                         <th>주문 상품</th>
                         <th>주문 금액</th>
-                        <th>반품 사유</th>
-                        <th>반품 신청일</th>
-                        <th>반품 승인</th>
+                        <th>환불 신청일</th>
+                        <th>환불 승인</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>54321</td>
-                        <td>김철수</td>
-                        <td>상품B 외 1개</td>
-                        <td>120,000원</td>
-                        <td>불량</td>
-                        <td>2023-06-10</td>
+                    <tr th:each="order : ${orders.content}">
+                        <td th:text="${order.orderId}">12345</td>
+                        <td th:text="${order.userId}">홍길동</td>
                         <td>
-                            <select class="form-select" aria-label="Default select example">
-                                <option selected>반품 승인</option>
-                                <option value="1">반품 거절</option>
-                            </select>
-                            <button type="button" class="btn btn-primary btn-sm mt-2">저장</button>
+                            <span th:text="${order.bookNames.get(0)}">상품A</span>
+                            <span th:if="${#lists.size(order.bookNames) > 1}" th:text="' 외 ' + (${#lists.size(order.bookNames) - 1}) + '개'"> 외 1개</span>
                         </td>
-                    </tr>
-                    <tr>
-                        <td>54322</td>
-                        <td>홍길동</td>
-                        <td>상품A 외 1개</td>
-                        <td>90,000원</td>
-                        <td>변심</td>
-                        <td>2023-06-12</td>
+                        <td th:text="${order.amount.intValue()}">80,000원</td>
+                        <td th:text="${order.canceledAt}">2023-06-05</td>
                         <td>
-                            <select class="form-select" aria-label="Default select example">
-                                <option selected>반품 승인</option>
-                                <option value="1">반품 거절</option>
+                            <select class="form-select" aria-label="Default select example" th:id="'select-' + ${order.orderId}">
+                                <option value="ACCESS" selected>환불 승인</option>
+                                <option value="DENIED">환불 거절</option>
                             </select>
-                            <button type="button" class="btn btn-primary btn-sm mt-2">저장</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>54323</td>
-                        <td>강감찬</td>
-                        <td>상품C 외 1개</td>
-                        <td>150,000원</td>
-                        <td>오배송</td>
-                        <td>2023-06-15</td>
-                        <td>
-                            <select class="form-select" aria-label="Default select example">
-                                <option selected>반품 승인</option>
-                                <option value="1">반품 거절</option>
-                            </select>
-                            <button type="button" class="btn btn-primary btn-sm mt-2">저장</button>
+                            <button type="button" class="btn btn-primary btn-sm mt-2"
+                                    th:attr="onclick=|handleRefund('${order.orderId}', document.getElementById('select-${order.orderId}'))|">
+                                저장
+                            </button>
                         </td>
                     </tr>
                     </tbody>
@@ -75,6 +55,36 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function sendRefundRequest(orderId, status) {
+            fetch('/admin/orders/' + orderId + '/refund', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: status })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "ACCESS") {
+                    alert('환불 요청이 승인되었습니다.');
+                } else if (data.status === "DENIED") {
+                    alert('환불 요청이 거부되었습니다.');
+                }
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('환불 요청 처리 중 오류가 발생했습니다.');
+            });
+        }
+
+        function handleRefund(orderId, selectElement) {
+            const status = selectElement.value;
+            sendRefundRequest(orderId, status);
+        }
+    </script>
 </div>
 </body>
 </html>

@@ -2,6 +2,7 @@ package com.nhnacademy.frontserver1.common.interceptor;
 
 import com.nhnacademy.frontserver1.application.service.UserService;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.ReadUserInfoResponse;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,17 @@ public class UserInfoInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
         ModelAndView modelAndView) throws Exception {
         if (modelAndView != null) {
-            UserService userService = applicationContext.getBean(UserService.class);
-            ReadUserInfoResponse userInfo = userService.getUserPointsAndGrade();
-            modelAndView.addObject("userInfo", userInfo);
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if ("AccessToken".equals(cookie.getName())) {
+                        UserService userService = applicationContext.getBean(UserService.class);
+                        ReadUserInfoResponse userInfo = userService.getUserPointsAndGrade();
+                        modelAndView.addObject("userInfo", userInfo);
+                        break;
+                    }
+                }
+            }
         }
     }
 }

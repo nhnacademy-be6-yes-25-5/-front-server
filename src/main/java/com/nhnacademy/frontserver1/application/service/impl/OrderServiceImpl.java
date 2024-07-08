@@ -1,14 +1,13 @@
 package com.nhnacademy.frontserver1.application.service.impl;
 
 import com.nhnacademy.frontserver1.application.service.OrderService;
+import com.nhnacademy.frontserver1.application.service.dto.request.ReadMaximumDiscountCouponRequest;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.AddressAdaptor;
-import com.nhnacademy.frontserver1.infrastructure.adaptor.BookAdaptor;
-import com.nhnacademy.frontserver1.infrastructure.adaptor.CartAdaptor;
-import com.nhnacademy.frontserver1.infrastructure.adaptor.CouponAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.OrderAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.OrderBookAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.PolicyAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.UserAdaptor;
+import com.nhnacademy.frontserver1.infrastructure.adaptor.UserCouponAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadOrderNoneMemberRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderRequest;
@@ -25,6 +24,7 @@ import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUser
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadPurePriceResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadUserCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.UpdateOrderResponse;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -40,12 +40,10 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderAdaptor orderAdaptor;
     private final PolicyAdaptor policyAdaptor;
-    private final CartAdaptor cartAdaptor;
     private final AddressAdaptor addressAdaptor;
     private final UserAdaptor userAdaptor;
-    private final BookAdaptor bookAdaptor;
+    private final UserCouponAdaptor userCouponAdaptor;
     private final OrderBookAdaptor orderBookAdaptor;
-    private final CouponAdaptor couponAdaptor;
 
     @Override
     public CreateOrderResponse createPreOrder(CreateOrderRequest request) {
@@ -108,7 +106,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ReadMaximumDiscountCouponResponse getMaxDiscountCoupon(Integer totalAmount) {
 //        ReadMaximumDiscountCouponRequest request = ReadMaximumDiscountCouponRequest.from(totalAmount);
-//        return couponAdaptor.getMaxDiscountCouponByTotalAmount(request);
+//        return userCouponAdaptor.getMaxDiscountCouponByTotalAmount(request);
 
         return ReadMaximumDiscountCouponResponse.fromTest();
     }
@@ -120,9 +118,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public ReadPurePriceResponse getPurePrice() {
-//        return userAdaptor.getPurePrice();
+        return userAdaptor.getPurePrice();
 
-        return ReadPurePriceResponse.fromTest();
+//        return ReadPurePriceResponse.fromTest();
     }
 
     @Override
@@ -143,5 +141,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ReadOrderDetailResponse findOrderNoneMemberByOrderIdAndEmail(ReadOrderNoneMemberRequest request) {
         return orderAdaptor.findOrderNoneMemberByOrderIdAndEmail(request.orderId(), request.email());
+    }
+
+    @Override
+    public List<ReadUserCouponResponse> getUserCoupons() {
+        return userCouponAdaptor.getAllUserCoupons();
     }
 }

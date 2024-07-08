@@ -13,6 +13,7 @@ import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUser
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUserInfoResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadUserCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.UpdateOrderResponse;
 import jakarta.servlet.http.HttpSession;
 import java.math.BigDecimal;
@@ -45,7 +46,8 @@ public class OrderController {
     @GetMapping("/checkout")
     public String findAllCheckout(Model model, Pageable pageable,
         @RequestParam List<Long> bookIdList, @RequestParam List<Integer> quantities) {
-        List<ReadCartBookResponse> cartBookResponses = orderService.getOrderBook(bookIdList, quantities);
+        List<ReadCartBookResponse> cartBookResponses = orderService.getOrderBook(bookIdList,
+            quantities);
         ReadOrderUserInfoResponse orderUserInfoResponse = orderService.getUserInfo();
         Integer totalAmount = getTotalAmount(cartBookResponses);
 
@@ -74,13 +76,16 @@ public class OrderController {
         }
     }
 
-    private void populateOrderDetails(Model model, Pageable pageable, Integer totalAmount, List<ReadCartBookResponse> cartBookResponses) {
-        ReadShippingPolicyResponse shippingPolicy = orderService.findAllOrderPolicy(pageable, totalAmount);
+    private void populateOrderDetails(Model model, Pageable pageable, Integer totalAmount,
+        List<ReadCartBookResponse> cartBookResponses) {
+        ReadShippingPolicyResponse shippingPolicy = orderService.findAllOrderPolicy(pageable,
+            totalAmount);
         ReadShippingPolicyResponse freeShippingPolicy = orderService.findFreePolicy();
         Integer freeShippingAmount = freeShippingPolicy.shippingPolicyMinAmount() - totalAmount;
         List<ReadTakeoutResponse> takeoutResponses = orderService.findAllTakeout();
 
-        boolean hasUnPackableBook = cartBookResponses.stream().anyMatch(cartBook -> !cartBook.bookIsPackable());
+        boolean hasUnPackableBook = cartBookResponses.stream()
+            .anyMatch(cartBook -> !cartBook.bookIsPackable());
 
         List<ReadTakeoutResponse> availableTakeouts = hasUnPackableBook
             ? List.of(new ReadTakeoutResponse(TakeoutType.NONE, 0, "포장 불가"))
@@ -96,14 +101,16 @@ public class OrderController {
 
     private Integer getTotalAmount(List<ReadCartBookResponse> cartBookResponses) {
         BigDecimal totalAmount = cartBookResponses.stream()
-            .map(cartBookResponse -> cartBookResponse.bookPrice().multiply(BigDecimal.valueOf(cartBookResponse.cartBookQuantity())))
+            .map(cartBookResponse -> cartBookResponse.bookPrice()
+                .multiply(BigDecimal.valueOf(cartBookResponse.cartBookQuantity())))
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return totalAmount.intValue();
     }
 
     @PostMapping
-    public ResponseEntity<CreateOrderResponse> create(@RequestBody CreateOrderRequest request, HttpSession session) {
+    public ResponseEntity<CreateOrderResponse> create(@RequestBody CreateOrderRequest request,
+        HttpSession session) {
         log.info("주문 요청이 들어왔습니다. {}", request.toString());
         CreateOrderResponse response = orderService.createPreOrder(request);
 
@@ -133,6 +140,14 @@ public class OrderController {
         return "order/address-popup";
     }
 
+    @GetMapping("/coupons")
+    public String getCouponPopup(Model model) {
+        List<ReadUserCouponResponse> coupons = orderService.getUserCoupons();
+        model.addAttribute("coupons", coupons);
+        return "coupon/popup";
+    }
+
+
     @PutMapping("/{orderId}")
     public ResponseEntity<UpdateOrderResponse> updateOrder(@PathVariable String orderId,
         @RequestBody UpdateOrderRequest request) {
@@ -145,8 +160,10 @@ public class OrderController {
     }
 
     @GetMapping("/none")
-    public String getOrderNoneMember(@ModelAttribute ReadOrderNoneMemberRequest request, Model model) {
-        ReadOrderDetailResponse response = orderService.findOrderNoneMemberByOrderIdAndEmail(request);
+    public String getOrderNoneMember(@ModelAttribute ReadOrderNoneMemberRequest request,
+        Model model) {
+        ReadOrderDetailResponse response = orderService.findOrderNoneMemberByOrderIdAndEmail(
+            request);
         model.addAttribute("order", response);
         model.addAttribute("noneMember", "noneMember");
 

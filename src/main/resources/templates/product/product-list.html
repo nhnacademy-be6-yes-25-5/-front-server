@@ -267,7 +267,7 @@
                                     <ul class="pagination-list">
                                         <!-- Previous Page Link -->
                                         <li th:class="${nowPage == 1} ? 'disabled' : ''">
-                                            <a th:if="${nowPage != 1}" th:href="@{/product/list/{categoryId}(categoryId=${categoryId}, page=${nowPage - 1})}">&laquo;</a>
+                                            <a th:if="${nowPage != 1}" th:href="@{/category/{categoryId}(categoryId=${categoryId}, page=${nowPage - 1})}">&laquo;</a>
                                         </li>
 
                                         <!-- Page Links -->

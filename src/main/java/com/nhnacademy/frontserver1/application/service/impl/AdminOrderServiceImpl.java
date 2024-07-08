@@ -2,6 +2,9 @@ package com.nhnacademy.frontserver1.application.service.impl;
 
 import com.nhnacademy.frontserver1.application.service.AdminOrderService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.AdminOrderAdaptor;
+import com.nhnacademy.frontserver1.presentation.dto.request.order.CancelOrderRequest;
+import com.nhnacademy.frontserver1.presentation.dto.response.admin.CancelOrderResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.admin.ReadAllUserOrderCancelStatusResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.admin.ReadAllUserOrderStatusResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.admin.UpdateOrderStatusRequest;
 import lombok.RequiredArgsConstructor;
@@ -25,5 +28,15 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     public void updateOrderStatusByOrderId(String orderId,
         UpdateOrderStatusRequest updateOrderStatusRequest) {
         adminOrderAdaptor.updateOrderStatusByOrderId(orderId, updateOrderStatusRequest);
+    }
+
+    @Override
+    public Page<ReadAllUserOrderCancelStatusResponse> getAllUserOrderCancelStatus(Pageable pageable) {
+        return adminOrderAdaptor.getAllUserOrderCancelStatusByPaging(pageable);
+    }
+
+    @Override
+    public CancelOrderResponse cancelOrder(String orderId, CancelOrderRequest request) {
+        return adminOrderAdaptor.cancelOrderByOrderId(orderId, request).getBody();
     }
 }

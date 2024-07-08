@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
 <body>
 <div th:fragment="content">
-
     <!-- Start Breadcrumbs Component -->
     <div th:replace="~{fragments/breadcrumbs :: breadcrumbs}"></div>
     <!-- End Breadcrumbs Component -->
@@ -32,17 +31,15 @@
                     <div class="col-lg-6 col-md-12 col-12">
                         <div class="product-info">
                             <input type="hidden" id="bookId" th:value="${book.bookId()}">
-
-                            <h2 th:text = "${book.bookName()}" class="title">GoPro Karma Camera Drone</h2>
-                            <p th:text = "${book.bookAuthor()}" class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">Action
-                                cameras</a></p>
+                            <h2 th:text="${book.bookName()}" class="title">GoPro Karma Camera Drone</h2>
+                            <p th:text="${book.bookAuthor()}" class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">Action cameras</a></p>
                             <h3 class="price">
-                                <span th:text = "${book.bookPrice()}">$945</span>
+                                <span th:text="${book.bookPrice()}">$945</span>
                                 <h5 th:if="${book.bookPrice() > 0}">
                                     <span th:text="${(1 - book.bookSellingPrice() / book.bookPrice()) * 100 + '%'}"></span>
                                     <span> off</span>
                                 </h5>
-                                <h3 th:text = "${book.bookSellingPrice()}">$850</h3>
+                                <h3 th:text="${book.bookSellingPrice()}">$850</h3>
                             </h3>
                             <div class="row">
                                 <div class="col-lg-4 col-md-4 col-12">
@@ -120,10 +117,7 @@
                         <div class="col-lg-6 col-12">
                             <div class="info-body custom-responsive-margin">
                                 <h4>Details</h4>
-                                <p th:text = "${book.bookDescription()}">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.</p>
+                                <p th:text="${book.bookDescription()}">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.</p>
                                 <h4>Features</h4>
                                 <ul class="features">
                                     <li>Capture 4K30 Video and 12MP Photos</li>
@@ -155,194 +149,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-4 col-12">
-                        <div class="single-block give-review">
-                            <h4>4.5 (Overall)</h4>
-                            <ul>
-                                <li>
-                                    <span>5 stars - 38</span>
-                                    <i class="lni lni-star-filled"></i>
-                                    <i class="lni lni-star-filled"></i>
-                                    <i class="lni lni-star-filled"></i>
-                                    <i class="lni lni-star-filled"></i>
-                                    <i class="lni lni-star-filled"></i>
-                                </li>
-                                <li>
-                                    <span>4 stars - 10</span>
-                                    <i class="lni lni-star-filled"></i>
-                                    <i class="lni lni-star-filled"></i>
-                                    <i class="lni lni-star-filled"></i>
-                                    <i class="lni lni-star-filled"></i>
-                                    <i class="lni lni-star"></i>
-                                </li>
-                                <li>
-                                    <span>3 stars - 3</span>
-                                    <i class="lni lni-star-filled"></i>
-                                    <i class="lni lni-star-filled"></i>
-                                    <i class="lni lni-star"></i>
-                                    <i class="lni lni-star"></i>
-                                </li>
-                                <li>
-                                    <span>2 stars - 1</span>
-                                    <i class="lni lni-star-filled"></i>
-                                    <i class="lni lni-star-filled"></i>
-                                    <i class="lni lni-star"></i>
-                                    <i class="lni lni-star"></i>
-                                    <i class="lni lni-star"></i>
-                                </li>
-                                <li>
-                                    <span>1 star - 0</span>
-                                    <i class="lni lni-star-filled"></i>
-                                    <i class="lni lni-star"></i>
-                                    <i class="lni lni-star"></i>
-                                    <i class="lni lni-star"></i>
-                                    <i class="lni lni-star"></i>
-                                </li>
-                            </ul>
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn review-btn" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal">
-                                Leave a Review
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-lg-8 col-12">
-                        <div class="single-block">
-                            <div class="reviews">
-                                <h4 class="title">Latest Reviews</h4>
-                                <!-- Start Single Review -->
-                                <div class="single-review">
-                                    <img src="https://via.placeholder.com/150x150" alt="#">
-                                    <div class="review-info">
-                                        <h4>Awesome quality for the price
-                                            <span>Jacob Hammond
-                                            </span>
-                                        </h4>
-                                        <ul class="stars">
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                        </ul>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                            tempor...</p>
-                                    </div>
-                                </div>
-                                <!-- End Single Review -->
-                                <!-- Start Single Review -->
-                                <div class="single-review">
-                                    <img src="https://via.placeholder.com/150x150" alt="#">
-                                    <div class="review-info">
-                                        <h4>My husband love his new...
-                                            <span>Alex Jaza
-                                            </span>
-                                        </h4>
-                                        <ul class="stars">
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star"></i></li>
-                                        </ul>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                            tempor...</p>
-                                    </div>
-                                </div>
-                                <!-- End Single Review -->
-                                <!-- Start Single Review -->
-                                <div class="single-review">
-                                    <img src="https://via.placeholder.com/150x150" alt="#">
-                                    <div class="review-info">
-                                        <h4>I love the built quality...
-                                            <span>Jacob Hammond
-                                            </span>
-                                        </h4>
-                                        <ul class="stars">
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                        </ul>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                            tempor...</p>
-                                    </div>
-                                </div>
-                                <!-- End Single Review -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div id="review-section"></div>
             </div>
         </div>
     </section>
     <!-- End Item Details -->
-
-    <!-- Review Modal -->
-    <div class="modal fade review-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Leave a Review</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="review-name">Your Name</label>
-                                <input class="form-control" type="text" id="review-name" required>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="review-email">Your Email</label>
-                                <input class="form-control" type="email" id="review-email" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="review-subject">Subject</label>
-                                <input class="form-control" type="text" id="review-subject" required>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="review-rating">Rating</label>
-                                <select class="form-control" id="review-rating">
-                                    <option>5 Stars</option>
-                                    <option>4 Stars</option>
-                                    <option>3 Stars</option>
-                                    <option>2 Stars</option>
-                                    <option>1 Star</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="review-message">Review</label>
-                        <textarea class="form-control" id="review-message" rows="8" required></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer button">
-                    <button type="button" class="btn">Submit Review</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Review Modal -->
-
-    <!-- ========================= JS here ========================= -->
-    <script src="/js/tiny-slider.js"></script>
-    <script src="/js/glightbox.min.js"></script>
-    <script src="/js/main.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function () {
@@ -447,12 +258,11 @@
                         console.error("Error parsing error message:", e);
                         errorMessage = error.message;
                     }
-                    alert(`${errorMessage}`);
+                    alert(`에러: ${errorMessage}`);
                 });
             });
         });
     </script>
 </div>
 </body>
-
 </html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<div th:fragment="review">
+  <div class="row">
+    <div class="col-lg-4 col-12">
+      <div class="single-block give-review">
+        <h4 th:if="${averageRating == 0}">리뷰 없음</h4>
+        <h4 th:if="${averageRating != 0}" th:text="${averageRating} + ' (전체)'"></h4>
+        <ul>
+          <li>
+            <span th:text="'5 별 - ' + ${ratingCounts[4]}"></span>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </li>
+          <li>
+            <span th:text="'4 별 - ' + ${ratingCounts[3]}"></span>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+          </li>
+          <li>
+            <span th:text="'3 별 - ' + ${ratingCounts[2]}"></span>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+            <i class="far fa-star"></i>
+          </li>
+          <li>
+            <span th:text="'2 별 - ' + ${ratingCounts[1]}"></span>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+            <i class="far fa-star"></i>
+            <i class="far fa-star"></i>
+          </li>
+          <li>
+            <span th:text="'1 별 - ' + ${ratingCounts[0]}"></span>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+            <i class="far fa-star"></i>
+            <i class="far fa-star"></i>
+            <i class="far fa-star"></i>
+          </li>
+        </ul>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn review-btn" th:if="${userInfo != null}" onclick="openReviewModal()">
+          리뷰 작성하기
+        </button>
+        <button type="button" class="btn review-btn" th:if="${userInfo == null}" onclick="alert('로그인을 먼저 해주세요.')">
+          리뷰 작성하기
+        </button>
+      </div>
+    </div>
+    <div class="col-lg-8 col-12">
+      <div class="single-block">
+        <div class="reviews">
+          <h4 class="title">최근 리뷰</h4>
+          <div id="review-list">
+            <th:block th:if="${reviews == null or #lists.isEmpty(reviews.content)}">
+              <p th:text="'작성된 리뷰가 없습니다.'"></p>
+            </th:block>
+            <th:block th:if="${reviews != null && reviews.content != null}">
+              <div th:each="review : ${reviews.content}">
+                <div class="single-review">
+                  <span class="review-user-name" th:text="${review.userName}"></span>
+                  <div class="review-info">
+                    <h4 th:text="${review.title}"></h4>
+                    <ul class="stars">
+                      <li th:each="star, stat : ${#numbers.sequence(1, review.rating)}">
+                        <i class="fas fa-star"></i>
+                      </li>
+                      <th:block th:if="${review.rating < 5}">
+                        <li th:each="star, stat : ${#numbers.sequence(1, 5 - review.rating)}">
+                          <i class="far fa-star"></i>
+                        </li>
+                      </th:block>
+                      <span class="review-review-time" th:text="${review.reviewTime}"></span>
+                    </ul>
+                    <div class="review-images-container" th:if="${!#lists.isEmpty(review.reviewImageUrls)}">
+                      <img th:each="reviewImageUrl : ${review.reviewImageUrls}" th:src="${reviewImageUrl}" alt="#">
+                    </div>
+                    <p th:text="${review.content}"></p>
+                    <div th:if="${userInfo != null && review.userId == userInfo.userId}" class="review-buttons">
+                      <a href="javascript:void(0);" th:data-review-id="${review.reviewId}" th:data-review-title="${review.title}" th:data-review-content="${review.content}" th:data-review-rating="${review.rating}" onclick="editReview(this)">수정</a>
+                      <a href="javascript:void(0);" th:data-review-id="${review.reviewId}" onclick="deleteReview(this)">삭제</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div th:if="${reviews.totalPages > 1}">
+                <ul class="pagination">
+                  <li th:classappend="${reviews.first ? 'disabled' : ''}">
+                    <a th:href="@{|/books/${bookId}?page=0|}" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+                  </li>
+                  <li th:classappend="${reviews.first ? 'disabled' : ''}">
+                    <a th:href="@{|/books/${bookId}?page=${reviews.number - 1}|}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                  </li>
+                  <li th:each="i : ${#numbers.sequence(1, reviews.totalPages)}" th:classappend="${i - 1 == reviews.number ? 'active' : ''}">
+                    <a th:href="@{|/books/${bookId}?page=${i - 1}|}" th:text="${i}"></a>
+                  </li>
+                  <li th:classappend="${reviews.last ? 'disabled' : ''}">
+                    <a th:href="@{|/books/${bookId}?page=${reviews.number + 1}|}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+                  </li>
+                  <li th:classappend="${reviews.last ? 'disabled' : ''}">
+                    <a th:href="@{|/books/${bookId}?page=${reviews.totalPages - 1}|}" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+                  </li>
+                </ul>
+              </div>
+            </th:block>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Review Modal -->
+  <div class="modal fade review-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">리뷰 남기기</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="bookId" th:value="${bookId}">
+          <input type="hidden" id="reviewId" value="">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="review-name">이름</label>
+                <input class="form-control" type="text" id="review-name" th:value="${userInfo != null ? userInfo.name : ''}" th:disabled="${userInfo == null}" readonly>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="review-subject">제목</label>
+                <input class="form-control" type="text" id="review-subject">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="review-rating">평점</label>
+                <select class="form-control" id="review-rating">
+                  <option>5</option>
+                  <option>4</option>
+                  <option>3</option>
+                  <option>2</option>
+                  <option>1</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="review-message">리뷰 내용</label>
+            <textarea class="form-control" id="review-message" rows="8" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="review-images">사진 업로드</label>
+            <input type="file" class="form-control" id="review-images" multiple accept="image/*" onchange="previewImages()">
+          </div>
+          <div class="form-group preview-container" id="preview-container"></div>
+        </div>
+        <div class="modal-footer button">
+          <button type="button" class="btn" th:if="${userInfo != null}" onclick="submitReview()">리뷰 제출</button>
+          <button type="button" class="btn" th:if="${userInfo == null}" onclick="alert('로그인을 먼저 해주세요.')">리뷰 작성하기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Review Modal -->
+</div>
+</body>
+</html>

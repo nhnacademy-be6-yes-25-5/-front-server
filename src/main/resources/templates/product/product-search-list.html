@@ -155,7 +155,7 @@
                                         <label for="sorting">Sort by:</label>
                                         <select class="form-control" id="sorting" onchange="sortBooks()">
                                             <option th:value = "popularity" th:selected="${sort == 'popularity'}">인기도</option>
-                                            <option th:value = "new-product" th:selected="${sort == 'new-product'}">신상품</option>
+<!--                                            <option th:value = "new-product" th:selected="${sort == 'new-product'}">신상품</option>-->
                                             <option th:value = "low-price" th:selected ="${sort == 'low-price'}">최저가</option>
                                             <option th:value = "high-price" th:selected = "${sort == 'high-price'}">최고가</option>
                                             <option th:value = "grade" th:selected = "${sort == 'grade'}">평점</option>

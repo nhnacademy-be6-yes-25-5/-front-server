@@ -153,16 +153,23 @@
                                 <div class="col-lg-7 col-md-8 col-12">
                                     <div class="product-sorting">
                                         <label for="sorting">Sort by:</label>
-                                        <select class="form-control" id="sorting">
-                                            <option>Popularity</option>
-                                            <option>Low - High Price</option>
-                                            <option>High - Low Price</option>
-                                            <option>Average Rating</option>
-                                            <option>A - Z Order</option>
-                                            <option>Z - A Order</option>
+                                        <select class="form-control" id="sorting" onchange="sortBooks()">
+                                            <option th:value = "popularity" th:selected="${sort == 'popularity'}">인기도</option>
+                                            <option th:value = "new-product" th:selected="${sort == 'new-product'}">신상품</option>
+                                            <option th:value = "low-price" th:selected ="${sort == 'low-price'}">최저가</option>
+                                            <option th:value = "high-price" th:selected = "${sort == 'high-price'}">최고가</option>
+                                            <option th:value = "grade" th:selected = "${sort == 'grade'}">평점</option>
+                                            <option th:value = "review" th:selected = "${sort == 'review'}">리뷰</option>
                                         </select>
-                                        <h3 class="total-show-product">Showing: <span>1 - 12 items</span></h3>
+                                        <h3 class="total-show-product">Showing: <span>1 - 9 items</span></h3>
                                     </div>
+
+                                    <script>
+                                        function sortBooks() {
+                                            var sort = document.getElementById("sorting").value;
+                                            window.location.href = "?sortString=" + sort;
+                                        }
+                                    </script>
                                 </div>
                                 <div class="col-lg-5 col-md-4 col-12">
                                     <nav>
@@ -267,19 +274,19 @@
                                     <ul class="pagination-list">
                                         <!-- Previous Page Link -->
                                         <li th:class="${nowPage == 1} ? 'disabled' : ''">
-                                            <a th:if="${nowPage != 1}" th:href="@{/category/{categoryId}(categoryId=${categoryId}, page=${nowPage - 1})}">&laquo;</a>
+                                            <a th:if="${nowPage != 1}" th:href="@{/category/{categoryId}(categoryId=${categoryId}, page=${nowPage - 1}, sortString=${sortString})}">&laquo;</a>
                                         </li>
 
                                         <!-- Page Links -->
                                         <th:block th:each="pageNum : ${#numbers.sequence(startPage, endPage)}">
                                             <li th:class="${pageNum == nowPage} ? 'active' : ''">
-                                                <a th:href="@{/category/{categoryId}(categoryId=${categoryId}, page=${pageNum - 1})}" th:text="${pageNum}"></a>
+                                                <a th:href="@{/category/{categoryId}(categoryId=${categoryId}, page=${pageNum - 1}, sortString=${sortString})}" th:text="${pageNum}"></a>
                                             </li>
                                         </th:block>
 
                                         <!-- Next Page Link -->
                                         <li th:class="${nowPage == totalPages} ? 'disabled' : ''">
-                                            <a th:if="${nowPage != totalPages}" th:href="@{/category/{categoryId}(categoryId=${categoryId}, page=${nowPage + 1})}">&raquo;</a>
+                                            <a th:if="${nowPage != totalPages}" th:href="@{/category/{categoryId}(categoryId=${categoryId}, page=${nowPage + 1}, sortString=${sortString})}">&raquo;</a>
                                         </li>
                                     </ul>
                                 </div>

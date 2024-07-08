@@ -35,9 +35,9 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String path = request.getServletPath();
 
-        if (path.equals("/") || path.startsWith("/auth/login") || path.startsWith("/orders/none")
-                || path.startsWith("/sign-up") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/check-email")
-        || path.startsWith("/auth/dormant")) {
+        if (path.equals("/") || path.startsWith("/auth/login") || path.startsWith("/orders/none") || path.startsWith("/category") || path.startsWith("/search")
+          || path.startsWith("/sign-up") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/check-email") || path.startsWith("/auth/dormant")) {
+
             return;
         }
 

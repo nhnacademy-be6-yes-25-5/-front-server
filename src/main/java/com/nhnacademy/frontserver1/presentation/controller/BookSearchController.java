@@ -24,46 +24,12 @@ public class BookSearchController {
     private final CategoryService categoryService;
 
     @GetMapping("/search")
-    public String search(Model model, @RequestParam String keyword, @RequestParam(name = "option") String option, @PageableDefault(size = 9, page = 0) Pageable pageable) {
+    public String search(Model model, @RequestParam String keyword, @RequestParam(name = "option") String option,
+                         @PageableDefault(size = 9, page = 0) Pageable pageable, @RequestParam(defaultValue = "popularity") String sortString) {
 
-        Page<BookIndexResponse> bookIndexList;
         List<CategoryResponse> rootCategories = categoryService.findRootCategories();
 
-        if(option.equals("name")) {
-
-            bookIndexList = bookSearchAdaptor.searchByName(keyword, pageable);
-
-            model.addAttribute("bookList", bookIndexList);
-
-        } else if(option.equals("description")) {
-
-            bookIndexList = bookSearchAdaptor.searchByDescription(keyword, pageable);
-
-            model.addAttribute("bookList", bookIndexList);
-        } else if(option.equals("author")) {
-
-            bookIndexList = bookSearchAdaptor.searchByAuthorName(keyword, pageable);
-
-            model.addAttribute("bookList", bookIndexList);
-
-        } else if(option.equals("tag")) {
-
-            bookIndexList = bookSearchAdaptor.searchByTagName(keyword, pageable);
-
-            model.addAttribute("bookList", bookIndexList);
-
-        } else if(option.equals("category")) {
-
-            bookIndexList = bookSearchAdaptor.searchByCategoryName(keyword, pageable);
-
-            model.addAttribute("bookList", bookIndexList);
-        } else {
-
-            bookIndexList = bookSearchAdaptor.searchAll(keyword, pageable);
-
-            model.addAttribute("bookList", bookIndexList);
-
-        }
+        Page<BookIndexResponse> bookIndexList = getBookIndexPage(pageable, option, keyword, sortString);
 
         int nowPage = bookIndexList.getNumber();
         int startPage = Math.max(nowPage - 4, 0);
@@ -80,6 +46,8 @@ public class BookSearchController {
             }
         }
 
+        model.addAttribute("sortString", sortString);
+        model.addAttribute("bookList", bookIndexList);
         model.addAttribute("keyword", keyword);
         model.addAttribute("option", option);
         model.addAttribute("nowPage", nowPage + 1);
@@ -90,4 +58,33 @@ public class BookSearchController {
 
         return "product/product-search-list";
     }
+
+    private Page<BookIndexResponse> getBookIndexPage(Pageable pageable, String option, String keyword, String sortString) {
+
+        Page<BookIndexResponse> bookIndexList;
+
+        if(option.equals("name")) {
+
+            bookIndexList = bookSearchAdaptor.searchByName(keyword, pageable, sortString);
+        } else if(option.equals("description")) {
+
+            bookIndexList = bookSearchAdaptor.searchByDescription(keyword, pageable, sortString);
+        } else if(option.equals("author")) {
+
+            bookIndexList = bookSearchAdaptor.searchByAuthorName(keyword, pageable, sortString);
+        } else if(option.equals("tag")) {
+
+            bookIndexList = bookSearchAdaptor.searchByTagName(keyword, pageable, sortString);
+        } else if(option.equals("category")) {
+
+            bookIndexList = bookSearchAdaptor.searchByCategoryName(keyword, pageable, sortString);
+        } else {
+
+            bookIndexList = bookSearchAdaptor.searchAll(keyword, pageable, sortString);
+
+        }
+
+        return bookIndexList;
+    }
+
 }

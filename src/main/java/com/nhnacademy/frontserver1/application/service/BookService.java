@@ -27,7 +27,7 @@ public interface BookService {
 
     BookResponse getBook(Long id);
 
-    Page<BookResponse> getBookByCategoryId(Long categoryId, Pageable pageable);
+    Page<BookResponse> getBookByCategoryId(Long categoryId, Pageable pageable, String sortString);
 
     List<Long> getCategoryIdsByBookId(Long bookId);
 }

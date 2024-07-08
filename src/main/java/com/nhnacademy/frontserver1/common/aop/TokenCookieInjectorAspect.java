@@ -59,7 +59,8 @@ public class TokenCookieInjectorAspect {
         if (token != null) {
             Cookie cookie = new Cookie(name, token);
             cookie.setHttpOnly(true);
-            cookie.setSecure(true);
+            //배포시에는 아래 주석 풀기
+            //cookie.setSecure(true);
             cookie.setPath("/");
             response.addCookie(cookie);
         }

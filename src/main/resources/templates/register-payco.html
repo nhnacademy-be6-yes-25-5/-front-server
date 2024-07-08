@@ -17,39 +17,22 @@
                             <p>Registration takes less than a minute but gives you full control over your orders.</p>
                         </div>
                         <form class="row" method="post" action="/additional-info" id="registerForm">
-                        <form class="row" method="post" action="/sign-up/payco" id="registerForm">
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="userName">이름</label>
                                     <input class="form-control" type="text" id="userName" name="userName" required>
-                                    <input class="form-control" type="text" id="userName" name="userName"
-                                           th:value="${paycoInfo.name}"
-                                           th:readonly="${paycoInfo.name != null}"
-                                           th:required="${paycoInfo.name == null}">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="userBirth">생년월일</label>
-                                    <input class="form-control" type="text" id="userBirth" name="userBirth"
-                                           th:value="${paycoInfo.birthdayMMdd}"
-                                           th:readonly="${paycoInfo.birthdayMMdd != null}"
-                                           th:required="${paycoInfo.birthdayMMdd == null}"
-                                           pattern="\d{4}" title="MMDD 형식으로 입력해주세요">
                                     <input class="form-control" type="date" id="userBirth" name="userBirth" required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="userEmail">Payco 식별 ID</label>
-                                    <input class="form-control" type="text" id="userEmail" name="userEmail" required>
-                                    <button type="button" class="btn btn-secondary" id="checkEmailButton">중복 체크</button>
-                                    <div id="emailCheckResult"></div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
                                     <label for="userPhone">휴대전화 번호</label>
+                                    <input class="form-control" type="text" id="userPhone" name="userPhone" required>
                                 </div>
                             </div>
                             <div id="pwConfirm" class="col-12"></div>

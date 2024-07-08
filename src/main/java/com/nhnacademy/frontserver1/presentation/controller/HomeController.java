@@ -6,6 +6,7 @@ import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.CategoryResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -32,12 +33,7 @@ public class HomeController {
     private String port;
 
     @GetMapping
-    public String index(Model model, HttpServletRequest request){
-
-        Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-
-        }
+    public String index(Model model, HttpServletRequest request, HttpServletResponse response){
 
         List<CategoryResponse> rootCategories = categoryService.findRootCategories();
         List<BookResponse> bookList = bookService.findAllBooks();
@@ -46,6 +42,18 @@ public class HomeController {
 
         model.addAttribute("categories", rootCategories);
         model.addAttribute("bookList", randomBooks);
+
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("AccessToken")) {
+                String accessToken = cookie.getValue();
+                model.addAttribute("AccessToken", accessToken);
+            }
+            if (cookie.getName().equals("RefreshToken")) {
+                String refreshToken = cookie.getValue();
+                model.addAttribute("RefreshToken", refreshToken);
+            }
+        }
 
         return "index";
     }

@@ -2,7 +2,7 @@ package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.impl.UserServiceImpl;
 import com.nhnacademy.frontserver1.application.service.impl.AuthServiceImpl;
-import com.nhnacademy.frontserver1.presentation.dto.response.user.AuthResponse;
+import com.nhnacademy.frontserver1.presentation.dto.request.user.LoginUserRequest;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,7 +19,6 @@ import com.nhnacademy.frontserver1.application.service.impl.PaycoServiceImpl;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import com.nhnacademy.frontserver1.presentation.dto.response.auth.CreateAccessTokenResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.auth.CreatePaycoInfoResponse;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.CreateUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.auth.CreatePaycoInfoResponse.Member;
 
@@ -28,8 +27,8 @@ import com.nhnacademy.frontserver1.presentation.dto.response.auth.CreatePaycoInf
 public class PaycoController {
 
     private final PaycoServiceImpl paycoService;
-    private final UserServiceImpl userServiceImpl;
-    private final AuthServiceImpl authServiceImpl;
+    private final UserServiceImpl userService;
+    private final AuthServiceImpl authService;
 
     @Value("${payco.client-id}")
     private String clientId;
@@ -58,40 +57,28 @@ public class PaycoController {
 
     @GetMapping("/callback")
     public String handleAuthorizationCallback(@RequestParam("code") String authorizationCode,
-                                              HttpServletRequest request,
-                                              HttpServletResponse response) {
+                                              HttpServletRequest request, HttpServletResponse response) {
         CreateAccessTokenResponse tokenResponse = paycoService.getAccessToken("authorization_code", clientId, clientSecret, authorizationCode);
-        String accessToken = tokenResponse.accessToken();
+        String paycoAccessToken = tokenResponse.accessToken();
 
-        Member paycoInfo = paycoService.getPaycoInfo(clientId, accessToken);
+        Member paycoInfo = paycoService.getPaycoInfo(clientId, paycoAccessToken);
         request.getSession().setAttribute("paycoInfo", paycoInfo);
 
-        AuthResponse authResponse = paycoService.processPaycoLogin(paycoInfo);
+        if (userService.isEmailDuplicate(paycoInfo.id())) {
+           authService.loginUser(
+                   LoginUserRequest.builder().email(paycoInfo.id()).password(paycoInfo.id()).build()
+           );
 
-        // 토큰 쿠키 설정
-        addTokenCookie(response, "AccessToken", authResponse.accessToken());
-        addTokenCookie(response, "RefreshToken", authResponse.refreshToken());
-
-        if (paycoService.isRequiredInfoMissing(paycoInfo)) {
-            return "redirect:/additional-info";
-        } else {
-            return "index";
+           return "redirect:/";
         }
-    }
 
-    private void addTokenCookie(HttpServletResponse response, String name, String token) {
-        if (token != null) {
-            Cookie cookie = new Cookie(name, token);
-            cookie.setHttpOnly(true);
-            cookie.setSecure(true);
-            cookie.setPath("/");
-            response.addCookie(cookie);
-        }
+        return "redirect:/additional-info";
     }
 
     @GetMapping("/additional-info")
     public String showAdditionalInfoForm(HttpServletRequest request, Model model) {
-        CreatePaycoInfoResponse paycoInfo = (CreatePaycoInfoResponse) request.getSession().getAttribute("paycoInfo");
+        Member paycoInfo = (Member) request.getSession().getAttribute("paycoInfo");
+
         model.addAttribute("paycoInfo", paycoInfo);
         return "register-payco";
     }
@@ -105,10 +92,30 @@ public class PaycoController {
             return "redirect:/error";
         }
 
-        userServiceImpl.signUp(paycoService.fillMissingInfo(paycoInfo, form));
+        userService.signUp(paycoService.fillMissingInfo(paycoInfo, form));
+        authService.loginUser(LoginUserRequest.builder().email(paycoInfo.id()).password(paycoInfo.id()).build());
 
         request.getSession().removeAttribute("paycoInfo");
 
-        return "redirect:/main";
+        return "redirect:/";
+    }
+
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+
+        deleteCookie(response, "AccessToken");
+        deleteCookie(response, "RefreshToken");
+
+        request.getSession().invalidate();
+
+        return "redirect:/";
+    }
+
+    private void deleteCookie(HttpServletResponse response, String name) {
+        Cookie cookie = new Cookie(name, null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
     }
 }

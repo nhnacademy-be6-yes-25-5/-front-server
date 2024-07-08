@@ -36,42 +36,39 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
         String path = request.getServletPath();
 
         if (path.equals("/") || path.startsWith("/auth/login") || path.startsWith("/orders/none")
-                || path.startsWith("/sign-up") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/check-email")
-                || path.startsWith("/auth/dormant") || path.startsWith("/users/sign-up") || path.equals("/callback")) {
-            if (path.equals("/") || path.startsWith("/auth/login") || path.startsWith("/orders/none") || path.startsWith("/category") || path.startsWith("/search")
-                    || path.startsWith("/sign-up") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/check-email") || path.startsWith("/auth/dormant")) {
+            || path.startsWith("/sign-up") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/check-email")
+            || path.startsWith("/auth/dormant") || path.startsWith("/users/sign-up") || path.equals("/callback")) {
 
-                return;
+            return;
+        }
+
+        List<String> tokens = cookieTokenProvider.getTokenFromCookie(request);
+        boolean allTokensEmpty = tokens == null
+                || tokens.isEmpty()
+                || tokens.stream().allMatch(String::isEmpty);
+
+
+        if (allTokensEmpty && (path.matches(".*/orders/.*/delivery.*") || path.startsWith("/users/cart-books")
+                || path.startsWith("/detail") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/reviews/books"))) {
+            return;
+        }
+
+        if (allTokensEmpty && (path.startsWith("/users/cart-books") || request.getMethod().equalsIgnoreCase("POST"))) {
+            return;
+        }
+
+        if (!allTokensEmpty) {
+            String accessToken = tokens.get(0);
+            String refreshToken = tokens.get(1);
+            if (!(accessToken.isBlank() || refreshToken.isBlank())) {
+                template.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+                log.debug("Adding Authorization header: Bearer {}", accessToken);
+                template.header("Refresh-Token", refreshToken);
+                log.debug("Adding RefreshToken header: {}", refreshToken);
             }
-
-            List<String> tokens = cookieTokenProvider.getTokenFromCookie(request);
-            boolean allTokensEmpty = tokens == null
-                    || tokens.isEmpty()
-                    || tokens.stream().allMatch(String::isEmpty);
-
-
-            if (allTokensEmpty && (path.matches(".*/orders/.*/delivery.*") || path.startsWith("/users/cart-books")
-                    || path.startsWith("/detail") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/reviews/books"))) {
-                return;
-            }
-
-            if (allTokensEmpty && (path.startsWith("/users/cart-books") || request.getMethod().equalsIgnoreCase("POST"))) {
-                return;
-            }
-
-            if (!allTokensEmpty) {
-                String accessToken = tokens.get(0);
-                String refreshToken = tokens.get(1);
-                if (!(accessToken.isBlank() || refreshToken.isBlank())) {
-                    template.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-                    log.debug("Adding Authorization header: Bearer {}", accessToken);
-                    template.header("Refresh-Token", refreshToken);
-                    log.debug("Adding RefreshToken header: {}", refreshToken);
-                }
-            } else {
-                log.warn("Authorization token is missing in the cookies.");
-                throw new TokenCookieMissingException();
-            }
+        } else {
+            log.warn("Authorization token is missing in the cookies.");
+            throw new TokenCookieMissingException();
         }
     }
 }

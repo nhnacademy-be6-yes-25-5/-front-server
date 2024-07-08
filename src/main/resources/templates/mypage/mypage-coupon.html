@@ -83,7 +83,7 @@
                                                         <td th:text="${coupon.couponName}"></td>
                                                         <td th:text="${coupon.couponMinAmount} + ' / ' + ${#dates.format(coupon.CouponExpiredAt, 'yyyy-MM-dd')}"></td>
                                                         <td th:text="${coupon.couponDiscountRate != null ? coupon.couponDiscountRate + '%' : coupon.couponDiscountAmount}"></td>
-                                                        <td th:text="${#dates.format(coupon.userCouponUsedAt, 'yyyy-MM-dd')}"></td>
+                                                        <td th:text="${coupon.userCouponUsedAt()}"></td>
                                                     </tr>
                                                     </tbody>
                                                 </table>

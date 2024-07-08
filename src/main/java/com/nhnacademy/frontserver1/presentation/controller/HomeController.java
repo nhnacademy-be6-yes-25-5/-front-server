@@ -46,14 +46,16 @@ public class HomeController {
         model.addAttribute("bookList", randomBooks);
 
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("AccessToken")) {
-                String accessToken = cookie.getValue();
-                model.addAttribute("AccessToken", accessToken);
-            }
-            if (cookie.getName().equals("RefreshToken")) {
-                String refreshToken = cookie.getValue();
-                model.addAttribute("RefreshToken", refreshToken);
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("AccessToken")) {
+                    String accessToken = cookie.getValue();
+                    model.addAttribute("AccessToken", accessToken);
+                }
+                if (cookie.getName().equals("RefreshToken")) {
+                    String refreshToken = cookie.getValue();
+                    model.addAttribute("RefreshToken", refreshToken);
+                }
             }
         }
 

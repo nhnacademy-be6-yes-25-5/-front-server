@@ -2,8 +2,9 @@ package com.nhnacademy.frontserver1.application.service.impl;
 
 import com.nhnacademy.frontserver1.application.service.AuthService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.AuthAdaptor;
+import com.nhnacademy.frontserver1.presentation.dto.request.dormant.CreateAuthNumberRequest;
+import com.nhnacademy.frontserver1.presentation.dto.request.dormant.SubmitAuthNumberRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.LoginUserRequest;
-import com.nhnacademy.frontserver1.presentation.dto.response.dormant.CreateAuthNumberRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.AuthResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -51,5 +52,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void createAuthNumber(CreateAuthNumberRequest request) {
         authAdaptor.createAuthNumber(request);
+    }
+
+    @Override
+    public boolean submitAuthNumber(SubmitAuthNumberRequest request) {
+        return authAdaptor.submitAuthNumber(request);
     }
 }

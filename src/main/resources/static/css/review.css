@@ -27,3 +27,26 @@
   padding-bottom: 15px;
   margin-bottom: 15px;
 }
+
+.review-buttons {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.review-buttons a {
+  color: #6c757d;
+  margin-left: 10px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.review-buttons a:hover {
+  text-decoration: underline;
+}
+
+.review-user-name {
+  position: absolute;
+  left: 0;
+  top: 10%;
+}

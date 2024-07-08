@@ -3,6 +3,7 @@ package com.nhnacademy.frontserver1.presentation.controller;
 import com.nhnacademy.frontserver1.application.service.AuthService;
 import com.nhnacademy.frontserver1.presentation.dto.request.dormant.SubmitAuthNumberRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.dormant.CreateAuthNumberRequest;
+import com.nhnacademy.frontserver1.presentation.dto.response.dormant.CreateAuthNumberRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

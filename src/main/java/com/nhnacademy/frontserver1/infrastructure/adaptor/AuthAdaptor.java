@@ -6,6 +6,7 @@ import com.nhnacademy.frontserver1.presentation.dto.request.dormant.SubmitAuthNu
 import com.nhnacademy.frontserver1.presentation.dto.request.user.LoginUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.auth.CreateAccessTokenResponse;
 import com.nhnacademy.frontserver1.presentation.dto.request.dormant.CreateAuthNumberRequest;
+import com.nhnacademy.frontserver1.presentation.dto.response.dormant.CreateAuthNumberRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.AuthResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;

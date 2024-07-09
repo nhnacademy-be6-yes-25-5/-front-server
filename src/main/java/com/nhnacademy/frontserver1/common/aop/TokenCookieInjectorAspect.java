@@ -36,13 +36,13 @@ public class TokenCookieInjectorAspect {
             HttpServletResponse response = ((ServletRequestAttributes) requestAttributes).getResponse();
 
             String accessToken = (String) request.getAttribute("AccessToken");
-            if (accessToken != null) {
-                accessToken = accessToken.replace("Bearer ", "");
-            }
             String refreshToken = (String) request.getAttribute("RefreshToken");
 
-            addTokenCookie(response, "AccessToken", accessToken);
-            addTokenCookie(response, "RefreshToken", refreshToken);
+            if (accessToken != null && !accessToken.isEmpty() && refreshToken != null && !refreshToken.isEmpty()) {
+                accessToken = accessToken.replace("Bearer ", "");
+                addTokenCookie(response, "AccessToken", accessToken);
+                addTokenCookie(response, "RefreshToken", refreshToken);
+            }
         }
 
         return result;
@@ -59,7 +59,8 @@ public class TokenCookieInjectorAspect {
         if (token != null) {
             Cookie cookie = new Cookie(name, token);
             cookie.setHttpOnly(true);
-            cookie.setSecure(true);
+            //배포시에는 아래 주석 풀기
+            //cookie.setSecure(true);
             cookie.setPath("/");
             response.addCookie(cookie);
         }

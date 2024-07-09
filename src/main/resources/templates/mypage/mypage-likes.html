@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<head>
+    <title>Order History</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:fragment="content">
+    <!-- Start Breadcrumbs Component -->
+    <div th:replace="~{fragments/breadcrumbs :: breadcrumbs}"></div>
+    <!-- End Breadcrumbs Component -->
+
+    <!-- Start Order History Area -->
+    <div class="section">
+        <div class="container">
+            <div class="row">
+<!--                <div class="col-lg-2">-->
+<!--                    <div th:replace="~{fragments/user-sidebar :: user-sidebar}"></div>-->
+<!--                </div>-->
+                <div class="col-lg-10">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="order-history-wrapper">
+                                    <div class="title">
+                                        <h3></h3>
+                                        <p>좋아요 표시한 도서</p>
+                                    </div>
+                                    <div class="order-history-list">
+                                        <table class="table" th:if="${bookList != null and not #lists.isEmpty(bookList)}">
+                                            <thead>
+                                            <tr>
+                                                <th>이미지</th>
+                                                <th>책 제목</th>
+                                                <th>책 설명</th>
+                                                <th>판매 가격</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="book : ${bookList}">
+                                                <td>
+                                                    <img th:if="${book.bookImage() != null}" th:src="@{${book.bookImage()}}">
+                                                    <img th:if="${book.bookImage() == null || book.bookImage().isEmpty()}" src="/images/logo/logo.png" alt="Default Book Image">
+                                                </td>
+                                                <td th:text="${book.bookName()}">책 제목</td>
+                                                <td>
+                                                    <a th:text="${book.bookDescription()}">책 설명</a>
+                                                </td>
+                                                <td th:text="${book.bookSellingPrice}">$99.99</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <div th:if="${bookList == null or #lists.isEmpty(bookList.content)}" class="text-center">좋아요 표시한 도서가 존재하지 않습니다.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Order History Area -->
+
+    <script>
+        function calculateDateRange(recordedAt) {
+            const recordedDate = new Date(recordedAt);
+            const priorDate = new Date(recordedDate);
+            priorDate.setMonth(recordedDate.getMonth() - 3);
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+            return {
+                recordedDate: recordedDate.toLocaleDateString('ko-KR', options),
+                priorDate: priorDate.toLocaleDateString('ko-KR', options)
+            };
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const recordedAt = /*[[${recordedAt}]]*/ '2024-07-08';
+            const dates = calculateDateRange(recordedAt);
+            document.querySelectorAll('.amount-text span:nth-child(2)').forEach(function (element) {
+                element.textContent = `(${dates.priorDate} ~ ${dates.recordedDate})`;
+            });
+        });
+    </script>
+</div>
+
+</body>
+</html>

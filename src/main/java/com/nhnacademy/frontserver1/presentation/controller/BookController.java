@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 @Controller
@@ -32,9 +31,9 @@ public class BookController {
         BookResponse book = bookService.getBook(bookId);
         List<CategoryResponse> rootCategories = categoryService.findRootCategories();
 
-//        if (likesAdapter.exist(bookId)) {
-//            model.addAttribute("like", likesAdapter.findByBookIdAndUserId(bookId));
-//        }
+        if (likesAdapter.exist(bookId)) {
+            model.addAttribute("like", likesAdapter.findByBookIdAndUserId(bookId));
+        }
 
         List<Long> categoryIds = bookService.getCategoryIdsByBookId(bookId);
         List<BookDetailCouponResponseDTO> coupons = couponService.getCoupons(bookId, categoryIds);

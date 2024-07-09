@@ -1,6 +1,7 @@
 package com.nhnacademy.frontserver1.infrastructure.adaptor;
 
 import com.nhnacademy.frontserver1.presentation.dto.request.user.*;
+import com.nhnacademy.frontserver1.presentation.dto.response.address.UserAddressResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.point.PointLogResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.*;
 import com.nhnacademy.frontserver1.common.config.FeignClientConfig;
@@ -11,6 +12,7 @@ import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadPurePrice
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,4 +65,28 @@ public interface UserAdaptor {
 
     @PostMapping("/find/password")
     boolean findUserPasswordByEmailByName(@RequestBody FindPasswordRequest request);
+
+//    @GetMapping
+//    List<UserAddressResponse> findAllUserAddresses();
+
+    @GetMapping("/user-addresses")
+    Page<UserAddressResponse> findAllUserAddresses(Pageable pageble);
+
+
+   // Page<UserAddressResponse> findAllUserAddresses(Long userId, Pageable pageable);
+
+
+
+    //Operation(summary = "회원 주소 목록 조회", description = "회원의 모든 주소 목록을 조회합니다.")
+    //    @GetMapping("/users/addressList")
+    //    public ResponseEntity<Page<UserAddressResponse>> findAllUserAddresses(Pageable pageable,
+    //                                                                          @CurrentUser JwtUserDetails jwtUserDetails) {
+    //
+    //        Long userId = jwtUserDetails.userId();
+    //
+    //        return ResponseEntity.ok(userAddressService.findAllAddresses(userId, pageable));
+    //    }
+
+
+
 }

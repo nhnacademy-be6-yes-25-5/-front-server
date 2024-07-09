@@ -36,7 +36,7 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
         String path = request.getServletPath();
 
         if (path.equals("/") || path.startsWith("/auth/login") || path.startsWith("/orders/none")
-                || path.startsWith("/sign-up") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/check-email")) {
+                || path.startsWith("/sign-up") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/check-email") || path.startsWith("/users/find/password") || path.startsWith("/users/find/password") || path.equals("/users/find/password") || path.equals("/users/find-email") || path.startsWith("/users/addressList") || path.equals("/reset-password/{email}") || path.equals("/users/info")){
             return;
         }
 
@@ -47,7 +47,7 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
 
 
         if (allTokensEmpty && (path.matches(".*/orders/.*/delivery.*") || path.startsWith("/users/cart-books")
-            || path.startsWith("/detail") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/reviews/books"))) {
+            || path.startsWith("/detail") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/users/info") || path.startsWith("/users/addressList") || path.startsWith("/users/find/password")  || path.startsWith("/users/addressList") || path.startsWith("/reset-password/{email}") || path.startsWith("/reviews/books"))) {
             return ;
         }
 

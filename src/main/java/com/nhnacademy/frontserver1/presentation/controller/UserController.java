@@ -2,6 +2,7 @@ package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.UserService;
 import com.nhnacademy.frontserver1.common.exception.FeignClientException;
+import com.nhnacademy.frontserver1.infrastructure.adaptor.UserAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.*;
 import com.nhnacademy.frontserver1.presentation.dto.response.point.PointLogResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.*;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,6 +36,7 @@ public class UserController {
 
     private final UserService userService;
 
+    private final UserAdaptor userAdaptor;
     // 회원 가입 페이지
     @GetMapping("/sign-up")
     public String signUp() {
@@ -135,23 +138,17 @@ public class UserController {
         return ResponseEntity.ok(userService.isEmailDuplicate(email));
     }
 
-    @GetMapping("/users/{userId}/addresses")
-    public String getUserAddresses(@PathVariable Long userId, Model model) {
-        Pageable pageable = PageRequest.of(0, 10);
-        UsersResponse user = userService.getUserById(userId);
-        Page<UserAddressResponse> addressPage = userService.getUserAddresses(userId, pageable);
 
-        model.addAttribute("userName", user.userName());
-        model.addAttribute("userGrade", user.userGrade());
-        model.addAttribute("userPoints", user.userPoints());
-        model.addAttribute("defaultAddress", user.defaultAddress());
-        model.addAttribute("addresses", addressPage.getContent());
-        model.addAttribute("currentPage", addressPage.getNumber());
-        model.addAttribute("totalPages", addressPage.getTotalPages());
-        model.addAttribute("pageSize", addressPage.getSize());
+    @GetMapping("/users/addressList")
+    public String getUserAddresses(Model model, @PageableDefault(size = 10, page = 0) Pageable pageable) {
+
+        Page<UserAddressResponse> userAddressPage = userService.findAllUserAddress(pageable);
+
+        model.addAttribute("userAddressPage", userAddressPage);
 
         return "mypage/mypage-address";
     }
+
 
     private static final Logger logger = Logger.getLogger(UserController.class.getName());
 
@@ -227,24 +224,77 @@ public class UserController {
         }
     }
 
+//    @GetMapping("/uses/addressList")
+//    public String getAddressList(Model model) {
+//        return "mypage/mypage-address";
+//    }
+
 
 
     @GetMapping("/reset-password/{email}")
     public String showResetPasswordForm(@PathVariable("email") String email, Model model){
+
+
         model.addAttribute("email", email);
         return "setNewPassword/set-new-password";
 
     }
 
-    @PostMapping("/reset-password")
-    public String resetPassword(@RequestParam String email, @RequestParam String newPassword, @RequestParam String confirmPassword, Model model) {
-        UpdatePasswordRequest request = new UpdatePasswordRequest(newPassword, confirmPassword);
-        boolean isPasswordReset = userService.setUserPasswordByEmail(email, request);
+    @PostMapping("/reset-password/{email}")
+    public String resetPassword(@PathVariable String email, @RequestParam String newPassword, @RequestParam String confirmPassword, Model model) {
+        if (!newPassword.equals(confirmPassword)) {
+            model.addAttribute("error", "Passwords do not match");
+            return "setNewPassword/set-new-password";
+        }
 
-        if (isPasswordReset) {
+        UpdateUserRequest request = UpdateUserRequest.builder()
+                .userName(null)  // 유저 이름을 업데이트하지 않으므로 null
+                .userPhone(null)  // 유저 전화번호를 업데이트하지 않으므로 null
+                .userBirth(null)  // 유저 생일을 업데이트하지 않으므로 null
+                .userPassword(null)  // 현재 비밀번호가 필요하지 않으므로 null
+                .newUserPassword(newPassword)
+                .newUserConfirmPassword(confirmPassword)
+                .build();
+
+        boolean isPasswordReset;
+        try {
+            UpdateUserResponse response = userService.updateUser(request);
+
+
+            isPasswordReset = response != null;
+        } catch (Exception e) {
+            isPasswordReset = false;
+        }
+
+        if (isPasswordReset ) {
             return "setNewPassword/set-new-password-success";
         } else {
+            model.addAttribute("error", "Password update failed");
             return "setNewPassword/set-new-password-fail";
         }
     }
+
+
+
+
+
+//    public Page<UserAddressResponse> findAllUserAddress(Pageable pageable){
+//        return userAdaptor.findAllUserAddresses(pageable);
+//    }
+
+
+
+//    @PostMapping("/reset-password/{email}")
+//    public String resetPassword(@RequestParam String email, @RequestParam String newPassword, @RequestParam String confirmPassword, Model model) {
+//        UpdatePasswordRequest request = new UpdatePasswordRequest(newPassword, confirmPassword);
+//        boolean isPasswordReset = userService.setUserPasswordByEmail(email, request);
+//      //  model.addAttribute("");
+//
+//        if (isPasswordReset) {
+//
+//            return "setNewPassword/set-new-password-success";
+//        } else {
+//            return "setNewPassword/set-new-password-fail";
+//        }
+//    }
 }

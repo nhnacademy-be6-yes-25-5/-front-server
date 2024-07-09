@@ -44,4 +44,10 @@ public interface UserService {
     boolean setUserPasswordByEmail(String email, UpdatePasswordRequest request);
 
     void sendEmail(String recipient);
+
+    Page<UserAddressResponse> findAllUserAddress(Pageable pageable);
+
+
+
+
 }

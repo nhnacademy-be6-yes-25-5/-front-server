@@ -18,7 +18,206 @@
                     <div class="sidebar">
                         <div class="user-info">
                             <div class="user-grade">
-                                <span>회원 등급:</span>
+                                <span>회원 등급:</span><!DOCTYPE html>
+                                <html lang="ko">
+                                <head>
+                                    <meta charset="UTF-8">
+                                </head>
+                                <body>
+                                <div th:fragment="content">
+
+                                    <!-- Start Breadcrumbs Component -->
+                                    <div th:replace="~{fragments/breadcrumbs :: breadcrumbs}"></div>
+                                    <!-- End Breadcrumbs Component -->
+
+                                    <!-- Start Order History Area -->
+                                    <div class="section">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-lg-2">
+                                                    <div class="sidebar">
+                                                        <div class="user-info">
+                                                            <div class="user-grade">
+                                                                <span>회원 등급:</span>
+                                                                <span class="grade" th:text="${userGrade}">일반회원</span>
+                                                            </div>
+                                                            <div class="user-points">
+                                                                <span>잔여 포인트:</span>
+                                                                <span class="points" th:text="${userPoints}">1,000P</span>
+                                                            </div>
+                                                        </div>
+                                                        <ul class="nav nav-tabs flex-column">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link active" href="#">주문 내역</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="#">쿠폰함</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="#">정보 수정</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="#">나의 리뷰</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="#">배송지 정보</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-10">
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                <div class="shipping-address-wrapper">
+                                                                    <div class="title">
+                                                                        <h3>배송지 관리</h3>
+                                                                        <p>배송지 정보 및 기본 배송지를 설정할 수 있습니다.</p>
+                                                                    </div>
+                                                                    <div class="shipping-address-actions">
+                                                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAddressModal">배송지 추가</button>
+                                                                    </div>
+                                                                    <ul class="nav nav-tabs" id="shippingAddressTab" role="tablist">
+                                                                        <li class="nav-item">
+                                                                            <a class="nav-link active" id="my-addresses-tab" data-toggle="tab" href="#my-addresses" role="tab" aria-controls="my-addresses" aria-selected="true">나의 배송지</a>
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                            <a class="nav-link" id="default-address-tab" data-toggle="tab" href="#default-address" role="tab" aria-controls="default-address" aria-selected="false">기본 배송지</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <div class="tab-content" id="shippingAddressTabContent">
+                                                                        <div class="tab-pane fade show active" id="my-addresses" role="tabpanel" aria-labelledby="my-addresses-tab">
+                                                                            <div class="shipping-address-list">
+                                                                                <table class="table table-striped">
+                                                                                    <thead>
+                                                                                    <tr>
+                                                                                        <th>이름</th>
+                                                                                        <th>주소</th>
+                                                                                        <th>연락처</th>
+                                                                                        <th>기본 배송지 설정</th>
+                                                                                    </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                    <tr th:each="address : ${addresses}">
+                                                                                        <td th:text="${address.addressName}"></td>
+                                                                                        <td th:text="${address.addressDetail}"></td>
+                                                                                        <td th:text="${address.addressPhone}"></td>
+                                                                                        <td>
+                                                                                            <button type="button" class="btn btn-primary btn-sm"
+                                                                                                    th:disabled="${address.addressBased}"
+                                                                                                    th:text="${address.addressBased ? '기본 배송지' : '기본 배송지로 설정'}"
+                                                                                                    th:onclick="'setAsDefault('+ ${address.addressId} +')'">
+                                                                                            </button>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                            <!-- Pagination -->
+                                                                            <div class="pagination">
+                                                                                <ul class="pagination">
+                                                                                    <li th:classappend="${currentPage == 0} ? 'disabled'">
+                                                                                        <a th:href="@{|/users/${userId}/addresses?page=${currentPage - 1}|}">Previous</a>
+                                                                                    </li>
+                                                                                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                                                                                        th:classappend="${currentPage == i} ? 'active'">
+                                                                                        <a th:href="@{|/users/${userId}/addresses?page=${i}|}" th:text="${i + 1}">1</a>
+                                                                                    </li>
+                                                                                    <li th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                                                                        <a th:href="@{|/users/${userId}/addresses?page=${currentPage + 1}|}">Next</a>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="tab-pane fade" id="default-address" role="tabpanel" aria-labelledby="default-address-tab">
+                                                                            <div class="default-address-info">
+                                                                                <h4>기본 배송지</h4>
+                                                                                <p th:if="${defaultAddress != null}">
+                                                                                    <span th:text="${defaultAddress.addressName}"></span> |
+                                                                                    <span th:text="${defaultAddress.addressDetail}"></span> |
+                                                                                    <span th:text="${defaultAddress.addressPhone}"></span>
+                                                                                </p>
+                                                                                <p th:if="${defaultAddress == null}">기본 배송지가 설정되지 않았습니다.</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Add Address Modal -->
+                                                <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="addAddressModalLabel">새 배송지 추가</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form>
+                                                                    <div class="mb-3">
+                                                                        <label for="addressName" class="form-label">이름</label>
+                                                                        <input type="text" class="form-control" id="addressName" required>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="addressDetail" class="form-label">주소</label>
+                                                                        <input type="text" class="form-control" id="addressDetail" required>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="addressPhone" class="form-label">연락처</label>
+                                                                        <input type="tel" class="form-control" id="addressPhone" required>
+                                                                    </div>
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="checkbox" value="" id="defaultAddressCheck">
+                                                                        <label class="form-check-label" for="defaultAddressCheck">
+                                                                            기본 배송지로 설정
+                                                                        </label>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                                                                <button type="button" class="btn btn-primary">저장</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Order History Area -->
+
+                                    <!-- 주소 검색 API -->
+                                    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+                                    <script>
+                                        document.getElementById('searchAddressBtn').addEventListener('click', function() {
+                                            new daum.Postcode({
+                                                oncomplete: function(data) {
+                                                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+                                                    // 예제를 참고하여 다양한 활용법을 확인해 보세요.
+                                                    // 우편번호와 주소 정보를 해당 필드에 넣습니다.
+                                                    document.getElementById('addressLine1').value = data.roadAddress; // 도로명 주소 사용
+                                                    // 필요하다면 지번 주소는 data.jibunAddress에서 사용할 수 있습니다.
+                                                    // 상세 주소 입력 필드로 포커스를 이동시킵니다.
+                                                    document.getElementById('addressDetail').focus();
+                                                }
+                                            }).open();
+                                        });
+                                    </script>
+                                    <script>
+                                        function setAsDefault(addressId) {
+                                            // 기본 배송지 설정을 위한 AJAX 호출 로직을 여기에 추가합니다.
+                                            console.log("Set address with ID " + addressId + " as default.");
+                                        }
+
+                                        newPasswordInput.addEventListener('input', pwCheck);
+                                        confirmPasswordInput.addEventListener('input', pwCheck);
+                                    </script>
+
+                                </div>>
+                                </body>
+                                </html>
                                 <span class="grade" th:text="${userGrade}">일반회원</span>
                             </div>
                             <div class="user-points">

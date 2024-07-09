@@ -145,6 +145,8 @@ public class UserServiceImpl implements UserService {
         return userAdaptor.findUserPasswordByEmailByName(request);
     }
 
+    // /users/addressList
+
 
 
 //    @Override
@@ -205,4 +207,21 @@ public class UserServiceImpl implements UserService {
         // 여기에 비밀번호를 재설정하는 로직을 구현합니다.
         //return true; // 실제 로직으로 대체
     }
+
+
+    //  public Page<PointLogResponse> getPointLogs(Pageable pageable) {
+    //        return userAdaptor.getUserPointLogs(pageable);
+    //    }
+    @Override
+    public Page<UserAddressResponse> findAllUserAddress(Pageable pageable){
+        return userAdaptor.findAllUserAddresses(pageable);
+    }
+
+
+//  @GetMapping("/addressList")
+//    Page<UserAddressResponse> findAllUserAddresses(Long userId, Pageable pageable);
+
+    //public record UserAddressResponse(Long userAddressId, Long addressId, String addressZip, String addressRaw, String addressName,
+    //                                  String addressDetail, boolean addressBased, Long userId) {
+    //}
 }

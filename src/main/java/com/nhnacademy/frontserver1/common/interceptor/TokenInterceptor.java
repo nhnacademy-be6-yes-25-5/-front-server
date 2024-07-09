@@ -4,10 +4,13 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import com.nhnacademy.frontserver1.common.provider.CookieTokenProvider;
 import com.nhnacademy.frontserver1.common.context.TokenContext;
+import org.springframework.web.servlet.ModelAndView;
+
 import java.util.List;
 
 @Component
@@ -30,7 +33,7 @@ public class TokenInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
         String accessToken = TokenContext.getAccessToken();
         String refreshToken = TokenContext.getRefreshToken();
 
@@ -38,7 +41,10 @@ public class TokenInterceptor implements HandlerInterceptor {
             addTokenCookie(response, "AccessToken", accessToken);
             addTokenCookie(response, "RefreshToken", refreshToken);
         }
+    }
 
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         TokenContext.clear();
     }
 

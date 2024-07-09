@@ -11,4 +11,6 @@ public interface PaymentService {
         List<Long> bookIds, List<Integer> quantities);
 
     List<ReadPaymentOrderResponse> findAllOrderByOrderId(String orderId);
+
+    CreatePaymentResponse createPaymentByZeroAmount(CreatePaymentRequest request, Integer totalAmount, List<Long> bookIds, List<Integer> quantities);
 }

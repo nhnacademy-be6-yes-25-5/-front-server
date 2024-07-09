@@ -1,0 +1,12 @@
+.form-group-inline {
+  display: flex;
+  align-items: center;
+}
+
+.form-group-inline input {
+  flex: 1;
+}
+
+.form-group-inline button {
+  margin-left: 10px;
+}

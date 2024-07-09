@@ -121,8 +121,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<BookResponse> getBookByCategoryId(Long categoryId, Pageable pageable) {
-        return bookAdapter.getBookByCategory(categoryId, pageable);
+    public Page<BookResponse> getBookByCategoryId(Long categoryId, Pageable pageable, String sortString) {
+        return bookAdapter.getBookByCategory(categoryId, pageable, sortString);
     }
 
     public List<Long> getCategoryIdsByBookId(Long bookId) {

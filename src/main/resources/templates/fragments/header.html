@@ -11,8 +11,11 @@
                             Hello
                         </div>
                         <ul class="user-login">
-                            <li>
+                            <li th:if="${AccessToken == null || RefreshToken == null}">
                                 <a href="/auth/login">Sign In</a>
+                            </li>
+                            <li th:if="${AccessToken != null && RefreshToken != null}">
+                                <a href="/logout">Logout</a>
                             </li>
                             <li>
                                 <a href="/sign-up">Register</a>
@@ -20,6 +23,9 @@
                             <li>
                                 <a href="/orders/find">주문번호로 주문내역 찾기</a>
                             </li>
+                            <li>
+                                <a href="/admin/orders">관라자 페이지 이동</a>
+                            </li>>
                         </ul>
                     </div>
                 </div>

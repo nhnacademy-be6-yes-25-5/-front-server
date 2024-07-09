@@ -24,3 +24,13 @@ nhn:
 naverapi:
   secret: ${NAVER_SECRET}
   id: ${NAVER_ID}
+
+payco:
+  client-id: 3RD7yuSJYSL9O_AZZIFCtfY
+  client-secret: naWXkVEA3aLQjFPx3Zrffwcm
+  redirect-uri: https://yes25-5.shop/callback
+provider:
+  payco:
+    authorization-uri: https://id.payco.com/oauth2.0/authorize
+    token-uri: https://id.payco.com/oauth2.0/token
+    logout-uri: https://id.payco.com/oauth2.0/logout

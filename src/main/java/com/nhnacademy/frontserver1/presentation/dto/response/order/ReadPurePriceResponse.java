@@ -6,11 +6,4 @@ import lombok.Builder;
 
 @Builder
 public record ReadPurePriceResponse(BigDecimal purePrice, LocalDate recordedAt) {
-
-    public static ReadPurePriceResponse fromTest() {
-        return ReadPurePriceResponse.builder()
-            .purePrice(BigDecimal.valueOf(80000))
-            .recordedAt(LocalDate.now())
-            .build();
-    }
 }

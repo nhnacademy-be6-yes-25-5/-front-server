@@ -16,7 +16,7 @@
                             <h3>No Account? Register</h3>
                             <p>Registration takes less than a minute but gives you full control over your orders.</p>
                         </div>
-                        <form class="row" method="post" action="/sign-up" id="registerForm">
+                        <form class="row" method="post" action="/additional-info" id="registerForm">
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="userName">이름</label>
@@ -31,33 +31,13 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="userEmail">E-mail 주소</label>
-                                    <input class="form-control" type="email" id="userEmail" name="userEmail" required>
-                                    <button type="button" class="btn btn-secondary" id="checkEmailButton">중복 체크</button>
-                                    <div id="emailCheckResult"></div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
                                     <label for="userPhone">휴대전화 번호</label>
                                     <input class="form-control" type="text" id="userPhone" name="userPhone" required>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label for="userPassword">비밀번호</label>
-                                    <input class="form-control" type="password" id="userPassword" name="userPassword" required>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label for="userConfirmPassword">비밀번호 확인</label>
-                                    <input class="form-control" type="password" id="userConfirmPassword" name="userConfirmPassword" required>
-                                </div>
-                            </div>
                             <div id="pwConfirm" class="col-12"></div>
                             <div class="button col-12">
-                                <button class="btn btn-primary" type="submit" id="register-btn" disabled>Register</button>
+                                <button class="btn btn-primary" type="submit" id="register-btn">Register</button>
                             </div>
                             <p class="outer-link">Already have an account? <a href="/auth/login">Login Now</a></p>
                         </form>
@@ -91,25 +71,15 @@
     <!-- jQuery CDN 추가 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- 중복 이메일 체크 -->
+<!--    중복 이메일 체크-->
     <script>
         document.getElementById('checkEmailButton').addEventListener('click', function() {
             const email = document.getElementById('userEmail').value.trim(); // 앞뒤 공백 제거
             const emailCheckResult = document.getElementById('emailCheckResult');
             const registerButton = document.getElementById('register-btn');
 
-            // 이메일 형식을 검증하는 정규표현식
-            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
             if (!email) {
                 emailCheckResult.textContent = '이메일을 입력해주세요.';
-                emailCheckResult.style.color = 'red';
-                registerButton.disabled = true;
-                return;
-            }
-
-            if (!emailPattern.test(email)) {
-                emailCheckResult.textContent = '올바른 이메일 형식이 아닙니다.';
                 emailCheckResult.style.color = 'red';
                 registerButton.disabled = true;
                 return;
@@ -166,44 +136,14 @@
             e.target.value = formatted;
         });
 
-        // 비밀번호 확인하는 JS
-        const userPasswordInput = document.getElementById('userPassword');
-        const userConfirmPasswordInput = document.getElementById('userConfirmPassword');
-        const pwConfirmElement = document.getElementById('pwConfirm');
-        const registerButton = document.getElementById('register-btn');
-        const registerForm = document.getElementById('registerForm');
-
-        function checkPassword() {
-            if (userPasswordInput.value === userConfirmPasswordInput.value) {
-                pwConfirmElement.textContent = '비밀번호 일치';
-                pwConfirmElement.style.color = 'green';
-                checkFormValidity(); // 비밀번호 일치 시 버튼 활성화 여부 확인
-            } else {
-                pwConfirmElement.textContent = '비밀번호 불일치';
-                pwConfirmElement.style.color = 'red';
-                registerButton.disabled = true;
-            }
-        }
-
-        userConfirmPasswordInput.addEventListener('keyup', checkPassword);
 
         function checkFormValidity() {
             const emailCheckResult = document.getElementById('emailCheckResult');
-            if (emailCheckResult.style.color === 'green' && pwConfirmElement.style.color === 'green') {
-                registerButton.disabled = false;
-            } else {
-                registerButton.disabled = true;
-            }
+            registerButton.disabled = emailCheckResult.style.color !== 'green';
         }
 
         // 회원가입 성공 모달 표시 및 폼 제출
         registerForm.addEventListener('submit', function(event) {
-            if (userPasswordInput.value !== userConfirmPasswordInput.value) {
-                event.preventDefault(); // 폼 기본 제출 방지
-                pwConfirmElement.textContent = '비밀번호 불일치';
-                pwConfirmElement.style.color = 'red';
-                return;
-            }
 
             // 비밀번호가 일치할 때만 모달 표시
             $('#registrationSuccessModal').modal('show'); // 모달 표시

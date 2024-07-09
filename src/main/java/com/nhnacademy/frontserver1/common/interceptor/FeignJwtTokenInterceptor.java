@@ -35,24 +35,27 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String path = request.getServletPath();
 
-        if (path.equals("/") || path.startsWith("/auth/login") || path.startsWith("/orders/none")
-                || path.startsWith("/sign-up") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/check-email") || path.startsWith("/users/find/password") || path.startsWith("/users/find/password") || path.equals("/users/find/password") || path.equals("/users/find-email") || path.startsWith("/users/addressList") || path.equals("/reset-password/{email}") || path.equals("/users/info")){
+        if (path.equals("/") || path.startsWith("/auth/login") || path.startsWith("/orders/none") || path.startsWith("/category") || path.startsWith("/search")
+          || path.startsWith("/sign-up") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/check-email")
+                || path.startsWith("/auth/dormant") || path.startsWith("/detail") || path.startsWith("/users/sign-up") || path.equals("/callback")
+        ||  path.startsWith("/users/find/password")  || path.equals("/users/find-email") || path.startsWith("/users/addressList") || path.equals("/reset-password/{email}") || path.equals("/users/info")) {
+
             return;
         }
 
         List<String> tokens = cookieTokenProvider.getTokenFromCookie(request);
         boolean allTokensEmpty = tokens == null
-            || tokens.isEmpty()
-            || tokens.stream().allMatch(String::isEmpty);
+                || tokens.isEmpty()
+                || tokens.stream().allMatch(String::isEmpty);
 
 
         if (allTokensEmpty && (path.matches(".*/orders/.*/delivery.*") || path.startsWith("/users/cart-books")
-            || path.startsWith("/detail") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/users/info") || path.startsWith("/users/addressList") || path.startsWith("/users/find/password")  || path.startsWith("/users/addressList") || path.startsWith("/reset-password/{email}") || path.startsWith("/reviews/books"))) {
-            return ;
+                || path.startsWith("/detail") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/reviews/books"))) {
+            return;
         }
 
         if (allTokensEmpty && (path.startsWith("/users/cart-books") || request.getMethod().equalsIgnoreCase("POST"))) {
-            return ;
+            return;
         }
 
         if (!allTokensEmpty) {
@@ -69,5 +72,4 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
             throw new TokenCookieMissingException();
         }
     }
-
 }

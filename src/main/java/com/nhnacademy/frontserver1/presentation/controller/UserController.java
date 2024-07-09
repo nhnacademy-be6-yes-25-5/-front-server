@@ -60,6 +60,7 @@ public class UserController {
                 .userPhone(userPhone)
                 .userPassword(userPassword)
                 .userConfirmPassword(userConfirmPassword)
+                .providerName("LOCAL")
                 .build();
 
         UserResponse userResponse = userService.signUp(userRequest);
@@ -297,4 +298,44 @@ public class UserController {
 //            return "setNewPassword/set-new-password-fail";
 //        }
 //    }
+
+
+
+
+
+
+
+
+
+
+
+
+    // 페이코 회원 가입 페이지
+    @GetMapping("/sign-up/payco")
+    public String signUpPayco() {
+        return "register-payco";
+    }
+
+    // 페이코 회원 가입
+    @PostMapping("/sign-up/payco")
+    public String signUpPayco(@RequestParam String userName,
+                         @RequestParam LocalDate userBirth,
+                         @RequestParam String userEmail,
+                         @RequestParam String userPhone,
+                         Model model) {
+
+        CreateUserRequest userRequest = CreateUserRequest.builder()
+                .userName(userName)
+                .userBirth(userBirth)
+                .userEmail(userEmail)
+                .userPhone(userPhone)
+                .providerName("PAYCO")
+                .build();
+
+        UserResponse userResponse = userService.signUp(userRequest);
+
+        model.addAttribute("userResponse", userResponse);
+
+        return "redirect:/auth/login";
+    }
 }

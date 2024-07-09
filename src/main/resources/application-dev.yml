@@ -15,7 +15,7 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
 eureka:
-  gateway: http://localhost:8085
+  gateway: http://127.0.0.1:8085
 
 app:
   mode: development
@@ -38,3 +38,8 @@ provider:
     authorization-uri: https://id.payco.com/oauth2.0/authorize
     token-uri: https://id.payco.com/oauth2.0/token
     logout-uri: https://id.payco.com/oauth2.0/logout
+
+
+logging:
+  level:
+    root: debug

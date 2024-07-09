@@ -39,18 +39,18 @@
                                             <tbody>
                                             <tr th:each="book : ${bookList}">
                                                 <td>
-                                                    <img th:if="${book.bookImage() != null}" th:src="@{${book.bookImage()}}">
-                                                    <img th:if="${book.bookImage() == null || book.bookImage().isEmpty()}" src="/images/logo/logo.png" alt="Default Book Image">
+                                                    <img width="200" height="300"  th:if="${book.bookImage() != null}" th:src="@{${book.bookImage()}}">
+                                                    <img width="200" height="300"  th:if="${book.bookImage() == null || book.bookImage().isEmpty()}" src="/images/logo/logo.png" alt="Default Book Image">
                                                 </td>
-                                                <td th:text="${book.bookName()}">책 제목</td>
                                                 <td>
-                                                    <a th:text="${book.bookDescription()}">책 설명</a>
+                                                    <a th:href="@{'/detail/' + ${book.bookId()}}" th:text="${book.bookName()}"></a>
                                                 </td>
+                                                <td th:text="${book.bookDescription()}">책 설명</td>
                                                 <td th:text="${book.bookSellingPrice}">$99.99</td>
                                             </tr>
                                             </tbody>
                                         </table>
-                                        <div th:if="${bookList == null or #lists.isEmpty(bookList.content)}" class="text-center">좋아요 표시한 도서가 존재하지 않습니다.</div>
+                                        <div th:if="${bookList == null or #lists.isEmpty(bookList)}" class="text-center">좋아요 표시한 도서가 존재하지 않습니다.</div>
                                     </div>
                                 </div>
                             </div>

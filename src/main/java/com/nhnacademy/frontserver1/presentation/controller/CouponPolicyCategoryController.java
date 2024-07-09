@@ -7,6 +7,7 @@ import com.nhnacademy.frontserver1.presentation.dto.response.book.CategoryRespon
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyCategoryResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +31,7 @@ public class CouponPolicyCategoryController {
     public String findAll(@RequestParam(defaultValue = "0") int page,
                           @RequestParam(defaultValue = "10") int size,
                           Model model) {
-        Pageable pageable = of(page, size);
+        Pageable pageable = PageRequest.of(page, size);
         Page<CouponPolicyCategoryResponseDTO> categoryCouponsPage = couponService.findAllCategoryCouponPolicies(pageable);
 
         model.addAttribute("categoryCoupons", categoryCouponsPage.getContent());

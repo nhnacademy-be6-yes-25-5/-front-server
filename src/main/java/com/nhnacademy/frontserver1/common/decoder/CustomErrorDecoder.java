@@ -46,12 +46,12 @@ public class CustomErrorDecoder implements ErrorDecoder {
             case 403:
                 if (responseBody.contains("휴면")) {
                     return new DormantAccountException(
-                        ErrorStatus.toErrorStatus("로그인한 유저가 휴면상태입니다.", 403, LocalDateTime.now()));
+                            ErrorStatus.toErrorStatus("로그인한 유저가 휴면상태입니다.", 403, LocalDateTime.now()));
                 }
             case 404:
                 if (methodKey.contains("findOrderStatusByOrderId")) {
                     return new OrderWaitingException(
-                        ErrorStatus.toErrorStatus("주문 완료 대기중", 301, LocalDateTime.now())
+                            ErrorStatus.toErrorStatus("주문 완료 대기중", 301, LocalDateTime.now())
                     );
                 }
                 log.error("리소스를 찾을 수 없습니다. 상태 코드: 404, 응답 본문: {}", responseBody);
@@ -75,6 +75,6 @@ public class CustomErrorDecoder implements ErrorDecoder {
 
     private FeignClientException throwFeignClientException(Response response, String responseBody) {
         return new FeignClientException(
-            ErrorStatus.toErrorStatus(responseBody, response.status(), LocalDateTime.now()));
+                ErrorStatus.toErrorStatus(responseBody, response.status(), LocalDateTime.now()));
     }
 }

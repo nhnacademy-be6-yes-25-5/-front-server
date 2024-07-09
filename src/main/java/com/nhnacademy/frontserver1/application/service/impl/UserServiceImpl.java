@@ -4,9 +4,8 @@ import com.nhnacademy.frontserver1.application.service.UserService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.UserAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.*;
 import com.nhnacademy.frontserver1.presentation.dto.response.point.PointLogResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.point.PointPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.*;
-import com.nhnacademy.frontserver1.presentation.dto.response.address.UserAddressResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.address.UsersAddressResponse;
 
 import java.util.Collections;
 import java.util.List;
@@ -83,9 +82,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserAddressResponse> getUserAddresses(Long userId, Pageable pageable) {
+    public Page<UsersAddressResponse> getUserAddresses(Long userId, Pageable pageable) {
         UsersResponse user = getUserById(userId);
-        List<UserAddressResponse> addresses = user.addresses();
+        List<UsersAddressResponse> addresses = user.addresses();
 
         if (addresses == null || addresses.isEmpty()) {
             return new PageImpl<>(Collections.emptyList(), pageable, 0);
@@ -93,7 +92,7 @@ public class UserServiceImpl implements UserService {
 
         int start = (int) pageable.getOffset();
         int end = Math.min(start + pageable.getPageSize(), addresses.size());
-        List<UserAddressResponse> pagedAddresses = addresses.subList(start, end);
+        List<UsersAddressResponse> pagedAddresses = addresses.subList(start, end);
 
         return new PageImpl<>(pagedAddresses, pageable, addresses.size());
     }
@@ -125,5 +124,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<CouponBoxResponse> getStateCouponBox(String couponState, Pageable pageable) {
         return userAdaptor.getStateCouponBox(couponState, pageable);
+    }
+
+    @Override
+    public Page<UserAddressResponse> getAllUserAddresses(Pageable pageable) {
+        return userAdaptor.findAllUserAddresses(pageable);
+    }
+
+    @Override
+    public void updateAddressBased(Long userAddressId, UpdateAddressBasedRequest request) {
+        userAdaptor.updateAddressBased(userAddressId, request);
+    }
+
+    @Override
+    public CreateUserAddressResponse createUserAddresses(CreateUserAddressRequest userRequest) {
+        return userAdaptor.createUserAddress(userRequest);
     }
 }

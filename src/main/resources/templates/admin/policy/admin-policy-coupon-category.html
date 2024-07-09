@@ -139,18 +139,56 @@
             window.open('/coupons/policy/categories/search', '카테고리 검색', 'width=800,height=600');
         }
 
+        function toggleDiscountFields() {
+            const discountType = document.getElementById('couponPolicyDiscountType').value;
+            const discountValueField = document.getElementById('couponPolicyDiscountValue');
+            const discountRateField = document.getElementById('couponPolicyRate');
+
+            if (discountType === 'true') {
+                discountValueField.disabled = true;
+                discountRateField.disabled = false;
+            } else {
+                discountValueField.disabled = false;
+                discountRateField.disabled = true;
+            }
+        }
+
+        function validateMaxAmount() {
+            const minOrderAmountField = document.getElementById('couponPolicyMinOrderAmount');
+            const maxAmountField = document.getElementById('couponPolicyMaxAmount');
+            const minOrderAmount = parseFloat(minOrderAmountField.value);
+            const maxAmount = parseFloat(maxAmountField.value);
+
+            if (maxAmount > minOrderAmount) {
+                alert('최대 할인 금액은 최소 주문 금액을 넘을 수 없습니다.');
+                maxAmountField.value = minOrderAmount; // 최대 할인 금액을 최소 주문 금액으로 맞춤
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
+            const discountTypeField = document.getElementById('couponPolicyDiscountType');
+            discountTypeField.addEventListener('change', toggleDiscountFields);
+
+            const maxAmountField = document.getElementById('couponPolicyMaxAmount');
+            maxAmountField.addEventListener('input', validateMaxAmount);
+
             document.getElementById('addCouponForm').addEventListener('submit', function(event) {
+                event.preventDefault(); // 기본 폼 제출을 막음
+
                 const discountValueField = document.getElementById('couponPolicyDiscountValue');
                 const discountRateField = document.getElementById('couponPolicyRate');
+                const minOrderAmountField = document.getElementById('couponPolicyMinOrderAmount');
+                const maxAmountField = document.getElementById('couponPolicyMaxAmount');
 
                 if ((discountValueField.value && discountRateField.value) || (!discountValueField.value && !discountRateField.value)) {
                     alert('할인 값(금액) 또는 할인율(비율) 중 하나만 입력해야 합니다.');
-                    event.preventDefault(); // 폼 제출을 막음
-                    return;
+                    return; // 폼 제출을 막음
                 }
 
-                event.preventDefault(); // 기본 폼 제출을 막음
+                if (parseFloat(maxAmountField.value) > parseFloat(minOrderAmountField.value)) {
+                    alert('최대 할인 금액은 최소 주문 금액을 넘을 수 없습니다.');
+                    return; // 폼 제출을 막음
+                }
 
                 const formData = new FormData(this);
 
@@ -174,6 +212,8 @@
                         console.error('Error:', error);
                     });
             });
+
+            toggleDiscountFields(); // 페이지 로드 시 필드 비활성화 상태 초기화
         });
     </script>
 </div>

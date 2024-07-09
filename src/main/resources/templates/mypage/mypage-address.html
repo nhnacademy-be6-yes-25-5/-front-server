@@ -77,16 +77,16 @@
                                                                     <div class="shipping-address-actions">
                                                                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAddressModal">배송지 추가</button>
                                                                     </div>
-                                                                    <ul class="nav nav-tabs" id="shippingAddressTab" role="tablist">
+                                                                    <ul class="nav nav-tabs" id="shippingAddressTab1" role="tablist">
                                                                         <li class="nav-item">
-                                                                            <a class="nav-link active" id="my-addresses-tab" data-toggle="tab" href="#my-addresses" role="tab" aria-controls="my-addresses" aria-selected="true">나의 배송지</a>
+                                                                            <a class="nav-link active" id="my-addresses-tab1" data-toggle="tab" href="#my-addresses" role="tab" aria-controls="my-addresses" aria-selected="true">나의 배송지</a>
                                                                         </li>
                                                                         <li class="nav-item">
-                                                                            <a class="nav-link" id="default-address-tab" data-toggle="tab" href="#default-address" role="tab" aria-controls="default-address" aria-selected="false">기본 배송지</a>
+                                                                            <a class="nav-link" id="default-address-tab1" data-toggle="tab" href="#default-address" role="tab" aria-controls="default-address" aria-selected="false">기본 배송지</a>
                                                                         </li>
                                                                     </ul>
-                                                                    <div class="tab-content" id="shippingAddressTabContent">
-                                                                        <div class="tab-pane fade show active" id="my-addresses" role="tabpanel" aria-labelledby="my-addresses-tab">
+                                                                    <div class="tab-content" id="shippingAddressTabContent1">
+                                                                        <div class="tab-pane fade show active" id="my-addresses1" role="tabpanel" aria-labelledby="my-addresses-tab">
                                                                             <div class="shipping-address-list">
                                                                                 <table class="table table-striped">
                                                                                     <thead>
@@ -98,7 +98,7 @@
                                                                                     </tr>
                                                                                     </thead>
                                                                                     <tbody>
-                                                                                    <tr th:each="address : ${addresses}">
+                                                                                    <tr th:each="address : ${userAddressPage.content}">
                                                                                         <td th:text="${address.addressName}"></td>
                                                                                         <td th:text="${address.addressDetail}"></td>
                                                                                         <td th:text="${address.addressPhone}"></td>

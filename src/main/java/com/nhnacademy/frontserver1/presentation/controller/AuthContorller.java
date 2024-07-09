@@ -62,6 +62,10 @@ public class AuthContorller {
         return "redirect:/";
     }
 
+
+
+
+
     /**
      * 토큰 테스트 페이지를 반환합니다.
      * AuthServiceImpl의 testToken() 메서드를 호출하여 테스트 결과(customerId)를 가져오고,

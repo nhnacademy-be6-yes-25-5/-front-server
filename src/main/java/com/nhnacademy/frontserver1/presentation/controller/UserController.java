@@ -140,16 +140,16 @@ public class UserController {
     }
 
 
-    @GetMapping("/users/addressList")
+    @GetMapping("/users/address-list")
     public String getUserAddresses(Model model, @PageableDefault(size = 10, page = 0) Pageable pageable) {
 
         Page<UserAddressResponse> userAddressPage = userService.findAllUserAddress(pageable);
+
 
         model.addAttribute("userAddressPage", userAddressPage);
 
         return "mypage/mypage-address";
     }
-
 
     private static final Logger logger = Logger.getLogger(UserController.class.getName());
 

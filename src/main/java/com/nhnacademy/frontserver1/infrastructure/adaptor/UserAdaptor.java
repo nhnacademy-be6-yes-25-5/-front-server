@@ -71,7 +71,7 @@ public interface UserAdaptor {
 
     @GetMapping("/user-addresses")
     Page<UserAddressResponse> findAllUserAddresses(Pageable pageble);
-
+///users/user-addresses
 
    // Page<UserAddressResponse> findAllUserAddresses(Long userId, Pageable pageable);
 

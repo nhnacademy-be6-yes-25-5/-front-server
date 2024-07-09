@@ -19,6 +19,22 @@
     .error {
       border: 2px solid red;
     }
+
+    .payment-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .payment-option {
+      display: flex;
+      align-items: center;
+    }
+
+    .radio-button {
+      margin-right: 5px;
+    }
+
   </style>
 </head>
 
@@ -176,10 +192,29 @@
                   </div>
 
                   <div class="col-md-12">
-                    <div class="single-form button">
-                      <button class="btn" data-bs-toggle="collapse" data-bs-target="#collapseFive"
-                              aria-expanded="false" aria-controls="collapseFive">다음 단계
-                      </button>
+                    <div class="checkout-payment-option">
+                      <h6 class="heading-6 font-weight-400 payment-title">배송비 정책</h6>
+                      <div class="payment-option-wrapper">
+                        <div class="single-payment-option">
+                          <input type="radio" name="shipping"
+                                 th:id="'shipping-' + ${shippingPolicy.shippingPolicyId}"
+                                 th:value="${shippingPolicy.shippingPolicyFee}" checked readonly>
+                          <label th:for="'shipping-' + ${shippingPolicy.shippingPolicyId}">
+                            <span class="price"
+                                  th:text="${'배송비 ' + shippingPolicy.shippingPolicyFee + '원'}"></span>
+                            <p class="min-amount"
+                               th:text="'최소 주문 금액 ' + ${shippingPolicy.shippingPolicyMinAmount} + '원'"></p>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                      <div class="single-form button">
+                        <button class="btn" data-bs-toggle="collapse" data-bs-target="#collapseFive"
+                                aria-expanded="false" aria-controls="collapseFive">다음 단계
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -197,20 +232,15 @@
                     <div class="single-form form-default">
                       <label>결제 수단 선택</label>
                       <div class="form-input form">
-                        <select id="paymentMethod" name="paymentMethod" onchange="togglePaymentFields()" required>
+                        <select id="paymentMethod" name="paymentMethod" required>
                           <option value="toss">토스</option>
-                          <option value="general">일반</option>
+                          <option value="general">일반결제</option>
                           <option value="kakao">카카오페이</option>
                           <option value="naver">네이버페이</option>
                         </select>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div id="paymentImages">
-                  <img id="tossImage" src="/images/payment/toss-payment.png" alt="Toss Payment" style="display: none;">
-                  <img id="kakaoImage" src="/images/payment/kakao-payment.png" alt="Kakao Pay" style="display: none;">
-                  <img id="naverImage" src="/images/payment/naver-payment.png" alt="Naver Pay" style="display: none;">
                 </div>
                 <div id="cardInfoFields" style="display: none;">
                   <div class="col-12">
@@ -225,7 +255,6 @@
                         <label>카드 번호</label>
                         <div class="form-input form">
                           <input id="cardNumber" type="text" placeholder="0000 0000 0000 0000">
-                          <img src="/images/payment/card.png" alt="card">
                         </div>
                       </div>
                       <div class="payment-card-info">
@@ -257,11 +286,16 @@
       </div>
       <div class="col-lg-4">
         <div class="checkout-sidebar">
-          <button onclick="openCouponPopup()" th:disabled="${userInfo.role == 'NONE_MEMBER'}">쿠폰 목록 보기</button>
-          <input type="text" id="selectedCoupon" readonly th:disabled="${userInfo.role == 'NONE_MEMBER'}">
-          <input type="hidden" id="couponDiscount" value="0" th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.discountAmount : 0}">
+          <button onclick="openCouponPopup()" th:disabled="${userInfo.role == 'NONE_MEMBER'}">쿠폰 목록
+            보기
+          </button>
+          <input type="text" id="selectedCoupon" readonly
+                 th:disabled="${userInfo.role == 'NONE_MEMBER'}">
+          <input type="hidden" id="couponDiscount" value="0"
+                 th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.discountAmount : 0}">
           <input type="hidden" id="couponDiscountRate" value="0">
-          <input type="hidden" id="couponId" th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.couponId : ''}">
+          <input type="hidden" id="couponId"
+                 th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.couponId : ''}">
           <input type="hidden" name="userId" id="userId" th:value="${userInfo.userId}">
           <input type="hidden" name="role" id="role" th:value="${userInfo.role}">
           <div th:each="cartBook, index : ${cartBooks}">
@@ -322,7 +356,8 @@
                 <p class="price" id="pointsDiscount">0원</p>
               </div>
               <div class="additional-info mt-30" th:if="${freeShippingAmount != null}">
-                <p th:if="${freeShippingAmount > 0}" th:text="'무료 배송까지 ' + ${freeShippingAmount} + '원'"></p>
+                <p th:if="${freeShippingAmount > 0}"
+                   th:text="'무료 배송까지 ' + ${freeShippingAmount} + '원'"></p>
                 <p th:if="${freeShippingAmount <= 0}" th:text="'무료 배송 혜택 적용중!'"></p>
                 <input type="hidden" id="freeShippingAmount" th:value="${freeShippingAmount}"/>
                 <div class="progress">
@@ -339,7 +374,9 @@
               </div>
             </div>
             <div class="price-table-btn button">
-              <button type="button" class="btn btn-alt" onclick="if (validateForm()) { submitOrder(); }">Checkout</button>
+              <button type="button" class="btn btn-alt"
+                      onclick="if (validateForm()) { submitOrder(); }">Checkout
+              </button>
             </div>
           </div>
 
@@ -367,12 +404,19 @@
 <script src="/js/tiny-slider.js"></script>
 <script src="/js/glightbox.min.js"></script>
 <script src="/js/main.js"></script>
+<script src="/js/paymentFactory.js"></script>
+<script src="/js/PaymentService.js"></script>
+<script src="/js/TossPaymentService.js"></script>
+<script src="/js/NaverPaymentService.js"></script>
+<script src="/js/KakaoPaymentService.js"></script>
+<script src="/js/GeneralPaymentService.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
   function updateTotalPrice() {
     const totalAmountElement = document.getElementById('totalAmount');
     const totalAmount = parseInt(totalAmountElement.innerText.replace('원', '')) || 0;
-    const shippingFee = parseInt(document.getElementById('shippingFee').innerText.replace('원', '')) || 0;
+    const shippingFee = parseInt(document.getElementById('shippingFee').innerText.replace('원', ''))
+        || 0;
     const discountAmountElement = document.getElementById('couponDiscount');
     const discountRateElement = document.getElementById('couponDiscountRate');
     const discountAmount = parseInt(discountAmountElement.value) || 0;
@@ -443,7 +487,8 @@
     if (checkbox.checked) {
       document.getElementById('receiveName').value = document.getElementById('orderName').value;
       document.getElementById('receiveEmail').value = document.getElementById('orderEmail').value;
-      document.getElementById('receivePhoneNumber').value = document.getElementById('orderPhoneNumber').value;
+      document.getElementById('receivePhoneNumber').value = document.getElementById(
+          'orderPhoneNumber').value;
     } else {
       document.getElementById('receiveName').value = '';
       document.getElementById('receiveEmail').value = '';
@@ -461,6 +506,7 @@
     const ALLOWED_PAYMENT_METHODS = ['toss'];
 
     const paymentMethod = document.getElementById('paymentMethod').value;
+    console.log(paymentMethod);
     if (!ALLOWED_PAYMENT_METHODS.includes(paymentMethod)) {
       alert('현재 개발중인 결제 수단입니다. 다른 결제수단을 사용해주세요.');
       return;
@@ -492,10 +538,14 @@
     const takeoutType = document.getElementById('takeoutType').value;
     const points = document.getElementById('points').value || "0";
     const role = document.getElementById('role').value;
-    const productIds = Array.from(document.querySelectorAll('input[name="productIds"]')).map(input => input.value);
-    const cartBookIds = Array.from(document.querySelectorAll('input[name="cartBookIds"]')).map(input => input.value);
-    const quantities = Array.from(document.querySelectorAll('input[name="quantities"]')).map(input => input.value);
-    const prices = Array.from(document.querySelectorAll('input[name="prices"]')).map(input => input.value);
+    const productIds = Array.from(document.querySelectorAll('input[name="productIds"]')).map(
+        input => input.value);
+    const cartBookIds = Array.from(document.querySelectorAll('input[name="cartBookIds"]')).map(
+        input => input.value);
+    const quantities = Array.from(document.querySelectorAll('input[name="quantities"]')).map(
+        input => input.value);
+    const prices = Array.from(document.querySelectorAll('input[name="prices"]')).map(
+        input => input.value);
     const couponId = document.getElementById('couponId').value;
 
     const orderData = {
@@ -534,12 +584,12 @@
     })
     .then(response => response.json())
     .then(data => {
-      const { orderId, totalAmount } = data;
+      const {orderId, totalAmount} = data;
       const paymentService = createPaymentService(paymentMethod);
       if (parseInt(totalAmount, 10) === 0) {
         completeZeroAmountPayment(orderData);
       } else {
-        paymentService.requestPayment({ orderId, totalAmount })
+        paymentService.requestPayment({orderId, totalAmount})
         .catch(error => {
           console.error('결제 요청 중 오류 발생:', error);
           window.location.href = '/payments/fail';
@@ -708,29 +758,6 @@
     }
 
     return isValid;
-  }
-
-  function togglePaymentFields() {
-    const paymentMethod = document.getElementById('paymentMethod').value;
-    const cardInfoFields = document.getElementById('cardInfoFields');
-    const tossImage = document.getElementById('tossImage');
-    const kakaoImage = document.getElementById('kakaoImage');
-    const naverImage = document.getElementById('naverImage');
-
-    tossImage.style.display = 'none';
-    kakaoImage.style.display = 'none';
-    naverImage.style.display = 'none';
-    cardInfoFields.style.display = 'none';
-
-    if (paymentMethod === 'general') {
-      cardInfoFields.style.display = 'block';
-    } else if (paymentMethod === 'toss') {
-      tossImage.style.display = 'block';
-    } else if (paymentMethod === 'kakao') {
-      kakaoImage.style.display = 'block';
-    } else if (paymentMethod === 'naver') {
-      naverImage.style.display = 'block';
-    }
   }
 
   window.addEventListener('load', function () {

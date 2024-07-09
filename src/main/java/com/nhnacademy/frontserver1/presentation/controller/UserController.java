@@ -144,7 +144,10 @@ public class UserController {
     public String getUserAddresses(Model model, @PageableDefault(size = 10, page = 0) Pageable pageable) {
 
         Page<UserAddressResponse> userAddressPage = userService.findAllUserAddress(pageable);
-
+        model.addAttribute("userAddressPage", userAddressPage);
+        model.addAttribute("currentPage", userAddressPage.getNumber());
+        model.addAttribute("totalPages", userAddressPage.getTotalPages());
+//  boolean addressBased,
 
         model.addAttribute("userAddressPage", userAddressPage);
 

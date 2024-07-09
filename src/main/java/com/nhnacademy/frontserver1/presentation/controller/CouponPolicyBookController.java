@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.data.domain.PageRequest.*;
-
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/coupons/policy/books")

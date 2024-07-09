@@ -9,7 +9,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -27,6 +26,7 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
     /**
      * Feign 요청에 JWT 토큰을 추가합니다.
      * '/auth/login' 경로에 대한 요청은 인증이 필요하지 않으므로 토큰을 추가하지 않습니다.
+     *
      * @param template Feign 요청 템플릿
      */
     @Override
@@ -37,24 +37,24 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
 
         if (path.equals("/") || path.startsWith("/auth/login") || path.startsWith("/orders/none") || path.startsWith("/category") || path.startsWith("/search")
           || path.startsWith("/sign-up") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/check-email")
-                || path.startsWith("/auth/dormant") || path.startsWith("/detail")) {
+                || path.startsWith("/auth/dormant") || path.startsWith("/detail") || path.startsWith("/users/sign-up") || path.equals("/callback")) {
 
             return;
         }
 
         List<String> tokens = cookieTokenProvider.getTokenFromCookie(request);
         boolean allTokensEmpty = tokens == null
-            || tokens.isEmpty()
-            || tokens.stream().allMatch(String::isEmpty);
+                || tokens.isEmpty()
+                || tokens.stream().allMatch(String::isEmpty);
 
 
         if (allTokensEmpty && (path.matches(".*/orders/.*/delivery.*") || path.startsWith("/users/cart-books")
-            || path.startsWith("/detail") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/reviews/books"))) {
-            return ;
+                || path.startsWith("/detail") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/reviews/books"))) {
+            return;
         }
 
         if (allTokensEmpty && (path.startsWith("/users/cart-books") || request.getMethod().equalsIgnoreCase("POST"))) {
-            return ;
+            return;
         }
 
         if (!allTokensEmpty) {
@@ -71,5 +71,4 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
             throw new TokenCookieMissingException();
         }
     }
-
 }

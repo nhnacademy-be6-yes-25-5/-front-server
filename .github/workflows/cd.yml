@@ -54,6 +54,7 @@ jobs:
           NAVER_SECRET: ${{ secrets.NAVER_SECRET }}
           NHN_IMAGE_APPKEY: ${{ secrets.NHN_IMAGE_APPKEY }}
           NHN_IMAGE_SECRET: ${{ secrets.NHN_IMAGE_SECRET }}
+          EUREKA_SERVER_HOSTNAME: ${{ secrets.EUREKA_SERVER_HOSTNAME }}
         run: |
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
             cd ${REMOTE_DIR}
@@ -69,6 +70,7 @@ jobs:
             -e NAVER_SECRET=${NAVER_SECRET} \
             -e NHN_IMAGE_SECRET=${NHN_IMAGE_SECRET} \
             -e NHN_IMAGE_APPKEY=${NHN_IMAGE_APPKEY} \
+            -e EUREKA_SERVER_HOSTNAME=${EUREKA_SERVER_HOSTNAME} \
             front1-app-8040
             
             sleep 30
@@ -82,6 +84,7 @@ jobs:
             -e NAVER_SECRET=${NAVER_SECRET} \
             -e NHN_IMAGE_SECRET=${NHN_IMAGE_SECRET} \
             -e NHN_IMAGE_APPKEY=${NHN_IMAGE_APPKEY} \
+            -e EUREKA_SERVER_HOSTNAME=${EUREKA_SERVER_HOSTNAME} \
             front1-app-8041
           EOF
 

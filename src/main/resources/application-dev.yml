@@ -28,3 +28,13 @@ naverapi:
 
 #app:
 #  mode: development
+
+payco:
+  client-id: 3RDYkPs3KeIrCYnH9mljM_v
+  client-secret: u13B9N3PzPxx7JdQ8qovRelc
+  redirect-uri: http://test.com:8040/callback
+provider:
+  payco:
+    authorization-uri: https://id.payco.com/oauth2.0/authorize
+    token-uri: https://id.payco.com/oauth2.0/token
+    logout-uri: https://id.payco.com/oauth2.0/logout

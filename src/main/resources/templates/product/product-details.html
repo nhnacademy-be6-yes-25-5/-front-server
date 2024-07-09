@@ -97,10 +97,10 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-12">
                                         <div class="wish-button">
-                                            <button th:onclick="|location.href='@{'/likes/'+ ${book.bookId()}}'|" th:if="${like == null || !like.likesStatus()}" class="btn">
+                                            <button th:onclick="|location.href='@{'/likesClick/'+ ${book.bookId()}}'|" th:if="${like == null || !like.likesStatus()}" class="btn">
                                                 <i class="lni lni-heart"></i> To Wishlist
                                             </button>
-                                            <button th:onclick="|location.href='@{'/likes/'+ ${book.bookId()}}'|" th:if="${like != null && like.likesStatus()}" class="btn">
+                                            <button th:onclick="|location.href='@{'/likesClick/'+ ${book.bookId()}}'|" th:if="${like != null && like.likesStatus()}" class="btn">
                                                 <i class="lni lni-heart-filled"></i> To Wishlist
                                             </button>
                                         </div>

@@ -23,7 +23,7 @@ public class LikesController {
     private final LikesAdapter likesAdapter;
     private final BookService bookService;
 
-    @GetMapping("/likes/{bookId}")
+    @GetMapping("/likesClick/{bookId}")
     public String likesClick(@PathVariable Long bookId) {
 
         likesAdapter.click(bookId);
@@ -31,7 +31,7 @@ public class LikesController {
         return "redirect:/detail/" + bookId;
     }
 
-    @GetMapping("/likes")
+    @GetMapping("/likesList")
     public String likesList(Model model) {
 
         List<LikesResponse> likesList = likesAdapter.findLikesByUserId();

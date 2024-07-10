@@ -1,9 +1,6 @@
 package com.nhnacademy.frontserver1.infrastructure.adaptor;
 
-import com.nhnacademy.frontserver1.presentation.dto.request.user.CreateUserRequest;
-import com.nhnacademy.frontserver1.presentation.dto.request.user.DeleteUserRequest;
-import com.nhnacademy.frontserver1.presentation.dto.request.user.FindEmailRequest;
-import com.nhnacademy.frontserver1.presentation.dto.request.user.UpdateUserRequest;
+import com.nhnacademy.frontserver1.presentation.dto.request.user.*;
 import com.nhnacademy.frontserver1.presentation.dto.response.point.PointLogResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.*;
 import com.nhnacademy.frontserver1.common.config.FeignClientConfig;
@@ -64,4 +61,7 @@ public interface UserAdaptor {
 
     @GetMapping("/coupons/state")
     Page<CouponBoxResponse> getStateCouponBox(@RequestParam String couponState, Pageable pageable);
+
+    @PostMapping("/find/password")
+    boolean findUserPasswordByEmailByName(@RequestBody FindPasswordRequest request);
 }

@@ -47,16 +47,19 @@ public class TokenInterceptor implements HandlerInterceptor {
         }
 
         if (modelAndView != null) {
-            Cookie[] cookies = request.getCookies();
-            if (cookies != null) {
-                for (Cookie cookie : cookies) {
-                    if (cookie.getName().equals("AccessToken")) {
-                        String accessCookie = cookie.getValue();
-                        modelAndView.addObject("AccessToken", accessCookie);
-                    }
-                    if (cookie.getName().equals("RefreshToken")) {
-                        String refreshCookie = cookie.getValue();
-                        modelAndView.addObject("RefreshToken", refreshCookie);
+            // 현재 요청이 /logout이 아니고, 리다이렉트가 아닌 경우에만 처리
+            if (!"/logout".equals(request.getRequestURI())) {
+                Cookie[] cookies = request.getCookies();
+                if (cookies != null) {
+                    for (Cookie cookie : cookies) {
+                        if (cookie.getName().equals("AccessToken")) {
+                            String accessCookie = cookie.getValue();
+                            modelAndView.addObject("AccessToken", accessCookie);
+                        }
+                        if (cookie.getName().equals("RefreshToken")) {
+                            String refreshCookie = cookie.getValue();
+                            modelAndView.addObject("RefreshToken", refreshCookie);
+                        }
                     }
                 }
             }

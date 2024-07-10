@@ -1009,14 +1009,12 @@ Author: lineicons.com
 
 /*add by chae*/
 .header .navbar-cart .cart-items .lni-cart::before{
-  top: 10px;
   left: 1px;
   position: relative;
 }
 
 /*add by chae*/
 .header .navbar-cart .wishlist .lni-heart::before {
-  top: 10px;
   position: relative;
 }
 

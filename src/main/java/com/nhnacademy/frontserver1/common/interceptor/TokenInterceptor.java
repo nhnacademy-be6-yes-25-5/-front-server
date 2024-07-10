@@ -53,7 +53,7 @@ public class TokenInterceptor implements HandlerInterceptor {
             Cookie cookie = new Cookie(name, token);
             cookie.setHttpOnly(true);
             //배포시에는 아래 주석 풀기\
-            cookie.setSecure(true);\
+            cookie.setSecure(true);
             cookie.setPath("/");
             response.addCookie(cookie);
         }

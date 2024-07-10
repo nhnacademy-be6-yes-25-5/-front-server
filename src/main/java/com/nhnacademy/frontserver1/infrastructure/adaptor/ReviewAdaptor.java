@@ -25,10 +25,10 @@ public interface ReviewAdaptor {
 
     @SkipTokenInjection
     @GetMapping("/books/{bookId}")
-    Page<ReadReviewResponse> getReviewByPaging(@PathVariable Long bookId, Pageable pageable);
+    ResponseEntity<Page<ReadReviewResponse>>  getReviewByPaging(@PathVariable Long bookId, Pageable pageable);
 
     @GetMapping("/books/{bookId}/ratings")
-    List<ReadReviewRatingResponse> getReviewRatings(@PathVariable Long bookId);
+    ResponseEntity<List<ReadReviewRatingResponse>> getReviewRatings(@PathVariable Long bookId);
 
     @PutMapping(value = "/{reviewId}", consumes = "multipart/form-data")
     ResponseEntity<Void> updateReviewByReviewId(@RequestPart String requestJson,

@@ -48,9 +48,11 @@ public class BookController {
     }
 
     @ExceptionHandler(LikesNotLoginException.class)
-    public ResponseEntity<String> likesNotLoginException(LikesNotLoginException e) {
+    public String likesNotLoginException(Model model) {
 
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(e.getMessage());
+        model.addAttribute("message", "로그인이 필요한 서비스입니다.");
+        model.addAttribute("url", "/");
+
+        return "message";
     }
 }

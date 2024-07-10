@@ -30,8 +30,14 @@ public class CustomErrorDecoder implements ErrorDecoder {
 
         switch (status) {
             case 400:
+                if(responseBody.contains("로그인한 회원만 좋아요를 할 수 있습니다.")) {
+                    return new LikesNotLoginException(
+                            ErrorStatus.toErrorStatus("로그인한 회원만 좋아요를 할 수 있습니다.", 401, LocalDateTime.now())
+                    );
+                }
                 log.error("클라이언트 요청에서 에러가 발생하였습니다. 상태 코드: 400, 응답 본문: {}", responseBody);
                 break;
+
             case 401:
                 if (responseBody.contains("refresh 토큰이 만료되었습니다.")) {
                     return new ExpireRefreshJwtException(

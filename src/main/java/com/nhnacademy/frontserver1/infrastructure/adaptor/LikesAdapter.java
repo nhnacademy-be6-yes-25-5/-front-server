@@ -7,11 +7,13 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @FeignClient(name = "likesAdapter", url = "${eureka.gateway}/books/likes")
 public interface LikesAdapter {
 
     @GetMapping("/users")
-    LikesResponse findLikesByUserId();
+    List<LikesResponse> findLikesByUserId();
 
     @GetMapping("/books/{bookId}")
     LikesResponse findLikesByBookId(@PathVariable("bookId") String bookId);

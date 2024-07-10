@@ -10,36 +10,8 @@
     <div class="section">
         <div class="container">
             <div class="row">
-                <div class="col-lg-2">
-                    <div class="sidebar">
-                        <div class="user-info">
-                            <div class="user-grade">
-                                <span>회원 등급:</span>
-                                <span class="grade">일반회원</span>
-                            </div>
-                            <div class="user-points">
-                                <span>잔여 포인트:</span>
-                                <span class="points">1,000P</span>
-                            </div>
-                        </div>
-                        <ul class="nav nav-tabs flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#">주문 내역</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">쿠폰함</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">정보 수정</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">나의 리뷰</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">배송지 정보</a>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="col-md-3">
+                    <div th:replace="~{fragments/user-sidebar :: user-sidebar}"></div>
                 </div>
                 <div class="col-lg-10">
                     <div class="container">
@@ -47,8 +19,8 @@
                             <div class="col-lg-12">
                                 <div class="book-review-wrapper">
                                     <div class="title">
-                                        <h3>내가 쓴 서평</h3>
-                                        <p>읽은 책에 대한 나의 서평 내역을 확인할 수 있습니다.</p>
+                                        <h3>내가 쓴 리뷰</h3>
+                                        <p>읽은 책에 대한 나의 리뷰 내역을 확인할 수 있습니다.</p>
                                     </div>
                                     <ul class="nav nav-tabs" id="bookReviewTab" role="tablist">
                                         <li class="nav-item">
@@ -61,23 +33,20 @@
                                                 <table class="table table-striped">
                                                     <thead>
                                                     <tr>
-                                                        <th>주문번호</th>
                                                         <th>작성일자</th>
                                                         <th>도서명</th>
-                                                        <th>서평 내용</th>
+                                                        <th>리뷰 내용</th>
                                                         <th>상태</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
                                                     <tr>
-                                                        <td>98765</td>
                                                         <td>2023-05-20</td>
                                                         <td>토지</td>
                                                         <td>역사적 맥락을 잘 보여주는 감동적인 책이었습니다.</td>
                                                         <td>승인</td>
                                                     </tr>
                                                     <tr>
-                                                        <td>54321</td>
                                                         <td>2023-04-01</td>
                                                         <td>82년생 김지영</td>
                                                         <td>현실적이고 공감되는 내용이었습니다.</td>

@@ -74,7 +74,7 @@
                                                     <thead>
                                                     <tr>
                                                         <th>이름</th>
-                                                        <th>주소</th>
+                                                        <th>주111소</th>
                                                         <th>우편번호</th>
                                                         <th>기본 배송지 여부</th>
 
@@ -87,11 +87,7 @@
                                                         <td th:text="${address.addressZip}"></td>
                                                         <td th:text="${address.addressBased ? '기본 배송지' : '기본 배송지 아님'}"></td>
                                                         <td>
-                                                            <button type="button" class="btn btn-primary btn-sm"
-                                                                    th:disabled="${address.addressBased}"
-                                                                    th:text="${address.addressBased ? '기본 배송지' : '기본 배송지로 설정'}"
-                                                                    th:onclick="${address.addressBased ? '' : 'setAsDefault(' + ${address.userAddressId} + ')'}">
-                                                            </button>
+
                                                         </td>
                                                     </tr>
                                                     </tbody>

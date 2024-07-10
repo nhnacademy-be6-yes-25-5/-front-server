@@ -39,6 +39,7 @@ public class BookController {
 
         List<Long> categoryIds = bookService.getCategoryIdsByBookId(bookId);
         List<BookDetailCouponResponseDTO> coupons = couponService.getCoupons(bookId, categoryIds);
+
         model.addAttribute("coupons", coupons);
         model.addAttribute("book", book);
         model.addAttribute("categories", rootCategories);

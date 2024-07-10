@@ -32,8 +32,10 @@ public class TokenExtractorAspect {
             }
             String refreshToken = headers.getFirst("Refresh-Token");
 
-            TokenContext.setAccessToken(accessToken);
-            TokenContext.setRefreshToken(refreshToken);
+            if (accessToken != null && refreshToken != null) {
+                TokenContext.setAccessToken(accessToken);
+                TokenContext.setRefreshToken(refreshToken);
+            }
         }
     }
 }

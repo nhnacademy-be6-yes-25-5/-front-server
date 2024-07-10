@@ -26,8 +26,7 @@
                             <th>ID</th>
                             <th>이름</th>
                             <th>카테고리</th>
-                            <th>할인 값</th>
-                            <th>비율</th>
+                            <th>할인 값/할인율</th>
                             <th>최소 주문 금액</th>
                             <th>최대 금액</th>
                             <th>할인 유형</th>
@@ -38,14 +37,14 @@
                             <td th:text="${coupon.categoryId}"></td>
                             <td th:text="${coupon.couponPolicy.couponPolicyName}"></td>
                             <td th:text="${coupon.categoryName}"></td>
-                            <td th:text="${coupon.couponPolicy.couponPolicyDiscountValue}"></td>
-                            <td th:text="${coupon.couponPolicy.couponPolicyRate}"></td>
-                            <td th:text="${coupon.couponPolicy.couponPolicyMinOrderAmount}"></td>
-                            <td th:text="${coupon.couponPolicy.couponPolicyMaxAmount}"></td>
+                            <td th:text="${coupon.couponPolicy.couponPolicyDiscountValue != null ? #numbers.formatDecimal(coupon.couponPolicy.couponPolicyDiscountValue, 0, 0) + '원' : #numbers.formatDecimal(coupon.couponPolicy.couponPolicyRate, 0, 0) + '%'}"></td>
+                            <td th:text="${#numbers.formatDecimal(coupon.couponPolicy.couponPolicyMinOrderAmount, 0, 0) + '원'}"></td>
+                            <td th:text="${#numbers.formatDecimal(coupon.couponPolicy.couponPolicyMaxAmount, 0, 0) + '원'}"></td>
                             <td th:text="${coupon.couponPolicy.couponPolicyDiscountType ? '비율' : '고정 금액'}"></td>
                         </tr>
                         </tbody>
                     </table>
+
 
                     <!-- Pagination -->
                     <nav>

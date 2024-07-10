@@ -6,6 +6,7 @@ import com.nhnacademy.frontserver1.application.service.ReviewService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.ReviewAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.review.CreateReviewRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.review.UpdateReviewRequest;
+import com.nhnacademy.frontserver1.presentation.dto.response.review.ReadMyReviewResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.review.ReadReviewRatingResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.review.ReadReviewResponse;
 import java.util.List;
@@ -48,6 +49,11 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void deleteReview(Long reviewId) {
         reviewAdaptor.deleteReviewByReviewId(reviewId);
+    }
+
+    @Override
+    public Page<ReadMyReviewResponse> getMyReviews(Pageable pageable) {
+        return reviewAdaptor.getMyReviewByPaging(pageable).getBody();
     }
 
     private <T> String getJsonFrom(T t) {

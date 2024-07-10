@@ -66,6 +66,17 @@ public class AuthContorller {
         return "redirect:/";
     }
 
+    private void addTokenCookie(HttpServletResponse response, String name, String token) {
+        if (token != null) {
+            Cookie cookie = new Cookie(name, token);
+            cookie.setHttpOnly(true);
+            //배포시에는 아래 주석 풀기
+            //cookie.setSecure(true);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+        }
+    }
+
     /**
      * 토큰 테스트 페이지를 반환합니다.
      * AuthServiceImpl의 testToken() 메서드를 호출하여 테스트 결과(customerId)를 가져오고,

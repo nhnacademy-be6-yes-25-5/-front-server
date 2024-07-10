@@ -41,6 +41,23 @@ public class TokenInterceptor implements HandlerInterceptor {
             addTokenCookie(response, "AccessToken", accessToken);
             addTokenCookie(response, "RefreshToken", refreshToken);
         }
+
+        if (modelAndView != null) {
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals("AccessToken")) {
+                        String accessCookie = cookie.getValue();
+                        modelAndView.addObject("AccessToken", accessCookie);
+                    }
+                    if (cookie.getName().equals("RefreshToken")) {
+                        String refreshCookie = cookie.getValue();
+                        modelAndView.addObject("RefreshToken", refreshCookie);
+                    }
+                }
+            }
+        }
+
     }
 
     @Override

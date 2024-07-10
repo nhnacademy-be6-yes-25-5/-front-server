@@ -33,7 +33,7 @@ public class BookController {
         BookResponse book = bookService.getBook(bookId);
         List<CategoryResponse> rootCategories = categoryService.findRootCategories();
 
-        if (likesAdapter.exist(bookId)) {
+        if (likesAdapter.exist(bookId).getBody()) {
             model.addAttribute("like", likesAdapter.findByBookIdAndUserId(bookId));
         }
 

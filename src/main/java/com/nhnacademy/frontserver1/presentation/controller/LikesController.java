@@ -35,7 +35,7 @@ public class LikesController {
     @GetMapping("/likesList")
     public String likesList(Model model) {
 
-        List<LikesResponse> likesList = likesAdapter.findLikesByUserId();
+        List<LikesResponse> likesList = likesAdapter.findLikesByUserId().getBody();
         List<BookResponse> bookList = new ArrayList<>();
 
         for(LikesResponse like : likesList) {

@@ -12,6 +12,9 @@ public class TokenContext {
     }
 
     public static String getAccessToken() {
+        if (accessToken.get() == null) {
+            return "";
+        }
         return accessToken.get();
     }
 
@@ -20,6 +23,9 @@ public class TokenContext {
     }
 
     public static String getRefreshToken() {
+        if (refreshToken.get() == null) {
+            return "";
+        }
         return refreshToken.get();
     }
 

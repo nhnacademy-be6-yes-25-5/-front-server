@@ -38,6 +38,12 @@
       amount: amount,
     };
 
+    if (amount === "0") {
+      console.log("Amount is 0, skipping confirmation and checking order status directly.");
+      checkOrderStatus(orderId);
+      return;
+    }
+
     try {
       console.log("Sending confirmation request:", requestData);
       const response = await fetch("/payments/confirm", {

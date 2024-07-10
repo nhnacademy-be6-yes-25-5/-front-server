@@ -30,12 +30,12 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public Page<ReadReviewResponse> getReviews(Long bookId, Pageable pageable) {
-        return reviewAdaptor.getReviewByPaging(bookId, pageable);
+        return reviewAdaptor.getReviewByPaging(bookId, pageable).getBody();
     }
 
     @Override
     public List<ReadReviewRatingResponse> getReviewRatings(Long bookId) {
-        return reviewAdaptor.getReviewRatings(bookId);
+        return reviewAdaptor.getReviewRatings(bookId).getBody();
     }
 
     @Override

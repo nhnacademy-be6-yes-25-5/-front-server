@@ -45,7 +45,7 @@ public interface UserAdaptor {
     ReadPurePriceResponse getPurePrice();
 
     @GetMapping("/grade")
-    ReadUserInfoResponse getUserPointsAndGrade();
+    ResponseEntity<ReadUserInfoResponse> getUserPointsAndGrade();
 
     @GetMapping("/grades")
     UserGradeResponse getUserGrade();

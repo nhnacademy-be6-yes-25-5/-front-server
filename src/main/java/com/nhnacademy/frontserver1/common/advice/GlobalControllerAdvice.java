@@ -34,6 +34,12 @@ public class GlobalControllerAdvice {
         return new ModelAndView(redirectView);
     }
 
+    @ExceptionHandler(Exception.class)
+    public String handleException(Exception e, Model model) {
+        model.addAttribute("cause", e.getMessage());
+        return "error/auth-fail";
+    }
+
     @ExceptionHandler(OrderWaitingException.class)
     public ResponseEntity<String> handleOrderNotFoundException(OrderWaitingException e) {
         log.warn("OrderWaitingException 발생: ", e);
@@ -44,7 +50,7 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(DormantAccountException.class)
     public String handleDormantAccountException(DormantAccountException e) {
         log.info("유저가 휴면 페이지로 리다이렉트됩니다.");
-        
+
         return "redirect:/dormant";
     }
 

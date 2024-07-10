@@ -21,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**");
 
         registry.addInterceptor(userInfoInterceptor)
-                .addPathPatterns("/moypage/**")
+                .addPathPatterns("/mypage/**")
                 .addPathPatterns("/reviews/books/**");
     }
 }

@@ -27,10 +27,15 @@ public class TokenExtractorAspect {
             // 토큰 갱신시의 응답 헤더에서 토큰 가져오기
             HttpHeaders headers = responseEntity.getHeaders();
             String accessToken = headers.getFirst(HttpHeaders.AUTHORIZATION);
+            if (accessToken != null) {
+                accessToken = accessToken.substring(7);
+            }
             String refreshToken = headers.getFirst("Refresh-Token");
 
-            TokenContext.setAccessToken(accessToken);
-            TokenContext.setRefreshToken(refreshToken);
+            if (accessToken != null && refreshToken != null) {
+                TokenContext.setAccessToken(accessToken);
+                TokenContext.setRefreshToken(refreshToken);
+            }
         }
     }
 }

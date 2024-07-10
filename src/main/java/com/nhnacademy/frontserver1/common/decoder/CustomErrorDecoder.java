@@ -1,10 +1,6 @@
 package com.nhnacademy.frontserver1.common.decoder;
 
-import com.nhnacademy.frontserver1.common.exception.DormantAccountException;
-import com.nhnacademy.frontserver1.common.exception.FeignClientException;
-import com.nhnacademy.frontserver1.common.exception.RefreshTokenFailedException;
-import com.nhnacademy.frontserver1.common.exception.ExpireRefreshJwtException;
-import com.nhnacademy.frontserver1.common.exception.OrderWaitingException;
+import com.nhnacademy.frontserver1.common.exception.*;
 import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
 import feign.Response;
 import feign.codec.ErrorDecoder;
@@ -64,6 +60,11 @@ public class CustomErrorDecoder implements ErrorDecoder {
                 break;
             case 500:
                 log.error("서버에서 에러가 발생하였습니다. 상태 코드: 500, 응답 본문: {}", responseBody);
+                if (responseBody.contains("SERVER")) {
+                    return new ConnectionException(
+                            ErrorStatus.toErrorStatus("서버 연결 실패", 500, LocalDateTime.now())
+                    );
+                }
                 break;
             default:
                 log.error("알 수 없는 에러가 발생하였습니다. 상태 코드: {}, 응답 본문: {}", status, responseBody);

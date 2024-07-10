@@ -56,4 +56,13 @@ public class GlobalControllerAdvice {
 
         return "redirect:/dormant";
     }
+
+    @ExceptionHandler(ConnectionException.class)
+    public ModelAndView handleCustomFeignException(ConnectionException e) {
+        log.error("ConnectionException 발생: ", e);
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("errorMessage", "Service is currently unavailable. Please try again later.");
+        mav.setViewName("error/server-fail");
+        return mav;
+    }
 }

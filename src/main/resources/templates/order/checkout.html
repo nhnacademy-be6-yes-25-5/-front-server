@@ -19,6 +19,22 @@
     .error {
       border: 2px solid red;
     }
+
+    .payment-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .payment-option {
+      display: flex;
+      align-items: center;
+    }
+
+    .radio-button {
+      margin-right: 5px;
+    }
+
   </style>
 </head>
 
@@ -56,7 +72,8 @@
                         <label>주문자명</label>
                         <div class="row">
                           <div class="col-md-6 form-input form">
-                            <input type="text" name="orderName" id="orderName" placeholder="주문자명" th:value="${orderUserName}" required>
+                            <input type="text" name="orderName" id="orderName" placeholder="주문자명"
+                                   th:value="${orderUserName}" required>
                           </div>
                         </div>
                       </div>
@@ -65,7 +82,8 @@
                       <div class="single-form form-default">
                         <label>주문자 이메일</label>
                         <div class="form-input form">
-                          <input type="text" name="orderEmail" id="orderEmail" placeholder="이메일" th:value="${orderUserEmail}" required>
+                          <input type="text" name="orderEmail" id="orderEmail" placeholder="이메일"
+                                 th:value="${orderUserEmail}" required>
                         </div>
                       </div>
                     </div>
@@ -73,13 +91,17 @@
                       <div class="single-form form-default">
                         <label>주문자 핸드폰 번호</label>
                         <div class="form-input form">
-                          <input type="text" id="orderPhoneNumber" name="orderPhoneNumber" placeholder="주문자 핸드폰 번호" th:value="${orderUserPhoneNumber}" required>
+                          <input type="text" id="orderPhoneNumber" name="orderPhoneNumber"
+                                 placeholder="주문자 핸드폰 번호" th:value="${orderUserPhoneNumber}"
+                                 required>
                         </div>
                       </div>
                     </div>
                     <div class="col-md-12">
                       <div class="single-form button">
-                        <button class="btn" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">다음 단계</button>
+                        <button class="btn" data-bs-toggle="collapse" data-bs-target="#collapseFour"
+                                aria-expanded="false" aria-controls="collapseFour">다음 단계
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -87,8 +109,10 @@
               </section>
             </li>
             <li>
-              <h6 class="title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">배송정보</h6>
-              <section class="checkout-steps-form-content collapse" id="collapseFour" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+              <h6 class="title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFour"
+                  aria-expanded="false" aria-controls="collapseFour">배송정보</h6>
+              <section class="checkout-steps-form-content collapse" id="collapseFour"
+                       aria-labelledby="headingFour" data-bs-parent="#accordionExample">
                 <div class="col-md-12">
                   <div class="single-checkbox checkbox-style-3">
                     <input type="checkbox" id="checkbox-3" onclick="copyOrderInfo()">
@@ -97,7 +121,9 @@
                   </div>
                 </div>
                 <div class="col-md-12">
-                  <button class="btn btn-secondary" onclick="openAddressPopup()" th:disabled="${userInfo.role == 'NONE_MEMBER'}">배송지 목록 보기</button>
+                  <button class="btn btn-secondary" onclick="openAddressPopup()"
+                          th:disabled="${userInfo.role == 'NONE_MEMBER'}">배송지 목록 보기
+                  </button>
                 </div>
                 <div class="row">
                   <div class="col-md-12">
@@ -105,7 +131,8 @@
                       <label>배송받는 사람</label>
                       <div class="row">
                         <div class="col-md-6 form-input form">
-                          <input type="text" name="receiveName" id="receiveName" placeholder="배송받는 사람" required>
+                          <input type="text" name="receiveName" id="receiveName"
+                                 placeholder="배송받는 사람" required>
                         </div>
                       </div>
                     </div>
@@ -114,7 +141,8 @@
                     <div class="single-form form-default">
                       <label>배송받는 사람 이메일</label>
                       <div class="form-input form">
-                        <input type="text" name="receiveEmail" id="receiveEmail" placeholder="이메일" required>
+                        <input type="text" name="receiveEmail" id="receiveEmail" placeholder="이메일"
+                               required>
                       </div>
                     </div>
                   </div>
@@ -122,7 +150,8 @@
                     <div class="single-form form-default">
                       <label>배송받는 사람 핸드폰 번호</label>
                       <div class="form-input form">
-                        <input type="text" name="receivePhoneNumber" id="receivePhoneNumber" placeholder="핸드폰 번호" required>
+                        <input type="text" name="receivePhoneNumber" id="receivePhoneNumber"
+                               placeholder="핸드폰 번호" required>
                       </div>
                     </div>
                   </div>
@@ -142,9 +171,13 @@
                     <div class="single-form form-default">
                       <label>포장 타입</label>
                       <div class="form-input form">
-                        <select id="takeoutType" name="takeoutType" onchange="updateTotalPrice()" required>
+                        <select id="takeoutType" name="takeoutType" onchange="updateTotalPrice()"
+                                required>
                           <option value="" data-price="0">포장 타입을 선택하세요</option>
-                          <option th:each="takeout : ${takeouts}" th:value="${takeout.takeoutType}" th:data-price="${takeout.takeoutPrice}" th:data-description="${takeout.takeoutDescription}" th:text="${takeout.takeoutDescription + ' - ' + takeout.takeoutPrice + '원'}"></option>
+                          <option th:each="takeout : ${takeouts}" th:value="${takeout.takeoutType}"
+                                  th:data-price="${takeout.takeoutPrice}"
+                                  th:data-description="${takeout.takeoutDescription}"
+                                  th:text="${takeout.takeoutDescription + ' - ' + takeout.takeoutPrice + '원'}"></option>
                         </select>
                       </div>
                     </div>
@@ -158,52 +191,93 @@
                     </div>
                   </div>
 
-                  <form id="orderForm" action="/orders" method="POST">
-                    <input type="hidden" name="userId" id="userId" th:value="${userInfo.userId}">
-                    <input type="hidden" name="role" id="role" th:value="${userInfo.role}">
-                    <div th:each="cartBook, index : ${cartBooks}">
-                      <input type="hidden" name="productIds" th:value="${cartBook.bookId}">
-                      <input type="hidden" name="cartBookIds" th:value="${cartBook.cartBookId}">
-                      <input type="hidden" name="quantities" th:value="${cartBook.cartBookQuantity}">
-                      <input type="hidden" name="prices" th:value="${cartBook.bookPrice}">
-                    </div>
-                    <input type="hidden" name="shippingFee" id="hiddenShippingFee">
-                    <input type="hidden" name="points" id="hiddenPointsUsed" value="0">
-                    <input type="hidden" name="takeoutPrice" id="hiddenTakeoutPrice">
-                    <input type="hidden" name="orderId" id="hiddenOrderId">
-                    <input type="hidden" name="discountPrice" id="hiddenDiscountPrice">
-                    <input type="hidden" name="addressRaw" id="hiddenAddressRaw">
-                    <input type="hidden" name="addressDetail" id="hiddenAddressDetail">
-                    <input type="hidden" name="reference" id="hiddenReference">
-                    <input type="hidden" name="zipcode" id="hiddenZipcode">
-                    <input type="hidden" name="takeoutType" id="hiddenTakeoutType">
-                    <input type="hidden" name="deliveryDate" id="hiddenDeliveryDate">
-                    <input type="hidden" name="orderName" id="hiddenOrderName">
-                    <input type="hidden" name="orderEmail" id="hiddenOrderEmail">
-                    <input type="hidden" name="orderPhoneNumber" id="hiddenOrderPhoneNumber">
-                    <input type="hidden" name="receiveName" id="hiddenReceiveOrderName">
-                    <input type="hidden" name="receiveEmail" id="hiddenReceiveOrderEmail">
-                    <input type="hidden" name="receivePhoneNumber" id="hiddenReceiveOrderPhoneNumber">
-
-                    <input type="hidden" name="orderTotalAmount" id="hiddenTotalPrice">
-
-                    <div class="col-md-12">
-                      <div class="checkout-payment-option">
-                        <h6 class="heading-6 font-weight-400 payment-title">배송비 정책</h6>
-                        <div class="payment-option-wrapper">
-                          <div class="single-payment-option">
-                            <input type="radio" name="shipping" th:id="'shipping-' + ${shippingPolicy.shippingPolicyId}" th:value="${shippingPolicy.shippingPolicyFee}" checked readonly>
-                            <label th:for="'shipping-' + ${shippingPolicy.shippingPolicyId}">
-                              <img src="https://via.placeholder.com/60x32" alt="Shipping">
-                              <span class="price" th:text="${'배송비 ' + shippingPolicy.shippingPolicyFee + '원'}"></span>
-                              <p class="min-amount" th:text="'최소 주문 금액 ' + ${shippingPolicy.shippingPolicyMinAmount} + '원'"></p>
-                            </label>
-                          </div>
+                  <div class="col-md-12">
+                    <div class="checkout-payment-option">
+                      <h6 class="heading-6 font-weight-400 payment-title">배송비 정책</h6>
+                      <div class="payment-option-wrapper">
+                        <div class="single-payment-option">
+                          <input type="radio" name="shipping"
+                                 th:id="'shipping-' + ${shippingPolicy.shippingPolicyId}"
+                                 th:value="${shippingPolicy.shippingPolicyFee}" checked readonly>
+                          <label th:for="'shipping-' + ${shippingPolicy.shippingPolicyId}">
+                            <span class="price"
+                                  th:text="${'배송비 ' + shippingPolicy.shippingPolicyFee + '원'}"></span>
+                            <p class="min-amount"
+                               th:text="'최소 주문 금액 ' + ${shippingPolicy.shippingPolicyMinAmount} + '원'"></p>
+                          </label>
                         </div>
                       </div>
                     </div>
 
-                  </form>
+                    <div class="col-md-12">
+                      <div class="single-form button">
+                        <button class="btn" data-bs-toggle="collapse" data-bs-target="#collapseFive"
+                                aria-expanded="false" aria-controls="collapseFive">다음 단계
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </li>
+
+            <!-- 결제 정보 섹션 추가 -->
+            <li>
+              <h6 class="title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFive"
+                  aria-expanded="false" aria-controls="collapseFive">결제 정보</h6>
+              <section class="checkout-steps-form-content collapse" id="collapseFive"
+                       aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="single-form form-default">
+                      <label>결제 수단 선택</label>
+                      <div class="form-input form">
+                        <select id="paymentMethod" name="paymentMethod" required>
+                          <option value="toss">토스</option>
+                          <option value="general">일반결제</option>
+                          <option value="kakao">카카오페이</option>
+                          <option value="naver">네이버페이</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="cardInfoFields" style="display: none;">
+                  <div class="col-12">
+                    <div class="checkout-payment-form">
+                      <div class="single-form form-default">
+                        <label>카드 소유자 이름</label>
+                        <div class="form-input form">
+                          <input type="text" id="cardHolderName" placeholder="Cardholder Name">
+                        </div>
+                      </div>
+                      <div class="single-form form-default">
+                        <label>카드 번호</label>
+                        <div class="form-input form">
+                          <input id="cardNumber" type="text" placeholder="0000 0000 0000 0000">
+                        </div>
+                      </div>
+                      <div class="payment-card-info">
+                        <div class="single-form form-default mm-yy">
+                          <label>유효기간</label>
+                          <div class="expiration d-flex">
+                            <div class="form-input form">
+                              <input type="text" id="cardExpiryMM" placeholder="MM">
+                            </div>
+                            <div class="form-input form">
+                              <input type="text" id="cardExpiryYY" placeholder="YYYY">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="single-form form-default">
+                          <label>CVC/CVV <span><i class="mdi mdi-alert-circle"></i></span></label>
+                          <div class="form-input form">
+                            <input type="text" id="cardCVC" placeholder="***">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </section>
             </li>
@@ -212,11 +286,45 @@
       </div>
       <div class="col-lg-4">
         <div class="checkout-sidebar">
-          <button onclick="openCouponPopup()" th:disabled="${userInfo.role == 'NONE_MEMBER'}">쿠폰 목록 보기</button>
-          <input type="text" id="selectedCoupon" readonly th:disabled="${userInfo.role == 'NONE_MEMBER'}">
-          <input type="hidden" id="couponDiscount" value="0" th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.discountAmount : 0}">
+          <button onclick="openCouponPopup()" th:disabled="${userInfo.role == 'NONE_MEMBER'}">쿠폰 목록
+            보기
+          </button>
+          <input type="text" id="selectedCoupon" readonly
+                 th:disabled="${userInfo.role == 'NONE_MEMBER'}">
+          <input type="hidden" id="couponDiscount" value="0"
+                 th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.discountAmount : 0}">
           <input type="hidden" id="couponDiscountRate" value="0">
-          <input type="hidden" id="couponId" th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.couponId : ''}">
+          <input type="hidden" id="couponId"
+                 th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.couponId : ''}">
+          <input type="hidden" name="userId" id="userId" th:value="${userInfo.userId}">
+          <input type="hidden" name="role" id="role" th:value="${userInfo.role}">
+          <div th:each="cartBook, index : ${cartBooks}">
+            <input type="hidden" name="productIds" th:value="${cartBook.bookId}">
+            <input type="hidden" name="cartBookIds" th:value="${cartBook.cartBookId}">
+            <input type="hidden" name="quantities"
+                   th:value="${cartBook.cartBookQuantity}">
+            <input type="hidden" name="prices" th:value="${cartBook.bookPrice}">
+          </div>
+          <input type="hidden" name="shippingFee" id="hiddenShippingFee">
+          <input type="hidden" name="points" id="hiddenPointsUsed" value="0">
+          <input type="hidden" name="takeoutPrice" id="hiddenTakeoutPrice">
+          <input type="hidden" name="orderId" id="hiddenOrderId">
+          <input type="hidden" name="discountPrice" id="hiddenDiscountPrice">
+          <input type="hidden" name="addressRaw" id="hiddenAddressRaw">
+          <input type="hidden" name="addressDetail" id="hiddenAddressDetail">
+          <input type="hidden" name="reference" id="hiddenReference">
+          <input type="hidden" name="zipcode" id="hiddenZipcode">
+          <input type="hidden" name="takeoutType" id="hiddenTakeoutType">
+          <input type="hidden" name="deliveryDate" id="hiddenDeliveryDate">
+          <input type="hidden" name="orderName" id="hiddenOrderName">
+          <input type="hidden" name="orderEmail" id="hiddenOrderEmail">
+          <input type="hidden" name="orderPhoneNumber" id="hiddenOrderPhoneNumber">
+          <input type="hidden" name="receiveName" id="hiddenReceiveOrderName">
+          <input type="hidden" name="receiveEmail" id="hiddenReceiveOrderEmail">
+          <input type="hidden" name="receivePhoneNumber"
+                 id="hiddenReceiveOrderPhoneNumber">
+
+          <input type="hidden" name="orderTotalAmount" id="hiddenTotalPrice">
           <div class="checkout-sidebar-price-table mt-30">
             <h5 class="title">Pricing Table</h5>
             <div class="sub-total-price">
@@ -243,15 +351,19 @@
               </div>
               <div class="total-price points">
                 <p class="value">포인트 사용:</p>
-                <input type="number" id="points" value="0" min="0" th:max="${points}" th:disabled="${userInfo.role == 'NONE_MEMBER'}" oninput="updateTotalPrice()">
+                <input type="number" id="points" value="0" min="0" th:max="${points}"
+                       th:disabled="${userInfo.role == 'NONE_MEMBER'}" oninput="updateTotalPrice()">
                 <p class="price" id="pointsDiscount">0원</p>
               </div>
               <div class="additional-info mt-30" th:if="${freeShippingAmount != null}">
-                <p th:if="${freeShippingAmount > 0}" th:text="'무료 배송까지 ' + ${freeShippingAmount} + '원'"></p>
+                <p th:if="${freeShippingAmount > 0}"
+                   th:text="'무료 배송까지 ' + ${freeShippingAmount} + '원'"></p>
                 <p th:if="${freeShippingAmount <= 0}" th:text="'무료 배송 혜택 적용중!'"></p>
                 <input type="hidden" id="freeShippingAmount" th:value="${freeShippingAmount}"/>
                 <div class="progress">
-                  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" id="progress-bar" th:aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                  <div class="progress-bar progress-bar-striped progress-bar-animated"
+                       role="progressbar" id="progress-bar" th:aria-valuenow="0" aria-valuemin="0"
+                       aria-valuemax="100" style="width: 0%"></div>
                 </div>
               </div>
             </div>
@@ -262,7 +374,9 @@
               </div>
             </div>
             <div class="price-table-btn button">
-              <button type="button" class="btn btn-alt" onclick="if (validateForm()) { submitOrder(); }">Checkout</button>
+              <button type="button" class="btn btn-alt"
+                      onclick="if (validateForm()) { submitOrder(); }">Checkout
+              </button>
             </div>
           </div>
 
@@ -290,12 +404,19 @@
 <script src="/js/tiny-slider.js"></script>
 <script src="/js/glightbox.min.js"></script>
 <script src="/js/main.js"></script>
+<script src="/js/paymentFactory.js"></script>
+<script src="/js/PaymentService.js"></script>
+<script src="/js/TossPaymentService.js"></script>
+<script src="/js/NaverPaymentService.js"></script>
+<script src="/js/KakaoPaymentService.js"></script>
+<script src="/js/GeneralPaymentService.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
   function updateTotalPrice() {
     const totalAmountElement = document.getElementById('totalAmount');
     const totalAmount = parseInt(totalAmountElement.innerText.replace('원', '')) || 0;
-    const shippingFee = parseInt(document.getElementById('shippingFee').innerText.replace('원', '')) || 0;
+    const shippingFee = parseInt(document.getElementById('shippingFee').innerText.replace('원', ''))
+        || 0;
     const discountAmountElement = document.getElementById('couponDiscount');
     const discountRateElement = document.getElementById('couponDiscountRate');
     const discountAmount = parseInt(discountAmountElement.value) || 0;
@@ -366,7 +487,8 @@
     if (checkbox.checked) {
       document.getElementById('receiveName').value = document.getElementById('orderName').value;
       document.getElementById('receiveEmail').value = document.getElementById('orderEmail').value;
-      document.getElementById('receivePhoneNumber').value = document.getElementById('orderPhoneNumber').value;
+      document.getElementById('receivePhoneNumber').value = document.getElementById(
+          'orderPhoneNumber').value;
     } else {
       document.getElementById('receiveName').value = '';
       document.getElementById('receiveEmail').value = '';
@@ -381,6 +503,15 @@
   }
 
   function submitOrder() {
+    const ALLOWED_PAYMENT_METHODS = ['toss'];
+
+    const paymentMethod = document.getElementById('paymentMethod').value;
+    console.log(paymentMethod);
+    if (!ALLOWED_PAYMENT_METHODS.includes(paymentMethod)) {
+      alert('현재 개발중인 결제 수단입니다. 다른 결제수단을 사용해주세요.');
+      return;
+    }
+
     const orderId = `order-${generateUUID()}`;
     const deliveryDateValue = document.getElementById('deliveryDate').value;
     const totalPrice = document.getElementById('totalPriceValue').textContent;
@@ -390,7 +521,6 @@
       return value ? value : "0";
     };
 
-    const userId = document.getElementById('userId').value;
     const totalPriceValue = totalPrice.replace('원', '').trim();
     const takeoutPrice = document.getElementById('takeoutPrice').innerText.replace('원', '');
     const shippingFee = document.getElementById('shippingFee').innerText.replace('원', '');
@@ -418,70 +548,93 @@
         input => input.value);
     const couponId = document.getElementById('couponId').value;
 
+    const orderData = {
+      orderId: orderId,
+      deliveryDate: deliveryDateValue,
+      orderTotalAmount: totalPriceValue,
+      takeoutPrice: takeoutPrice,
+      shippingFee: shippingFee,
+      discountPrice: couponDiscount,
+      orderName: orderName,
+      orderEmail: orderEmail,
+      orderPhoneNumber: orderPhoneNumber,
+      receiveName: receiveName,
+      receiveEmail: receiveEmail,
+      receivePhoneNumber: receivePhoneNumber,
+      addressRaw: addressRaw,
+      reference: reference,
+      addressDetail: addressDetail,
+      zipcode: postcode,
+      takeoutType: takeoutType,
+      points: points,
+      productIds: productIds,
+      quantities: quantities,
+      prices: prices,
+      cartBookIds: cartBookIds,
+      role: role,
+      couponId: couponId
+    };
+
     fetch('/orders', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        userId : userId,
-        orderId: orderId,
-        deliveryDate: deliveryDateValue,
-        orderTotalAmount: totalPriceValue,
-        takeoutPrice: takeoutPrice,
-        shippingFee: shippingFee,
-        discountPrice: couponDiscount,
-        orderName: orderName,
-        orderEmail: orderEmail,
-        orderPhoneNumber: orderPhoneNumber,
-        receiveName: receiveName,
-        receiveEmail: receiveEmail,
-        receivePhoneNumber: receivePhoneNumber,
-        addressRaw: addressRaw,
-        reference: reference,
-        addressDetail: addressDetail,
-        zipcode: postcode,
-        takeoutType: takeoutType,
-        points: points,
-        productIds: productIds,
-        quantities: quantities,
-        prices: prices,
-        cartBookIds: cartBookIds,
-        role : role,
-        couponId : couponId
-      }),
+      body: JSON.stringify(orderData),
     })
     .then(response => response.json())
     .then(data => {
       const {orderId, totalAmount} = data;
-      startPaymentProcess(orderId, totalAmount);
+      const paymentService = createPaymentService(paymentMethod);
+      if (parseInt(totalAmount, 10) === 0) {
+        completeZeroAmountPayment(orderData);
+      } else {
+        paymentService.requestPayment({orderId, totalAmount})
+        .catch(error => {
+          console.error('결제 요청 중 오류 발생:', error);
+          window.location.href = '/payments/fail';
+        });
+      }
     })
     .catch(error => {
-      console.error('주문 생성 및 결제 요청 중 오류 발생:', error);
-      window.location.href='/orders/fail'
+      console.error('주문 생성 중 오류 발생:', error);
+      window.location.href = '/orders/fail';
     });
   }
 
-  function startPaymentProcess(orderId, totalAmount) {
-    const customerKey = generateUUID();
+  function completeZeroAmountPayment(orderData) {
+    console.log("completeZeroAmountPayment 호출됨");
+    const paymentKey = generateUUID();
 
-    const clientKey = 'test_ck_5OWRapdA8dJYOKZkAR06Vo1zEqZK';
-    const tossPayments = TossPayments(clientKey);
+    const paymentData = {
+      paymentKey: paymentKey,
+      orderId: orderData.orderId,
+      amount: 0,
+    };
 
-    tossPayments.requestPayment('카드', {
-      amount: totalAmount,
-      orderId: orderId,
-      orderName: orderId,
-      customerName: customerKey,
-      successUrl: window.location.origin + "/payments/success",
-      failUrl: window.location.origin + "/payments/fail",
+    fetch('/payments/confirm/zero', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(paymentData),
     })
-    .catch(function (error) {
-      if (error.code === 'USER_CANCEL') {
-        console.error('사용자가 결제를 취소하였습니다.');
-      } else if (error.code === 'INVALID_CARD_COMPANY') {
-        console.error('유효하지 않은 카드 회사입니다.');
+    .then(response => {
+      if (response.ok) {
+        const urlParams = new URLSearchParams({
+          paymentKey: paymentKey,
+          orderId: orderData.orderId,
+          amount: "0",
+        });
+        window.location.href = `/payments/success?${urlParams.toString()}`;
+      } else {
+        console.log("결제 완료 처리 실패");
+        window.location.href = '/payments/fail';
       }
+    })
+    .catch(error => {
+      console.error('결제 완료 처리 중 오류 발생:', error);
+      window.location.href = '/payments/fail';
     });
   }
 

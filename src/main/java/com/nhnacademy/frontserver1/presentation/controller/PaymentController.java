@@ -46,11 +46,7 @@ public class PaymentController {
                 ErrorStatus.toErrorStatus("결제 정보가 주문 정보와 일치하지 않습니다.", 400, LocalDateTime.now()));
         }
 
-        if (paymentService.createPayment(request, bookIds, quantities).status() != 200) {
-            log.error("결제에 실패했습니다.");
-            throw new ApplicationException(
-                ErrorStatus.toErrorStatus("결제에 실패했습니다.", 500, LocalDateTime.now()));
-        }
+        paymentService.createPayment(request, bookIds, quantities);
 
         session.removeAttribute("orderId");
         session.removeAttribute("totalAmount");
@@ -58,6 +54,27 @@ public class PaymentController {
         session.removeAttribute("quantities");
 
         return ResponseEntity.ok(SuccessPaymentResponse.from(orderId));
+    }
+
+    @PostMapping("/confirm/zero")
+    public ResponseEntity<?> confirmZeroAmount(@RequestBody CreatePaymentRequest request, HttpSession session) {
+        String orderId = (String) session.getAttribute("orderId");
+        Integer totalAmount = (Integer) session.getAttribute("totalAmount");
+        List<Long> bookIds = getLongListFromSession(session.getAttribute("bookIds"));
+        List<Integer> quantities = getIntegerListFromSession(session.getAttribute("quantities"));
+
+        if (!Objects.equals(request.orderId(), orderId) && !Objects.equals(request.amount(), totalAmount)) {
+            log.error("결제 정보와 주문 정보가 일치하지 않습니다.");
+            throw new ApplicationException(
+                ErrorStatus.toErrorStatus("결제 정보가 주문 정보와 일치하지 않습니다.", 400, LocalDateTime.now()));
+        }
+
+        session.removeAttribute("orderId");
+        session.removeAttribute("totalAmount");
+        session.removeAttribute("bookIds");
+        session.removeAttribute("quantities");
+
+        return ResponseEntity.ok(paymentService.createPaymentByZeroAmount(request, totalAmount, bookIds, quantities));
     }
 
     @GetMapping("/success")

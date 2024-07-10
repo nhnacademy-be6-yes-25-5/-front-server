@@ -5,8 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-public record CreateOrderRequest(Long userId,
-                                 String orderId,
+public record CreateOrderRequest(String orderId,
                                  BigDecimal orderTotalAmount,
                                  TakeoutType takeoutType,
                                  String addressRaw,

@@ -5,7 +5,7 @@ import com.nhnacademy.frontserver1.common.provider.CookieTokenProvider;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.List;
+import com.nhnacademy.frontserver1.common.context.TokenContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -37,29 +37,26 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
 
         if (path.equals("/") || path.startsWith("/auth/login") || path.startsWith("/orders/none") || path.startsWith("/category") || path.startsWith("/search")
           || path.startsWith("/sign-up") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/check-email")
-                || path.startsWith("/auth/dormant") || path.startsWith("/detail") || path.startsWith("/users/sign-up") || path.equals("/callback")) {
+                || path.startsWith("/auth/dormant")|| path.startsWith("/users/sign-up") || path.equals("/callback") || path.startsWith("/users/find/password")) {
 
             return;
         }
 
-        List<String> tokens = cookieTokenProvider.getTokenFromCookie(request);
-        boolean allTokensEmpty = tokens == null
-                || tokens.isEmpty()
-                || tokens.stream().allMatch(String::isEmpty);
+        String accessToken = TokenContext.getAccessToken();
+        String refreshToken = TokenContext.getRefreshToken();
 
+        boolean isTokensEmpty = accessToken == null || refreshToken == null;
 
-        if (allTokensEmpty && (path.matches(".*/orders/.*/delivery.*") || path.startsWith("/users/cart-books")
+        if (isTokensEmpty && (path.matches(".*/orders/.*/delivery.*") || path.startsWith("/users/cart-books")
                 || path.startsWith("/detail") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/reviews/books"))) {
             return;
         }
 
-        if (allTokensEmpty && (path.startsWith("/users/cart-books") || request.getMethod().equalsIgnoreCase("POST"))) {
+        if (isTokensEmpty && (path.startsWith("/users/cart-books") || request.getMethod().equalsIgnoreCase("POST"))) {
             return;
         }
 
-        if (!allTokensEmpty) {
-            String accessToken = tokens.get(0);
-            String refreshToken = tokens.get(1);
+        if (!isTokensEmpty) {
             if (!(accessToken.isBlank() || refreshToken.isBlank())) {
                 template.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
                 log.debug("Adding Authorization header: Bearer {}", accessToken);
@@ -71,4 +68,5 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
             throw new TokenCookieMissingException();
         }
     }
+
 }

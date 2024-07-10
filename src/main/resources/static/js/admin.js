@@ -33,16 +33,4 @@ document.getElementById('policyLink').addEventListener('click', function(event) 
             console.log(this.getAttribute("ara-expanded") + " 열렸ㄴ다.")
         }
     }
-
-    // 페이지 콘텐츠를 비동기적으로 로드
-    fetch('/coupons/policy?page=0&size=10')
-        .then(response => response.text())
-        .then(html => {
-            const contentContainer = document.querySelector('#main-content');
-            if (contentContainer) {
-                contentContainer.innerHTML = html;
-            }
-            history.pushState(null, '', '/coupons/policy?page=0&size=10');
-        })
-        .catch(error => console.error('Error:', error));
 });

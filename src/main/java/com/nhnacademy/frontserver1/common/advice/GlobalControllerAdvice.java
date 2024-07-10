@@ -1,10 +1,6 @@
 package com.nhnacademy.frontserver1.common.advice;
 
-import com.nhnacademy.frontserver1.common.exception.DormantAccountException;
-import com.nhnacademy.frontserver1.common.exception.FeignClientException;
-import com.nhnacademy.frontserver1.common.exception.OrderWaitingException;
-import com.nhnacademy.frontserver1.common.exception.RefreshTokenFailedException;
-import com.nhnacademy.frontserver1.common.exception.TokenCookieMissingException;
+import com.nhnacademy.frontserver1.common.exception.*;
 import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 @ControllerAdvice
@@ -38,6 +35,12 @@ public class GlobalControllerAdvice {
         return new ModelAndView(redirectView);
     }
 
+    @ExceptionHandler(Exception.class)
+    public String handleException(Exception e, Model model) {
+        model.addAttribute("cause", e.getMessage());
+        return "error/auth-fail";
+    }
+
     @ExceptionHandler(OrderWaitingException.class)
     public ResponseEntity<String> handleOrderNotFoundException(OrderWaitingException e) {
         log.warn("OrderWaitingException 발생: ", e);
@@ -48,7 +51,16 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(DormantAccountException.class)
     public String handleDormantAccountException(DormantAccountException e) {
         log.info("유저가 휴면 페이지로 리다이렉트됩니다.");
-        
+
         return "redirect:/dormant";
+    }
+
+    @ExceptionHandler(ConnectionException.class)
+    public ModelAndView handleCustomFeignException(ConnectionException e) {
+        log.error("ConnectionException 발생: ", e);
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("errorMessage", "Service is currently unavailable. Please try again later.");
+        mav.setViewName("error/server-fail");
+        return mav;
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.nhnacademy.frontserver1.application.service.impl.PaycoServiceImpl;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import com.nhnacademy.frontserver1.common.context.TokenContext;
 import com.nhnacademy.frontserver1.presentation.dto.response.auth.CreateAccessTokenResponse;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.CreateUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.auth.CreatePaycoInfoResponse.Member;
@@ -106,6 +107,8 @@ public class PaycoController {
 
         deleteCookie(response, "AccessToken");
         deleteCookie(response, "RefreshToken");
+
+        TokenContext.clear();
 
         request.getSession().invalidate();
 

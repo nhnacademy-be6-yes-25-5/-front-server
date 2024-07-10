@@ -25,25 +25,25 @@
                         <tr>
                             <th>ID</th>
                             <th>이름</th>
-                            <th>할인 값</th>
-                            <th>비율</th>
+                            <th>할인 값/할인율</th>
                             <th>최소 주문 금액</th>
-                            <th>최대 금액</th>
+                            <th>최대 할인 금액</th>
                             <th>할인 유형</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="coupon : ${coupons}">
-                            <td th:text="${coupon.couponPolicyId}"></td>
+                            <td th:text="${coupon.couponPolicyId()}"></td>
                             <td th:text="${coupon.couponPolicyName}"></td>
-                            <td th:text="${coupon.couponPolicyDiscountValue}"></td>
-                            <td th:text="${coupon.couponPolicyRate}"></td>
-                            <td th:text="${coupon.couponPolicyMinOrderAmount}"></td>
-                            <td th:text="${coupon.couponPolicyMaxAmount}"></td>
-                            <td th:text="${coupon.couponPolicyDiscountType ? '비율' : '고정 금액'}"></td>
+                            <td th:text="${coupon.couponPolicyDiscountValue != null ? #numbers.formatDecimal(coupon.couponPolicyDiscountValue, 0, 0) + '원' : #numbers.formatDecimal(coupon.couponPolicyRate, 0, 0) + '%'}"></td>
+                            <td th:text="${#numbers.formatDecimal(coupon.couponPolicyMinOrderAmount, 0, 0) + '원'}"></td>
+                            <td th:text="${#numbers.formatDecimal(coupon.couponPolicyMaxAmount, 0, 0) + '원'}"></td>
+                            <td th:text="${coupon.couponPolicyDiscountType ? '할인율' : '금액할인'}"></td>
                         </tr>
                         </tbody>
                     </table>
+
+
                     <nav>
                         <ul class="pagination justify-content-center">
                             <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
@@ -122,12 +122,50 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('addCouponForm').addEventListener('submit', function(event) {
+            function toggleDiscountFields() {
+                const discountType = document.getElementById('couponPolicyDiscountType').value;
                 const discountValueField = document.getElementById('couponPolicyDiscountValue');
                 const discountRateField = document.getElementById('couponPolicyRate');
 
+                if (discountType === 'true') {
+                    discountValueField.disabled = true;
+                    discountRateField.disabled = false;
+                } else {
+                    discountValueField.disabled = false;
+                    discountRateField.disabled = true;
+                }
+            }
+
+            function validateMaxAmount() {
+                const minOrderAmount = document.getElementById('couponPolicyMinOrderAmount').value;
+                const maxAmount = document.getElementById('couponPolicyMaxAmount').value;
+
+                if (parseFloat(maxAmount) > parseFloat(minOrderAmount)) {
+                    alert('최대 할인 금액은 최소 주문 금액을 넘을 수 없습니다.');
+                    document.getElementById('couponPolicyMaxAmount').value = minOrderAmount;
+                }
+            }
+
+            toggleDiscountFields();
+
+            document.getElementById('couponPolicyDiscountType').addEventListener('change', toggleDiscountFields);
+            document.getElementById('couponPolicyMaxAmount').addEventListener('input', validateMaxAmount);
+            document.getElementById('couponPolicyMinOrderAmount').addEventListener('input', validateMaxAmount);
+
+            document.getElementById('addCouponForm').addEventListener('submit', function(event) {
+                const discountValueField = document.getElementById('couponPolicyDiscountValue');
+                const discountRateField = document.getElementById('couponPolicyRate');
+                const minOrderAmount = document.getElementById('couponPolicyMinOrderAmount').value;
+                const maxAmount = document.getElementById('couponPolicyMaxAmount').value;
+
                 if ((discountValueField.value && discountRateField.value) || (!discountValueField.value && !discountRateField.value)) {
                     alert('할인 값(금액) 또는 할인율(비율) 중 하나만 입력해야 합니다.');
+                    event.preventDefault(); // 폼 제출을 막음
+                    return;
+                }
+
+                if (parseFloat(maxAmount) > parseFloat(minOrderAmount)) {
+                    alert('최대 할인 금액은 최소 주문 금액을 넘을 수 없습니다.');
                     event.preventDefault(); // 폼 제출을 막음
                     return;
                 }

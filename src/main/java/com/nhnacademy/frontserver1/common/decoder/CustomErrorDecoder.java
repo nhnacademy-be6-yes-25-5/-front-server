@@ -1,10 +1,6 @@
 package com.nhnacademy.frontserver1.common.decoder;
 
-import com.nhnacademy.frontserver1.common.exception.DormantAccountException;
-import com.nhnacademy.frontserver1.common.exception.FeignClientException;
-import com.nhnacademy.frontserver1.common.exception.RefreshTokenFailedException;
-import com.nhnacademy.frontserver1.common.exception.ExpireRefreshJwtException;
-import com.nhnacademy.frontserver1.common.exception.OrderWaitingException;
+import com.nhnacademy.frontserver1.common.exception.*;
 import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
 import feign.Response;
 import feign.codec.ErrorDecoder;
@@ -34,8 +30,14 @@ public class CustomErrorDecoder implements ErrorDecoder {
 
         switch (status) {
             case 400:
+                if(responseBody.contains("로그인한 회원만 좋아요를 할 수 있습니다.")) {
+                    return new LikesNotLoginException(
+                            ErrorStatus.toErrorStatus("로그인한 회원만 좋아요를 할 수 있습니다.", 401, LocalDateTime.now())
+                    );
+                }
                 log.error("클라이언트 요청에서 에러가 발생하였습니다. 상태 코드: 400, 응답 본문: {}", responseBody);
                 break;
+
             case 401:
                 if (responseBody.contains("refresh 토큰이 만료되었습니다.")) {
                     return new ExpireRefreshJwtException(
@@ -46,12 +48,12 @@ public class CustomErrorDecoder implements ErrorDecoder {
             case 403:
                 if (responseBody.contains("휴면")) {
                     return new DormantAccountException(
-                        ErrorStatus.toErrorStatus("로그인한 유저가 휴면상태입니다.", 403, LocalDateTime.now()));
+                            ErrorStatus.toErrorStatus("로그인한 유저가 휴면상태입니다.", 403, LocalDateTime.now()));
                 }
             case 404:
                 if (methodKey.contains("findOrderStatusByOrderId")) {
                     return new OrderWaitingException(
-                        ErrorStatus.toErrorStatus("주문 완료 대기중", 301, LocalDateTime.now())
+                            ErrorStatus.toErrorStatus("주문 완료 대기중", 301, LocalDateTime.now())
                     );
                 }
                 log.error("리소스를 찾을 수 없습니다. 상태 코드: 404, 응답 본문: {}", responseBody);
@@ -64,6 +66,11 @@ public class CustomErrorDecoder implements ErrorDecoder {
                 break;
             case 500:
                 log.error("서버에서 에러가 발생하였습니다. 상태 코드: 500, 응답 본문: {}", responseBody);
+                if (responseBody.contains("SERVER")) {
+                    return new ConnectionException(
+                            ErrorStatus.toErrorStatus("서버 연결 실패", 500, LocalDateTime.now())
+                    );
+                }
                 break;
             default:
                 log.error("알 수 없는 에러가 발생하였습니다. 상태 코드: {}, 응답 본문: {}", status, responseBody);
@@ -75,6 +82,6 @@ public class CustomErrorDecoder implements ErrorDecoder {
 
     private FeignClientException throwFeignClientException(Response response, String responseBody) {
         return new FeignClientException(
-            ErrorStatus.toErrorStatus(responseBody, response.status(), LocalDateTime.now()));
+                ErrorStatus.toErrorStatus(responseBody, response.status(), LocalDateTime.now()));
     }
 }

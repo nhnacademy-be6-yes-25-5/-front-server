@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
+import com.nhnacademy.frontserver1.presentation.dto.request.user.UpdatePasswordRequest;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -29,6 +29,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import com.nhnacademy.frontserver1.presentation.dto.request.user.FindPasswordRequest;
 
 @Controller
 @RequiredArgsConstructor
@@ -248,5 +249,44 @@ public class UserController {
         model.addAttribute("userResponse", userResponse);
 
         return "redirect:/auth/login";
+    }
+
+    @GetMapping("/users/find/password")
+    public String showFindPasswordForm(){
+        return "findPassword/find-password";
+    }
+
+    @PostMapping("/users/find/password")
+    public String findPassword(@RequestParam String email, @RequestParam String name, Model model) {
+        FindPasswordRequest request = new FindPasswordRequest(email, name);
+        boolean isUserFound = userService.findUserPasswordByEmailByName(request);
+
+        if (isUserFound) {
+            userService.sendEmail(email);
+            return "findPassword/send-mail-success";
+        } else {
+            return "findPassword/send-mail-fail";
+        }
+    }
+
+
+
+    @GetMapping("/reset-password/{email}")
+    public String showResetPasswordForm(@PathVariable("email") String email, Model model){
+        model.addAttribute("email", email);
+        return "setNewPassword/set-new-password";
+
+    }
+
+    @PostMapping("/reset-password")
+    public String resetPassword(@RequestParam String email, @RequestParam String newPassword, @RequestParam String confirmPassword, Model model) {
+        UpdatePasswordRequest request = new UpdatePasswordRequest(newPassword, confirmPassword);
+        boolean isPasswordReset = userService.setUserPasswordByEmail(email, request);
+
+        if (isPasswordReset) {
+            return "setNewPassword/set-new-password-success";
+        } else {
+            return "setNewPassword/set-new-password-fail";
+        }
     }
 }

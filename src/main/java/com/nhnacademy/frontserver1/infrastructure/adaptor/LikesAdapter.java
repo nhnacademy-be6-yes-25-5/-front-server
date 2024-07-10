@@ -13,17 +13,17 @@ import java.util.List;
 public interface LikesAdapter {
 
     @GetMapping("/users")
-    List<LikesResponse> findLikesByUserId();
+    ResponseEntity<List<LikesResponse>> findLikesByUserId();
 
     @GetMapping("/books/{bookId}")
     LikesResponse findLikesByBookId(@PathVariable("bookId") String bookId);
 
     @PostMapping("{bookId}")
-    LikesResponse click(@PathVariable Long bookId);
+    ResponseEntity<LikesResponse> click(@PathVariable Long bookId);
 
     @GetMapping("/{bookId}")
-    LikesResponse findByBookIdAndUserId(@PathVariable Long bookId);
+    ResponseEntity<LikesResponse> findByBookIdAndUserId(@PathVariable Long bookId);
 
     @GetMapping("/{bookId}/exist")
-    Boolean exist(@PathVariable Long bookId);
+    ResponseEntity<Boolean> exist(@PathVariable Long bookId);
 }

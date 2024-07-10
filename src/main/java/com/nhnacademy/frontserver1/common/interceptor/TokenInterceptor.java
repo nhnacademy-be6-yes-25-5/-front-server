@@ -37,9 +37,13 @@ public class TokenInterceptor implements HandlerInterceptor {
         String accessToken = TokenContext.getAccessToken();
         String refreshToken = TokenContext.getRefreshToken();
 
-        if (!accessToken.isEmpty() && !refreshToken.isEmpty()) {
-            addTokenCookie(response, "AccessToken", accessToken);
-            addTokenCookie(response, "RefreshToken", refreshToken);
+        assert accessToken != null;
+        if (!accessToken.isEmpty()) {
+            assert refreshToken != null;
+            if (!refreshToken.isEmpty()) {
+                addTokenCookie(response, "AccessToken", accessToken);
+                addTokenCookie(response, "RefreshToken", refreshToken);
+            }
         }
 
         if (modelAndView != null) {

@@ -86,9 +86,6 @@
                                                         <td th:text="${address.addressDetail}"></td>
                                                         <td th:text="${address.addressZip}"></td>
                                                         <td th:text="${address.addressBased ? '기본 배송지' : '기본 배송지 아님'}"></td>
-                                                        <td>
-
-                                                        </td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -145,7 +142,7 @@
                                         <input type="text" class="form-control" id="addressDetail" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="addressPhone" class="form-label">연락처</label>
+                                        <label for="addressPhone" class="form-label">우편번호</label>
                                         <input type="tel" class="form-control" id="addressPhone" required>
                                     </div>
                                     <div class="form-check">

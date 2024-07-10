@@ -21,7 +21,15 @@
                         <div class="user-info">
                             <div class="user-grade">
                                 <span>회원 등급:</span>
-                                <span class="grade" th:text="${userGrade}">일반회원</span>
+                                <span class="grade">
+                                    <span th:if="${userInfo == null}"></span>
+                                    <span th:if="${userInfo != null}">
+                                        <span th:if="${userInfo.userGradeId == 1}">NORMAL</span>
+                                        <span th:if="${userInfo.userGradeId == 2}">ROYAL</span>
+                                        <span th:if="${userInfo.userGradeId == 3}">GOLD</span>
+                                        <span th:if="${userInfo.userGradeId == 4}">PLATINUM</span>
+                                    </span>
+                                </span>
                             </div>
                             <div class="user-points">
                                 <span>잔여 포인트:</span>

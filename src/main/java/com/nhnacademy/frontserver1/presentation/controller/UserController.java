@@ -151,6 +151,9 @@ public class UserController {
 
         model.addAttribute("userAddressPage", userAddressPage);
 
+        UserResponse userInfo = userService.findByUser();
+        model.addAttribute("userInfo", userInfo);
+
         return "mypage/mypage-address";
     }
 

@@ -6,6 +6,7 @@ import com.nhnacademy.frontserver1.presentation.dto.response.order.CreatePayment
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadPaymentOrderResponse;
 import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,4 +20,7 @@ public interface PaymentAdaptor {
 
     @GetMapping("/{orderId}")
     List<ReadPaymentOrderResponse> findAllByOrderId(@PathVariable String orderId);
+
+    @PostMapping("/confirm/zero")
+    ResponseEntity<CreatePaymentResponse> createPaymentByZeroAmount(@RequestBody CreatePaymentsRequest paymentsRequest);
 }

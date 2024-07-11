@@ -8,7 +8,6 @@ import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicy
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,13 +29,9 @@ public class CouponController {
     private final CouponService couponService;
     private final BookService bookService;
 
-    //모든 쿠폰 정책
+    // 모든 쿠폰 정책
     @GetMapping("/policy")
-    public String getAdminCouponPolicy(@RequestParam(defaultValue = "0") int page,
-                                       @RequestParam(defaultValue = "10") int size,
-                                       @RequestParam(defaultValue = "ko") String lang,
-                                       Model model) {
-        Pageable pageable = PageRequest.of(page, size);
+    public String getAdminCouponPolicy(@RequestParam(defaultValue = "ko") String lang, Pageable pageable, Model model) {
         Page<CouponPolicyResponseDTO> couponPage = couponService.findAllCouponPolicies(pageable);
 
         model.addAttribute("coupons", couponPage.getContent());
@@ -48,7 +43,7 @@ public class CouponController {
         return "admin/policy/admin-policy-coupon";
     }
 
-    //일반 쿠폰 정책 생성
+    // 일반 쿠폰 정책 생성
     @PostMapping("/policy/create")
     public ResponseEntity<Void> createCoupon(@ModelAttribute CouponPolicyRequestDTO createCouponRequest) {
         couponService.createCoupon(createCouponRequest);
@@ -77,5 +72,4 @@ public class CouponController {
         couponService.claimCoupon(couponId);
         return ResponseEntity.ok().build();
     }
-
 }

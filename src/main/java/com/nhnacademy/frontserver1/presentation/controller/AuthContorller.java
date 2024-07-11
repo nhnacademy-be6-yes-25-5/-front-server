@@ -1,8 +1,9 @@
 package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.impl.AuthServiceImpl;
-import com.nhnacademy.frontserver1.application.service.impl.PaycoServiceImpl;
+import com.nhnacademy.frontserver1.common.utils.CookieUtils;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.LoginUserRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuthContorller {
 
     private final AuthServiceImpl authService;
-    private final PaycoServiceImpl paycoService;
 
     /**
      * 로그인 페이지를 반환합니다.
@@ -31,9 +31,12 @@ public class AuthContorller {
      * @return 로그인 페이지의 view 이름
      */
     @GetMapping("/login")
-    public String loginForm() {
+    public String loginForm(HttpServletRequest request) {
+        CookieUtils.validateAccessToken(request);
         return "login";
     }
+
+
 
     /**
      * 인증 실패 로그인 페이질를 반환합니다.

@@ -11,6 +11,7 @@ import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadPurePrice
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,7 +44,7 @@ public interface UserAdaptor {
     ReadPurePriceResponse getPurePrice();
 
     @GetMapping("/grade")
-    ReadUserInfoResponse getUserPointsAndGrade();
+    ResponseEntity<ReadUserInfoResponse> getUserPointsAndGrade();
 
     @GetMapping("/grades")
     UserGradeResponse getUserGrade();
@@ -60,6 +61,9 @@ public interface UserAdaptor {
 
     @GetMapping("/coupons/state")
     Page<CouponBoxResponse> getStateCouponBox(@RequestParam String couponState, Pageable pageable);
+
+    @PostMapping("/find/password")
+    boolean findUserPasswordByEmailByName(@RequestBody FindPasswordRequest request);
 
     @GetMapping("/user-addresses")
     Page<UserAddressResponse> findAllUserAddresses(Pageable pageable);

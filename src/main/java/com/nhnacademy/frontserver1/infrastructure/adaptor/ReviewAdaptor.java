@@ -2,6 +2,7 @@ package com.nhnacademy.frontserver1.infrastructure.adaptor;
 
 import com.nhnacademy.frontserver1.common.config.FeignClientConfig;
 import com.nhnacademy.frontserver1.common.jwt.annotation.SkipTokenInjection;
+import com.nhnacademy.frontserver1.presentation.dto.response.review.ReadMyReviewResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.review.ReadReviewRatingResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.review.ReadReviewResponse;
 import java.util.List;
@@ -25,10 +26,10 @@ public interface ReviewAdaptor {
 
     @SkipTokenInjection
     @GetMapping("/books/{bookId}")
-    Page<ReadReviewResponse> getReviewByPaging(@PathVariable Long bookId, Pageable pageable);
+    ResponseEntity<Page<ReadReviewResponse>>  getReviewByPaging(@PathVariable Long bookId, Pageable pageable);
 
     @GetMapping("/books/{bookId}/ratings")
-    List<ReadReviewRatingResponse> getReviewRatings(@PathVariable Long bookId);
+    ResponseEntity<List<ReadReviewRatingResponse>> getReviewRatings(@PathVariable Long bookId);
 
     @PutMapping(value = "/{reviewId}", consumes = "multipart/form-data")
     ResponseEntity<Void> updateReviewByReviewId(@RequestPart String requestJson,
@@ -36,4 +37,7 @@ public interface ReviewAdaptor {
 
     @DeleteMapping("/{reviewId}")
     void deleteReviewByReviewId(@PathVariable Long reviewId);
+
+    @GetMapping("/users")
+    ResponseEntity<Page<ReadMyReviewResponse>> getMyReviewByPaging(Pageable pageable);
 }

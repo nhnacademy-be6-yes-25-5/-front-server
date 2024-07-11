@@ -8481,3 +8481,5 @@ tr {
 .payco-btn:hover {
   background-color: #fa2828; /* PAYCO의 대표색 */
 }
+
+em {font-style: normal}

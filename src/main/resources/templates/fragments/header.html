@@ -4,28 +4,28 @@
     <div class="topbar">
         <div class="container">
             <div class="row justify-content-end">
-                <div class="col-lg-4 col-md-4 col-12">
+                <div class="col-lg-4 col-md-4 col-12" style="text-align: right">
                     <div class="top-end">
-                        <div class="user">
+                        <div class="user" th:if="${!(AccessToken == null || RefreshToken == null)}">
                             <i class="lni lni-user"></i>
-                            Hello
+                            <em th:text="#{header.hello}"></em>
                         </div>
                         <ul class="user-login">
                             <li th:if="${AccessToken == null || RefreshToken == null}">
-                                <a href="/auth/login">Sign In</a>
+                                <a href="/auth/login" th:text="#{header.login}"></a>
                             </li>
                             <li th:if="${AccessToken != null && RefreshToken != null}">
-                                <a href="/logout">Logout</a>
+                                <a href="/logout" th:text="#{header.logout}"></a>
+                            </li>
+                            <li th:if="${AccessToken == null && RefreshToken == null}">
+                                <a href="/sign-up" th:text="#{header.register}"></a>
                             </li>
                             <li>
-                                <a href="/sign-up">Register</a>
+                                <a href="/orders/find" th:text="#{header.findOrder}"></a>
                             </li>
                             <li>
-                                <a href="/orders/find">주문번호로 주문내역 찾기</a>
+                                <a href="/admin/orders" th:text="#{header.goAdminPage}"></a>
                             </li>
-                            <li>
-                                <a href="/admin/orders">관라자 페이지 이동</a>
-                            </li>>
                         </ul>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                                 </a>
                             </div>
                             <div class="wishlist">
-                                <a href="#">
+                                <a href="/likesList">
                                     <i class="lni lni-heart"></i>
                                     <span class="total-items">0</span>
                                 </a>

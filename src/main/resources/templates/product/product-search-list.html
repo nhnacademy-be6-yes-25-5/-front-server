@@ -154,12 +154,12 @@
                                     <div class="product-sorting">
                                         <label for="sorting">Sort by:</label>
                                         <select class="form-control" id="sorting" onchange="sortBooks()">
-                                            <option th:value = "popularity" th:selected="${sort == 'popularity'}">인기도</option>
+                                            <option th:value = "popularity" th:selected="${sort == 'popularity'}" th:text = "#{book.sort.POPULARITY}">인기도</option>
 <!--                                            <option th:value = "new-product" th:selected="${sort == 'new-product'}">신상품</option>-->
-                                            <option th:value = "low-price" th:selected ="${sort == 'low-price'}">최저가</option>
-                                            <option th:value = "high-price" th:selected = "${sort == 'high-price'}">최고가</option>
-                                            <option th:value = "grade" th:selected = "${sort == 'grade'}">평점</option>
-                                            <option th:value = "review" th:selected = "${sort == 'review'}">리뷰</option>
+                                            <option th:value = "low-price" th:selected ="${sort == 'low-price'}" th:text = "#{book.sort.LOWPRICE}">최저가</option>
+                                            <option th:value = "high-price" th:selected = "${sort == 'high-price'}" th:text = "#{book.sort.HIGHPRICE}">최고가</option>
+<!--                                            <option th:value = "grade" th:selected = "${sort == 'grade'}" th:text = "#{book.sort.GRADE}">평점</option>-->
+                                            <option th:value = "review" th:selected = "${sort == 'review'}" th:text = "#{book.sort.REVIEW}">리뷰</option>
                                         </select>
                                         <h3 class="total-show-product">Showing: <span>1 - 9 items</span></h3>
 

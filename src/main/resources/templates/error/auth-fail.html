@@ -25,7 +25,7 @@
       </p>
     <![endif]-->
 
-  <!-- Preloader -->
+<!--   Preloader-->
   <div class="preloader">
     <div class="preloader-inner">
       <div class="preloader-icon">
@@ -34,7 +34,7 @@
       </div>
     </div>
   </div>
-  <!-- /End Preloader -->
+<!--   /End Preloader-->
 
   <!-- Start Error Area -->
   <div class="error-area">
@@ -46,7 +46,10 @@
             <h2>죄송합니다.</h2>
             <p th:text="${cause}"></p>
             <div class="button">
-              <a href="/auth/login" class="btn">Go to Sign In</a>
+              <a th:href="${cause == '알 수 없는 이유로 인해 인증 정보를 찾을 수 없습니다.' ? '/auth/login' : '/'}"
+                 class="btn"
+                 th:text="${cause == '알 수 없는 이유로 인해 인증 정보를 찾을 수 없습니다.' ? 'Go to Sign In' : 'Go to Home'}">
+              </a>
             </div>
           </div>
         </div>

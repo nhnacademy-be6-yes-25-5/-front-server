@@ -38,6 +38,12 @@ public interface UserService {
 
     Page<CouponBoxResponse> getStateCouponBox(String couponState, Pageable pageable);
 
+    boolean findUserPasswordByEmailByName(FindPasswordRequest request);
+
+    boolean setUserPasswordByEmail(String email, UpdatePasswordRequest request);
+
+    void sendEmail(String recipient);
+
     Page<UserAddressResponse> getAllUserAddresses(Pageable pageable);
 
     void updateAddressBased(Long userAddressId, UpdateAddressBasedRequest request);

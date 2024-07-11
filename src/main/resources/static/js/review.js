@@ -1,11 +1,20 @@
 document.addEventListener('DOMContentLoaded', function () {
   const bookId = document.getElementById('bookId').value;
   fetch('/reviews/books/' + bookId)
-  .then(response => response.text())
-  .then(html => {
-    document.getElementById('review-section').innerHTML = html;
-  })
-  .catch(error => handleError(error));
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('데이터를 가져오는데 실패했습니다.');
+        }
+        return response.text();
+      })
+      .then(html => {
+        document.getElementById('review-section').innerHTML = html;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        // 전체 페이지를 /auth/error로 리다이렉트
+        window.location.href = '/auth/error?cause=' + encodeURIComponent(error.message);
+      });
 });
 
 function openReviewModal() {

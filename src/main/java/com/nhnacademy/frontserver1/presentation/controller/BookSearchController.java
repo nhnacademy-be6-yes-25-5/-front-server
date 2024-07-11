@@ -2,7 +2,6 @@ package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.CategoryService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.BookSearchAdaptor;
-import com.nhnacademy.frontserver1.presentation.dto.request.book.BookSearchRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookIndexResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.CategoryResponse;
 import lombok.RequiredArgsConstructor;

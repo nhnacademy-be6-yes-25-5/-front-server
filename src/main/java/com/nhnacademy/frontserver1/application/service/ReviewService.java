@@ -2,6 +2,7 @@ package com.nhnacademy.frontserver1.application.service;
 
 import com.nhnacademy.frontserver1.presentation.dto.request.review.CreateReviewRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.review.UpdateReviewRequest;
+import com.nhnacademy.frontserver1.presentation.dto.response.review.ReadMyReviewResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.review.ReadReviewRatingResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.review.ReadReviewResponse;
 import java.util.List;
@@ -20,4 +21,6 @@ public interface ReviewService {
     void updateReview(UpdateReviewRequest updateReviewRequest, List<MultipartFile> images, Long reviewId);
 
     void deleteReview(Long reviewId);
+
+    Page<ReadMyReviewResponse> getMyReviews(Pageable pageable);
 }

@@ -9,8 +9,6 @@ import com.nhnacademy.frontserver1.infrastructure.adaptor.LikesAdapter;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.BookDetailCouponResponseDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -48,9 +46,11 @@ public class BookController {
     }
 
     @ExceptionHandler(LikesNotLoginException.class)
-    public ResponseEntity<String> likesNotLoginException(LikesNotLoginException e) {
+    public String likesNotLoginException(Model model) {
 
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(e.getMessage());
+        model.addAttribute("message", "로그인이 필요한 서비스입니다.");
+        model.addAttribute("url", "/");
+
+        return "message";
     }
 }

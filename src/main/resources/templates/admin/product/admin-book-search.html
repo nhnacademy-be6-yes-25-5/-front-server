@@ -18,7 +18,7 @@
     <body>
 
     <div class="col-md-12">
-        <h1>도서 검색</h1>
+        <h1 th:text = "#{admin.product.search}">도서 검색</h1>
         <div class="col-md-4">
             <form th:action="@{/admin/bookSearch}" method="post">
                 <input type="text" th:value="${keyword}" name="keyword" placeholder="도서명 또는 ISBN을 입력해주세요.">
@@ -31,14 +31,14 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th>Image</th>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Publisher</th>
-                    <th>Publish Date</th>
-                    <th>Price</th>
-                    <th>ISBN</th>
-                    <th>Description</th>
+                    <th th:text = "#{product.modal.image}">Image</th>
+                    <th th:text = "#{product.modal.name}">Title</th>
+                    <th th:text = "#{product.modal.author}">Author</th>
+                    <th th:text = "#{product.modal.publisher}">Publisher</th>
+                    <th th:text = "#{product.modal.publisherdate}">Publish Date</th>
+                    <th th:text = "#{product.modal.price}">Price</th>
+                    <th th:text = "#{product.modal.isbn}">ISBN</th>
+                    <th th:text = "#{product.modal.description}">Description</th>
                 </tr>
                 </thead>
                 <tbody>

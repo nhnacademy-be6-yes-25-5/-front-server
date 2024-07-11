@@ -3,12 +3,9 @@ package com.nhnacademy.frontserver1.presentation.controller;
 import com.nhnacademy.frontserver1.application.service.UserService;
 import com.nhnacademy.frontserver1.common.utils.CookieUtils;
 import com.nhnacademy.frontserver1.common.exception.FeignClientException;
-import com.nhnacademy.frontserver1.presentation.dto.request.user.CreateUserRequest;
-import com.nhnacademy.frontserver1.presentation.dto.request.user.DeleteUserRequest;
-import com.nhnacademy.frontserver1.presentation.dto.request.user.UpdateUserRequest;
+import com.nhnacademy.frontserver1.presentation.dto.request.user.*;
 import com.nhnacademy.frontserver1.presentation.dto.response.point.PointLogResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.*;
-import com.nhnacademy.frontserver1.presentation.dto.response.address.UserAddressResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,9 +18,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.*;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.UpdatePasswordRequest;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.FindPasswordRequest;
 
@@ -137,22 +136,41 @@ public class UserController {
         return ResponseEntity.ok(userService.isEmailDuplicate(email));
     }
 
-    @GetMapping("/users/{userId}/addresses")
-    public String getUserAddresses(@PathVariable Long userId, Model model) {
-        Pageable pageable = PageRequest.of(0, 10);
-        UsersResponse user = userService.getUserById(userId);
-        Page<UserAddressResponse> addressPage = userService.getUserAddresses(userId, pageable);
 
-        model.addAttribute("userName", user.userName());
-        model.addAttribute("userGrade", user.userGrade());
-        model.addAttribute("userPoints", user.userPoints());
-        model.addAttribute("defaultAddress", user.defaultAddress());
-        model.addAttribute("addresses", addressPage.getContent());
-        model.addAttribute("currentPage", addressPage.getNumber());
-        model.addAttribute("totalPages", addressPage.getTotalPages());
-        model.addAttribute("pageSize", addressPage.getSize());
+
+    // 배송지 조회(임시)
+    @GetMapping("/mypage/addresses")
+    public String getUserAddresses(@RequestParam(defaultValue = "0") int page,
+                                   @RequestParam(defaultValue = "10") int size,
+                                   Model model) {
+
+        Page<UserAddressResponse> userAddresses = userService.getAllUserAddresses(PageRequest.of(page, size));
+        Optional<UserAddressResponse> defaultAddress = userAddresses.stream()
+                .filter(UserAddressResponse::addressBased)
+                .findFirst();
+
+
+        model.addAttribute("addresses", userAddresses);
+        model.addAttribute("defaultAddress", defaultAddress.orElse(null));
+
 
         return "mypage/mypage-address";
+    }
+
+    // 주소 기본 배송지 지정
+    @PatchMapping("/mypage/addresses/{userAddressId}")
+    public ResponseEntity<Void> updateAddressBased(@PathVariable Long userAddressId,
+                                                   @RequestBody UpdateAddressBasedRequest request) {
+
+        userService.updateAddressBased(userAddressId, request);
+
+        return ResponseEntity.ok().build();
+    }
+
+    // 배송지 추가
+    @PostMapping("/mypage/addresses")
+    public ResponseEntity<CreateUserAddressResponse> createUserAddresses(@ModelAttribute CreateUserAddressRequest request) {
+        return ResponseEntity.ok(userService.createUserAddresses(request));
     }
 
     private static final Logger logger = Logger.getLogger(UserController.class.getName());
@@ -208,17 +226,6 @@ public class UserController {
 
         return "mypage/mypage-coupon";
     }
-
-
-
-
-
-
-
-
-
-
-
 
     // 페이코 회원 가입 페이지
     @GetMapping("/sign-up/payco")

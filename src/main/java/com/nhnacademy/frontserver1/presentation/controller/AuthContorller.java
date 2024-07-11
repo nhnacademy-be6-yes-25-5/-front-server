@@ -1,18 +1,14 @@
 package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.impl.AuthServiceImpl;
-import com.nhnacademy.frontserver1.common.exception.AccessDeniedException;
-import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
+import com.nhnacademy.frontserver1.common.utils.CookieUtils;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.LoginUserRequest;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import com.nhnacademy.frontserver1.common.context.TokenContext;
-import java.time.LocalDateTime;
 
 /**
  * AuthController 클래스는 사용자 인증 관련 기능을 제공하는 Spring MVC 컨트롤러입니다.
@@ -35,14 +31,12 @@ public class AuthContorller {
      * @return 로그인 페이지의 view 이름
      */
     @GetMapping("/login")
-    public String loginForm() {
-        if (TokenContext.getAccessToken() != null) {
-            throw new AccessDeniedException(ErrorStatus.toErrorStatus(
-                    "불가능한 접근입니다.", 409, LocalDateTime.now()
-            ));
-        }
+    public String loginForm(HttpServletRequest request) {
+        CookieUtils.validateAccessToken(request);
         return "login";
     }
+
+
 
     /**
      * 인증 실패 로그인 페이질를 반환합니다.

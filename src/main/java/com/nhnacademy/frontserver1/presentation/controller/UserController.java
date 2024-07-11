@@ -1,6 +1,7 @@
 package com.nhnacademy.frontserver1.presentation.controller;
 
 import com.nhnacademy.frontserver1.application.service.UserService;
+import com.nhnacademy.frontserver1.common.utils.CookieUtils;
 import com.nhnacademy.frontserver1.common.exception.FeignClientException;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.CreateUserRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.DeleteUserRequest;
@@ -8,9 +9,9 @@ import com.nhnacademy.frontserver1.presentation.dto.request.user.UpdateUserReque
 import com.nhnacademy.frontserver1.presentation.dto.response.point.PointLogResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.*;
 import com.nhnacademy.frontserver1.presentation.dto.response.address.UserAddressResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -19,16 +20,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.UpdatePasswordRequest;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Logger;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.FindPasswordRequest;
 
 @Controller
@@ -39,7 +35,9 @@ public class UserController {
 
     // 회원 가입 페이지
     @GetMapping("/sign-up")
-    public String signUp() {
+    public String signUp(HttpServletRequest request) {
+        CookieUtils.validateAccessToken(request);
+
         return "register";
     }
 

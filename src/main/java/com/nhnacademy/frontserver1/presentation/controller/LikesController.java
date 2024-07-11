@@ -49,9 +49,9 @@ public class LikesController {
     }
 
     @ExceptionHandler(LikesNotLoginException.class)
-    public String likesNotLoginException(Model model) {
+    public String likesNotLoginException(Model model, LikesNotLoginException e) {
 
-        model.addAttribute("message", "회원가입이 필요합니다.");
+        model.addAttribute("message", e.getErrorStatus().message());
         model.addAttribute("url", "/");
 
         return "message";

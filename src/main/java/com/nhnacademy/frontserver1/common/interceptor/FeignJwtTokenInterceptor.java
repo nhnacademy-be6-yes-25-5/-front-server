@@ -1,6 +1,8 @@
 package com.nhnacademy.frontserver1.common.interceptor;
 
+import com.nhnacademy.frontserver1.common.exception.LikesNotLoginException;
 import com.nhnacademy.frontserver1.common.exception.TokenCookieMissingException;
+import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
 import com.nhnacademy.frontserver1.common.provider.CookieTokenProvider;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
@@ -11,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.time.LocalDateTime;
 
 /**
  * JWT 인증을 위한 Feign 요청 인터셉터입니다.
@@ -62,6 +66,14 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
             template.header("Refresh-Token", refreshToken);
             log.debug("Adding RefreshToken header: {}", refreshToken);
         } else {
+            if(path.equals("/likesList")) {
+                throw new LikesNotLoginException(ErrorStatus.toErrorStatus("로그인 시 좋아요 표시한 도서를 볼 수 있습니다.",401, LocalDateTime.now()));
+            }
+
+            if(path.matches("/likesClick/\\d+")) {
+                throw new LikesNotLoginException(ErrorStatus.toErrorStatus("로그인 시 좋아요를 표시할 수 있습니다.", 401, LocalDateTime.now()));
+            }
+
             log.warn("Authorization token is missing in the cookies.");
             throw new TokenCookieMissingException();
         }

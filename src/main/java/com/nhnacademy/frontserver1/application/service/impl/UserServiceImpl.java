@@ -172,7 +172,7 @@ public class UserServiceImpl implements UserService {
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
             message.setSubject("[Yes25.5] 비밀번호를 새로 설정하겠습니다.");
 
-            message.setText("비밀번호를 새로 설정하기 위해서는 이 링크를 클릭하세요: http://localhost:8040/reset-password/" + recipient);
+            message.setText("비밀번호를 새로 설정하기 위해서는 이 링크를 클릭하세요: https://yes25-5.shop/reset-password/" + recipient);
 
             Transport.send(message);
             System.out.println("Email sent successfully.");

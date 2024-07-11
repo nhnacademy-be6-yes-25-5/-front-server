@@ -38,9 +38,7 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
      */
     @Override
     public void apply(RequestTemplate template) {
-
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String path = request.getServletPath();
+        String path = template.path();
 
         if (path.equals("/") || path.startsWith("/orders/none") || path.startsWith("/category") || path.startsWith("/search")
           || path.startsWith("/sign-up") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/check-email")
@@ -59,7 +57,7 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
             return;
         }
 
-        if (isTokensEmpty && (path.startsWith("/users/cart-books") || request.getMethod().equalsIgnoreCase("POST"))) {
+        if (isTokensEmpty && (path.startsWith("/users/cart-books") || template.method().equalsIgnoreCase("POST"))) {
             return;
         }
 

@@ -30,7 +30,10 @@ public class CartInfoInterceptor implements HandlerInterceptor {
                     if ("AccessToken".equals(cookie.getName())) {
                         CartService cartService = applicationContext.getBean(CartService.class);
                         List<ReadCartBookResponse> cartPreview = cartService.getCarts();
+
                         modelAndView.addObject("cartPreview", cartPreview);
+                        modelAndView.addObject("cartItemCount", cartPreview.size());
+
                         break;
                     }
                 }

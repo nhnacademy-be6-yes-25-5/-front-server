@@ -59,7 +59,7 @@
                                             <div class="pagination">
                                                 <ul>
                                                     <li th:each="i : ${#numbers.sequence(0, activeCoupons.totalPages - 1)}">
-                                                        <a th:href="@{'/coupons(page=${i}, size=${couponBoxResponses.size})'}"
+                                                        <a th:href="@{'/mypage/coupons'(page=${i}, size=${activeCoupons.size})}"
                                                            th:text="${i + 1}"
                                                            th:classappend="${i == activeCoupons.number} ? 'active'"></a>
                                                     </li>
@@ -91,7 +91,7 @@
                                             <div class="pagination">
                                                 <ul>
                                                     <li th:each="i : ${#numbers.sequence(0, usedCoupons.totalPages - 1)}">
-                                                        <a th:href="@{'/coupons/used(page=${i}, size=${usedCoupons.size})'}"
+                                                        <a th:href="@{'/mypage/coupons#used'(page=${i}, size=${usedCoupons.size})}"
                                                            th:text="${i + 1}"
                                                            th:classappend="${i == usedCoupons.number} ? 'active'"></a>
                                                     </li>
@@ -123,7 +123,7 @@
                                             <div class="pagination">
                                                 <ul>
                                                     <li th:each="i : ${#numbers.sequence(0, expiredCoupons.totalPages - 1)}">
-                                                        <a th:href="@{'/coupons/history(page=${i}, size=${historyCoupons.size})'}"
+                                                        <a th:href="@{'/mypage/coupons#history'(page=${i}, size=${expiredCoupons.size})}"
                                                            th:text="${i + 1}"
                                                            th:classappend="${i == expiredCoupons.number} ? 'active'"></a>
                                                     </li>

@@ -10,7 +10,8 @@
 <div th:fragment="content">
     <div class="container">
         <h2>Email Found</h2>
-        <p>We found the following email associated with your account:</p>
+        <p>귀하의 계정들과 관련된 이메일 주소 목록입니다 :</p>
+        <p></p>
         <ul class="email-list">
             <li th:each="email : ${emails}" th:text="${email.userEmail}"></li>
         </ul>

@@ -310,7 +310,7 @@
                  th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.discountAmount : 0}">
           <input type="hidden" id="couponDiscountRate" value="0">
           <input type="hidden" id="couponId"
-                 th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.couponId : ''}">
+                 th:value="${maxDiscountCoupon != null and maxDiscountCoupon.couponId != null ? maxDiscountCoupon.couponId : ''}">
           <input type="hidden" name="userId" id="userId" th:value="${userInfo.userId}">
           <input type="hidden" name="role" id="role" th:value="${userInfo.role}">
           <div th:each="cartBook, index : ${cartBooks}">

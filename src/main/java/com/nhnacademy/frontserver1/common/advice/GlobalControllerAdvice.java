@@ -1,5 +1,6 @@
 package com.nhnacademy.frontserver1.common.advice;
 
+import com.nhnacademy.frontserver1.common.exception.AccessDeniedException;
 import com.nhnacademy.frontserver1.common.exception.ConnectionException;
 import com.nhnacademy.frontserver1.common.exception.DormantAccountException;
 import com.nhnacademy.frontserver1.common.exception.FeignClientException;

@@ -77,22 +77,7 @@
                         opener.document.getElementById("addPublishDate").value = data.pubDate;
                         opener.document.getElementById("addIsbn").value = data.isbn;
                         opener.document.getElementById("addContent").value = data.description;
-
-                        if (opener.toastui && opener.toastui.Editor) {
-                            let editorInstance = opener.toastui.Editor.factory({
-                                el: opener.document.querySelector('#addContent'),
-                                initialEditType: 'wysiwyg',
-                                initialValue: '내용을 입력해 주세요.',
-                                height: '500px',
-                                previewStyle: 'vertical'
-                            });
-                            editorInstance.setMarkdown(data.description);
-                        } else {
-                            opener.document.getElementById("addContent").textContent = data.description;
-                        }
                     }
-
-
                 </script>
 
                 <tr th:each="book : ${bookList}" onclick="selectElement(this)" style="cursor : pointer;" \>

@@ -305,7 +305,8 @@
         <div class="checkout-sidebar">
           <button class="btn btn-primary" onclick="openCouponPopup()" th:disabled="${userInfo.role == 'NONE_MEMBER'}">쿠폰 목록 보기</button>
           <input type="text" id="selectedCoupon" readonly
-                 th:disabled="${userInfo.role == 'NONE_MEMBER'}">
+                 th:disabled="${userInfo.role == 'NONE_MEMBER'}"
+                 th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.couponName : ''}">
           <input type="hidden" id="couponDiscount" value="0"
                  th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.discountAmount : 0}">
           <input type="hidden" id="couponDiscountRate" value="0">

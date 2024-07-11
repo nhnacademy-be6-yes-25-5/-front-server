@@ -1,9 +1,8 @@
 package com.nhnacademy.frontserver1.application.service;
 
 import com.nhnacademy.frontserver1.presentation.dto.request.user.*;
-import com.nhnacademy.frontserver1.presentation.dto.response.address.UserAddressResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.address.UsersAddressResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.point.PointLogResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.point.PointPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +28,7 @@ public interface UserService {
 
     UsersResponse getUserById(Long id);
 
-    Page<UserAddressResponse> getUserAddresses(Long userId, Pageable pageable);
+    Page<UsersAddressResponse> getUserAddresses(Long userId, Pageable pageable);
 
     ReadUserInfoResponse getUserPointsAndGrade();
 
@@ -44,4 +43,10 @@ public interface UserService {
     boolean setUserPasswordByEmail(String email, UpdatePasswordRequest request);
 
     void sendEmail(String recipient);
+
+    Page<UserAddressResponse> getAllUserAddresses(Pageable pageable);
+
+    void updateAddressBased(Long userAddressId, UpdateAddressBasedRequest request);
+
+    CreateUserAddressResponse createUserAddresses(CreateUserAddressRequest userRequest);
 }

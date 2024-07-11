@@ -2,10 +2,10 @@
 * 전체 물품 목록에서 장바구니에 담는 기능입니다.
 * */
 document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.add-to-cart-button').forEach(function(button) {
-    button.addEventListener('click', function() {
-      var bookId = this.getAttribute('data-book-id');
-      var quantity = 1;
+    document.querySelectorAll('.add-to-cart-button').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var bookId = this.getAttribute('data-book-id');
+            var quantity = 1;
 
       fetch('/carts', {
         method: 'POST',
@@ -30,7 +30,5 @@ document.addEventListener('DOMContentLoaded', function() {
       })
       .catch(error => {
         handleError(error);
-      });
     });
-  });
 });

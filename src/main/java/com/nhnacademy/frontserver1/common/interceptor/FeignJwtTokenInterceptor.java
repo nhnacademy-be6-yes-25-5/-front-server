@@ -45,7 +45,7 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
         String accessToken = TokenContext.getAccessToken();
         String refreshToken = TokenContext.getRefreshToken();
 
-        boolean isTokensEmpty = accessToken == null || refreshToken == null;
+        boolean isTokensEmpty = accessToken.isBlank() || refreshToken.isBlank();
 
         if (isTokensEmpty && (path.matches(".*/orders/.*/delivery.*") || path.startsWith("/users/cart-books")
                 || path.startsWith("/detail") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/reviews/books"))) {
@@ -57,12 +57,10 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
         }
 
         if (!isTokensEmpty) {
-            if (!(accessToken.isBlank() || refreshToken.isBlank())) {
-                template.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-                log.debug("Adding Authorization header: Bearer {}", accessToken);
-                template.header("Refresh-Token", refreshToken);
-                log.debug("Adding RefreshToken header: {}", refreshToken);
-            }
+            template.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+            log.debug("Adding Authorization header: Bearer {}", accessToken);
+            template.header("Refresh-Token", refreshToken);
+            log.debug("Adding RefreshToken header: {}", refreshToken);
         } else {
             log.warn("Authorization token is missing in the cookies.");
             throw new TokenCookieMissingException();

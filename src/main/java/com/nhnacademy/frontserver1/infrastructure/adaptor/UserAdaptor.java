@@ -64,4 +64,13 @@ public interface UserAdaptor {
 
     @PostMapping("/find/password")
     boolean findUserPasswordByEmailByName(@RequestBody FindPasswordRequest request);
+
+    @GetMapping("/user-addresses")
+    Page<UserAddressResponse> findAllUserAddresses(Pageable pageable);
+
+    @PutMapping("/user-addresses/{userAddressId}/based")
+    void updateAddressBased(@PathVariable Long userAddressId, @RequestBody UpdateAddressBasedRequest request);
+
+    @PostMapping("/user-addresses")
+    CreateUserAddressResponse createUserAddress(@RequestBody CreateUserAddressRequest userAddressRequest);
 }

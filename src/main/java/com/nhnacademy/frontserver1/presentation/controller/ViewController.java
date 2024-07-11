@@ -18,4 +18,14 @@ public class ViewController {
     public String index(Model model){
         return "admin/policy/admin-policy-coupon";
     }
+
+    @GetMapping("/find-mail")
+    public String findMail() {
+        return "findMail/find-mail";
+    }
+
+    @GetMapping("/find-password")
+    public String findPassword() {
+        return "findPassword/find-password";
+    }
 }

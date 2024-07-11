@@ -40,7 +40,7 @@ public interface UserService {
 
     boolean findUserPasswordByEmailByName(FindPasswordRequest request);
 
-    boolean setUserPasswordByEmail(String email, UpdatePasswordRequest request);
+   // boolean setUserPasswordByEmail(String email, UpdatePasswordRequest request);
 
     void sendEmail(String recipient);
 
@@ -49,4 +49,7 @@ public interface UserService {
     void updateAddressBased(Long userAddressId, UpdateAddressBasedRequest request);
 
     CreateUserAddressResponse createUserAddresses(CreateUserAddressRequest userRequest);
+
+
+    void UpdateUserPasswordByEmail(String email, UpdatePasswordRequest request);
 }

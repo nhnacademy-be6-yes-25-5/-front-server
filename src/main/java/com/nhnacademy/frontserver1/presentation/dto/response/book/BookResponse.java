@@ -21,7 +21,8 @@ public record BookResponse(
     Integer reviewCount,
     Integer hitsCount,
     Integer searchCount,
-    Boolean bookIsPackable
+    Boolean bookIsPackable,
+    Double grade
 ) {
 
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "bookAdapter", url = "${eureka.gateway}/books", configuration = FeignClientConfig.class)
+@FeignClient(name = "bookAdaptor", url = "${eureka.gateway}/books", configuration = FeignClientConfig.class)
 public interface BookAdaptor {
 
     @GetMapping("/page")
@@ -50,4 +50,7 @@ public interface BookAdaptor {
 
     @GetMapping("/categories/book/{bookId}")
     List<Long> getCategoryIdsByBookId(@PathVariable("bookId") Long bookId);
+
+    @GetMapping("/{bookId}/addHitsCount")
+    void addHitsCount(@PathVariable("bookId") Long bookId);
 }

@@ -37,7 +37,7 @@ public class BookServiceImpl implements BookService {
     @Value("${naverapi.id}")
     private String clientId;
 
-    private final BookAdaptor bookAdapter;
+    private final BookAdaptor bookAdaptor;
 
     @Override
     public List<BookAPIResponse> searchBooks(String keyword) {
@@ -92,40 +92,45 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookResponse createBook(CreateBookRequest createBookRequest, List<Long> categoryIdList, List<Long> tagIdList) {
-        return bookAdapter.createBook(createBookRequest, categoryIdList, tagIdList);
+        return bookAdaptor.createBook(createBookRequest, categoryIdList, tagIdList);
     }
 
     @Override
     public Page<BookResponse> findAllBooks(Pageable pageable) {
-        return bookAdapter.findAllBooks(pageable);
+        return bookAdaptor.findAllBooks(pageable);
     }
 
     @Override
     public List<BookResponse> findAllBooks() {
-        return bookAdapter.findAllBooks();
+        return bookAdaptor.findAllBooks();
     }
 
     @Override
     public void deleteBook(Long id) {
-        bookAdapter.deleteBook(id);
+        bookAdaptor.deleteBook(id);
     }
 
     @Override
     public BookResponse updateBook(UpdateBookRequest updateBookRequest, List<Long> categoryIdList, List<Long> tagIdList) {
-        return bookAdapter.updateBook(updateBookRequest, categoryIdList, tagIdList);
+        return bookAdaptor.updateBook(updateBookRequest, categoryIdList, tagIdList);
     }
 
     @Override
     public BookResponse getBook(Long id) {
-        return bookAdapter.findBookById(id);
+        return bookAdaptor.findBookById(id);
     }
 
     @Override
     public Page<BookResponse> getBookByCategoryId(Long categoryId, Pageable pageable, String sortString) {
-        return bookAdapter.getBookByCategory(categoryId, pageable, sortString);
+        return bookAdaptor.getBookByCategory(categoryId, pageable, sortString);
     }
 
     public List<Long> getCategoryIdsByBookId(Long bookId) {
-        return bookAdapter.getCategoryIdsByBookId(bookId);
+        return bookAdaptor.getCategoryIdsByBookId(bookId);
+    }
+
+    @Override
+    public void addHitsCount(Long bookId) {
+        bookAdaptor.addHitsCount(bookId);
     }
 }

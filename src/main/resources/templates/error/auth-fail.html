@@ -46,7 +46,10 @@
             <h2>죄송합니다.</h2>
             <p th:text="${cause}"></p>
             <div class="button">
-              <a href="/auth/login" class="btn">Go to Sign In</a>
+              <a th:href="${cause == '불가능한 접근입니다.' ? '/' : '/auth/login'}"
+                 class="btn"
+                 th:text="${cause == '불가능한 접근입니다.' ? 'Go to Home' : 'Go to Sign In'}">
+              </a>
             </div>
           </div>
         </div>

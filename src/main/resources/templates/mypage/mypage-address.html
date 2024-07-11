@@ -37,29 +37,31 @@
                                     <div class="tab-content" id="shippingAddressTabContent">
                                         <div class="tab-pane fade" id="my-addresses" role="tabpanel" aria-labelledby="my-addresses-tab">
                                             <div class="shipping-address-list">
+                                                <div th:if="${addresses.content.size() > 10}" class="alert alert-warning" role="alert">
+                                                    주소는 최대 10개까지만 등록할 수 있습니다.
+                                                </div>
                                                 <table class="table table-striped">
                                                     <thead>
                                                     <tr>
                                                         <th>별칭</th>
                                                         <th>주소</th>
                                                         <th>우편번호</th>
-                                                        <th>기본 배송지 설정</th>
+                                                        <th>기본 배송지 여부</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-<!--                                                    주소 조회 (임시) (선영님이 하시는 부분)-->
-<!--                                                    <tr th:each="address : ${addresses}">-->
-<!--                                                        <td th:text="${address.addressName}"></td>-->
-<!--                                                        <td th:text="${address.addressRaw} + ${address.addressDetail}"></td>-->
-<!--                                                        <td th:text="${address.addressZip}"></td>-->
-<!--                                                        <td>-->
-<!--                                                            <button type="button" class="btn btn-primary btn-sm"-->
-<!--                                                                    th:disabled="${address.addressBased}"-->
-<!--                                                                    th:text="${address.addressBased ? '기본 배송지' : '기본 배송지로 설정'}"-->
-<!--                                                                    th:onclick="'setAsDefault('+ ${address.userAddressId} +')'">-->
-<!--                                                            </button>-->
-<!--                                                        </td>-->
-<!--                                                    </tr>-->
+                                                    <tr th:each="address : ${addresses}">
+                                                        <td th:text="${address.addressName}"></td>
+                                                        <td th:text="${address.addressRaw} + ${address.addressDetail}"></td>
+                                                        <td th:text="${address.addressZip}"></td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-primary btn-sm"
+                                                                    th:disabled="${address.addressBased}"
+                                                                    th:text="${address.addressBased ? '기본 배송지' : '기본 배송지로 설정'}"
+                                                                    th:onclick="'setAsDefault('+ ${address.userAddressId} +')'">
+                                                            </button>
+                                                        </td>
+                                                    </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -111,10 +113,6 @@
                                     <div class="mb-3">
                                         <label for="addressZip" class="form-label">우편번호</label>
                                         <input type="text" class="form-control" id="addressZip" name="addressZip" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="addressPhone" class="form-label">연락처</label>
-                                        <input type="tel" class="form-control" id="addressPhone" name="addressPhone" required>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="true" id="addressBased" name="addressBased">
@@ -190,7 +188,7 @@
                 })
                 .catch(function(error) {
                     console.error('Error:', error);
-                    alert('배송지 저장에 실패했습니다.');
+                    alert('배송지 10개를 초과하였습니다.');
                 });
         });
 

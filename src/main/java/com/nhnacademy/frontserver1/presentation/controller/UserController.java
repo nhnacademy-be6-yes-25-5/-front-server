@@ -138,7 +138,7 @@ public class UserController {
 
 
 
-    // 배송지 조회(임시)
+    // 배송지 목록 조회
     @GetMapping("/mypage/addresses")
     public String getUserAddresses(@RequestParam(defaultValue = "0") int page,
                                    @RequestParam(defaultValue = "10") int size,
@@ -218,7 +218,6 @@ public class UserController {
         Page<CouponBoxResponse> activeCoupons = userService.getStateCouponBox("ACTIVE", PageRequest.of(page, size));
         Page<CouponBoxResponse> usedCoupons = userService.getStateCouponBox("USED", PageRequest.of(page, size));
         Page<CouponBoxResponse> expiredCoupons = userService.getStateCouponBox("EXPIRED", PageRequest.of(page, size));
-
 
         model.addAttribute("activeCoupons", activeCoupons);
         model.addAttribute("usedCoupons", usedCoupons);

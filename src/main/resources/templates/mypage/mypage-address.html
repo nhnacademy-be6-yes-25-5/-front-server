@@ -52,7 +52,7 @@
                                                     <tbody>
                                                     <tr th:each="address : ${addresses}">
                                                         <td th:text="${address.addressName}"></td>
-                                                        <td th:text="${address.addressRaw} + ${address.addressDetail}"></td>
+                                                        <td th:text="${address.addressRaw} + ', ' + ${address.addressDetail}"></td>
                                                         <td th:text="${address.addressZip}"></td>
                                                         <td>
                                                             <button type="button" class="btn btn-primary btn-sm"
@@ -71,7 +71,7 @@
                                                 <h4>기본 배송지</h4>
                                                 <p th:if="${defaultAddress != null}">
                                                     <span th:text="${defaultAddress.addressName}"></span> |
-                                                    <span th:text="${defaultAddress.addressRaw} + ${defaultAddress.addressDetail()}"></span> |
+                                                    <span th:text="${defaultAddress.addressRaw} + ', ' + ${defaultAddress.addressDetail()}"></span> |
                                                     <span th:text="${defaultAddress.addressZip}"></span>
                                                 </p>
                                                 <p th:if="${defaultAddress == null}">기본 배송지가 설정되지 않았습니다.</p>
@@ -225,7 +225,7 @@
 
 
     <!-- jQuery 및 Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 

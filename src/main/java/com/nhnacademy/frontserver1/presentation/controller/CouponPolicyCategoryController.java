@@ -28,6 +28,7 @@ public class CouponPolicyCategoryController {
     @GetMapping
     public String findAll(@RequestParam(defaultValue = "0") int page,
                           @RequestParam(defaultValue = "10") int size,
+                          @RequestParam(defaultValue = "ko") String lang,
                           Model model) {
         Pageable pageable = PageRequest.of(page, size);
         Page<CouponPolicyCategoryResponseDTO> categoryCouponsPage = couponService.findAllCategoryCouponPolicies(pageable);
@@ -36,6 +37,7 @@ public class CouponPolicyCategoryController {
         model.addAttribute("currentPage", categoryCouponsPage.getNumber());
         model.addAttribute("totalPages", categoryCouponsPage.getTotalPages());
         model.addAttribute("pageSize", categoryCouponsPage.getSize());
+        model.addAttribute("lang", lang);
         return "admin/policy/admin-policy-coupon-category";
     }
 
@@ -46,10 +48,13 @@ public class CouponPolicyCategoryController {
     }
 
     @GetMapping("/search")
-    public String searchCategories(@RequestParam(value = "query", required = false, defaultValue = "") String query, Model model) {
+    public String searchCategories(@RequestParam(value = "query", required = false, defaultValue = "") String query,
+                                   @RequestParam(defaultValue = "ko") String lang,
+                                   Model model) {
         List<CategoryResponse> categories = bookAdapter.findAllCategories();
         model.addAttribute("categoryList", categories);
         model.addAttribute("keyword", query);
+        model.addAttribute("lang", lang);
         return "admin/policy/admin-policy-coupon-category-search";
     }
 }

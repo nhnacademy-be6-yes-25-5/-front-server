@@ -34,6 +34,7 @@ public class CouponController {
     @GetMapping("/policy")
     public String getAdminCouponPolicy(@RequestParam(defaultValue = "0") int page,
                                        @RequestParam(defaultValue = "10") int size,
+                                       @RequestParam(defaultValue = "ko") String lang,
                                        Model model) {
         Pageable pageable = PageRequest.of(page, size);
         Page<CouponPolicyResponseDTO> couponPage = couponService.findAllCouponPolicies(pageable);
@@ -43,6 +44,7 @@ public class CouponController {
         model.addAttribute("totalPages", couponPage.getTotalPages());
         model.addAttribute("pageSize", couponPage.getSize());
         model.addAttribute("newCouponPolicy", new CouponPolicyRequestDTO());
+        model.addAttribute("lang", lang); // 언어 파라미터 추가
         return "admin/policy/admin-policy-coupon";
     }
 

@@ -27,6 +27,14 @@ public class GlobalControllerAdvice {
         return new ResponseEntity<>(errorStatus, errorStatus.toHttpStatus());
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    public ModelAndView handleAccessDeniedException(AccessDeniedException e) {
+
+        RedirectView redirectView = new RedirectView("/auth/error");
+        redirectView.addStaticAttribute("cause", e.getErrorStatus().message());
+        return new ModelAndView(redirectView);
+    }
+
     @ExceptionHandler({RefreshTokenFailedException.class, TokenCookieMissingException.class})
     public ModelAndView handleRefreshTokenFailedException() {
 

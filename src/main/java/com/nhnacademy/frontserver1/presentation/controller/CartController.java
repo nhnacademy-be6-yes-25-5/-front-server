@@ -10,9 +10,13 @@ import com.nhnacademy.frontserver1.presentation.dto.response.cart.UpdateCartBook
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpCookie;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import com.nhnacademy.frontserver1.common.context.TokenContext;
 
 @Controller
 @RequiredArgsConstructor
@@ -34,7 +39,29 @@ public class CartController {
 
     @PostMapping
     public ResponseEntity<CreateCartResponse> createCart(@RequestBody CreateCartRequest createCartRequest) {
-        return ResponseEntity.ok(cartService.createCart(createCartRequest));
+        CreateCartResponse response = cartService.createCart(createCartRequest);
+
+        // 쿠키 생성
+        HttpCookie accessTokenCookie = ResponseCookie.from("AccessToken", TokenContext.getAccessToken())
+                .httpOnly(true)
+                .secure(true) // HTTPS를 사용하는 경우에만 true로 설정
+                .path("/")
+                .maxAge(Duration.ofHours(1)) // 예: 1시간 유효
+                .sameSite("Strict") // 또는 "Lax"
+                .build();
+
+        HttpCookie refreshTokenCookie = ResponseCookie.from("RefreshToken", TokenContext.getRefreshToken())
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(Duration.ofDays(7)) // 예: 7일 유효
+                .sameSite("Strict")
+                .build();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
+                .body(response);
     }
 
     @GetMapping

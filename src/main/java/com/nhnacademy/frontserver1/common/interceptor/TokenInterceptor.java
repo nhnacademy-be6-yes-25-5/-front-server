@@ -10,8 +10,11 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import com.nhnacademy.frontserver1.common.provider.CookieTokenProvider;
 import com.nhnacademy.frontserver1.common.context.TokenContext;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -46,22 +49,29 @@ public class TokenInterceptor implements HandlerInterceptor {
             }
         }
 
-        if (modelAndView != null) {
-            // 현재 요청이 /logout이 아니고, 리다이렉트가 아닌 경우에만 처리
-            if (!"/logout".equals(request.getRequestURI())) {
-                Cookie[] cookies = request.getCookies();
-                if (cookies != null) {
-                    for (Cookie cookie : cookies) {
-                        if (cookie.getName().equals("AccessToken")) {
-                            String accessCookie = cookie.getValue();
-                            modelAndView.addObject("AccessToken", accessCookie);
-                        }
-                        if (cookie.getName().equals("RefreshToken")) {
-                            String refreshCookie = cookie.getValue();
-                            modelAndView.addObject("RefreshToken", refreshCookie);
-                        }
+        if (modelAndView != null && !"/logout".equals(request.getRequestURI())) {
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals("AccessToken")) {
+                        modelAndView.addObject("AccessToken", cookie.getValue());
+                    }
+                    if (cookie.getName().equals("RefreshToken")) {
+                        modelAndView.addObject("RefreshToken", cookie.getValue());
                     }
                 }
+            }
+
+            // 리다이렉트인 경우 URL 파라미터로 전달되지 않도록 처리
+            if (modelAndView.getViewName().startsWith("redirect:")) {
+                Map<String, Object> flashAttributes = new HashMap<>();
+                flashAttributes.put("AccessToken", modelAndView.getModel().get("AccessToken"));
+                flashAttributes.put("RefreshToken", modelAndView.getModel().get("RefreshToken"));
+
+                modelAndView.getModel().remove("AccessToken");
+                modelAndView.getModel().remove("RefreshToken");
+
+                modelAndView.addObject("flashAttributes", flashAttributes);
             }
         }
 

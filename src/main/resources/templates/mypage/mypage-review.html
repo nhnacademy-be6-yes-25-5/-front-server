@@ -13,50 +13,70 @@
                 <div class="col-md-3">
                     <div th:replace="~{fragments/user-sidebar :: user-sidebar}"></div>
                 </div>
-                <div class="col-lg-10">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="book-review-wrapper">
-                                    <div class="title">
-                                        <h3>내가 쓴 리뷰</h3>
-                                        <p>읽은 책에 대한 나의 리뷰 내역을 확인할 수 있습니다.</p>
-                                    </div>
-                                    <ul class="nav nav-tabs" id="bookReviewTab" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" id="my-reviews-tab" data-toggle="tab" href="#my-reviews" role="tab" aria-controls="my-reviews" aria-selected="true">내가 쓴 서평</a>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content" id="bookReviewTabContent">
-                                        <div class="tab-pane fade show active" id="my-reviews" role="tabpanel" aria-labelledby="my-reviews-tab">
-                                            <div class="book-review-list">
-                                                <table class="table table-striped">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>작성일자</th>
-                                                        <th>도서명</th>
-                                                        <th>리뷰 내용</th>
-                                                        <th>상태</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr>
-                                                        <td>2023-05-20</td>
-                                                        <td>토지</td>
-                                                        <td>역사적 맥락을 잘 보여주는 감동적인 책이었습니다.</td>
-                                                        <td>승인</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2023-04-01</td>
-                                                        <td>82년생 김지영</td>
-                                                        <td>현실적이고 공감되는 내용이었습니다.</td>
-                                                        <td>승인</td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
+                <div class="col-md-9">
+                    <div class="book-review-wrapper">
+                        <div class="title">
+                            <h3>내가 쓴 리뷰</h3>
+                            <p>작성한 리뷰 내역을 확인할 수 있습니다.</p>
+                        </div>
+                        <ul class="nav nav-tabs" id="bookReviewTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="my-reviews-tab" data-toggle="tab" href="#my-reviews" role="tab" aria-controls="my-reviews" aria-selected="true">내가 쓴 리뷰</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="bookReviewTabContent">
+                            <div class="tab-pane fade show active" id="my-reviews" role="tabpanel" aria-labelledby="my-reviews-tab">
+                                <div class="book-review-list" th:if="${!#lists.isEmpty(reviews.content)}">
+                                    <div th:each="review : ${reviews.content}" class="card mb-3">
+                                        <div class="row no-gutters">
+                                            <div class="col-md-12">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div>
+                                                            <h5 class="card-title" th:text="${review.bookName}">도서명</h5>
+                                                            <p class="card-text" th:text="${review.content}">리뷰 내용</p>
+                                                            <p class="card-text"><small class="text-muted" th:text="${review.createdAt}">작성일자</small></p>
+                                                            <p class="card-text">
+                                                                <span th:each="star : ${#numbers.sequence(1, review.rating)}">
+                                                                    <i class="lni lni-star-filled" aria-hidden="true"></i>
+                                                                </span>
+                                                                <span th:if="${review.rating < 5}">
+                                                                    <i class="lni lni-star-empty" aria-hidden="true"></i>
+                                                                </span>
+                                                            </p>
+                                                            <div th:if="${!#lists.isEmpty(review.reviewImages)}" class="review-images">
+                                                                <div th:each="image : ${review.reviewImages}" class="review-image-wrapper">
+                                                                    <img th:src="@{${image}}" class="card-img" alt="review image" style="max-width: 100px; max-height: 100px; margin-right: 10px;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+<!--                                                            <a href="#" class="card-link" th:href="@{/reviews/edit/{id}(id=${review.reviewId})}">수정</a>-->
+<!--                                                            <a href="#" class="card-link" th:href="@{/reviews/delete/{id}(id=${review.reviewId})}">삭제</a>-->
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="pagination" th:if="${reviews.totalPages > 1}">
+                                        <ul class="pagination-list">
+                                            <li th:if="${reviews.hasPrevious()}">
+                                                <a th:href="@{${#pagination.previousPageUrl(reviews)}}">&laquo; Previous</a>
+                                            </li>
+                                            <li th:each="pageNum : ${#numbers.sequence(1, reviews.totalPages)}"
+                                                th:classappend="${pageNum == reviews.number + 1} ? 'active'">
+                                                <a th:href="@{${#pagination.pageUrl(reviews, pageNum - 1)}}"
+                                                   th:text="${pageNum}"></a>
+                                            </li>
+                                            <li th:if="${reviews.hasNext()}">
+                                                <a th:href="@{${#pagination.nextPageUrl(reviews)}}">Next &raquo;</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="no-reviews" th:if="${#lists.isEmpty(reviews.content)}">
+                                    <p>리뷰 내역이 존재하지 않습니다.</p>
                                 </div>
                             </div>
                         </div>
@@ -65,30 +85,6 @@
             </div>
         </div>
     </div>
-    <!-- End Order History Area -->
-    <script>
-        // 비밀번호 확인하는 JS
-        const newPasswordInput = document.getElementById('new-password');
-        const confirmPasswordInput = document.getElementById('confirm-password');
-        const pwConfirmElement = document.getElementById('pwConfirm');
-        const setPasswordBtn = document.getElementById('update-btn');
-
-        function pwCheck() {
-            if (newPasswordInput.value === confirmPasswordInput.value) {
-                pwConfirmElement.textContent = '비밀번호 일치';
-                pwConfirmElement.style.color = 'green';
-            } else {
-                pwConfirmElement.textContent = '비밀번호 불일치';
-                pwConfirmElement.style.color = 'red';
-            }
-
-            setPasswordBtn.disabled = (newPasswordInput.value !== confirmPasswordInput.value);
-        }
-
-        newPasswordInput.addEventListener('input', pwCheck);
-        confirmPasswordInput.addEventListener('input', pwCheck);
-    </script>
-
-</div>>
+</div>
 </body>
 </html>

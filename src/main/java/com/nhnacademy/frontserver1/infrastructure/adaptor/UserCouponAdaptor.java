@@ -6,6 +6,8 @@ import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadUserCoupo
 import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "userCouponAdaptor", url = "${eureka.gateway}/users")
 public interface UserCouponAdaptor {
@@ -15,5 +17,5 @@ public interface UserCouponAdaptor {
 
     @GetMapping("/user-coupons/max")
     ReadMaximumDiscountCouponResponse getMaxDiscountCouponByTotalAmount(
-        ReadMaximumDiscountCouponRequest request);
+        @RequestParam Integer totalAmount);
 }

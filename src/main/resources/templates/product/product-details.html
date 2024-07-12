@@ -34,12 +34,12 @@
                             <h2 th:text="${book.bookName()}" class="title">GoPro Karma Camera Drone</h2>
                             <p th:text="${book.bookAuthor()}" class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">Action cameras</a></p>
                             <h3 class="price">
-                                <span th:text="${book.bookPrice()}">$945</span>
+                                <span th:text = "${#numbers.formatInteger(book.bookPrice(),3,'COMMA')} + '원'">$945</span>
                                 <h5 th:if="${book.bookPrice() > 0}">
                                     <span th:text="${(1 - book.bookSellingPrice() / book.bookPrice()) * 100 + '%'}"></span>
                                     <span> off</span>
                                 </h5>
-                                <h3 th:text="${book.bookSellingPrice()}">$850</h3>
+                                <h3 th:text = "${#numbers.formatInteger(book.bookSellingPrice(),3,'COMMA')} + '원'">$850</h3>
                             </h3>
                             <div class="row">
                                 <div class="col-lg-4 col-md-4 col-12">

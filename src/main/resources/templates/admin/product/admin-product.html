@@ -29,7 +29,7 @@
                             <tr th:each="product : ${productList}">
                                 <td th:text = "${product.bookId()}">1</td>
                                 <td th:text = "${product.bookName()}">Product A</td>
-                                <td th:text = "${product.bookSellingPrice()}">$49.99</td>
+                                <td th:text = "${#numbers.formatInteger(product.bookSellingPrice(),3,'COMMA') + '원'}">$49.99</td>
                                 <td th:text = "${product.bookQuantity()}">1</td>
                                 <td th:text = "${product.bookDescription()}">This is a sample product description.</td>
                                 <td>

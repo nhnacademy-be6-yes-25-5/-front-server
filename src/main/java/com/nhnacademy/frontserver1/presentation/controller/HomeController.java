@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,8 +43,20 @@ public class HomeController {
         Collections.shuffle(bookList);
         List<BookResponse> randomBooks = bookList.stream().limit(6).collect(Collectors.toList());
 
+
+        List<BookResponse> popularBooks = bookList.stream()
+                .limit(8)
+                .sorted(Comparator.comparingInt(BookResponse::hitsCount))
+                .toList()
+                .reversed();
+
+        BookResponse recentlyBook = bookList.stream()
+                        .max(Comparator.comparing(BookResponse::bookPublishDate)).orElse(null);
+
+        model.addAttribute("recentlyBook", recentlyBook);
         model.addAttribute("categories", rootCategories);
         model.addAttribute("bookList", randomBooks);
+        model.addAttribute("popularBooks", popularBooks);
 
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {

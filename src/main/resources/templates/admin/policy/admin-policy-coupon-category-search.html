@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <title th:text="${lang == 'ko'} ? '카테고리 목록' : 'Category List'">Category List</title>
     <style>
         table {
             width: 100%;
@@ -14,19 +15,24 @@
 </head>
 <body>
 <div class="col-md-12">
-    <h1>카테고리 목록</h1>
-    <h2>클릭시 자동 입력됩니다 !!</h2>
+    <h1 th:text="${lang == 'ko'} ? '카테고리 목록' : 'Category List'">Category List</h1>
+    <h2 th:text="${lang == 'ko'} ? '클릭시 자동 입력됩니다 !!' : 'Click to auto-fill!!'">Click to auto-fill!!</h2>
     <div class="col-md-4">
         <form th:action="@{/coupons/policy/categories/search}" method="get">
+            <input type="hidden" name="lang" th:value="${lang}">
         </form>
+    </div>
+    <div class="col-md-4" style="margin-top: 10px;">
+        <button class="btn btn-secondary" onclick="changeLang('ko')">한국어</button>
+        <button class="btn btn-secondary" onclick="changeLang('en')">English</button>
     </div>
     <hr>
     <div>
         <table class="table">
             <thead>
             <tr>
-                <th>ID</th>
-                <th>카테고리명</th>
+                <th th:text="${lang == 'ko'} ? 'ID' : 'ID'">ID</th>
+                <th th:text="${lang == 'ko'} ? '카테고리명' : 'Category Name'">Category Name</th>
             </tr>
             </thead>
             <tbody>
@@ -41,8 +47,6 @@
                 }
 
                 function addDataToForm(ele) {
-                    console.log('addDateToForm' + ele);
-
                     let elements = ele.getElementsByTagName("td");
                     let data = {
                         categoryId: elements[0].textContent,
@@ -52,6 +56,12 @@
                     // 부모 창으로 element 전달
                     opener.document.getElementById("categoryId").value = data.categoryId;
                     opener.document.getElementById("categoryName").value = data.categoryName;
+                }
+
+                function changeLang(lang) {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('lang', lang);
+                    window.location.href = url.toString();
                 }
             </script>
 

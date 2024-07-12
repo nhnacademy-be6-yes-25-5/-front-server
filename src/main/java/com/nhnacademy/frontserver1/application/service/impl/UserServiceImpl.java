@@ -31,13 +31,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserAdaptor userAdaptor;
 
-    @Value("${SMTP_HOST}")
+    @Value("${spring.mail.host}")
     private String host;
 
-    @Value("${SMTP_USERNAME}")
+    @Value("${spring.mail.username}")
     private String sender;
 
-    @Value("${SMTP_PASSWORD}")
+    @Value("${spring.mail.password}")
     private String password;
 
     @Override

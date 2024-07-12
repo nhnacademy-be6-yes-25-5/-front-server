@@ -55,6 +55,11 @@ jobs:
           NHN_IMAGE_APPKEY: ${{ secrets.NHN_IMAGE_APPKEY }}
           NHN_IMAGE_SECRET: ${{ secrets.NHN_IMAGE_SECRET }}
           EUREKA_SERVER_HOSTNAME: ${{ secrets.EUREKA_SERVER_HOSTNAME }}
+          SMTP_HOST : ${{ secrets.SMTP_HOST }}
+          SMTP_PASSWORD : ${{ secrets.SMTP_PASSWORD }}
+          SMTP_PORT : ${{ secrets.SMTP_PORT }}
+          SMTP_USERNAME : ${{ secrets.SMTP_USERNAME }}
+
         run: |
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
             cd ${REMOTE_DIR}
@@ -72,9 +77,9 @@ jobs:
             -e NHN_IMAGE_APPKEY=${NHN_IMAGE_APPKEY} \
             -e EUREKA_SERVER_HOSTNAME=${EUREKA_SERVER_HOSTNAME} \
             -e SMTP_HOST=${SMTP_HOST} \ 
-            -e SMTP_PASSWORD=${lxcm tulr nnme uimf} \
-            -e SMTP_PORT = ${587} \
-            -e SMTP_USERNAME=${amuge0705@gmail.com}
+            -e SMTP_PASSWORD=${SMTP_PASSWORD} \
+            -e SMTP_PORT = ${SMTP_PORT} \
+            -e SMTP_USERNAME=${SMTP_USERNAME}
           
             front1-app-8040
             

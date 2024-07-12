@@ -25,7 +25,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<ReadCartBookResponse> getCarts() {
-        return cartAdaptor.getCartBooks();
+        return cartAdaptor.getCartBooks().getBody();
     }
 
     @Override

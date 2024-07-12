@@ -50,6 +50,10 @@ public class HomeController {
                 .toList()
                 .reversed();
 
+        BookResponse recentlyBook = bookList.stream()
+                        .max(Comparator.comparing(BookResponse::bookPublishDate)).orElse(null);
+
+        model.addAttribute("recentlyBook", recentlyBook);
         model.addAttribute("categories", rootCategories);
         model.addAttribute("bookList", randomBooks);
         model.addAttribute("popularBooks", popularBooks);

@@ -20,6 +20,7 @@ public record BookIndexResponse(
         Integer hitsCount,
         Integer searchCount,
         boolean bookIsPackable,
+        Double grade,
         List<String> authors,
         List<String> tags
 )

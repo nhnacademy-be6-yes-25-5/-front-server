@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +30,15 @@ import java.util.Properties;
 public class UserServiceImpl implements UserService {
 
     private final UserAdaptor userAdaptor;
+
+    @Value("${SMTP_HOST}")
+    private String host;
+
+    @Value("${SMTP_USERNAME}")
+    private String sender;
+
+    @Value("${SMTP_PASSWORD}")
+    private String password;
 
     @Override
     public UserResponse signUp(CreateUserRequest userRequest) {
@@ -149,10 +159,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void sendEmail(String recipient) {
-
-        String host = System.getenv("SMTP_HOST");
-        final String sender = System.getenv("SMTP_USERNAME");
-        final String password = System.getenv("SMTP_PASSWORD");
 
         Properties properties = new Properties();
         properties.put("mail.smtp.host", host);

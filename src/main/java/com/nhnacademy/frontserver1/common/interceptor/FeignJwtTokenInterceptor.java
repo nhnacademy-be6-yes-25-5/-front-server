@@ -52,6 +52,10 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
             return;
         }
 
+        if (path.startsWith("/detail") && request.getMethod().equalsIgnoreCase("GET")) {
+            return;
+        }
+
         if (isTokensEmpty && (path.startsWith("/users/cart-books") || request.getMethod().equalsIgnoreCase("POST"))) {
             return;
         }

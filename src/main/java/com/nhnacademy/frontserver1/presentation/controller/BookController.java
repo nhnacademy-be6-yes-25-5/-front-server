@@ -3,6 +3,7 @@ package com.nhnacademy.frontserver1.presentation.controller;
 import com.nhnacademy.frontserver1.application.service.BookService;
 import com.nhnacademy.frontserver1.application.service.CategoryService;
 import com.nhnacademy.frontserver1.application.service.CouponService;
+import com.nhnacademy.frontserver1.common.exception.BookException;
 import com.nhnacademy.frontserver1.common.exception.LikesNotLoginException;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.CategoryResponse;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.LikesAdapter;
@@ -51,6 +52,15 @@ public class BookController {
 
         model.addAttribute("message", "로그인이 필요한 서비스입니다.");
         model.addAttribute("url", "/");
+
+        return "message";
+    }
+
+    @ExceptionHandler(BookException.class)
+    public String bookException(Model model) {
+
+        model.addAttribute("message", "이미 존재하는 책입니다.");
+        model.addAttribute("url", "/admin/product");
 
         return "message";
     }

@@ -21,9 +21,9 @@ spring:
     properties:
       mail:
         smtp:
-          auth=true:
+          auth: true
           starttls:
-            enable=true:
+            enable: true
 
 eureka:
   gateway: http://127.0.0.1:8085

@@ -3,7 +3,7 @@ FROM maven:3.8.8-eclipse-temurin-21
 
 # Install tzdata and set the timezone
 RUN apt-get update && apt-get install -y tzdata && \
-    ln -snf /usr/share/zoneinfo/Asia/Seoul /etc/localtime && echo "Asia/Seoul" > /etc/timezone \
+    ln -snf /usr/share/zoneinfo/Asia/Seoul /etc/localtime && echo "Asia/Seoul" > /etc/timezone
 
 # Set the working directory
 WORKDIR /app

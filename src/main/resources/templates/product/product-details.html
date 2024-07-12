@@ -207,7 +207,6 @@
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/x-www-form-urlencoded',
-                                        'Authorization': 'Bearer ' + localStorage.getItem('accessToken') // 토큰을 로컬 스토리지에서 가져옴
                                     },
                                     body: new URLSearchParams({
                                         'couponId': couponId
@@ -215,7 +214,12 @@
                                 }).then(response => {
                                     if (response.ok) {
                                         alert('쿠폰이 성공적으로 발급되었습니다.');
-                                    } else {
+                                    } else if (response.status === 400) {
+                                        alert('이미 발급된 쿠폰입니다.');
+                                    } else if (response.status === 500) {
+                                        alert('비회원은 쿠폰 발급이 불가합니다.\n회원가입 후 쿠폰혜택을 받아보세요 !!')
+                                    }
+                                    else {
                                         alert('쿠폰 발급에 실패하였습니다.');
                                     }
                                 });

@@ -71,6 +71,11 @@ jobs:
             -e NHN_IMAGE_SECRET=${NHN_IMAGE_SECRET} \
             -e NHN_IMAGE_APPKEY=${NHN_IMAGE_APPKEY} \
             -e EUREKA_SERVER_HOSTNAME=${EUREKA_SERVER_HOSTNAME} \
+            -e SMTP_HOST=${SMTP_HOST} \ 
+            -e SMTP_PASSWORD=${lxcm tulr nnme uimf} \
+            -e SMTP_PORT = ${587} \
+            -e SMTP_USERNAME=${amuge0705@gmail.com}
+          
             front1-app-8040
             
             sleep 30

@@ -138,6 +138,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UpdateUserAddressResponse updateUserAddress(Long userAddressId, UpdateUserAddressRequest userRequest) {
+        return userAdaptor.updateUserAddress(userAddressId, userRequest);
+    }
+
+    @Override
+    public UserAddressResponse findUserAddressById(Long userAddressId) {
+        return userAdaptor.findUserAddressById(userAddressId);
+    }
+
+    @Override
+    public void deleteUserAddress(Long userAddressId) {
+        userAdaptor.deleteUserAddress(userAddressId);
+    }
+
+    @Override
     public boolean findUserPasswordByEmailByName(FindPasswordRequest request) {
         return userAdaptor.findUserPasswordByEmailByName(request);
     }

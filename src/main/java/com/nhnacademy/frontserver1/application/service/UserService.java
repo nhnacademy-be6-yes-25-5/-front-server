@@ -6,6 +6,7 @@ import com.nhnacademy.frontserver1.presentation.dto.response.point.PointLogRespo
 import com.nhnacademy.frontserver1.presentation.dto.response.user.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -50,6 +51,11 @@ public interface UserService {
 
     CreateUserAddressResponse createUserAddresses(CreateUserAddressRequest userRequest);
 
+    UpdateUserAddressResponse updateUserAddress(Long userAddressId, UpdateUserAddressRequest userRequest);
+
+    UserAddressResponse findUserAddressById(Long userAddressId);
+
+    void deleteUserAddress(Long userAddressId);
 
     void UpdateUserPasswordByEmail(String email, UpdatePasswordRequest request);
 }

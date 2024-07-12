@@ -173,6 +173,27 @@ public class UserController {
         return ResponseEntity.ok(userService.createUserAddresses(request));
     }
 
+    // 배송지 수정
+    @PutMapping("/mypage/addresses/{userAddressId}")
+    public ResponseEntity<UpdateUserAddressResponse> updateUserAddress(@PathVariable Long userAddressId,
+                                                                       @RequestBody UpdateUserAddressRequest request) {
+        return ResponseEntity.ok(userService.updateUserAddress(userAddressId, request));
+    }
+
+    // 배송지 단건 조회
+    @GetMapping("/mypage/addresses/{userAddressId}")
+    public ResponseEntity<UserAddressResponse> findUserAddressById(@PathVariable Long userAddressId) {
+        return ResponseEntity.ok(userService.findUserAddressById(userAddressId));
+    }
+
+    @DeleteMapping("/mypage/addresses/{userAddressId}")
+    public ResponseEntity<Void> deleteUserAddressById(@PathVariable Long userAddressId) {
+
+        userService.deleteUserAddress(userAddressId);
+
+        return ResponseEntity.ok().build();
+    }
+
     private static final Logger logger = Logger.getLogger(UserController.class.getName());
 
     @GetMapping("/users/find-email")

@@ -13,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
 import com.nhnacademy.frontserver1.common.exception.AccessDeniedException;
-import java.time.LocalDateTime;
-
 import java.time.LocalDateTime;
 
 /**
@@ -38,14 +35,11 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
      */
     @Override
     public void apply(RequestTemplate template) {
-
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String path = request.getServletPath();
+        String servletPath = request.getServletPath();
+        String feignPath = template.path();
 
-        if (path.equals("/") || path.startsWith("/orders/none") || path.startsWith("/category") || path.startsWith("/search")
-          || path.startsWith("/sign-up") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/check-email")
-                || path.startsWith("/auth/dormant")|| path.startsWith("/users/sign-up") || path.equals("/callback") || path.startsWith("/users/find/password")) {
-
+        if (isServletPathAndFeignExclude(servletPath, feignPath)) {
             return;
         }
 
@@ -54,21 +48,20 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
 
         boolean isTokensEmpty = accessToken.isBlank() || refreshToken.isBlank();
 
-        if (isTokensEmpty && (path.matches(".*/orders/.*/delivery.*") || path.startsWith("/users/cart-books")
-                || path.startsWith("/detail") || path.startsWith("/books") || path.matches("/coupons") || path.startsWith("/reviews/books"))) {
+        if (isTokensEmptyAndIsServletPathExclude(isTokensEmpty, servletPath)) {
             return;
         }
 
-        if (path.startsWith("/detail") && request.getMethod().equalsIgnoreCase("GET")) {
+        if (servletPath.startsWith("/detail") && request.getMethod().equalsIgnoreCase("GET")) {
             return;
         }
 
-        if (isTokensEmpty && (path.startsWith("/users/cart-books") || request.getMethod().equalsIgnoreCase("POST"))) {
+        if (isTokensEmptyAndIsServletPathExcludeWithHttpMethod(isTokensEmpty, servletPath, template)) {
             return;
         }
 
         if (!isTokensEmpty) {
-            if (path.equals("/auth/login")) {
+            if (servletPath.equals("/auth/login")) {
                 throw new AccessDeniedException(ErrorStatus.toErrorStatus(
                         "불가능한 접근입니다.", 409, LocalDateTime.now()
                 ));
@@ -78,17 +71,52 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
             template.header("Refresh-Token", refreshToken);
             log.debug("Adding RefreshToken header: {}", refreshToken);
         } else {
-            if(path.equals("/likesList")) {
+            if(servletPath.equals("/likesList")) {
                 throw new LikesNotLoginException(ErrorStatus.toErrorStatus("로그인 시 좋아요 표시한 도서를 볼 수 있습니다.",401, LocalDateTime.now()));
             }
 
-            if(path.matches("/likesClick/\\d+")) {
+            if(servletPath.matches("/likesClick/\\d+")) {
                 throw new LikesNotLoginException(ErrorStatus.toErrorStatus("로그인 시 좋아요를 표시할 수 있습니다.", 401, LocalDateTime.now()));
             }
 
             log.warn("Authorization token is missing in the cookies.");
             throw new TokenCookieMissingException();
         }
+    }
+
+    /**
+     * 서블릿 경로이면서, 토큰이 필요한 있는 요청 중 Http 메소드와 토큰이 없는 상황을 고려해야 할 경우 경로를 추가해주시면 됩니다.
+     * ex) 회원, 비회원(비회원 중에서도 토큰이 없는 비회원) 구분이 필요할 경우
+     * @param servletPath 서블릿 요청 경로입니다.
+     * @param isTokensEmpty 엑세스, 리프레시 토큰 둘다 비어있으면 true, 하나라도 있으면 false
+     * */
+    private boolean isTokensEmptyAndIsServletPathExcludeWithHttpMethod(boolean isTokensEmpty,
+        String servletPath, RequestTemplate template) {
+        return isTokensEmpty && (servletPath.startsWith("/users/cart-books") || template.method().equalsIgnoreCase("POST"));
+    }
+
+    /**
+     * 서블릿 경로이면서, 토큰이 필요한 있는 요청 중 토큰이 없는 상황을 고려해야 할 경우 경로를 추가해주시면 됩니다.
+     * ex) 회원, 비회원(비회원 중에서도 토큰이 없는 비회원) 구분이 필요할 경우
+     * @param servletPath 서블릿 경로입니다.
+     * @param isTokensEmpty 엑세스, 리프레시 토큰 둘다 비어있으면 true, 하나라도 있으면 false
+     * */
+    private boolean isTokensEmptyAndIsServletPathExclude(boolean isTokensEmpty, String servletPath) {
+        return isTokensEmpty && (servletPath.matches(".*/orders/.*/delivery.*") || servletPath.startsWith("/users/cart-books")
+            || servletPath.startsWith("/detail") || servletPath.startsWith("/books") || servletPath.matches("/coupons") || servletPath.startsWith("/reviews/books"));
+    }
+
+    /**
+     * 서블릿 경로이거나 feign경로이면서, 토큰이 필요없는 요청일 경우 경로를 추가해주시면 됩니다.
+     *
+     * @param servletPath 서블릿 경로입니다.
+     * @param feignPath feign 경로입니다.
+     */
+    private boolean isServletPathAndFeignExclude(String servletPath, String feignPath) {
+        return (servletPath.equals("/") || servletPath.startsWith("/orders/none") || servletPath.startsWith("/category") || servletPath.startsWith("/search")
+            || servletPath.startsWith("/sign-up") || servletPath.startsWith("/books") || servletPath.matches("/coupons") || servletPath.startsWith("/check-email")
+            || servletPath.startsWith("/auth/dormant")|| servletPath.startsWith("/users/sign-up") || servletPath.equals("/callback") || servletPath.startsWith("/users/find/password"))
+            && !feignPath.startsWith("/cart-books");
     }
 
 }

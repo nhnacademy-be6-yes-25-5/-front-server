@@ -1,8 +1,9 @@
 # Use the official Maven image with Java 11
 FROM maven:3.8.8-eclipse-temurin-21
 
+# Install tzdata and set the timezone
 RUN apt-get update && apt-get install -y tzdata && \
-    ln -snf /usr/share/zoneinfo/Asia/Seoul /etc/localtime && echo "Asia/Seoul" > /etc/timezone \
+    ln -snf /usr/share/zoneinfo/Asia/Seoul /etc/localtime && echo "Asia/Seoul" > /etc/timezone
 
 # Set the working directory
 WORKDIR /app
@@ -15,7 +16,7 @@ RUN mvn dependency:go-offline
 COPY . .
 
 # Package the application
-RUN mvn package
+RUN mvn clean package
 
 # Default command with specific port for this Dockerfile
 CMD ["java", "-jar", "target/FrontServer1-0.0.1-SNAPSHOT.jar", "--spring.profiles.active=prod", "--server.port=8041"]

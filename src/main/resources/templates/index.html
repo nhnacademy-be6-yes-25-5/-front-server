@@ -71,15 +71,6 @@
         </div>
         <div class="row">
             <div class="col-lg-4 col-md-6 col-12" th:each="book : ${bookList}">
-<!--                <div class="single-category">-->
-<!--                    <div class="images">-->
-<!--                        <h3 class="heading" th:text="${book.bookName()}">책 제목</h3>-->
-<!--                        <ul>&ndash;&gt;-->
-<!--                            <li><a th:text = "${book.bookAuthor()}">작가</a></li>-->
-<!--                        </ul>-->
-<!--                        <img th:src="@{${book.bookImage()}}" alt="책 이미지">-->
-<!--                    </div>-->
-<!--                </div>-->
                 <div class="single-product">
                     <div class="product-image">
                         <img th:if="${book.bookImage() != null}" th:src="@{${book.bookImage()}}">
@@ -99,64 +90,46 @@
                             <li><i class="lni lni-star-filled"></i></li>
                             <li><i class="lni lni-star-filled"></i></li>
                             <li><i class="lni lni-star"></i></li>
-                            <li><span>Review(555)</span></li>
+                            <li th:text="'Review(' + ${book.reviewCount() + ')'}"><span>Review(555)</span></li>
                         </ul>
                         <div class="price">
-                            <span th:text = "${book.bookSellingPrice()}">19,900원</span>
+                            <span th:text = "${#numbers.formatInteger(book.bookSellingPrice(),3,'COMMA')} + '원'">19,900원</span>
                         </div>
                     </div>
                 </div>
                 <!-- End Single Category -->
             </div>
-<!--            <div class="col-lg-4 col-md-6 col-12">-->
-<!--                &lt;!&ndash; Start Single Category &ndash;&gt;-->
-<!--                <div class="single-category">-->
-<!--                    <h3 class="heading">대분류 2</h3>-->
-<!--                    <ul>-->
-<!--                        <li><a href="product/product-grids.html">소분류 1</a></li>-->
-<!--                        <li><a href="product/product-grids.html">소분류 2</a></li>-->
-<!--                        <li><a href="product/product-grids.html">소분류 3</a></li>-->
-<!--                        <li><a href="product/product-grids.html">소분류 4</a></li>-->
-<!--                        <li><a href="product/product-grids.html">View All</a></li>-->
-<!--                    </ul>-->
-<!--                    <div class="images">-->
-<!--                        &lt;!&ndash; 해당 카테고리 검색 화면으로 get 요청 &ndash;&gt;-->
-<!--                        <img src="/images/book-exam.jpeg" alt="#">-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                &lt;!&ndash; End Single Category &ndash;&gt;-->
-<!--            </div>-->
-
         </div>
     </div>
 </section>
 <!-- End Features Area -->
 
-<!-- Start Trending Product Area -->
+    <!-- Start Trending Product Area -->
 <section class="trending-product section">
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <div class="section-title">
-                    <h2>인기 도서 Best 6</h2>
-                    <p>가장 많은 사랑을 받은 베스트셀러 6권을 소개합니다.</p>
+                    <h2>인기 도서 Best 8</h2>
+                    <p>가장 많은 사랑을 받은 베스트셀러 8권을 소개합니다.</p>
                 </div>
             </div>
         </div>
+        <!-- 반복문 시작 -->
         <div class="row">
-            <div class="col-lg-3 col-md-6 col-12">
-                <!-- Start Single Product -->
+            <div class="col-lg-3 col-md-6 col-12" th:each="book : ${popularBooks}">
                 <div class="single-product">
                     <div class="product-image">
-                        <img src="/images/sapiens.jpeg" alt="#">
+                        <img th:if="${book.bookImage() != null}" th:src="@{${book.bookImage()}}">
+                        <img th:if="${book.bookImage() == null || book.bookImage().isEmpty()}" src="/images/logo/logo.png" alt="Default Book Image">
                         <div class="button">
-                            <a href="product/product-details.html" class="btn"><i class="lni lni-cart"></i> Add to Cart</a>
+                            <button class="btn add-to-cart-button" th:data-book-id="${book.bookId()}"><i class="lni lni-cart"></i> Add to Cart</button>
                         </div>
                     </div>
                     <div class="product-info">
-                        <span class="category">소설</span>
+                        <span th:text="${book.bookAuthor()}" class="category">작가</span>
                         <h4 class="title">
-                            <a href="product/product-grids.html">해리포터와 마법사의 돌</a>
+                            <a th:text="${book.bookName()}" th:href="@{'/detail/' + ${book.bookId()}}">해리포터와 마법사의 돌</a>
                         </h4>
                         <ul class="review">
                             <li><i class="lni lni-star-filled"></i></li>
@@ -164,228 +137,21 @@
                             <li><i class="lni lni-star-filled"></i></li>
                             <li><i class="lni lni-star-filled"></i></li>
                             <li><i class="lni lni-star"></i></li>
-                            <li><span>Review(555)</span></li>
+                            <li th:text="'Review(' + ${book.reviewCount() + ')'}"><span>Review(555)</span></li>
                         </ul>
                         <div class="price">
-                            <span>19,900원</span>
+                            <span th:text = "${#numbers.formatInteger(book.bookSellingPrice(),3,'COMMA')} + '원'">19,900원</span>
                         </div>
                     </div>
                 </div>
-                <!-- End Single Product -->
-            </div>
-            <div class="col-lg-3 col-md-6 col-12">
-                <!-- Start Single Product -->
-                <div class="single-product">
-                    <div class="product-image">
-                        <img src="/images/sapiens.jpeg" alt="#">
-                        <span class="sale-tag">-25%</span>
-                        <div class="button">
-                            <button class="btn add-to-cart-button" data-book-id="${book.bookId()}"><i class="lni lni-cart"></i> Add to Cart</button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <span class="category">자기계발</span>
-                        <h4 class="title">
-                            <a href="product/product-grids.html">7가지 습관</a>
-                        </h4>
-                        <ul class="review">
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><span>Review(344)</span></li>
-                        </ul>
-                        <div class="price">
-                            <span>1,680원</span>
-                            <span class="discount-price">12,420원</span>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Single Product -->
-            </div>
-            <div class="col-lg-3 col-md-6 col-12">
-                <!-- Start Single Product -->
-                <div class="single-product">
-                    <div class="product-image">
-                        <img src="/images/sapiens.jpeg" alt="#">
-                        <div class="button">
-                            <button class="btn add-to-cart-button" data-book-id="${book.bookId()}"><i class="lni lni-cart"></i> Add to Cart</button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <span class="category">에세이</span>
-                        <h4 class="title">
-                            <a href="product/product-grids.html">나는 나로 살기로 했다</a>
-                        </h4>
-                        <ul class="review">
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><span>Review(311)</span></li>
-                        </ul>
-                        <div class="price">
-                            <span>15,300원</span>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Single Product -->
-            </div>
-            <div class="col-lg-3 col-md-6 col-12">
-                <!-- Start Single Product -->
-                <div class="single-product">
-                    <div class="product-image">
-                        <img src="/images/sapiens.jpeg" alt="#">
-                        <span class="new-tag">New</span>
-                        <div class="button">
-                            <button class="btn add-to-cart-button" data-book-id="${book.bookId()}"><i class="lni lni-cart"></i> Add to Cart</button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <span class="category">사회과학</span>
-                        <h4 class="title">
-                            <a href="product/product-grids.html">사피엔스</a>
-                        </h4>
-                        <ul class="review">
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><span>Review(111)</span></li>
-                        </ul>
-                        <div class="price">
-                            <span>21,600원</span>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Single Product -->
-            </div>
-            <div class="col-lg-3 col-md-6 col-12">
-                <!-- Start Single Product -->
-                <div class="single-product">
-                    <div class="product-image">
-                        <img src="/images/sapiens.jpeg" alt="#">
-                        <div class="button">
-                            <a href="product/product-details.html" class="btn"><i class="lni lni-cart"></i> Add to Cart</a>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <span class="category">역사</span>
-                        <h4 class="title">
-                            <a href="product/product-grids.html">총,균,쇠</a>
-                        </h4>
-                        <ul class="review">
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><span>Review(15)</span></li>
-                        </ul>
-                        <div class="price">
-                            <span>25,200원</span>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Single Product -->
-            </div>
-            <div class="col-lg-3 col-md-6 col-12">
-                <!-- Start Single Product -->
-                <div class="single-product">
-                    <div class="product-image">
-                        <img src="/images/sapiens.jpeg" alt="#">
-                        <div class="button">
-                            <a href="product/product-details.html" class="btn"><i class="lni lni-cart"></i> Add to Cart</a>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <span class="category">경제경영</span>
-                        <h4 class="title">
-                            <a href="product/product-grids.html">부의 추월차선</a>
-                        </h4>
-                        <ul class="review">
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star"></i></li>
-                            <li><span>Review(5)</span></li>
-                        </ul>
-                        <div class="price">
-                            <span>17,100원</span>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Single Product -->
-            </div>
-            <div class="col-lg-3 col-md-6 col-12">
-                <!-- Start Single Product -->
-                <div class="single-product">
-                    <div class="product-image">
-                        <img src="/images/sapiens.jpeg" alt="#">
-                        <div class="button">
-                            <a href="product/product-details.html" class="btn"><i class="lni lni-cart"></i> Add to Cart</a>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <span class="category">경제경영</span>
-                        <h4 class="title">
-                            <a href="product/product-grids.html">부자 아빠 가난한 아빠</a>
-                        </h4>
-                        <ul class="review">
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-half"></i></li>
-                            <li><span>Review(3)</span></li>
-                        </ul>
-                        <div class="price">
-                            <span>14,000원</span>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Single Product -->
-            </div>
-
-            <div class="col-lg-3 col-md-6 col-12">
-                <!-- Start Single Product -->
-                <div class="single-product">
-                    <div class="product-image">
-                        <img src="/images/sapiens.jpeg" alt="#">
-                        <div class="button">
-                            <a href="product/product-details.html" class="btn"><i class="lni lni-cart"></i> Add to Cart</a>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <span class="category">경제경영</span>
-                        <h4 class="title">
-                            <a href="product/product-grids.html">돈을 벌어라</a>
-                        </h4>
-                        <ul class="review">
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star-filled"></i></li>
-                            <li><i class="lni lni-star"></i></li>
-                            <li><span>Review(1)</span></li>
-                        </ul>
-                        <div class="price">
-                            <span>16,500원</span>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Single Product -->
+                <!-- End Single Category -->
             </div>
         </div>
     </div>
 </section>
-<!-- End Trending Product Area -->
+    <!-- End Trending Product Area -->
 
-<!-- Start Banner Area -->
+    <!-- Start Banner Area -->
 <section class="banner section">
     <div class="container">
         <div class="row">

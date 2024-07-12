@@ -15,16 +15,16 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
   mail:
-    host: ${SMTP_HOST}
-    port: ${SMTP_PORT}
-    username: ${SMTP_USERNAME}
-    password: ${SMTP_PASSWORD}
+    host: smtp.gmail.com
+    port: 587
+    username: "lxcm tulr nnme uimf"
+    password: amuge0705@gmail.com
     properties:
       mail:
         smtp:
-          auth=true:
+          auth: true
           starttls:
-            enable=true:
+            enable: true
 
 eureka:
   gateway: http://133.186.153.195:8085

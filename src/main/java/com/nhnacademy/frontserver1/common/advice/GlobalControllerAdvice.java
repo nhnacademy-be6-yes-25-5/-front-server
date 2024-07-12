@@ -1,6 +1,12 @@
 package com.nhnacademy.frontserver1.common.advice;
 
-import com.nhnacademy.frontserver1.common.exception.*;
+import com.nhnacademy.frontserver1.common.exception.AccessDeniedException;
+import com.nhnacademy.frontserver1.common.exception.ConnectionException;
+import com.nhnacademy.frontserver1.common.exception.DormantAccountException;
+import com.nhnacademy.frontserver1.common.exception.FeignClientException;
+import com.nhnacademy.frontserver1.common.exception.OrderWaitingException;
+import com.nhnacademy.frontserver1.common.exception.RefreshTokenFailedException;
+import com.nhnacademy.frontserver1.common.exception.TokenCookieMissingException;
 import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 @ControllerAdvice
@@ -36,10 +41,10 @@ public class GlobalControllerAdvice {
     }
 
     @ExceptionHandler({RefreshTokenFailedException.class, TokenCookieMissingException.class})
-    public ModelAndView handleRefreshTokenFailedException() {
+    public ModelAndView handleRefreshTokenFailedException(TokenCookieMissingException e) {
 
         RedirectView redirectView = new RedirectView("/auth/error");
-        redirectView.addStaticAttribute("cause", "알 수 없는 이유로 인해 인증 정보를 찾을 수 없습니다.");
+        redirectView.addStaticAttribute("cause", e.getMessage());
         return new ModelAndView(redirectView);
     }
 
@@ -67,7 +72,7 @@ public class GlobalControllerAdvice {
     public ModelAndView handleCustomFeignException(ConnectionException e) {
         log.error("ConnectionException 발생: ", e);
         ModelAndView mav = new ModelAndView();
-        mav.addObject("errorMessage", "Service is currently unavailable. Please try again later.");
+        mav.addObject("errorMessage", e.getErrorStatus().message());
         mav.setViewName("error/server-fail");
         return mav;
     }

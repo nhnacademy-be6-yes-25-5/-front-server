@@ -7,7 +7,6 @@ import com.nhnacademy.frontserver1.presentation.dto.response.coupon.BookCouponRe
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyBookResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,20 +21,19 @@ import java.util.List;
 public class CouponPolicyBookController {
 
     private final CouponService couponService;
-
     private final BookAdaptor bookAdapter;
 
     @GetMapping
-    public String findAll(@RequestParam(defaultValue = "0") int page,
-                          @RequestParam(defaultValue = "10") int size,
+    public String findAll(@RequestParam(defaultValue = "ko") String lang,
+                          Pageable pageable,
                           Model model) {
-        Pageable pageable = PageRequest.of(page, size);
         Page<CouponPolicyBookResponseDTO> bookCouponsPage = couponService.findAllBookCouponPolicies(pageable);
 
         model.addAttribute("bookCoupons", bookCouponsPage.getContent());
         model.addAttribute("currentPage", bookCouponsPage.getNumber());
         model.addAttribute("totalPages", bookCouponsPage.getTotalPages());
         model.addAttribute("pageSize", bookCouponsPage.getSize());
+        model.addAttribute("lang", lang);
         return "admin/policy/admin-policy-coupon-book";
     }
 
@@ -46,11 +44,13 @@ public class CouponPolicyBookController {
     }
 
     @GetMapping("/search")
-    public String searchBooks(@RequestParam(value = "query", required = false, defaultValue = "") String query, Model model) {
+    public String searchBooks(@RequestParam(value = "query", required = false, defaultValue = "") String query,
+                              @RequestParam(defaultValue = "ko") String lang,
+                              Model model) {
         List<BookCouponResponseDTO> books = bookAdapter.findBooksByName(query);
         model.addAttribute("bookList", books);
         model.addAttribute("keyword", query);
+        model.addAttribute("lang", lang);
         return "admin/policy/admin-policy-coupon-book-search";
     }
-
 }

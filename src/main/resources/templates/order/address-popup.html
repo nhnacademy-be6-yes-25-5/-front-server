@@ -2,15 +2,30 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>주소 목록</title>
+  <title>배송지 목록</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    .list-group-item-primary {
+      background-color: #d4edda;
+    }
+    .address-item {
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .address-item:hover {
+      background-color: #f8f9fa;
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-  <h1>주소 목록</h1>
-  <div class="list-group">
-    <div th:each="address : ${addresses}">
-      <a href="#" class="list-group-item list-group-item-action"
+<div class="container mt-5">
+  <h1 class="mb-4">배송지 목록</h1>
+  <div th:if="${#lists.isEmpty(addresses.content)}" class="alert alert-warning">
+    <p>등록되어있는 배송지가 없습니다.</p>
+  </div>
+  <div th:if="${!#lists.isEmpty(addresses.content)}" class="list-group">
+    <div th:each="address : ${addresses.content}">
+      <a href="#" class="list-group-item list-group-item-action address-item"
          th:classappend="${address.addressBased} ? 'list-group-item-primary' : ''"
          th:data-name="${address.addressName}"
          th:data-postcode="${address.zipCode}"
@@ -18,28 +33,29 @@
          th:data-detailaddress="${address.addressDetail}"
          th:data-reference="${address.reference}"
          onclick="selectAddress(this)">
-        <div th:text="${address.addressName}"></div>
-        <div th:text="${address.addressRaw} + ' ' + ${address.addressDetail}"></div>
-        <div th:text="${address.zipCode}"></div>
+        <h5 th:text="${address.addressName}" class="mb-1"></h5>
+        <p th:text="${address.addressRaw} + ' ' + ${address.addressDetail}" class="mb-1"></p>
+        <small th:text="${address.zipCode}"></small>
       </a>
     </div>
   </div>
 
-  <nav>
-    <ul class="pagination">
-      <li th:classappend="${addresses.hasPrevious()} ? '' : 'disabled'">
+  <nav th:if="${addresses.totalPages > 1}" class="mt-4">
+    <ul class="pagination justify-content-center">
+      <li th:classappend="${addresses.hasPrevious()} ? '' : 'disabled'" class="page-item">
         <a th:href="@{|/orders/address?page=${addresses.number - 1}|}" class="page-link">Previous</a>
       </li>
       <li th:each="i : ${#numbers.sequence(1, addresses.totalPages)}"
-          th:classappend="${addresses.number + 1 == i} ? 'active' : ''">
+          th:classappend="${addresses.number + 1 == i} ? 'active' : ''" class="page-item">
         <a th:href="@{|/orders/address?page=${i - 1}|}" class="page-link" th:text="${i}">1</a>
       </li>
-      <li th:classappend="${addresses.hasNext()} ? '' : 'disabled'">
+      <li th:classappend="${addresses.hasNext()} ? '' : 'disabled'" class="page-item">
         <a th:href="@{|/orders/address?page=${addresses.number + 1}|}" class="page-link">Next</a>
       </li>
     </ul>
   </nav>
 </div>
+
 <script>
   function selectAddress(element) {
     const address = {

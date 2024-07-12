@@ -38,7 +38,7 @@ public interface UserAdaptor {
     ReadOrderUserInfoResponse getUserInfo();
 
     @PostMapping("/coupons/claim")
-    void claimCoupon(@RequestParam Long couponId);
+    ResponseEntity<Void> claimCoupon(@RequestParam Long couponId);
 
     @GetMapping("/pure-price")
     ReadPurePriceResponse getPurePrice();

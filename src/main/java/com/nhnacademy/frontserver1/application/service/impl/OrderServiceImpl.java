@@ -105,10 +105,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public ReadMaximumDiscountCouponResponse getMaxDiscountCoupon(Integer totalAmount) {
-//        ReadMaximumDiscountCouponRequest request = ReadMaximumDiscountCouponRequest.from(totalAmount);
-//        return userCouponAdaptor.getMaxDiscountCouponByTotalAmount(request);
+        return userCouponAdaptor.getMaxDiscountCouponByTotalAmount(totalAmount);
 
-        return ReadMaximumDiscountCouponResponse.fromTest();
+//        return ReadMaximumDiscountCouponResponse.fromTest();
     }
 
     @Override

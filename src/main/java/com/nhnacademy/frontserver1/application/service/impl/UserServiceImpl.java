@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +30,15 @@ import java.util.Properties;
 public class UserServiceImpl implements UserService {
 
     private final UserAdaptor userAdaptor;
+
+    @Value("${spring.mail.host}")
+    private String host;
+
+    @Value("${spring.mail.username}")
+    private String sender;
+
+    @Value("${spring.mail.password}")
+    private String password;
 
     @Override
     public UserResponse signUp(CreateUserRequest userRequest) {
@@ -138,19 +148,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UpdateUserAddressResponse updateUserAddress(Long userAddressId, UpdateUserAddressRequest userRequest) {
+        return userAdaptor.updateUserAddress(userAddressId, userRequest);
+    }
+
+    @Override
+    public UserAddressResponse findUserAddressById(Long userAddressId) {
+        return userAdaptor.findUserAddressById(userAddressId);
+    }
+
+    @Override
+    public void deleteUserAddress(Long userAddressId) {
+        userAdaptor.deleteUserAddress(userAddressId);
+    }
+
+    @Override
     public boolean findUserPasswordByEmailByName(FindPasswordRequest request) {
         return userAdaptor.findUserPasswordByEmailByName(request);
     }
 
-    public void sendEmail(String recipient) {
-        // 구글메일로 전송
-        String host = "smtp.gmail.com";
-        // amuge0705가 여기서 yes255의 관리자 계정 역할을 합니다
-        final String sender = "amuge0705@gmail.com"; // Your email address
-        // 실제 비밀번호가 아닌 이 기능 구현을 위해 따로 발급받은 2중보안 앱 비밀번호입니다.
-        final String password = "lxcm tulr nnme uimf"; // Your app password (not your Google account password)
+//    @Override
+//    public boolean setUserPasswordByEmail(String email, UpdatePasswordRequest request) {
+//        return false;
+//    }
 
-        Properties properties = System.getProperties();
+    @Override
+    public void sendEmail(String recipient) {
+
+        Properties properties = new Properties();
         properties.put("mail.smtp.host", host);
         properties.put("mail.smtp.port", "587");
         properties.put("mail.smtp.auth", "true");
@@ -167,9 +192,8 @@ public class UserServiceImpl implements UserService {
             message.setFrom(new InternetAddress(sender));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
             message.setSubject("[Yes25.5] 비밀번호를 새로 설정하겠습니다.");
-            // 링크는 배포 상태에 알맞게 추후 수정할 예정입니다
-            message.setText("비밀번호를 새로 설정하기 위해서는 이 링크를 클릭하세요: https://yes25-5.shop/reset-password/"+recipient);
 
+            message.setText("비밀번호를 새로 설정하기 위해서는 이 링크를 클릭하세요: https://yes25-5.shop/reset-password/" + recipient);
 
             Transport.send(message);
             System.out.println("Email sent successfully.");
@@ -179,17 +203,11 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    //public record UpdatePasswordRequest(String password, String confirmPassword) {
-    //}
+
+
     @Override
-    public boolean setUserPasswordByEmail(String email, UpdatePasswordRequest request) {
-        if (request.password().equals(request.confirmPassword())) {
-            return true;
-        } else {return false;}
-
-
-
-        // 여기에 비밀번호를 재설정하는 로직을 구현합니다.
-        //return true; // 실제 로직으로 대체
+    public void UpdateUserPasswordByEmail(String email, UpdatePasswordRequest request) {
+        userAdaptor.updatePassword(email, request);
     }
+
 }

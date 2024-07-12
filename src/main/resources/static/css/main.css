@@ -1830,7 +1830,7 @@ ol {
   position: absolute;
   top: 72px;
   right: 0;
-  width: 300px;
+  width: 350px; /* 넓이를 조정 */
   background: #fff;
   padding: 20px 25px;
   -webkit-transition: all 0.3s ease 0s;
@@ -1838,7 +1838,7 @@ ol {
   z-index: 99;
   border-radius: 4px;
   -webkit-box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.137);
-          box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.137);
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.137);
   opacity: 0;
   visibility: hidden;
 }
@@ -1983,6 +1983,12 @@ ol {
 .header .navbar-cart .cart-items .shopping-item .shopping-list li .content .quantity {
   line-height: 22px;
   font-size: 14px;
+}
+
+.header .navbar-cart .cart-items .shopping-item .shopping-list li .content .price {
+  line-height: 22px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .header .navbar-cart .cart-items .shopping-item .bottom {

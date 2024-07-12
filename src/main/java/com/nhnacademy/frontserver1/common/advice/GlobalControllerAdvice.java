@@ -41,10 +41,10 @@ public class GlobalControllerAdvice {
     }
 
     @ExceptionHandler({RefreshTokenFailedException.class, TokenCookieMissingException.class})
-    public ModelAndView handleRefreshTokenFailedException() {
+    public ModelAndView handleRefreshTokenFailedException(TokenCookieMissingException e) {
 
         RedirectView redirectView = new RedirectView("/auth/error");
-        redirectView.addStaticAttribute("cause", "알 수 없는 이유로 인해 인증 정보를 찾을 수 없습니다.");
+        redirectView.addStaticAttribute("cause", e.getMessage());
         return new ModelAndView(redirectView);
     }
 
@@ -72,7 +72,7 @@ public class GlobalControllerAdvice {
     public ModelAndView handleCustomFeignException(ConnectionException e) {
         log.error("ConnectionException 발생: ", e);
         ModelAndView mav = new ModelAndView();
-        mav.addObject("errorMessage", "Service is currently unavailable. Please try again later.");
+        mav.addObject("errorMessage", e.getErrorStatus().message());
         mav.setViewName("error/server-fail");
         return mav;
     }

@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Header</title>
+</head>
+<body>
 <!-- Start Header Area -->
 <header class="header navbar-area">
     <!-- Start Topbar -->
@@ -63,7 +69,7 @@
                                     </div>
                                 </div>
                                 <div class="search-input">
-                                    <input name = "keyword" type="text" placeholder="Search">
+                                    <input name="keyword" type="text" placeholder="Search">
                                 </div>
                                 <div class="search-btn">
                                     <button><i class="lni lni-search-alt"></i></button>
@@ -91,18 +97,34 @@
                             <div class="cart-items">
                                 <a href="/carts" class="main-btn">
                                     <i class="lni lni-cart"></i>
-<!--                                    <span class="total-items">1</span>-->
+                                    <span class="total-items" th:text="${cartItemCount}">0</span>
                                 </a>
                                 <!-- Shopping Item -->
                                 <div class="shopping-item">
                                     <div class="dropdown-cart-header">
-                                        <a href="/carts">장바구니</a>
+                                        <a href="/carts" th:text="#{cart.title}">장바구니</a>
                                     </div>
-<!--                                    <div class="bottom">-->
-<!--                                        <div class="button">-->
-<!--                                            <a href="/carts/orders" class="btn animate">Checkout</a>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
+                                    <ul id="cart-preview" th:if="${cartPreview != null && !#lists.isEmpty(cartPreview)}" class="shopping-list">
+                                        <li th:each="item : ${cartPreview}">
+                                            <a class="remove" title="Remove this item" th:data-book-id="${item.bookId}" th:onclick="'removeCartItem(' + ${item.bookId} + '); return false;'">
+                                                <i class="lni lni-close"></i>
+                                            </a>
+                                            <a class="cart-img" th:href="@{'/detail/' + ${item.bookId}}">
+                                                <img th:src="${item.bookImage}" alt="#" class="cart-preview-img">
+                                            </a>
+                                            <div class="cart-details">
+                                                <div class="cart-preview-name"><span th:text="${item.bookName}">Product Name</span></div>
+                                                <div class="cart-preview-quantity"><span th:text="#{cart.quantity}"></span>: <span th:text="${item.cartBookQuantity}">1</span></div>
+                                                <div class="cart-preview-price"><span th:text="#{cart.price}"></span>: <span th:text="${#numbers.formatDecimal(item.bookPrice.multiply(item.cartBookQuantity), 0, 0)} + ' 원'">0 원</span></div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <div th:if="${cartPreview == null || #lists.isEmpty(cartPreview)}" class="empty-cart-message" th:text="#{cart.empty}">장바구니가 비어 있습니다</div>
+                                    <div class="bottom">
+                                        <div class="button">
+                                            <a href="#" class="btn animate" th:text="#{cart.checkout}">Checkout</a>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!--/ End Shopping Item -->
                             </div>
@@ -177,7 +199,56 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            async function removeCartItem(bookId) {
+                try {
+                    let response = await fetch(`/carts/books/${bookId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    console.log('Item removed successfully');
+                    alert('상품이 성공적으로 삭제되었습니다.');
+                    location.reload();
+                } catch (error) {
+                    console.error('Error removing item:', error);
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelector('.btn.animate').addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    const cartItems = document.querySelectorAll('#cart-preview li');
+                    let bookIdList = [];
+                    let quantities = [];
+
+                    cartItems.forEach(function (item) {
+                        const bookId = item.querySelector('.remove').dataset.bookId;
+                        const quantity = item.querySelector('.cart-preview-quantity span:last-child').innerText.trim();
+                        bookIdList.push(bookId);
+                        quantities.push(quantity);
+                    });
+
+                    if (bookIdList.length && quantities.length) {
+                        const url = `/orders/checkout?bookIdList=${bookIdList.join(',')}&quantities=${quantities.join(',')}`;
+                        window.location.href = url;
+                    } else {
+                        console.error('Book IDs or quantities are empty');
+                    }
+                });
+            });
+
+        </script>
     </div>
-    <!-- End Header Bottom -->
 </header>
 <!-- End Header Area -->
+</body>
+</html>

@@ -138,7 +138,7 @@ public class UserController {
 
 
 
-    // 배송지 조회(임시)
+    // 배송지 목록 조회
     @GetMapping("/mypage/addresses")
     public String getUserAddresses(@RequestParam(defaultValue = "0") int page,
                                    @RequestParam(defaultValue = "10") int size,
@@ -171,6 +171,27 @@ public class UserController {
     @PostMapping("/mypage/addresses")
     public ResponseEntity<CreateUserAddressResponse> createUserAddresses(@ModelAttribute CreateUserAddressRequest request) {
         return ResponseEntity.ok(userService.createUserAddresses(request));
+    }
+
+    // 배송지 수정
+    @PutMapping("/mypage/addresses/{userAddressId}")
+    public ResponseEntity<UpdateUserAddressResponse> updateUserAddress(@PathVariable Long userAddressId,
+                                                                       @RequestBody UpdateUserAddressRequest request) {
+        return ResponseEntity.ok(userService.updateUserAddress(userAddressId, request));
+    }
+
+    // 배송지 단건 조회
+    @GetMapping("/mypage/addresses/{userAddressId}")
+    public ResponseEntity<UserAddressResponse> findUserAddressById(@PathVariable Long userAddressId) {
+        return ResponseEntity.ok(userService.findUserAddressById(userAddressId));
+    }
+
+    @DeleteMapping("/mypage/addresses/{userAddressId}")
+    public ResponseEntity<Void> deleteUserAddressById(@PathVariable Long userAddressId) {
+
+        userService.deleteUserAddress(userAddressId);
+
+        return ResponseEntity.ok().build();
     }
 
     private static final Logger logger = Logger.getLogger(UserController.class.getName());
@@ -218,7 +239,6 @@ public class UserController {
         Page<CouponBoxResponse> activeCoupons = userService.getStateCouponBox("ACTIVE", PageRequest.of(page, size));
         Page<CouponBoxResponse> usedCoupons = userService.getStateCouponBox("USED", PageRequest.of(page, size));
         Page<CouponBoxResponse> expiredCoupons = userService.getStateCouponBox("EXPIRED", PageRequest.of(page, size));
-
 
         model.addAttribute("activeCoupons", activeCoupons);
         model.addAttribute("usedCoupons", usedCoupons);
@@ -283,15 +303,70 @@ public class UserController {
 
     }
 
-    @PostMapping("/reset-password")
-    public String resetPassword(@RequestParam String email, @RequestParam String newPassword, @RequestParam String confirmPassword, Model model) {
-        UpdatePasswordRequest request = new UpdatePasswordRequest(newPassword, confirmPassword);
-        boolean isPasswordReset = userService.setUserPasswordByEmail(email, request);
+    @PutMapping("/reset-password/[{email}")
+    public String resetPassword(@RequestBody String email, @RequestBody String newPassword, @RequestBody String confirmPassword, Model model) {
+       // UpdatePasswordRequest request = new UpdatePasswordRequest(newPassword, confirmPassword);
+        //boolean isPasswordReset = userService.setUserPasswordByEmail(email, request);
 
-        if (isPasswordReset) {
+        UpdatePasswordRequest request = UpdatePasswordRequest.builder()
+                .userPassword(newPassword)
+                .confirmPassword(confirmPassword)
+                .build();
+
+       // boolean isPasswordReset = userService.UpdateUserPasswordByEmail(email, request);
+
+
+        if (newPassword.equals(confirmPassword)) {
             return "setNewPassword/set-new-password-success";
         } else {
             return "setNewPassword/set-new-password-fail";
         }
+//@Builder
+//public record UpdatePasswordRequest(String userPassword, String confirmPassword) {}
+//        if (isPasswordReset) {
+//            return "setNewPassword/set-new-password-success";
+//        } else {
+//            return "setNewPassword/set-new-password-fail";
+//        }
     }
+
+//    @PostMapping("/reset-password/{email}")
+//        public String resetPassword(@PathVariable String email, @RequestParam String newPassword, @RequestParam String confirmPassword, Model model) {
+//        if (!newPassword.equals(confirmPassword)) {
+//            model.addAttribute("error", "Passwords do not match");
+//            return "setNewPassword/set-new-password";
+//        }
+//        //UpdateUserRequest(String userName, String userPhone, LocalDate userBirth, String userPassword,
+//        //                                String newUserPassword, String newUserConfirmPassword)
+//        UpdateUserRequest request = UpdateUserRequest.builder()
+//                .userName(null)  // 유저 이름을 업데이트하지 않으므로 null
+//                .userPhone(null)  // 유저 전화번호를 업데이트하지 않으므로 null
+//                .userBirth(null)  // 유저 생일을 업데이트하지 않으므로 null
+//                .userPassword(newPassword)  // 현재 비밀번호가 필요하지 않으므로 null
+//                .newUserConfirmPassword(confirmPassword)
+//                .build();
+//
+//
+////            boolean isPasswordReset;
+////            try {
+////                UpdatePasswordResponse response = userService.updateUser(request);
+////
+////
+////                isPasswordReset = response != null;
+////            } catch (Exception e) {
+////                isPasswordReset = false;
+////            }
+////
+////            if (isPasswordReset) {
+////                return "setNewPassword/set-new-password-success";
+////            } else {
+////                model.addAttribute("error", "Password update failed");
+////                return "setNewPassword/set-new-password-fail";
+////            }
+////            return null; }
+//
+//
+//    }
+        //@PutMapping("/info")
+    //    UpdateUserResponse updateUser(@RequestBody UpdateUserRequest userRequest);
 }

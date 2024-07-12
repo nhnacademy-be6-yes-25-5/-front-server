@@ -14,22 +14,27 @@
 </head>
 <body>
 <div class="col-md-12">
-    <h1>도서 검색</h1>
+    <h1 th:text="${lang == 'ko'} ? '도서 검색' : 'Book Search'"></h1>
     <div class="col-md-4">
         <form th:action="@{/coupons/policy/books/search}" method="get">
-            <input type="text" th:value="${keyword}" name="query" placeholder="도서명을 입력해주세요.">
-            <button type="submit">검색</button>
+            <input type="text" th:value="${keyword}" name="query" th:placeholder="${lang == 'ko'} ? '도서명을 입력해주세요.' : 'Enter book title.'">
+            <input type="hidden" name="lang" th:value="${lang}">
+            <button type="submit" th:text="${lang == 'ko'} ? '검색' : 'Search'"></button>
         </form>
+    </div>
+    <div class="col-md-4" style="margin-top: 10px;">
+        <button class="btn btn-secondary" onclick="changeLang('ko')">한국어</button>
+        <button class="btn btn-secondary" onclick="changeLang('en')">English</button>
     </div>
     <hr>
     <div>
         <table class="table">
             <thead>
             <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Publisher</th>
+                <th th:text="${lang == 'ko'} ? 'ID' : 'ID'"></th>
+                <th th:text="${lang == 'ko'} ? '제목' : 'Title'"></th>
+                <th th:text="${lang == 'ko'} ? '저자' : 'Author'"></th>
+                <th th:text="${lang == 'ko'} ? '출판사' : 'Publisher'"></th>
             </tr>
             </thead>
             <tbody>
@@ -64,5 +69,12 @@
         </table>
     </div>
 </div>
+<script>
+    function changeLang(lang) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('lang', lang);
+        window.location.href = url.toString();
+    }
+</script>
 </body>
 </html>

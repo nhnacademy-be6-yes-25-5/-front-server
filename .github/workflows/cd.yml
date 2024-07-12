@@ -54,16 +54,16 @@ jobs:
           NAVER_SECRET: ${{ secrets.NAVER_SECRET }}
           NHN_IMAGE_APPKEY: ${{ secrets.NHN_IMAGE_APPKEY }}
           NHN_IMAGE_SECRET: ${{ secrets.NHN_IMAGE_SECRET }}
-          EUREKA_SERVER_HOSTNAME: ${{ secrets.EUREKA_SERVER_HOSTNAME }}
+
         run: |
           ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << EOF
             cd ${REMOTE_DIR}
             docker build -f Dockerfile-8040 -t front1-app-8040 .
             docker build -f Dockerfile-8041 -t front1-app-8041 .
-            
+
             docker stop front1-app-8040 || true
             docker rm front1-app-8040 || true
-            
+
             docker run -d -p 8040:8040 --name front1-app-8040 \
             --network yes255-network \
             -e NAVER_ID=${NAVER_ID} \
@@ -72,12 +72,12 @@ jobs:
             -e NHN_IMAGE_APPKEY=${NHN_IMAGE_APPKEY} \
             -e EUREKA_SERVER_HOSTNAME=${EUREKA_SERVER_HOSTNAME} \
             front1-app-8040
-            
+
             sleep 30
-            
+
             docker stop front1-app-8041 || true
             docker rm front1-app-8041 || true
-            
+
             docker run -d -p 8041:8041 --name front1-app-8041 \
             --network yes255-network \
             -e NAVER_ID=${NAVER_ID} \

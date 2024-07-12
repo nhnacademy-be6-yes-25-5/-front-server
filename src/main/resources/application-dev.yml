@@ -50,7 +50,12 @@ provider:
     token-uri: https://id.payco.com/oauth2.0/token
     logout-uri: https://id.payco.com/oauth2.0/logout
 
+cookie:
+  set-secure: false
 
 logging:
   level:
     root: debug
+
+main:
+  host: 127.0.0.1:8040

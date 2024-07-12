@@ -45,3 +45,9 @@ provider:
     authorization-uri: https://id.payco.com/oauth2.0/authorize
     token-uri: https://id.payco.com/oauth2.0/token
     logout-uri: https://id.payco.com/oauth2.0/logout
+
+cookie:
+  set-secure: true
+
+main:
+  host: 133.186.153.195:8040

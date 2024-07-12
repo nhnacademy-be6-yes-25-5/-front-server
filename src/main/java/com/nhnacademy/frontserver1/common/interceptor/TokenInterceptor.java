@@ -4,14 +4,13 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import com.nhnacademy.frontserver1.common.provider.CookieTokenProvider;
 import com.nhnacademy.frontserver1.common.context.TokenContext;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +20,9 @@ import java.util.Map;
 public class TokenInterceptor implements HandlerInterceptor {
 
     private final CookieTokenProvider cookieTokenProvider;
+
+    @Value("${cookie.set-secure}")
+    private static boolean IS_SECURE;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -63,16 +65,19 @@ public class TokenInterceptor implements HandlerInterceptor {
             }
 
             // 리다이렉트인 경우 URL 파라미터로 전달되지 않도록 처리
-            if (modelAndView.getViewName().startsWith("redirect:")) {
-                Map<String, Object> flashAttributes = new HashMap<>();
-                flashAttributes.put("AccessToken", modelAndView.getModel().get("AccessToken"));
-                flashAttributes.put("RefreshToken", modelAndView.getModel().get("RefreshToken"));
+            if (modelAndView.getViewName() != null && !modelAndView.getViewName().isEmpty()) {
+                if (modelAndView.getViewName().startsWith("redirect:")) {
+                    Map<String, Object> flashAttributes = new HashMap<>();
+                    flashAttributes.put("AccessToken", modelAndView.getModel().get("AccessToken"));
+                    flashAttributes.put("RefreshToken", modelAndView.getModel().get("RefreshToken"));
 
-                modelAndView.getModel().remove("AccessToken");
-                modelAndView.getModel().remove("RefreshToken");
+                    modelAndView.getModel().remove("AccessToken");
+                    modelAndView.getModel().remove("RefreshToken");
 
-                modelAndView.addObject("flashAttributes", flashAttributes);
+                    modelAndView.addObject("flashAttributes", flashAttributes);
+                }
             }
+
         }
 
     }
@@ -86,8 +91,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         if (token != null) {
             Cookie cookie = new Cookie(name, token);
             cookie.setHttpOnly(true);
-            //배포시에는 아래 주석 풀기\
-            cookie.setSecure(true);
+            cookie.setSecure(IS_SECURE);
             cookie.setPath("/");
             response.addCookie(cookie);
         }

@@ -73,4 +73,14 @@ public interface UserAdaptor {
 
     @PostMapping("/user-addresses")
     CreateUserAddressResponse createUserAddress(@RequestBody CreateUserAddressRequest userAddressRequest);
+
+//    @PutMapping("/update-password")
+//    UpdatePasswordResponse updatePassword(UpdatePasswordRequest request);
+    //@PutMapping("/update-password/{email}")
+    //    void updatePassword(@PathVariable("email") String email, @RequestBody UpdatePasswordRequest request);
+
+//    @PutMapping("/update-password/{email}")
+//    void updatePassword(@PathVariable("email") String email, @RequestBody UpdatePasswordRequest request);
+    @PutMapping("/update-password/{email}")
+    UpdatePasswordResponse updatePassword(@PathVariable("email") String email, @RequestBody UpdatePasswordRequest request);
 }

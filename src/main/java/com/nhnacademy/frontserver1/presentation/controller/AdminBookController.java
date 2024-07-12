@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.print.Book;
 import java.util.List;
 
 @Controller
@@ -85,9 +86,15 @@ public class AdminBookController {
     public String adminUpdateBook(@ModelAttribute @Valid UpdateBookRequest request, @RequestParam(value = "categoryIdList") List<Long> categoryIdList,
                                   @RequestParam(value = "tagIdList", required = false) List<Long> tagIdList, @RequestParam(value = "bookImage", required = false) MultipartFile file) {
 
-        UploadImageResponse uploadImageResponse = uploadimageService.imageUpload(file);
-        UpdateBookRequest updateBookRequest = UpdateBookRequest.updateImageURL(request, uploadImageResponse.imageUrl());
-        bookService.updateBook(updateBookRequest, categoryIdList, tagIdList);
+        BookResponse book = bookService.getBook(request.bookId());
+
+        if(!file.isEmpty()) {
+            UploadImageResponse uploadImageResponse = uploadimageService.imageUpload(file);
+            UpdateBookRequest updateBookRequest = UpdateBookRequest.updateImageURL(request, uploadImageResponse.imageUrl());
+        } else {
+            UpdateBookRequest updateBookRequest = UpdateBookRequest.updateImageURL(request, book.bookImage());
+            bookService.updateBook(updateBookRequest, categoryIdList, tagIdList);
+        }
 
         return "redirect:/admin/product";
     }

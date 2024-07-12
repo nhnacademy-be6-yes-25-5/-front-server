@@ -78,7 +78,7 @@ jobs:
             -e EUREKA_SERVER_HOSTNAME=${EUREKA_SERVER_HOSTNAME} \
             -e SMTP_HOST=${SMTP_HOST} \ 
             -e SMTP_PASSWORD=${SMTP_PASSWORD} \
-            -e SMTP_PORT = ${SMTP_PORT} \
+            -e SMTP_PORT=${SMTP_PORT} \
             -e SMTP_USERNAME=${SMTP_USERNAME}
           
             front1-app-8040

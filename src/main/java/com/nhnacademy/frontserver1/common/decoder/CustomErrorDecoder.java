@@ -35,6 +35,13 @@ public class CustomErrorDecoder implements ErrorDecoder {
                             ErrorStatus.toErrorStatus("로그인한 회원만 좋아요를 할 수 있습니다.", 401, LocalDateTime.now())
                     );
                 }
+
+                if(responseBody.contains("이미 존재하는 책입니다.")) {
+                    return new BookException(
+                            ErrorStatus.toErrorStatus("이미 존재하는 책입니다.", 400, LocalDateTime.now())
+                    );
+                }
+
                 log.error("클라이언트 요청에서 에러가 발생하였습니다. 상태 코드: 400, 응답 본문: {}", responseBody);
                 break;
 

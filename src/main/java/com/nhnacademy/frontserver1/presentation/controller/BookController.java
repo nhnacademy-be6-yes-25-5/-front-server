@@ -3,12 +3,14 @@ package com.nhnacademy.frontserver1.presentation.controller;
 import com.nhnacademy.frontserver1.application.service.BookService;
 import com.nhnacademy.frontserver1.application.service.CategoryService;
 import com.nhnacademy.frontserver1.application.service.CouponService;
+import com.nhnacademy.frontserver1.common.exception.BookException;
 import com.nhnacademy.frontserver1.common.exception.LikesNotLoginException;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.CategoryResponse;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.LikesAdapter;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.BookDetailCouponResponseDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -51,6 +53,15 @@ public class BookController {
 
         model.addAttribute("message", "로그인이 필요한 서비스입니다.");
         model.addAttribute("url", "/");
+
+        return "message";
+    }
+
+    @ExceptionHandler(BookException.class)
+    public String bookException(Model model) {
+
+        model.addAttribute("message", "이미 존재하는 책입니다.");
+        model.addAttribute("url", "/admin/product");
 
         return "message";
     }

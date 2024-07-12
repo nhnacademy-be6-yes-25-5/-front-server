@@ -154,7 +154,7 @@
         </div>
     </section>
     <!-- End Item Details -->
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function () {
             // 이미지 갤러리 기능
@@ -192,7 +192,7 @@
                                 var row = '<tr>' +
                                     '<td>' + coupon.couponName + '</td>' +
                                     '<td>' + (coupon.couponPolicyRate ? coupon.couponPolicyRate + '%' : coupon.couponPolicyDiscountValue + '원') + '</td>' +
-                                    '<td>' + new Date(coupon.couponExpiredAt).toLocaleString() + '</td>' +
+                                    '<td>' + new Date(coupon.couponExpiredAt).toLocaleDateString() + '</td>' +
                                     '<td><button class="btn btn-primary claim-coupon-btn" data-coupon-id="' + coupon.couponId + '">발급받기</button></td>' +
                                     '</tr>';
                                 couponList.append(row);
@@ -207,6 +207,7 @@
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/x-www-form-urlencoded',
+                                        'Authorization': 'Bearer ' + localStorage.getItem('accessToken') // 토큰을 로컬 스토리지에서 가져옴
                                     },
                                     body: new URLSearchParams({
                                         'couponId': couponId

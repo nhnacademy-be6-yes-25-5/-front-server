@@ -38,7 +38,7 @@ public interface UserAdaptor {
     ReadOrderUserInfoResponse getUserInfo();
 
     @PostMapping("/coupons/claim")
-    void claimCoupon(@RequestParam Long couponId);
+    ResponseEntity<Void> claimCoupon(@RequestParam Long couponId);
 
     @GetMapping("/pure-price")
     ReadPurePriceResponse getPurePrice();
@@ -73,4 +73,14 @@ public interface UserAdaptor {
 
     @PostMapping("/user-addresses")
     CreateUserAddressResponse createUserAddress(@RequestBody CreateUserAddressRequest userAddressRequest);
+
+//    @PutMapping("/update-password")
+//    UpdatePasswordResponse updatePassword(UpdatePasswordRequest request);
+    //@PutMapping("/update-password/{email}")
+    //    void updatePassword(@PathVariable("email") String email, @RequestBody UpdatePasswordRequest request);
+
+//    @PutMapping("/update-password/{email}")
+//    void updatePassword(@PathVariable("email") String email, @RequestBody UpdatePasswordRequest request);
+    @PutMapping("/update-password/{email}")
+    UpdatePasswordResponse updatePassword(@PathVariable("email") String email, @RequestBody UpdatePasswordRequest request);
 }

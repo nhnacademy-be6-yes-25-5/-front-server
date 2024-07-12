@@ -73,15 +73,29 @@ public class TokenInterceptor implements HandlerInterceptor {
                     flashAttributes.put("AccessToken", modelAndView.getModel().get("AccessToken"));
                     flashAttributes.put("RefreshToken", modelAndView.getModel().get("RefreshToken"));
 
+                    // cartItemCount를 flashAttributes에 추가
+                    if (modelAndView.getModel().containsKey("cartItemCount")) {
+                        flashAttributes.put("cartItemCount", modelAndView.getModel().get("cartItemCount"));
+                    }
+
                     modelAndView.getModel().remove("AccessToken");
                     modelAndView.getModel().remove("RefreshToken");
+                    modelAndView.getModel().remove("cartItemCount");  // cartItemCount 제거
 
                     modelAndView.addObject("flashAttributes", flashAttributes);
+
+                    // URL에서 cartItemCount 파라미터 제거
+                    String viewName = modelAndView.getViewName();
+                    if (viewName.contains("cartItemCount")) {
+                        viewName = viewName.replaceAll("[?&]cartItemCount=[^&]*", "");
+                        if (viewName.endsWith("?")) {
+                            viewName = viewName.substring(0, viewName.length() - 1);
+                        }
+                        modelAndView.setViewName(viewName);
+                    }
                 }
             }
-
         }
-
     }
 
     @Override

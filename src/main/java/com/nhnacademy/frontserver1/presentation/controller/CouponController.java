@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,9 @@ public class CouponController {
 
     // 모든 쿠폰 정책
     @GetMapping("/policy")
-    public String getAdminCouponPolicy(@RequestParam(defaultValue = "ko") String lang, Pageable pageable, Model model) {
+    public String getAdminCouponPolicy(@RequestParam(defaultValue = "ko") String lang,
+                                       @PageableDefault(size = 10, page = 0) Pageable pageable,
+                                       Model model) {
         Page<CouponPolicyResponseDTO> couponPage = couponService.findAllCouponPolicies(pageable);
 
         model.addAttribute("coupons", couponPage.getContent());

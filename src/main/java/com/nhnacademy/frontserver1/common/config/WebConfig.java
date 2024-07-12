@@ -28,6 +28,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/reviews/books/**");
 
         registry.addInterceptor(cartInfoInterceptor)
-            .addPathPatterns("/**");
+            .addPathPatterns("/**")
+            .excludePathPatterns("/logout");
     }
 }

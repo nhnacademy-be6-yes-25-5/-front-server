@@ -52,7 +52,7 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
             return;
         }
 
-        if (servletPath.startsWith("/detail") && request.getMethod().equalsIgnoreCase("GET")) {
+        if ((servletPath.startsWith("/detail") && request.getMethod().equalsIgnoreCase("GET")) && !feignPath.startsWith("/cart-books")) {
             return;
         }
 
@@ -115,7 +115,8 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
     private boolean isServletPathAndFeignExclude(String servletPath, String feignPath) {
         return (servletPath.equals("/") || servletPath.startsWith("/orders/none") || servletPath.startsWith("/category") || servletPath.startsWith("/search")
             || servletPath.startsWith("/sign-up") || servletPath.startsWith("/books") || servletPath.matches("/coupons") || servletPath.startsWith("/check-email")
-            || servletPath.startsWith("/auth/dormant")|| servletPath.startsWith("/users/sign-up") || servletPath.equals("/callback") || servletPath.startsWith("/users/find/password"))
+            || servletPath.startsWith("/auth/dormant")|| servletPath.startsWith("/users/sign-up") || servletPath.equals("/callback") || servletPath.startsWith("/users/find/password")
+            || servletPath.startsWith("/detail"))
             && !feignPath.startsWith("/cart-books");
     }
 

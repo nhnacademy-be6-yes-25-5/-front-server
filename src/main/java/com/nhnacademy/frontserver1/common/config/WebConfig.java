@@ -1,5 +1,6 @@
 package com.nhnacademy.frontserver1.common.config;
 
+import com.nhnacademy.frontserver1.common.interceptor.CartInfoInterceptor;
 import com.nhnacademy.frontserver1.common.interceptor.UserInfoInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final TokenInterceptor tokenInterceptor;
 
+    private final CartInfoInterceptor cartInfoInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(tokenInterceptor)
@@ -23,5 +26,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(userInfoInterceptor)
                 .addPathPatterns("/mypage/**")
                 .addPathPatterns("/reviews/books/**");
+
+        registry.addInterceptor(cartInfoInterceptor)
+            .addPathPatterns("/**");
     }
 }

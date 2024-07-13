@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,7 +43,7 @@ public class UserController {
 
     // 회원 가입
     @PostMapping("/sign-up")
-    public String signUp(@RequestParam String userName, // todo : @ModelAttribute 변경 예정, 중복 이메일 예외 처리 예정
+    public String signUp(@RequestParam String userName,
                          @RequestParam LocalDate userBirth,
                          @RequestParam String userEmail,
                          @RequestParam String userPhone,
@@ -90,6 +91,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    // 회원 탈퇴 페이지
     @GetMapping("/mypage/delete")
     public String userDelete(Model model) {
 
@@ -119,11 +121,10 @@ public class UserController {
 
     // 회원 현재 포인트와 포인트 이력 조회
     @GetMapping("/mypage/point-logs")
-    public String getUserPoints(@RequestParam(defaultValue = "0") int page,
-                                @RequestParam(defaultValue = "15") int size,
+    public String getUserPoints(@PageableDefault(size = 15) Pageable pageable,
                                 Model model) {
 
-        Page<PointLogResponse> pointLogs = userService.getPointLogs(PageRequest.of(page, size));
+        Page<PointLogResponse> pointLogs = userService.getPointLogs(pageable);
 
         model.addAttribute("currentPoint", pointLogs.getContent().isEmpty() ? BigDecimal.ZERO : pointLogs.getContent().getFirst().pointCurrent());
         model.addAttribute("pointLogs", pointLogs);
@@ -140,11 +141,10 @@ public class UserController {
 
     // 배송지 목록 조회
     @GetMapping("/mypage/addresses")
-    public String getUserAddresses(@RequestParam(defaultValue = "0") int page,
-                                   @RequestParam(defaultValue = "10") int size,
+    public String getUserAddresses(@PageableDefault Pageable pageable,
                                    Model model) {
 
-        Page<UserAddressResponse> userAddresses = userService.getAllUserAddresses(PageRequest.of(page, size));
+        Page<UserAddressResponse> userAddresses = userService.getAllUserAddresses(pageable);
         Optional<UserAddressResponse> defaultAddress = userAddresses.stream()
                 .filter(UserAddressResponse::addressBased)
                 .findFirst();

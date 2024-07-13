@@ -76,6 +76,9 @@
                                                             </button>
                                                         </td>
                                                     </tr>
+                                                    <tr th:if="${addresses.content.size()} == 0">
+                                                        <td colspan="6" class="text-center" style="font-size: 1.25em; color: black;">배송지가 없습니다.</td>
+                                                    </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -83,12 +86,12 @@
                                         <div class="tab-pane fade show active" id="default-address" role="tabpanel" aria-labelledby="default-address-tab">
                                             <div class="default-address-info">
                                                 <h4>기본 배송지</h4>
-                                                <p th:if="${defaultAddress != null}">
-                                                    <span th:text="${defaultAddress.addressName}"></span> |
+                                                <p th:if="${defaultAddress != null}" style="font-size: 1.25em; color: black;">
+                                                    <span th:text="${defaultAddress.addressName}" ></span> |
                                                     <span th:text="${defaultAddress.addressRaw} + ', ' + ${defaultAddress.addressDetail()}"></span> |
                                                     <span th:text="${defaultAddress.addressZip}"></span>
                                                 </p>
-                                                <p th:if="${defaultAddress == null}">기본 배송지가 설정되지 않았습니다.</p>
+                                                <p th:if="${defaultAddress == null}" style="font-size: 1.25em; color: black;">기본 배송지가 설정되지 않았습니다.</p>
                                             </div>
                                         </div>
                                     </div>

@@ -8,6 +8,7 @@ import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicy
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -25,7 +26,7 @@ public class CouponPolicyBookController {
 
     @GetMapping
     public String findAll(@RequestParam(defaultValue = "ko") String lang,
-                          Pageable pageable,
+                          @PageableDefault(size = 10, page = 0) Pageable pageable,
                           Model model) {
         Page<CouponPolicyBookResponseDTO> bookCouponsPage = couponService.findAllBookCouponPolicies(pageable);
 

@@ -57,6 +57,11 @@ public class CustomErrorDecoder implements ErrorDecoder {
                     return new DormantAccountException(
                             ErrorStatus.toErrorStatus("로그인한 유저가 휴면상태입니다.", 403, LocalDateTime.now()));
                 }
+                if (responseBody.contains("접근 권한이 없습니다.")) {
+                    return new UnauthorizedAccessException(
+                            ErrorStatus.toErrorStatus("접근 권한이 없습니다. 로그아웃 후 관리자 계정으로 로그인해 주세요.", 403, LocalDateTime.now())
+                    );
+                }
             case 404:
                 if (methodKey.contains("findOrderStatusByOrderId")) {
                     return new OrderWaitingException(

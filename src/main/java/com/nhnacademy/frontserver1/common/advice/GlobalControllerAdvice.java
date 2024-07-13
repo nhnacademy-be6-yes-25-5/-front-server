@@ -1,6 +1,7 @@
 package com.nhnacademy.frontserver1.common.advice;
 
 import com.nhnacademy.frontserver1.common.exception.AccessDeniedException;
+import com.nhnacademy.frontserver1.common.exception.UnauthorizedAccessException;
 import com.nhnacademy.frontserver1.common.exception.ConnectionException;
 import com.nhnacademy.frontserver1.common.exception.DormantAccountException;
 import com.nhnacademy.frontserver1.common.exception.FeignClientException;
@@ -40,11 +41,27 @@ public class GlobalControllerAdvice {
         return new ModelAndView(redirectView);
     }
 
-    @ExceptionHandler({RefreshTokenFailedException.class, TokenCookieMissingException.class})
-    public ModelAndView handleRefreshTokenFailedException(TokenCookieMissingException e) {
+    @ExceptionHandler({RefreshTokenFailedException.class})
+    public ModelAndView handleRefreshTokenFailedException(RefreshTokenFailedException e) {
 
         RedirectView redirectView = new RedirectView("/auth/error");
-        redirectView.addStaticAttribute("cause", e.getMessage());
+        redirectView.addStaticAttribute("cause", e.getErrorStatus().message());
+        return new ModelAndView(redirectView);
+    }
+
+    @ExceptionHandler({TokenCookieMissingException.class})
+    public ModelAndView handleTokenCookieMissingException(TokenCookieMissingException e) {
+
+        RedirectView redirectView = new RedirectView("/auth/error");
+        redirectView.addStaticAttribute("cause", e.getErrorStatus().message());
+        return new ModelAndView(redirectView);
+    }
+
+    @ExceptionHandler({UnauthorizedAccessException.class})
+    public ModelAndView handleUnauthorizedAccessException(UnauthorizedAccessException e) {
+
+        RedirectView redirectView = new RedirectView("/auth/error");
+        redirectView.addStaticAttribute("cause", e.getErrorStatus().message());
         return new ModelAndView(redirectView);
     }
 

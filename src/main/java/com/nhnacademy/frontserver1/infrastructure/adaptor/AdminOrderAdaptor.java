@@ -20,15 +20,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface AdminOrderAdaptor {
 
     @GetMapping("/admin")
-    Page<ReadAllUserOrderStatusResponse> getAllUserOrderStatusByPaging(Pageable pageable,
+    ResponseEntity<Page<ReadAllUserOrderStatusResponse>> getAllUserOrderStatusByPaging(Pageable pageable,
         @RequestParam(required = false) String role);
 
     @PutMapping("/admin/{orderId}")
-    void updateOrderStatusByOrderId(@PathVariable String orderId,
+    ResponseEntity<Void> updateOrderStatusByOrderId(@PathVariable String orderId,
         @RequestBody UpdateOrderStatusRequest updateOrderStatusRequests);
 
     @GetMapping("/admin/refund")
-    Page<ReadAllUserOrderCancelStatusResponse> getAllUserOrderCancelStatusByPaging(Pageable pageable);
+    ResponseEntity<Page<ReadAllUserOrderCancelStatusResponse>> getAllUserOrderCancelStatusByPaging(Pageable pageable);
 
     @PutMapping("/admin/{orderId}/refund")
     ResponseEntity<CancelOrderResponse> cancelOrderByOrderId(@PathVariable String orderId, @RequestBody CancelOrderRequest request);

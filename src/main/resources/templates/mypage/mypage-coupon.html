@@ -41,17 +41,22 @@
                                                     <thead>
                                                     <tr>
                                                         <th>쿠폰명</th>
-                                                        <th>사용 조건 및 사용기간</th>
+                                                        <th>최소 주문금액 / 유효기간</th>
                                                         <th>할인 혜택</th>
                                                         <th>등록일</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <tr th:each="coupon : ${activeCoupons}">
-                                                        <td th:text="${coupon.couponName}"></td>
-                                                        <td th:text="${coupon.couponMinAmount} + ' / ' + ${#dates.format(coupon.CouponExpiredAt, 'yyyy-MM-dd')}"></td>
-                                                        <td th:text="${coupon.couponDiscountRate != null ? coupon.couponDiscountRate + '%' : coupon.couponDiscountAmount}"></td>
+                                                    <tr th:each="coupon : ${activeCoupons}" th:data-coupon-id="${coupon.couponId}">
+                                                        <td th:text="${coupon.couponName}" class="coupon-name" th:data-coupon-name="${coupon.couponName}"
+                                                            th:data-coupon-max-amount="${#numbers.formatInteger(coupon.couponMaxAmount, 3, 'COMMA') + '원'}"
+                                                            th:data-coupon-expired-at="${#dates.format(coupon.CouponExpiredAt, 'yyyy-MM-dd')}"></td>
+                                                        <td th:text="${#numbers.formatInteger(coupon.couponMinAmount, 3, 'COMMA') + '원'} + ' / ' + ${#dates.format(coupon.CouponExpiredAt, 'yyyy-MM-dd')}" />
+                                                        <td th:text="${coupon.couponDiscountRate != null ? #numbers.setFormatInteger(coupon.couponDiscountRate, 0) + '%' : #numbers.formatInteger(coupon.couponDiscountAmount, 3, 'COMMA') + '원'}"></td>
                                                         <td th:text="${#dates.format(coupon.couponCreatedAt, 'yyyy-MM-dd')}"></td>
+                                                    </tr>
+                                                    <tr th:if="${activeCoupons.content.size()} == 0">
+                                                        <td colspan="6" class="text-center" style="font-size: 1.2em; color: black;">사용 가능한 쿠폰이 없습니다.</td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -73,7 +78,7 @@
                                                     <thead>
                                                     <tr>
                                                         <th>쿠폰명</th>
-                                                        <th>사용 조건 및 사용기간</th>
+                                                        <th>최소 주문금액 / 유효기간</th>
                                                         <th>할인 혜택</th>
                                                         <th>사용일</th>
                                                     </tr>
@@ -81,9 +86,12 @@
                                                     <tbody>
                                                     <tr th:each="coupon : ${usedCoupons}">
                                                         <td th:text="${coupon.couponName}"></td>
-                                                        <td th:text="${coupon.couponMinAmount} + ' / ' + ${#dates.format(coupon.CouponExpiredAt, 'yyyy-MM-dd')}"></td>
-                                                        <td th:text="${coupon.couponDiscountRate != null ? coupon.couponDiscountRate + '%' : coupon.couponDiscountAmount}"></td>
+                                                        <td th:text="${#numbers.formatInteger(coupon.couponMinAmount, 3, 'COMMA') + '원'} + ' / ' + ${#dates.format(coupon.CouponExpiredAt, 'yyyy-MM-dd')}"></td>
+                                                        <td th:text="${coupon.couponDiscountRate != null ? #numbers.setFormatInteger(coupon.couponDiscountRate, 0) + '%' : #numbers.formatInteger(coupon.couponDiscountAmount, 3, 'COMMA') + '원'}"></td>
                                                         <td th:text="${coupon.userCouponUsedAt()}"></td>
+                                                    </tr>
+                                                    <tr th:if="${usedCoupons.content.size()} == 0">
+                                                        <td colspan="6" class="text-center" style="font-size: 1.2em; color: black;">사용한 쿠폰이 없습니다.</td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -105,7 +113,7 @@
                                                     <thead>
                                                     <tr>
                                                         <th>쿠폰명</th>
-                                                        <th>사용 조건 및 사용기간</th>
+                                                        <th>최소 주문금액 / 유효기간</th>
                                                         <th>할인 혜택</th>
                                                         <th>등록일</th>
                                                     </tr>
@@ -113,9 +121,12 @@
                                                     <tbody>
                                                     <tr th:each="coupon : ${expiredCoupons}">
                                                         <td th:text="${coupon.couponName}"></td>
-                                                        <td th:text="${coupon.couponMinAmount} + ' / ' + ${#dates.format(coupon.CouponExpiredAt, 'yyyy-MM-dd')}"></td>
-                                                        <td th:text="${coupon.couponDiscountRate != null ? coupon.couponDiscountRate + '%' : coupon.couponDiscountAmount}"></td>
+                                                        <td th:text="${#numbers.formatInteger(coupon.couponMinAmount, 3, 'COMMA') + '원'} + ' / ' + ${#dates.format(coupon.CouponExpiredAt, 'yyyy-MM-dd')}"></td>
+                                                        <td th:text="${coupon.couponDiscountRate != null ? #numbers.setFormatInteger(coupon.couponDiscountRate, 0) + '%' : #numbers.formatInteger(coupon.couponDiscountAmount, 3, 'COMMA') + '원'}"></td>
                                                         <td th:text="${#dates.format(coupon.couponCreatedAt, 'yyyy-MM-dd')}"></td>
+                                                    </tr>
+                                                    <tr th:if="${expiredCoupons.content.size()} == 0">
+                                                        <td colspan="6" class="text-center" style="font-size: 1.2em; color: black;">만료된 쿠폰이 없습니다.</td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -136,9 +147,49 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- 쿠폰 상세보기 모달 -->
+                <div class="modal fade" id="couponDetailModal" tabindex="-1" aria-labelledby="couponDetailModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="couponDetailModalLabel">쿠폰 상세보기</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p style="font-size: 1.2em; color: black;"><strong>쿠폰명:</strong> <span id="couponName"></span></p>
+                                <p style="font-size: 1.2em; color: black;"><strong>최대 할인금액:</strong> <span id="couponMaxAmount"></span></p>
+                                <p style="font-size: 1.2em; color: black;"><strong>유효기간:</strong> <span id="couponExpiredAt"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 쿠폰 이름을 클릭할 때 이벤트 추가
+            const couponNames = document.querySelectorAll('.coupon-name');
+
+            couponNames.forEach(coupon => {
+                coupon.addEventListener('click', function () {
+                    const couponName = this.dataset.couponName;
+                    const couponMaxAmount = this.dataset.couponMaxAmount;
+                    const couponExpiredAt = this.dataset.couponExpiredAt;
+
+                    // 모달에 데이터 설정
+                    document.getElementById('couponName').innerText = couponName;
+                    document.getElementById('couponMaxAmount').innerText = couponMaxAmount;
+                    document.getElementById('couponExpiredAt').innerText = couponExpiredAt;
+
+                    // 모달 띄우기
+                    const modal = new bootstrap.Modal(document.getElementById('couponDetailModal'));
+                    modal.show();
+                });
+            });
+        });
+    </script>
 </div>
 </body>
 </html>

@@ -34,12 +34,12 @@
                             <h2 th:text="${book.bookName()}" class="title">GoPro Karma Camera Drone</h2>
                             <p th:text="${book.bookAuthor()}" class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">Action cameras</a></p>
                             <h3 class="price">
-                                <span th:text="${book.bookPrice()}">$945</span>
+                                <span th:text = "${#numbers.formatInteger(book.bookPrice(),3,'COMMA')} + '원'">$945</span>
                                 <h5 th:if="${book.bookPrice() > 0}">
                                     <span th:text="${(1 - book.bookSellingPrice() / book.bookPrice()) * 100 + '%'}"></span>
                                     <span> off</span>
                                 </h5>
-                                <h3 th:text="${book.bookSellingPrice()}">$850</h3>
+                                <h3 th:text = "${#numbers.formatInteger(book.bookSellingPrice(),3,'COMMA')} + '원'">$850</h3>
                             </h3>
                             <div class="row">
                                 <div class="col-lg-4 col-md-4 col-12">
@@ -207,7 +207,6 @@
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/x-www-form-urlencoded',
-                                        'Authorization': 'Bearer ' + localStorage.getItem('accessToken') // 토큰을 로컬 스토리지에서 가져옴
                                     },
                                     body: new URLSearchParams({
                                         'couponId': couponId
@@ -215,7 +214,12 @@
                                 }).then(response => {
                                     if (response.ok) {
                                         alert('쿠폰이 성공적으로 발급되었습니다.');
-                                    } else {
+                                    } else if (response.status === 400) {
+                                        alert('이미 발급된 쿠폰입니다.');
+                                    } else if (response.status === 500) {
+                                        alert('비회원은 쿠폰 발급이 불가합니다.\n회원가입 후 쿠폰혜택을 받아보세요 !!')
+                                    }
+                                    else {
                                         alert('쿠폰 발급에 실패하였습니다.');
                                     }
                                 });

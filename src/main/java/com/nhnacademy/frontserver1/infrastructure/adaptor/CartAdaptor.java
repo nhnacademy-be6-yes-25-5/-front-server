@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface CartAdaptor {
 
     @GetMapping("/cart-books/{cartId}")
-    List<ReadCartBookResponse> getCartBooks(@PathVariable String cartId);
+    ResponseEntity<List<ReadCartBookResponse>> getCartBooks(@PathVariable String cartId);
 
     @PostMapping("/cart-books/{cartId}")
     ResponseEntity<CreateCartResponse> createCart(@RequestBody CreateCartRequest createCartRequest,

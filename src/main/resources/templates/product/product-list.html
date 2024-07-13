@@ -211,10 +211,10 @@
                                                     <li><i class="lni lni-star-filled"></i></li>
                                                     <li><i class="lni lni-star-filled"></i></li>
                                                     <li><i class="lni lni-star"></i></li>
-                                                    <li><span>4.0 Review(s)</span></li>
+                                                    <li><span th:text = "${book.grade()} + ' Review(s)'">4.0 Review(s)</span></li>
                                                 </ul>
                                                 <div class="price">
-                                                    <span th:text ="${book.bookSellingPrice()}">$199.00</span>
+                                                    <span th:text ="${#numbers.formatInteger(book.bookSellingPrice(), 3, 'COMMA') + '원'}">$199.00</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -250,10 +250,10 @@
                                                             <li><i class="lni lni-star-filled"></i></li>
                                                             <li><i class="lni lni-star-filled"></i></li>
                                                             <li><i class="lni lni-star"></i></li>
-                                                            <li><span>4.0 Review(s)</span></li>
+                                                            <li><span th:text = "${book.grade()} + ' Review(s)'">4.0 Review(s)</span></li>
                                                         </ul>
                                                         <div class="price">
-                                                            <span th:text = "${book.bookSellingPrice()}">$199.00</span>
+                                                            <span th:text ="${#numbers.formatInteger(book.bookSellingPrice(), 3, 'COMMA') + '원'}">$199.00</span>
                                                         </div>
                                                     </div>
                                                 </div>

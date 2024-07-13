@@ -35,6 +35,13 @@ public class CustomErrorDecoder implements ErrorDecoder {
                             ErrorStatus.toErrorStatus("로그인한 회원만 좋아요를 할 수 있습니다.", 401, LocalDateTime.now())
                     );
                 }
+
+                if(responseBody.contains("이미 존재하는 책입니다.")) {
+                    return new BookException(
+                            ErrorStatus.toErrorStatus("이미 존재하는 책입니다.", 400, LocalDateTime.now())
+                    );
+                }
+
                 log.error("클라이언트 요청에서 에러가 발생하였습니다. 상태 코드: 400, 응답 본문: {}", responseBody);
                 break;
 
@@ -49,6 +56,11 @@ public class CustomErrorDecoder implements ErrorDecoder {
                 if (responseBody.contains("휴면")) {
                     return new DormantAccountException(
                             ErrorStatus.toErrorStatus("로그인한 유저가 휴면상태입니다.", 403, LocalDateTime.now()));
+                }
+                if (responseBody.contains("접근 권한이 없습니다.")) {
+                    return new UnauthorizedAccessException(
+                            ErrorStatus.toErrorStatus("접근 권한이 없습니다. 로그아웃 후 관리자 계정으로 로그인해 주세요.", 403, LocalDateTime.now())
+                    );
                 }
             case 404:
                 if (methodKey.contains("findOrderStatusByOrderId")) {

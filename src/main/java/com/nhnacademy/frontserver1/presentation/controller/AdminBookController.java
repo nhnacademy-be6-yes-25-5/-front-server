@@ -4,6 +4,7 @@ import com.nhnacademy.frontserver1.application.service.BookService;
 import com.nhnacademy.frontserver1.application.service.CategoryService;
 import com.nhnacademy.frontserver1.application.service.TagService;
 import com.nhnacademy.frontserver1.application.service.UploadImageService;
+import com.nhnacademy.frontserver1.common.exception.BookException;
 import com.nhnacademy.frontserver1.presentation.dto.request.book.CreateBookRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.book.UpdateBookRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.*;
@@ -18,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.print.Book;
 import java.util.List;
 
 @Controller
@@ -85,9 +87,15 @@ public class AdminBookController {
     public String adminUpdateBook(@ModelAttribute @Valid UpdateBookRequest request, @RequestParam(value = "categoryIdList") List<Long> categoryIdList,
                                   @RequestParam(value = "tagIdList", required = false) List<Long> tagIdList, @RequestParam(value = "bookImage", required = false) MultipartFile file) {
 
-        UploadImageResponse uploadImageResponse = uploadimageService.imageUpload(file);
-        UpdateBookRequest updateBookRequest = UpdateBookRequest.updateImageURL(request, uploadImageResponse.imageUrl());
-        bookService.updateBook(updateBookRequest, categoryIdList, tagIdList);
+        BookResponse book = bookService.getBook(request.bookId());
+
+        if(!file.isEmpty()) {
+            UploadImageResponse uploadImageResponse = uploadimageService.imageUpload(file);
+            UpdateBookRequest updateBookRequest = UpdateBookRequest.updateImageURL(request, uploadImageResponse.imageUrl());
+        } else {
+            UpdateBookRequest updateBookRequest = UpdateBookRequest.updateImageURL(request, book.bookImage());
+            bookService.updateBook(updateBookRequest, categoryIdList, tagIdList);
+        }
 
         return "redirect:/admin/product";
     }
@@ -108,5 +116,14 @@ public class AdminBookController {
         model.addAttribute("bookList", bookList);
 
         return "admin/product/admin-book-search";
+    }
+
+    @ExceptionHandler(BookException.class)
+    public String bookException(Model model) {
+
+        model.addAttribute("message", "이미 존재하는 책입니다.");
+        model.addAttribute("url", "/admin/product");
+
+        return "message";
     }
 }

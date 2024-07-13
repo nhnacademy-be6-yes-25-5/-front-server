@@ -11,8 +11,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import com.nhnacademy.frontserver1.common.provider.CookieTokenProvider;
 import com.nhnacademy.frontserver1.common.context.TokenContext;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

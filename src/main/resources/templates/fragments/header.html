@@ -106,7 +106,9 @@
                                     </div>
                                     <ul id="cart-preview" th:if="${cartPreview != null && !#lists.isEmpty(cartPreview)}" class="shopping-list">
                                         <li th:each="item : ${cartPreview}">
-                                            <a class="remove" title="Remove this item" th:data-book-id="${item.bookId}" th:onclick="'removeCartItem(' + ${item.bookId} + '); return false;'">
+                                            <a class="remove" title="Remove this item"
+                                               th:data-book-id="${item.bookId}"
+                                               th:data-cart-id="${cartId}">
                                                 <i class="lni lni-close"></i>
                                             </a>
                                             <a class="cart-img" th:href="@{'/detail/' + ${item.bookId}}">
@@ -201,9 +203,31 @@
         </div>
 
         <script>
-            async function removeCartItem(bookId) {
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('.remove').forEach(function (removeButton) {
+                    removeButton.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const bookId = e.target.closest('.remove').dataset.bookId;
+                        const cartId = e.target.closest('.remove').dataset.cartId;
+                        removeCartItem(bookId, cartId);
+                    });
+                });
+
+                document.querySelector('.btn.animate').addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    if (bookIdList.length && quantities.length) {
+                        const url = `/orders/checkout`;
+                        window.location.href = url;
+                    } else {
+                        console.error('Book IDs or quantities are empty');
+                    }
+                });
+            });
+
+            async function removeCartItem(bookId, cartId) {
                 try {
-                    let response = await fetch(`/carts/books/${bookId}`, {
+                    let response = await fetch(`/carts/${cartId}/books/${bookId}`, {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json'
@@ -221,30 +245,6 @@
                     console.error('Error removing item:', error);
                 }
             }
-
-            document.addEventListener('DOMContentLoaded', function () {
-                document.querySelector('.btn.animate').addEventListener('click', function (e) {
-                    e.preventDefault();
-
-                    const cartItems = document.querySelectorAll('#cart-preview li');
-                    let bookIdList = [];
-                    let quantities = [];
-
-                    cartItems.forEach(function (item) {
-                        const bookId = item.querySelector('.remove').dataset.bookId;
-                        const quantity = item.querySelector('.cart-preview-quantity span:last-child').innerText.trim();
-                        bookIdList.push(bookId);
-                        quantities.push(quantity);
-                    });
-
-                    if (bookIdList.length && quantities.length) {
-                        const url = `/orders/checkout?bookIdList=${bookIdList.join(',')}&quantities=${quantities.join(',')}`;
-                        window.location.href = url;
-                    } else {
-                        console.error('Book IDs or quantities are empty');
-                    }
-                });
-            });
 
         </script>
     </div>

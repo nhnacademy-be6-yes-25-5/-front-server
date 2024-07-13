@@ -14,6 +14,7 @@
   <section class="cart-details section">
     <div class="container">
       <h2 class="my-4">장바구니</h2>
+      <input type="hidden" id="cartId" name="cartId" th:value="${cartId}">
       <form id="checkout-form" action="/orders/checkout" method="get">
         <div class="row">
           <div class="col-lg-8 col-md-12 col-12">
@@ -104,6 +105,7 @@
       input.value = newValue;
       updateButtonStates(input);
 
+      const cartId = document.getElementById('cartId').value;
       var bookId = button.closest('.cart-item-container').getAttribute('data-book-id');
       var loading = document.getElementById('loading');
       var checkoutButton = document.getElementById('checkout-button');
@@ -112,7 +114,7 @@
       setButtonsDisabled(true);
 
       try {
-        let response = await fetch(`/carts/books/${bookId}`, {
+        let response = await fetch(`/carts/${cartId}/books/${bookId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'

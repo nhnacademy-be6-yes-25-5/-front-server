@@ -1,9 +1,7 @@
 package com.nhnacademy.frontserver1.common.interceptor;
 
 import com.nhnacademy.frontserver1.application.service.CartService;
-import com.nhnacademy.frontserver1.application.service.UserService;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadCartBookResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.user.ReadUserInfoResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,20 +22,27 @@ public class CartInfoInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
         ModelAndView modelAndView) throws Exception {
         if (modelAndView != null) {
-            Cookie[] cookies = request.getCookies();
-            if (cookies != null) {
-                for (Cookie cookie : cookies) {
-                    if ("AccessToken".equals(cookie.getName())) {
-                        CartService cartService = applicationContext.getBean(CartService.class);
-                        List<ReadCartBookResponse> cartPreview = cartService.getCarts();
+            String cartId = getCartIdFromCookie(request);
+            if (cartId != null) {
+                CartService cartService = applicationContext.getBean(CartService.class);
+                List<ReadCartBookResponse> cartPreview = cartService.getCarts(cartId);
 
-                        modelAndView.addObject("cartPreview", cartPreview);
-                        modelAndView.addObject("cartItemCount", cartPreview.size());
+                modelAndView.addObject("cartPreview", cartPreview);
+                modelAndView.addObject("cartId", cartId);
+                modelAndView.addObject("cartItemCount", cartPreview.size());
+            }
+        }
+    }
 
-                        break;
-                    }
+    private String getCartIdFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("CART-ID".equals(cookie.getName())) {
+                    return cookie.getValue();
                 }
             }
         }
+        return null;
     }
 }

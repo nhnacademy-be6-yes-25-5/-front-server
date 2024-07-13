@@ -11,20 +11,13 @@ public record ReadOrderUserInfoResponse(Long userId,
                                         String role
                                         ) {
 
-    public static ReadOrderUserInfoResponse fromTestMember() {
+    public static ReadOrderUserInfoResponse fromNoneMember() {
         return ReadOrderUserInfoResponse.builder()
-            .userId(8L)
-            .points(1000)
-            .name("김토스")
-            .email("asd@dsa.dsa")
-            .phoneNumber("01012345678")
-            .role("MEMBER")
-            .build();
-    }
-
-    public static ReadOrderUserInfoResponse fromTestNoneMember() {
-        return ReadOrderUserInfoResponse.builder()
-            .userId(8L)
+            .userId(null)
+            .points(0)
+            .name("")
+            .email("")
+            .phoneNumber("")
             .role("NONE_MEMBER")
             .build();
     }

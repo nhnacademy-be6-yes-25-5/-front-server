@@ -316,7 +316,6 @@
           <input type="hidden" name="role" id="role" th:value="${userInfo.role}">
           <div th:each="cartBook, index : ${cartBooks}">
             <input type="hidden" name="productIds" th:value="${cartBook.bookId}">
-            <input type="hidden" name="cartBookIds" th:value="${cartBook.cartBookId}">
             <input type="hidden" name="quantities"
                    th:value="${cartBook.cartBookQuantity}">
             <input type="hidden" name="prices" th:value="${cartBook.bookPrice}">
@@ -324,7 +323,8 @@
           <input type="hidden" name="shippingFee" id="hiddenShippingFee">
           <input type="hidden" name="points" id="hiddenPointsUsed" value="0">
           <input type="hidden" name="takeoutPrice" id="hiddenTakeoutPrice">
-          <input type="hidden" name="orderId" id="hiddenOrderId">
+          <input type="hidden" name="orderId" id="orderId" th:value="${orderId}">
+          <input type="hidden" name="cartId" id="cartId" th:value="${cartId}">
           <input type="hidden" name="discountPrice" id="hiddenDiscountPrice">
           <input type="hidden" name="addressRaw" id="hiddenAddressRaw">
           <input type="hidden" name="addressDetail" id="hiddenAddressDetail">
@@ -528,7 +528,6 @@
       return;
     }
 
-    const orderId = `order-${generateUUID()}`;
     const deliveryDateValue = document.getElementById('deliveryDate').value;
     const totalPrice = document.getElementById('totalPriceValue').textContent;
 
@@ -541,6 +540,8 @@
     const takeoutPrice = document.getElementById('takeoutPrice').innerText.replace('원', '');
     const shippingFee = document.getElementById('shippingFee').innerText.replace('원', '');
     const couponDiscount = getNumberValue('discountAmount');
+    const orderId = document.getElementById('orderId').value;
+    const cartId = document.getElementById('cartId').value;
     const orderName = document.getElementById('orderName').value;
     const orderEmail = document.getElementById('orderEmail').value;
     const orderPhoneNumber = document.getElementById('orderPhoneNumber').value;
@@ -555,8 +556,6 @@
     const points = document.getElementById('points').value || "0";
     const role = document.getElementById('role').value;
     const productIds = Array.from(document.querySelectorAll('input[name="productIds"]')).map(
-        input => input.value);
-    const cartBookIds = Array.from(document.querySelectorAll('input[name="cartBookIds"]')).map(
         input => input.value);
     const quantities = Array.from(document.querySelectorAll('input[name="quantities"]')).map(
         input => input.value);
@@ -586,9 +585,9 @@
       productIds: productIds,
       quantities: quantities,
       prices: prices,
-      cartBookIds: cartBookIds,
       role: role,
-      couponId: couponId
+      couponId: couponId,
+      cartId: cartId
     };
 
     fetch('/orders', {

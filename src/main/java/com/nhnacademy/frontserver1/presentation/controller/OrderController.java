@@ -1,5 +1,6 @@
 package com.nhnacademy.frontserver1.presentation.controller;
 
+import com.nhnacademy.frontserver1.application.service.CartService;
 import com.nhnacademy.frontserver1.application.service.OrderService;
 import com.nhnacademy.frontserver1.domain.TakeoutType;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
@@ -15,9 +16,12 @@ import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingP
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadUserCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.UpdateOrderResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,7 +36,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/orders")
@@ -41,25 +44,41 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class OrderController {
 
     private final OrderService orderService;
+    private final CartService cartService;
     private static final String MEMBER = "MEMBER";
 
     @GetMapping("/checkout")
-    public String findAllCheckout(Model model, Pageable pageable,
-        @RequestParam List<Long> bookIdList, @RequestParam List<Integer> quantities) {
-        List<ReadCartBookResponse> cartBookResponses = orderService.getOrderBook(bookIdList,
-            quantities);
-        ReadOrderUserInfoResponse orderUserInfoResponse = orderService.getUserInfo();
+    public String findAllCheckout(Model model, Pageable pageable, HttpServletRequest request) {
+        String cartId = getCartIdFromCookie(request);
+        String orderId = UUID.randomUUID().toString();
+        List<ReadCartBookResponse> cartBookResponses = cartService.getCarts(cartId);
+        ReadOrderUserInfoResponse orderUserInfoResponse = orderService.getUserInfo(request);
         Integer totalAmount = getTotalAmount(cartBookResponses);
 
-        populateUserInfo(model, orderUserInfoResponse, totalAmount);
+        populateUserInfo(model, orderUserInfoResponse, totalAmount, orderId, cartId);
         populateOrderDetails(model, pageable, totalAmount, cartBookResponses);
 
         return "order/checkout";
     }
 
+    private String getCartIdFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("CART-ID".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+
+        return null;
+    }
+
     private void populateUserInfo(Model model, ReadOrderUserInfoResponse orderUserInfoResponse,
-        Integer totalAmount) {
+        Integer totalAmount, String orderId, String cartId) {
         model.addAttribute("userInfo", orderUserInfoResponse);
+        model.addAttribute("orderId", orderId);
+        model.addAttribute("cartId", cartId);
 
         if (MEMBER.equals(orderUserInfoResponse.role())) {
             model.addAttribute("orderUserName", orderUserInfoResponse.name());

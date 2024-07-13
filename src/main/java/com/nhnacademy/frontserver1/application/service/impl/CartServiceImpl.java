@@ -19,22 +19,22 @@ public class CartServiceImpl implements CartService {
     private final CartAdaptor cartAdaptor;
 
     @Override
-    public CreateCartResponse createCart(CreateCartRequest createCartRequest) {
-        return cartAdaptor.createCart(createCartRequest).getBody();
+    public CreateCartResponse createCart(String cartId, CreateCartRequest createCartRequest) {
+        return cartAdaptor.createCart(createCartRequest, cartId).getBody();
     }
 
     @Override
-    public List<ReadCartBookResponse> getCarts() {
-        return cartAdaptor.getCartBooks();
+    public List<ReadCartBookResponse> getCarts(String cartId) {
+        return cartAdaptor.getCartBooks(cartId);
     }
 
     @Override
-    public UpdateCartBookResponse updateCart(Long bookId, UpdateCartBookRequest request) {
-        return cartAdaptor.updateCartBook(bookId, request);
+    public UpdateCartBookResponse updateCart(String cartId, Long bookId, UpdateCartBookRequest request) {
+        return cartAdaptor.updateCartBook(cartId, bookId, request);
     }
 
     @Override
-    public DeleteCartBookResponse deleteCartBook(Long bookId) {
-        return cartAdaptor.deleteCartBookByBookId(bookId);
+    public DeleteCartBookResponse deleteCartBook(String cartId, Long bookId) {
+        return cartAdaptor.deleteCartBookByBookId(cartId, bookId);
     }
 }

@@ -19,16 +19,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "cartAdaptor", url = "${eureka.gateway}/users")
 public interface CartAdaptor {
 
-    @GetMapping("/cart-books")
-    List<ReadCartBookResponse> getCartBooks();
+    @GetMapping("/cart-books/{cartId}")
+    List<ReadCartBookResponse> getCartBooks(@PathVariable String cartId);
 
-    @PostMapping("/cart-books")
-    ResponseEntity<CreateCartResponse> createCart(CreateCartRequest createCartRequest);
+    @PostMapping("/cart-books/{cartId}")
+    ResponseEntity<CreateCartResponse> createCart(@RequestBody CreateCartRequest createCartRequest,
+        @PathVariable String cartId);
 
-    @PutMapping("/cart-books/books/{bookId}")
-    UpdateCartBookResponse updateCartBook(@PathVariable Long bookId,
+    @PutMapping("/cart-books/{cartId}/books/{bookId}")
+    UpdateCartBookResponse updateCartBook(@PathVariable String cartId, @PathVariable Long bookId,
         @RequestBody UpdateCartBookRequest request);
 
-    @DeleteMapping("/cart-books/books/{bookId}")
-    DeleteCartBookResponse deleteCartBookByBookId(@PathVariable Long bookId);
+    @DeleteMapping("/cart-books/{cartId}/books/{bookId}")
+    DeleteCartBookResponse deleteCartBookByBookId(@PathVariable String cartId, @PathVariable Long bookId);
 }

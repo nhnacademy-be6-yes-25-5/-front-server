@@ -1,7 +1,6 @@
 package com.nhnacademy.frontserver1.application.service;
 
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
-import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadOrderNoneMemberRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
@@ -17,6 +16,7 @@ import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingP
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadUserCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.UpdateOrderResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,13 +31,11 @@ public interface OrderService {
 
     List<ReadTakeoutResponse> findAllTakeout();
 
-    List<ReadCartBookResponse> getOrderBook(List<Long> bookIdList, List<Integer> quantities);
-
     ReadOrderStatusResponse getOrderStatusByOrderId(String orderId);
 
     Page<ReadOrderUserAddressResponse> getUserAddresses(Pageable pageable);
 
-    ReadOrderUserInfoResponse getUserInfo();
+    ReadOrderUserInfoResponse getUserInfo(HttpServletRequest request);
 
     ReadMaximumDiscountCouponResponse getMaxDiscountCoupon(Integer totalAmount);
 

@@ -3,7 +3,6 @@ package com.nhnacademy.frontserver1.application.service.impl;
 import com.nhnacademy.frontserver1.application.service.OrderService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.AddressAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.OrderAdaptor;
-import com.nhnacademy.frontserver1.infrastructure.adaptor.OrderBookAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.PolicyAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.UserAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.UserCouponAdaptor;
@@ -41,7 +40,6 @@ public class OrderServiceImpl implements OrderService {
     private final AddressAdaptor addressAdaptor;
     private final UserAdaptor userAdaptor;
     private final UserCouponAdaptor userCouponAdaptor;
-    private final OrderBookAdaptor orderBookAdaptor;
 
     @Override
     public CreateOrderResponse createPreOrder(CreateOrderRequest request) {

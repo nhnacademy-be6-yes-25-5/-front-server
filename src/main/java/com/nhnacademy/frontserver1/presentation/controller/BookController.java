@@ -55,13 +55,4 @@ public class BookController {
 
         return "message";
     }
-
-    @ExceptionHandler(BookException.class)
-    public String bookException(Model model) {
-
-        model.addAttribute("message", "이미 존재하는 책입니다.");
-        model.addAttribute("url", "/admin/product");
-
-        return "message";
-    }
 }

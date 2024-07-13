@@ -40,9 +40,6 @@ public class HomeController {
 
         List<CategoryResponse> rootCategories = categoryService.findRootCategories();
         List<BookResponse> bookList = bookService.findAllBooks();
-        Collections.shuffle(bookList);
-        List<BookResponse> randomBooks = bookList.stream().limit(6).collect(Collectors.toList());
-
 
         List<BookResponse> popularBooks = bookList.stream()
                 .limit(8)
@@ -52,6 +49,9 @@ public class HomeController {
 
         BookResponse recentlyBook = bookList.stream()
                         .max(Comparator.comparing(BookResponse::bookPublishDate)).orElse(null);
+
+        Collections.shuffle(bookList);
+        List<BookResponse> randomBooks = bookList.stream().limit(6).collect(Collectors.toList());
 
         model.addAttribute("recentlyBook", recentlyBook);
         model.addAttribute("categories", rootCategories);

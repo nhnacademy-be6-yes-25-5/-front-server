@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface PaymentAdaptor {
 
     @PostMapping("/confirm")
-    CreatePaymentResponse createPayment(@RequestBody CreatePaymentsRequest request);
+    ResponseEntity<CreatePaymentResponse> createPayment(@RequestBody CreatePaymentsRequest request);
 
     @GetMapping("/{orderId}")
-    List<ReadPaymentOrderResponse> findAllByOrderId(@PathVariable String orderId);
+    ResponseEntity<List<ReadPaymentOrderResponse>> findAllByOrderId(@PathVariable String orderId);
 
     @PostMapping("/confirm/zero")
     ResponseEntity<CreatePaymentResponse> createPaymentByZeroAmount(@RequestBody CreatePaymentsRequest paymentsRequest);

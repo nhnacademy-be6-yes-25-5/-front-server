@@ -27,7 +27,7 @@ public class PaymentServiceImpl implements PaymentService {
         List<Integer> quantities) {
 
         CreatePaymentsRequest paymentsRequest = CreatePaymentsRequest.of(request, bookIds, quantities);
-        CreatePaymentResponse response = paymentAdaptor.createPayment(paymentsRequest);
+        CreatePaymentResponse response = paymentAdaptor.createPayment(paymentsRequest).getBody();
 
         if (response.status() != 200) {
             log.error("결제에 실패했습니다.");
@@ -40,7 +40,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public List<ReadPaymentOrderResponse> findAllOrderByOrderId(String orderId) {
-        return paymentAdaptor.findAllByOrderId(orderId);
+        return paymentAdaptor.findAllByOrderId(orderId).getBody();
     }
 
     @Override

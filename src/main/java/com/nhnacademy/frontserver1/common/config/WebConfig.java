@@ -29,6 +29,7 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(cartInfoInterceptor)
             .addPathPatterns("/**")
-            .excludePathPatterns("/logout");
+            .excludePathPatterns("/logout")
+            .excludePathPatterns("/auth/error");
     }
 }

@@ -21,18 +21,18 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     @Override
     public Page<ReadAllUserOrderStatusResponse> getAllUserOrderStatus(Pageable pageable,
         String role) {
-        return adminOrderAdaptor.getAllUserOrderStatusByPaging(pageable, role);
+        return adminOrderAdaptor.getAllUserOrderStatusByPaging(pageable, role).getBody();
     }
 
     @Override
     public void updateOrderStatusByOrderId(String orderId,
         UpdateOrderStatusRequest updateOrderStatusRequest) {
-        adminOrderAdaptor.updateOrderStatusByOrderId(orderId, updateOrderStatusRequest);
+        adminOrderAdaptor.updateOrderStatusByOrderId(orderId, updateOrderStatusRequest).getBody();
     }
 
     @Override
     public Page<ReadAllUserOrderCancelStatusResponse> getAllUserOrderCancelStatus(Pageable pageable) {
-        return adminOrderAdaptor.getAllUserOrderCancelStatusByPaging(pageable);
+        return adminOrderAdaptor.getAllUserOrderCancelStatusByPaging(pageable).getBody();
     }
 
     @Override

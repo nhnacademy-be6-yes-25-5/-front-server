@@ -80,7 +80,7 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
             }
 
             log.warn("Authorization token is missing in the cookies.");
-            throw new TokenCookieMissingException();
+            throw new TokenCookieMissingException(ErrorStatus.toErrorStatus("인증 정보를 찾을 수 없습니다.", 403, LocalDateTime.now()));
         }
     }
 

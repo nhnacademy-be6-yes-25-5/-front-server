@@ -47,13 +47,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public CreateOrderResponse createPreOrder(CreateOrderRequest request) {
-        return orderAdaptor.createPreOrder(request);
+        return orderAdaptor.createPreOrder(request).getBody();
     }
 
     @Override
     public ReadShippingPolicyResponse findAllOrderPolicy(Pageable pageable,
         Integer totalAmount) {
-        Page<ReadShippingPolicyResponse> policyResponses = policyAdaptor.findAllDeliveryPolicy(pageable);
+        Page<ReadShippingPolicyResponse> policyResponses = policyAdaptor.findAllDeliveryPolicy(pageable).getBody();
 
         return policyResponses.getContent().stream()
             .filter(policy -> totalAmount >= policy.shippingPolicyMinAmount())
@@ -63,17 +63,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public ReadShippingPolicyResponse findFreePolicy() {
-        return policyAdaptor.findFreePolicy();
+        return policyAdaptor.findFreePolicy().getBody();
     }
 
     @Override
     public List<ReadTakeoutResponse> findAllTakeout() {
-        return policyAdaptor.findAllTakeoutPolicy();
+        return policyAdaptor.findAllTakeoutPolicy().getBody();
     }
 
     @Override
     public List<ReadCartBookResponse> getOrderBook(List<Long> bookIdList, List<Integer> quantities) {
-        List<ReadOrderBookInfoResponse> orderBookInfoResponses = orderBookAdaptor.getBooksByBookIdList(bookIdList);
+        List<ReadOrderBookInfoResponse> orderBookInfoResponses = orderBookAdaptor.getBooksByBookIdList(bookIdList).getBody();
 
         List<ReadCartBookResponse> cartBookResponses = new ArrayList<>();
         for (ReadOrderBookInfoResponse orderBookInfoResponse : orderBookInfoResponses) {
@@ -90,7 +90,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public ReadOrderStatusResponse getOrderStatusByOrderId(String orderId) {
-        return orderAdaptor.findOrderStatusByOrderId(orderId);
+        return orderAdaptor.findOrderStatusByOrderId(orderId).getBody();
     }
 
     @Override
@@ -112,7 +112,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Page<ReadMyOrderHistoryResponse> getMyOrders(Pageable pageable) {
-        return orderAdaptor.getMyOrders(pageable);
+        return orderAdaptor.getMyOrders(pageable).getBody();
     }
 
     @Override
@@ -122,22 +122,22 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public UpdateOrderResponse updateOrderByOrderId(String orderId, UpdateOrderRequest request) {
-        return orderAdaptor.updateOrderByOrderId(orderId, request);
+        return orderAdaptor.updateOrderByOrderId(orderId, request).getBody();
     }
 
     @Override
     public ReadOrderDeliveryInfoResponse getMyOrderDelivery(String orderId) {
-        return orderAdaptor.getMyOrderDeliveryByOrderId(orderId);
+        return orderAdaptor.getMyOrderDeliveryByOrderId(orderId).getBody();
     }
 
     @Override
     public ReadOrderDetailResponse getMyOrderByOrderId(String orderId) {
-        return orderAdaptor.getMyOrderByOrderId(orderId);
+        return orderAdaptor.getMyOrderByOrderId(orderId).getBody();
     }
 
     @Override
     public ReadOrderDetailResponse findOrderNoneMemberByOrderIdAndEmail(ReadOrderNoneMemberRequest request) {
-        return orderAdaptor.findOrderNoneMemberByOrderIdAndEmail(request.orderId(), request.email());
+        return orderAdaptor.findOrderNoneMemberByOrderIdAndEmail(request.orderId(), request.email()).getBody();
     }
 
     @Override

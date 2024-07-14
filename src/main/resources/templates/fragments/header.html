@@ -141,22 +141,22 @@
             <div class="col-lg-8 col-md-6 col-12">
                 <div class="nav-inner">
                     <!-- Start Mega Category Menu -->
-                    <div class="mega-category-menu">
-                        <span class="cat-button"><i class="lni lni-menu"></i>All Categories</span>
-                        <ul class="sub-category" th:each="category : ${categories}">
-                            <li>
-                                <a th:href="@{'/category/' + ${category.categoryId()}}" th:text="${category.categoryName()}"></a>
-                                <!-- 소분류가 있을 때만 아이콘을 표시합니다. -->
-                                <i class="lni lni-chevron-right" th:if="${category.subCategories() != null}"></i>
-                                <ul class="inner-sub-category" th:if="${category.subCategories() != null}">
-                                    <li th:each="subCategory : ${category.subCategories()}">
-                                        <a th:href="@{'/category/' + ${subCategory.categoryId()}}" th:text="${subCategory.categoryName()}"></a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a href="#">소분류 없는 대분류 카테고리 2</a></li>
-                        </ul>
-                    </div>
+<!--                    <div class="mega-category-menu">-->
+<!--                        <span class="cat-button"><i class="lni lni-menu"></i>All Categories</span>-->
+<!--                        <ul class="sub-category" th:each="category : ${categories}">-->
+<!--                            <li>-->
+<!--                                <a th:href="@{'/category/' + ${category.categoryId()}}" th:text="${category.categoryName()}"></a>-->
+<!--                                &lt;!&ndash; 소분류가 있을 때만 아이콘을 표시합니다. &ndash;&gt;-->
+<!--                                <i class="lni lni-chevron-right" th:if="${category.subCategories() != null}"></i>-->
+<!--                                <ul class="inner-sub-category" th:if="${category.subCategories() != null}">-->
+<!--                                    <li th:each="subCategory : ${category.subCategories()}">-->
+<!--                                        <a th:href="@{'/category/' + ${subCategory.categoryId()}}" th:text="${subCategory.categoryName()}"></a>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+<!--                            <li><a href="#">소분류 없는 대분류 카테고리 2</a></li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
                     <!-- End Mega Category Menu -->
                     <!-- Start Navbar -->
                     <nav class="navbar navbar-expand-lg">

@@ -6740,6 +6740,14 @@ blockquote span {
   border: 1px solid #e6e6e6;
 }
 
+.checkout-steps-form-style-1 .single-form .form-input input[type="radio"] {
+  width: auto;
+  height: auto;
+  padding: 0;
+  border-radius: 0;
+  border: none;
+}
+
 .checkout-steps-form-style-1 .single-form .form-input textarea:focus,
 .checkout-steps-form-style-1 .single-form .form-input input:focus {
   border-color: #0167F3;

@@ -1,5 +1,7 @@
 package com.nhnacademy.frontserver1.common.interceptor;
 
+import com.nhnacademy.frontserver1.common.context.TokenContext;
+import com.nhnacademy.frontserver1.common.exception.AccessDeniedException;
 import com.nhnacademy.frontserver1.common.exception.LikesNotLoginException;
 import com.nhnacademy.frontserver1.common.exception.TokenCookieMissingException;
 import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
@@ -7,14 +9,12 @@ import com.nhnacademy.frontserver1.common.provider.CookieTokenProvider;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import jakarta.servlet.http.HttpServletRequest;
-import com.nhnacademy.frontserver1.common.context.TokenContext;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import com.nhnacademy.frontserver1.common.exception.AccessDeniedException;
-import java.time.LocalDateTime;
 
 /**
  * JWT 인증을 위한 Feign 요청 인터셉터입니다.
@@ -52,11 +52,11 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
             return;
         }
 
-        if ((servletPath.startsWith("/detail") && request.getMethod().equalsIgnoreCase("GET")) && !feignPath.startsWith("/cart-books")) {
+        if (isTokensEmpty && (servletPath.equals("/orders") && request.getMethod().equals("POST"))) {
             return;
         }
 
-        if (isTokensEmptyAndIsServletPathExcludeWithHttpMethod(isTokensEmpty, servletPath, template)) {
+        if ((servletPath.startsWith("/detail") && request.getMethod().equalsIgnoreCase("GET"))) {
             return;
         }
 
@@ -85,17 +85,6 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
     }
 
     /**
-     * 서블릿 경로이면서, 토큰이 필요한 있는 요청 중 Http 메소드와 토큰이 없는 상황을 고려해야 할 경우 경로를 추가해주시면 됩니다.
-     * ex) 회원, 비회원(비회원 중에서도 토큰이 없는 비회원) 구분이 필요할 경우
-     * @param servletPath 서블릿 요청 경로입니다.
-     * @param isTokensEmpty 엑세스, 리프레시 토큰 둘다 비어있으면 true, 하나라도 있으면 false
-     * */
-    private boolean isTokensEmptyAndIsServletPathExcludeWithHttpMethod(boolean isTokensEmpty,
-        String servletPath, RequestTemplate template) {
-        return isTokensEmpty && (servletPath.startsWith("/users/cart-books") || template.method().equalsIgnoreCase("POST"));
-    }
-
-    /**
      * 서블릿 경로이면서, 토큰이 필요한 있는 요청 중 토큰이 없는 상황을 고려해야 할 경우 경로를 추가해주시면 됩니다.
      * ex) 회원, 비회원(비회원 중에서도 토큰이 없는 비회원) 구분이 필요할 경우
      * @param servletPath 서블릿 경로입니다.
@@ -103,7 +92,8 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
      * */
     private boolean isTokensEmptyAndIsServletPathExclude(boolean isTokensEmpty, String servletPath) {
         return isTokensEmpty && (servletPath.matches(".*/orders/.*/delivery.*") || servletPath.startsWith("/users/cart-books")
-            || servletPath.startsWith("/detail") || servletPath.startsWith("/books") || servletPath.matches("/coupons") || servletPath.startsWith("/reviews/books"));
+            || servletPath.startsWith("/detail") || servletPath.startsWith("/books") || servletPath.matches("/coupons") || servletPath.startsWith("/reviews/books")
+            || servletPath.startsWith("/payments"));
     }
 
     /**
@@ -116,8 +106,8 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
         return (servletPath.equals("/") || servletPath.startsWith("/orders/none") || servletPath.startsWith("/category") || servletPath.startsWith("/search")
             || servletPath.startsWith("/sign-up") || servletPath.startsWith("/books") || servletPath.matches("/coupons") || servletPath.startsWith("/check-email")
             || servletPath.startsWith("/auth/dormant")|| servletPath.startsWith("/users/sign-up") || servletPath.equals("/callback") || servletPath.startsWith("/users/find/password")
-            || servletPath.startsWith("/detail"))
-            && !feignPath.startsWith("/cart-books");
+            || servletPath.startsWith("/detail") || servletPath.startsWith("/carts") || servletPath.startsWith("/auth/login")
+        || feignPath.startsWith("/cart-books") || feignPath.startsWith("/shipping") || feignPath.startsWith("/takeout"));
     }
 
 }

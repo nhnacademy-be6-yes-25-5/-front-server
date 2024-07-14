@@ -4,8 +4,13 @@ class GeneralPaymentService extends PaymentService{
     this.clientKey = clientKey;
   }
 
-  requestPayment({orderId, totalAmount, cardInfo}) {
-    console.log('General payment requested', orderId, totalAmount, cardInfo);
-    return Promise.resolve();
+  confirmPayment(paymentKey, orderId, amount) {
+    return fetch("/payments/confirm", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ paymentKey, orderId, amount }),
+    });
   }
 }

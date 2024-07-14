@@ -201,7 +201,7 @@
                   </div>
                   <div class="col-md-12">
                     <div class="single-form form-default">
-                      <label>배송 받길 원하는 날짜</label>
+                      <label>배송예정일</label>
                       <div class="form-input form">
                         <input type="date" id="deliveryDate" required>
                       </div>
@@ -210,7 +210,7 @@
 
                   <div class="col-md-12">
                     <div class="checkout-payment-option">
-                      <h6 class="heading-6 font-weight-400 payment-title">배송비 정책</h6>
+                      <h6 class="heading-6 font-weight-400 payment-title">적용 예정 배송비 정책</h6>
                       <div class="payment-option-wrapper">
                         <div class="single-payment-option">
                           <input type="radio" name="shipping"
@@ -368,7 +368,7 @@
               <div class="total-price points">
                 <p class="value">포인트 사용:</p>
                 <input type="number" id="points" value="0" min="0" th:max="${points}"
-                       th:disabled="${userInfo.role == 'NONE_MEMBER'}" oninput="updateTotalPrice()">
+                       th:disabled="${userInfo.role == 'NONE_MEMBER'}" oninput="validatePointsUsage()">
                 <p class="price" id="pointsDiscount">0원</p>
               </div>
               <div class="additional-info mt-30" th:if="${freeShippingAmount != null}">
@@ -428,11 +428,32 @@
 <script src="/js/GeneralPaymentService.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
+  function setMinDeliveryDate() {
+    const deliveryDateInput = document.getElementById('deliveryDate');
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const minDeliveryDate = new Date(today);
+    minDeliveryDate.setDate(today.getDate() + 3);
+
+    const minDateString = minDeliveryDate.toISOString().split('T')[0];
+    deliveryDateInput.setAttribute('min', minDateString);
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    setMinDeliveryDate();
+    const firstShippingOption = document.querySelector('input[name="shipping"]:checked');
+    if (firstShippingOption) {
+      updateShippingFee(firstShippingOption.value);
+    } else {
+      updateTotalPrice();
+    }
+  });
+
   function updateTotalPrice() {
     const totalAmountElement = document.getElementById('totalAmount');
     const totalAmount = parseInt(totalAmountElement.innerText.replace('원', '')) || 0;
-    const shippingFee = parseInt(document.getElementById('shippingFee').innerText.replace('원', ''))
-        || 0;
+    const shippingFee = parseInt(document.getElementById('shippingFee').innerText.replace('원', '')) || 0;
     const discountAmountElement = document.getElementById('couponDiscount');
     const discountRateElement = document.getElementById('couponDiscountRate');
     const discountAmount = parseInt(discountAmountElement.value) || 0;
@@ -784,6 +805,19 @@
       }
     }, 1000);
   });
+
+  function validatePointsUsage() {
+    const pointsInput = document.getElementById('points');
+    const maxPoints = parseInt(pointsInput.getAttribute('max'), 10);
+    let pointsValue = parseInt(pointsInput.value, 10) || 0;
+
+    if (pointsValue > maxPoints) {
+      pointsValue = maxPoints;
+      pointsInput.value = maxPoints;
+    }
+
+    updateTotalPrice();
+  }
 </script>
 </body>
 

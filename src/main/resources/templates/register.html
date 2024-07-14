@@ -2,10 +2,6 @@
 <body>
 <div th:fragment="content">
 
-    <!-- Start Breadcrumbs Component -->
-    <div th:replace="~{fragments/breadcrumbs :: breadcrumbs}"></div>
-    <!-- End Breadcrumbs Component -->
-
     <!-- Start Account Register Area -->
     <div class="account-login section">
         <div class="container">
@@ -33,7 +29,7 @@
                                 <div class="form-group">
                                     <label for="userEmail">E-mail 주소</label>
                                     <input class="form-control" type="email" id="userEmail" name="userEmail" required>
-                                    <button type="button" class="btn btn-secondary" id="checkEmailButton">중복 체크</button>
+                                    <button type="button" class="btn btn-secondary" id="checkEmailButton" style="margin-top: 10px">중복 체크</button>
                                     <div id="emailCheckResult"></div>
                                 </div>
                             </div>

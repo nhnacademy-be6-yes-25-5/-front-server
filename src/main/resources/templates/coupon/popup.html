@@ -13,9 +13,18 @@
       margin-top: 20px;
       color: #ff0000;
     }
+    .disabled-button {
+      background-color: #cccccc;
+      border-color: #cccccc;
+      cursor: not-allowed;
+    }
   </style>
   <script>
     function selectCoupon(button) {
+      if (button.classList.contains('disabled-button')) {
+        return;
+      }
+
       const couponId = button.getAttribute('data-coupon-id');
       const discountAmount = button.getAttribute('data-discount-amount');
       const discountRate = button.getAttribute('data-discount-rate');
@@ -27,6 +36,18 @@
       window.opener.updateTotalPrice();
       window.close();
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const totalAmount = parseInt(window.opener.document.getElementById('totalAmount').innerText.replace('원', '').trim());
+
+      document.querySelectorAll('button[data-coupon-min-amount]').forEach(button => {
+        const minAmount = parseInt(button.getAttribute('data-coupon-min-amount'));
+        if (totalAmount < minAmount) {
+          button.classList.add('disabled-button');
+          button.disabled = true;
+        }
+      });
+    });
   </script>
 </head>
 <body>
@@ -60,7 +81,8 @@
                     th:attr="data-coupon-id=${coupon.userCouponId},
                             data-coupon-name=${coupon.couponName},
                             data-discount-amount=${coupon.couponDiscountAmount != null ? coupon.couponDiscountAmount.intValue() : 'null'},
-                            data-discount-rate=${coupon.couponDiscountRate != null ? coupon.couponDiscountRate : 'null'}"
+                            data-discount-rate=${coupon.couponDiscountRate != null ? coupon.couponDiscountRate : 'null'},
+                            data-coupon-min-amount=${coupon.couponMinAmount.intValue()}"
                     onclick="selectCoupon(this)">선택</button>
           </td>
         </tr>

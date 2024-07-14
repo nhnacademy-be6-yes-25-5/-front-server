@@ -31,24 +31,6 @@
       align-items: center;
     }
 
-    .radio-button {
-      margin-right: 5px;
-    }
-
-    .coupon-button {
-      background-color: #ff6f61;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .coupon-button:hover {
-      background-color: #ff3d2e;
-    }
-
     .address-button {
       margin-top: 15px;
     }
@@ -188,14 +170,17 @@
                     <div class="single-form form-default">
                       <label>포장 타입</label>
                       <div class="form-input form">
-                        <select id="takeoutType" name="takeoutType" onchange="updateTotalPrice()"
-                                required>
-                          <option value="" data-price="0">포장 타입을 선택하세요</option>
-                          <option th:each="takeout : ${takeouts}" th:value="${takeout.takeoutType}"
-                                  th:data-price="${takeout.takeoutPrice}"
-                                  th:data-description="${takeout.takeoutDescription}"
-                                  th:text="${takeout.takeoutDescription + ' - ' + takeout.takeoutPrice + '원'}"></option>
-                        </select>
+                        <div class="takeout-options">
+                          <div class="takeout-option" th:each="takeout : ${takeouts}">
+                            <input type="radio" th:id="'takeout-' + ${takeout.takeoutType}" name="takeoutType"
+                                   th:value="${takeout.takeoutType}" th:data-price="${takeout.takeoutPrice}"
+                                   th:data-description="${takeout.takeoutDescription}" th:onchange="updateTotalPrice()" required>
+                            <label th:for="'takeout-' + ${takeout.takeoutType}">
+                              <div class="takeout-description" th:text="${takeout.takeoutDescription}"></div>
+                              <div class="takeout-price" th:text="${takeout.takeoutPrice + '원'}"></div>
+                            </label>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -249,12 +234,32 @@
                     <div class="single-form form-default">
                       <label>결제 수단 선택</label>
                       <div class="form-input form">
-                        <select id="paymentMethod" name="paymentMethod" required>
-                          <option value="toss">토스</option>
-                          <option value="general">일반결제</option>
-                          <option value="kakao">카카오페이</option>
-                          <option value="naver">네이버페이</option>
-                        </select>
+                        <div class="payment-options">
+                          <div class="payment-option">
+                            <input type="radio" id="toss" name="paymentMethod" value="toss" required>
+                            <label for="toss">
+                              <i class="lni lni-credit-cards"></i> 토스
+                            </label>
+                          </div>
+                          <div class="payment-option">
+                            <input type="radio" id="general" name="paymentMethod" value="general" required>
+                            <label for="general">
+                              <i class="lni lni-visa"></i> 일반결제
+                            </label>
+                          </div>
+                          <div class="payment-option">
+                            <input type="radio" id="kakao" name="paymentMethod" value="kakao" required>
+                            <label for="kakao">
+                              <i class="lni lni-kakao-talk"></i> 카카오페이
+                            </label>
+                          </div>
+                          <div class="payment-option">
+                            <input type="radio" id="naver" name="paymentMethod" value="naver" required>
+                            <label for="naver">
+                              <i class="lni lni-naver"></i> 네이버페이
+                            </label>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

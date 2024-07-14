@@ -8,7 +8,9 @@ import com.nhnacademy.frontserver1.presentation.dto.response.cart.CreateCartResp
 import com.nhnacademy.frontserver1.presentation.dto.response.cart.DeleteCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.cart.UpdateCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadCartBookResponse;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,10 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<ReadCartBookResponse> getCarts(String cartId) {
+        if (Objects.isNull(cartId)) {
+            return Collections.emptyList();
+        }
+
         return cartAdaptor.getCartBooks(cartId).getBody();
     }
 

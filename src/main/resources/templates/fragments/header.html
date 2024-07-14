@@ -215,13 +215,7 @@
 
                 document.querySelector('.btn.animate').addEventListener('click', function (e) {
                     e.preventDefault();
-
-                    if (bookIdList.length && quantities.length) {
-                        const url = `/orders/checkout`;
-                        window.location.href = url;
-                    } else {
-                        console.error('Book IDs or quantities are empty');
-                    }
+                    window.location.href = `/orders/checkout`;
                 });
             });
 

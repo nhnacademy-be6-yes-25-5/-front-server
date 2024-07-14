@@ -2,9 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
 <body>
 <div th:fragment="content">
-    <!-- Start Breadcrumbs Component -->
-    <div th:replace="~{fragments/breadcrumbs :: breadcrumbs}"></div>
-    <!-- End Breadcrumbs Component -->
 
     <!-- Start Item Details -->
     <section class="item-details section">
@@ -18,13 +15,13 @@
                                     <img th:if="${book.bookImage() != null}" th:src="@{${book.bookImage()}}">
                                     <img th:if="${book.bookImage() == null || book.bookImage().isEmpty()}" src="/images/logo/logo.png" alt="Default Book Image">
                                 </div>
-                                <div class="images">
-                                    <img src="https://via.placeholder.com/1000x670" class="img" alt="#">
-                                    <img src="https://via.placeholder.com/1000x670" class="img" alt="#">
-                                    <img src="https://via.placeholder.com/1000x670" class="img" alt="#">
-                                    <img src="https://via.placeholder.com/1000x670" class="img" alt="#">
-                                    <img src="https://via.placeholder.com/1000x670" class="img" alt="#">
-                                </div>
+<!--                                <div class="images">-->
+<!--                                    <img src="https://via.placeholder.com/1000x670" class="img" alt="#">-->
+<!--                                    <img src="https://via.placeholder.com/1000x670" class="img" alt="#">-->
+<!--                                    <img src="https://via.placeholder.com/1000x670" class="img" alt="#">-->
+<!--                                    <img src="https://via.placeholder.com/1000x670" class="img" alt="#">-->
+<!--                                    <img src="https://via.placeholder.com/1000x670" class="img" alt="#">-->
+<!--                                </div>-->
                             </main>
                         </div>
                     </div>
@@ -34,17 +31,22 @@
                             <h2 th:text="${book.bookName()}" class="title">GoPro Karma Camera Drone</h2>
                             <p th:text="${book.bookAuthor()}" class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">Action cameras</a></p>
                             <h3 class="price">
-                                <span th:text = "${#numbers.formatInteger(book.bookPrice(),3,'COMMA')} + '원'">$945</span>
-                                <h5 th:if="${book.bookPrice() > 0}">
-                                    <span th:text="${(1 - book.bookSellingPrice() / book.bookPrice()) * 100 + '%'}"></span>
-                                    <span> off</span>
-                                </h5>
-                                <h3 th:text = "${#numbers.formatInteger(book.bookSellingPrice(),3,'COMMA')} + '원'">$850</h3>
+                                <div class="price-detail">
+                                    <em>정가: </em>
+                                    <span th:text = "${#numbers.formatInteger(book.bookPrice(),3,'COMMA')} + '원'">$945</span>
+                                </div>
+                                <div class="price-detail">
+                                    <em>판매가: </em>
+                                    <h3
+                                        th:text = "${#numbers.formatInteger(book.bookSellingPrice(),3,'COMMA')} + '원'"></h3>
+                                    <em class="sale"
+                                        th:if="${book.bookPrice() > 0}" th:text="${'(' + (1 - book.bookSellingPrice() / book.bookPrice()) * 100 + ')% 할인'}"></em>
+                                </div>
                             </h3>
                             <div class="row">
                                 <div class="col-lg-4 col-md-4 col-12">
                                     <div class="form-group quantity">
-                                        <label for="quantity">Quantity</label>
+                                        <label for="quantity">수량</label>
                                         <input type="number" id="quantity" class="form-control" min="1" value="1">
                                     </div>
                                 </div>
@@ -114,39 +116,39 @@
             <div class="product-details-info">
                 <div class="single-block">
                     <div class="row">
-                        <div class="col-lg-6 col-12">
+                        <div class="col-12">
                             <div class="info-body custom-responsive-margin">
                                 <h4>Details</h4>
-                                <p th:text="${book.bookDescription()}">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.</p>
-                                <h4>Features</h4>
-                                <ul class="features">
-                                    <li>Capture 4K30 Video and 12MP Photos</li>
-                                    <li>Game-Style Controller with Touchscreen</li>
-                                    <li>View Live Camera Feed</li>
-                                    <li>Full Control of HERO6 Black</li>
-                                    <li>Use App for Dedicated Camera Operation</li>
-                                </ul>
+                                <p th:utext="${#strings.replace(book.bookDescription(), '\n', '<br/>')}"></p>
+<!--                                <h4>Features</h4>-->
+<!--                                <ul class="features">-->
+<!--                                    <li>Capture 4K30 Video and 12MP Photos</li>-->
+<!--                                    <li>Game-Style Controller with Touchscreen</li>-->
+<!--                                    <li>View Live Camera Feed</li>-->
+<!--                                    <li>Full Control of HERO6 Black</li>-->
+<!--                                    <li>Use App for Dedicated Camera Operation</li>-->
+<!--                                </ul>-->
                             </div>
                         </div>
-                        <div class="col-lg-6 col-12">
-                            <div class="info-body">
-                                <h4>Specifications</h4>
-                                <ul class="normal-list">
-                                    <li><span>Weight:</span> 35.5oz (1006g)</li>
-                                    <li><span>Maximum Speed:</span> 35 mph (15 m/s)</li>
-                                    <li><span>Maximum Distance:</span> Up to 9,840ft (3,000m)</li>
-                                    <li><span>Operating Frequency:</span> 2.4GHz</li>
-                                    <li><span>Manufacturer:</span> GoPro, USA</li>
-                                </ul>
-                                <h4>Shipping Options:</h4>
-                                <ul class="normal-list">
-                                    <li><span>Courier:</span> 2 - 4 days, $22.50</li>
-                                    <li><span>Local Shipping:</span> up to one week, $10.00</li>
-                                    <li><span>UPS Ground Shipping:</span> 4 - 6 days, $18.00</li>
-                                    <li><span>Unishop Global Export:</span> 3 - 4 days, $25.00</li>
-                                </ul>
-                            </div>
-                        </div>
+<!--                        <div class="col-lg-6 col-12">-->
+<!--                            <div class="info-body">-->
+<!--                                <h4>Specifications</h4>-->
+<!--                                <ul class="normal-list">-->
+<!--                                    <li><span>Weight:</span> 35.5oz (1006g)</li>-->
+<!--                                    <li><span>Maximum Speed:</span> 35 mph (15 m/s)</li>-->
+<!--                                    <li><span>Maximum Distance:</span> Up to 9,840ft (3,000m)</li>-->
+<!--                                    <li><span>Operating Frequency:</span> 2.4GHz</li>-->
+<!--                                    <li><span>Manufacturer:</span> GoPro, USA</li>-->
+<!--                                </ul>-->
+<!--                                <h4>Shipping Options:</h4>-->
+<!--                                <ul class="normal-list">-->
+<!--                                    <li><span>Courier:</span> 2 - 4 days, $22.50</li>-->
+<!--                                    <li><span>Local Shipping:</span> up to one week, $10.00</li>-->
+<!--                                    <li><span>UPS Ground Shipping:</span> 4 - 6 days, $18.00</li>-->
+<!--                                    <li><span>Unishop Global Export:</span> 3 - 4 days, $25.00</li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
+<!--                        </div>-->
                     </div>
                 </div>
                 <div id="review-section"></div>

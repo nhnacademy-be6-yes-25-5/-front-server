@@ -463,9 +463,13 @@
     const discountRateElement = document.getElementById('couponDiscountRate');
     const discountAmount = parseInt(discountAmountElement.value) || 0;
     const discountRate = parseFloat(discountRateElement.value) || 0;
-    const takeoutSelect = document.getElementById('takeoutType');
-    const selectedOption = takeoutSelect.options[takeoutSelect.selectedIndex];
-    const takeoutPrice = parseInt(selectedOption.getAttribute('data-price'), 10) || 0;
+    const takeoutSelect = document.querySelector('input[name="takeoutType"]:checked');
+
+    let takeoutPrice = 0;
+    if (takeoutSelect) {
+      takeoutPrice = parseInt(takeoutSelect.getAttribute('data-price'), 10) || 0;
+    }
+
     let pointsDiscount = parseInt(document.getElementById('points').value, 10) || 0;
 
     let calculatedDiscount = discountAmount;
@@ -547,47 +551,86 @@
   function submitOrder() {
     const ALLOWED_PAYMENT_METHODS = ['toss'];
 
-    const paymentMethod = document.getElementById('paymentMethod').value;
+    const paymentMethodElement = document.querySelector('input[name="paymentMethod"]:checked');
+    if (!paymentMethodElement) {
+      alert('결제 수단을 선택해주세요.');
+      return;
+    }
+    const paymentMethod = paymentMethodElement.value;
+
     console.log(paymentMethod);
     if (!ALLOWED_PAYMENT_METHODS.includes(paymentMethod)) {
       alert('현재 개발중인 결제 수단입니다. 다른 결제수단을 사용해주세요.');
       return;
     }
 
-    const deliveryDateValue = document.getElementById('deliveryDate').value;
-    const totalPrice = document.getElementById('totalPriceValue').textContent;
+    const deliveryDateElement = document.getElementById('deliveryDate');
+    const totalPriceElement = document.getElementById('totalPriceValue');
+    const takeoutPriceElement = document.getElementById('takeoutPrice');
+    const shippingFeeElement = document.getElementById('shippingFee');
+    const orderIdElement = document.getElementById('orderId');
+    const cartIdElement = document.getElementById('cartId');
+    const orderNameElement = document.getElementById('orderName');
+    const orderEmailElement = document.getElementById('orderEmail');
+    const orderPhoneNumberElement = document.getElementById('orderPhoneNumber');
+    const receiveNameElement = document.getElementById('receiveName');
+    const receiveEmailElement = document.getElementById('receiveEmail');
+    const receivePhoneNumberElement = document.getElementById('receivePhoneNumber');
+    const addressRawElement = document.getElementById('addressRaw');
+    const referenceElement = document.getElementById('reference');
+    const addressDetailElement = document.getElementById('addressDetail');
+    const postcodeElement = document.getElementById('postcode');
+    const pointsElement = document.getElementById('points');
+    const roleElement = document.getElementById('role');
+    const couponIdElement = document.getElementById('couponId');
+
+    const requiredElements = [
+      deliveryDateElement, totalPriceElement, takeoutPriceElement, shippingFeeElement,
+      orderIdElement, cartIdElement, orderNameElement, orderEmailElement, orderPhoneNumberElement,
+      receiveNameElement, receiveEmailElement, receivePhoneNumberElement, addressRawElement,
+      referenceElement, addressDetailElement, postcodeElement, pointsElement, roleElement, couponIdElement
+    ];
+
+    for (const element of requiredElements) {
+      if (!element) {
+        console.error(`Element with ID ${element.id} not found.`);
+        return;
+      }
+    }
 
     const getNumberValue = (id) => {
       const value = document.getElementById(id).textContent.replace('원', '').trim();
       return value ? value : "0";
     };
 
-    const totalPriceValue = totalPrice.replace('원', '').trim();
-    const takeoutPrice = document.getElementById('takeoutPrice').innerText.replace('원', '');
-    const shippingFee = document.getElementById('shippingFee').innerText.replace('원', '');
+    const deliveryDateValue = deliveryDateElement.value;
+    const totalPriceValue = totalPriceElement.textContent.replace('원', '').trim();
+    const takeoutPrice = takeoutPriceElement.innerText.replace('원', '');
+    const shippingFee = shippingFeeElement.innerText.replace('원', '');
     const couponDiscount = getNumberValue('discountAmount');
-    const orderId = document.getElementById('orderId').value;
-    const cartId = document.getElementById('cartId').value;
-    const orderName = document.getElementById('orderName').value;
-    const orderEmail = document.getElementById('orderEmail').value;
-    const orderPhoneNumber = document.getElementById('orderPhoneNumber').value;
-    const receiveName = document.getElementById('receiveName').value;
-    const receiveEmail = document.getElementById('receiveEmail').value;
-    const receivePhoneNumber = document.getElementById('receivePhoneNumber').value;
-    const addressRaw = document.getElementById('addressRaw').value;
-    const reference = document.getElementById('reference').value;
-    const addressDetail = document.getElementById('addressDetail').value;
-    const postcode = document.getElementById('postcode').value;
-    const takeoutType = document.getElementById('takeoutType').value;
-    const points = document.getElementById('points').value || "0";
-    const role = document.getElementById('role').value;
+    const orderId = orderIdElement.value;
+    const cartId = cartIdElement.value;
+    const orderName = orderNameElement.value;
+    const orderEmail = orderEmailElement.value;
+    const orderPhoneNumber = orderPhoneNumberElement.value;
+    const receiveName = receiveNameElement.value;
+    const receiveEmail = receiveEmailElement.value;
+    const receivePhoneNumber = receivePhoneNumberElement.value;
+    const addressRaw = addressRawElement.value;
+    const reference = referenceElement.value;
+    const addressDetail = addressDetailElement.value;
+    const postcode = postcodeElement.value;
+    const takeoutTypeElement = document.querySelector('input[name="takeoutType"]:checked');
+    const takeoutType = takeoutTypeElement ? takeoutTypeElement.value : "";
+    const points = pointsElement.value || "0";
+    const role = roleElement.value;
     const productIds = Array.from(document.querySelectorAll('input[name="productIds"]')).map(
         input => input.value);
     const quantities = Array.from(document.querySelectorAll('input[name="quantities"]')).map(
         input => input.value);
     const prices = Array.from(document.querySelectorAll('input[name="prices"]')).map(
         input => input.value);
-    const couponId = document.getElementById('couponId').value;
+    const couponId = couponIdElement.value;
 
     const orderData = {
       orderId: orderId,
@@ -780,7 +823,6 @@
       'postcode',
       'addressRaw',
       'addressDetail',
-      'takeoutType',
       'deliveryDate'
     ];
 
@@ -788,7 +830,12 @@
 
     for (const fieldId of requiredFields) {
       const field = document.getElementById(fieldId);
-      if (!field || !field.value.trim()) {
+      if (!field) {
+        console.error(`Element with ID ${fieldId} not found.`);
+        continue;
+      }
+
+      if (!field.value.trim()) {
         field.classList.add('error');
         if (isValid) {
           field.focus();
@@ -799,8 +846,18 @@
       }
     }
 
+    const takeoutSelect = document.querySelector('input[name="takeoutType"]:checked');
+    if (!takeoutSelect) {
+      console.error('Takeout type not selected.');
+      document.querySelectorAll('input[name="takeoutType"]').forEach(input => input.classList.add('error'));
+      isValid = false;
+    } else {
+      document.querySelectorAll('input[name="takeoutType"]').forEach(input => input.classList.remove('error'));
+    }
+
     return isValid;
   }
+
 
   window.addEventListener('load', function () {
     setTimeout(function () {

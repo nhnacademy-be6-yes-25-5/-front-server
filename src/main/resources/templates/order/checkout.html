@@ -64,8 +64,20 @@
       background-color: #4caf50;
     }
 
+    .payment-option input[type="radio"]:checked.toss + .switch .switch-inner {
+      background-color: #001da8 !important;
+    }
+
+    .payment-option input[type="radio"]:checked.kakao + .switch .switch-inner {
+      background-color: #ffe900 !important;
+    }
+
+    .payment-option input[type="radio"]:checked.naver + .switch .switch-inner {
+      background-color: #05c25b !important;
+    }
+
     .payment-option input[type="radio"]:checked + .switch .switch-handle {
-      left: 20px;
+      left: 30px;
     }
 
     .payment-option .switch i {
@@ -150,7 +162,7 @@
               <section class="checkout-steps-form-content collapse" id="collapseFour"
                        aria-labelledby="headingFour" data-bs-parent="#accordionExample">
                 <div class="col-md-12">
-                  <div class="single-checkbox checkbox-style-3">
+                  <div class="single-checkbox checkbox-style-3" style="margin: 20px 0 10px 0;">
                     <input type="checkbox" id="checkbox-3" onclick="copyOrderInfo()">
                     <label for="checkbox-3"><span></span></label>
                     <p>주문자 정보와 배송 정보가 동일합니다.</p>
@@ -192,7 +204,7 @@
                     </div>
                   </div>
                   <div class="col-md-12">
-                    <div class="single-form form-default">
+                    <div class="single-form form-default address-form">
                       <label>주소</label>
                       <div class="form-input form">
                         <input type="text" id="postcode" placeholder="우편번호" required>
@@ -205,10 +217,11 @@
                   </div>
                   <div class="col-md-12">
                     <div class="single-form form-default">
-                      <label>포장 타입</label>
+                      <label>
+                        포장 타입</label>
                       <div class="form-input form">
-                        <div class="takeout-options">
-                          <div class="takeout-option" th:each="takeout : ${takeouts}">
+                        <div class="takeout-options" style="display: flex; justify-content: space-between;">
+                          <div class="takeout-option single-payment-option" th:each="takeout : ${takeouts}" style="width: 32%; padding: 10px 0 !important;">
                             <input type="radio" th:id="'takeout-' + ${takeout.takeoutType}" name="takeoutType"
                                    th:value="${takeout.takeoutType}" th:data-price="${takeout.takeoutPrice}"
                                    th:data-description="${takeout.takeoutDescription}" th:onchange="updateTotalPrice()" required>
@@ -273,7 +286,7 @@
                       <div class="form-input form">
                         <div class="payment-options">
                           <div class="payment-option">
-                            <input type="radio" id="toss" name="paymentMethod" value="toss" required>
+                            <input type="radio" id="toss" name="paymentMethod" value="toss" required class="toss">
                             <label for="toss" class="switch">
                               <span class="switch-inner"></span>
                               <span class="switch-handle"></span>
@@ -289,7 +302,7 @@
                             </label>
                           </div>
                           <div class="payment-option">
-                            <input type="radio" id="kakao" name="paymentMethod" value="kakao" required>
+                            <input type="radio" id="kakao" name="paymentMethod" value="kakao" required class="kakao">
                             <label for="kakao" class="switch">
                               <span class="switch-inner"></span>
                               <span class="switch-handle"></span>
@@ -297,7 +310,7 @@
                             </label>
                           </div>
                           <div class="payment-option">
-                            <input type="radio" id="naver" name="paymentMethod" value="naver" required>
+                            <input type="radio" id="naver" name="paymentMethod" value="naver" required class="naver">
                             <label for="naver" class="switch">
                               <span class="switch-inner"></span>
                               <span class="switch-handle"></span>
@@ -356,7 +369,12 @@
           <button class="btn btn-primary" onclick="openCouponPopup()" th:disabled="${userInfo.role == 'NONE_MEMBER'}">쿠폰 목록 보기</button>
           <input type="text" id="selectedCoupon" readonly
                  th:disabled="${userInfo.role == 'NONE_MEMBER'}"
-                 th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.couponName : ''}">
+                 th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.couponName : ''}"
+                 style="height: 37px;
+                        border: 1px solid #DDD;
+                        padding: 1px 0 4px 0;
+                        width: 285px;
+                        margin: 0 0 0 12px;">
           <input type="hidden" id="couponDiscount" value="0"
                  th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.discountAmount : 0}">
           <input type="hidden" id="couponDiscountRate" value="0">
@@ -419,8 +437,8 @@
                 <p class="value">포인트 사용:</p>
                 <input type="number" id="points" value="0" min="0" th:max="${points}"
                        th:disabled="${userInfo.role == 'NONE_MEMBER'}" oninput="validatePointsUsage()">
-                <p class="price" id="pointsDiscount">0원</p>
               </div>
+              <p class="price" id="pointsDiscount" style="display: block">0원</p>
               <div class="additional-info mt-30" th:if="${freeShippingAmount != null}">
                 <p th:if="${freeShippingAmount > 0}"
                    th:text="'무료 배송까지 ' + ${freeShippingAmount} + '원'"></p>

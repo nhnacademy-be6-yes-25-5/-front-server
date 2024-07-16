@@ -16,10 +16,6 @@
   <link rel="stylesheet" href="/css/glightbox.min.css">
   <link rel="stylesheet" href="/css/main.css">
   <style>
-    .error {
-      border: 2px solid red;
-    }
-
     .payment-options {
       display: flex;
       flex-direction: column;
@@ -31,8 +27,49 @@
       align-items: center;
     }
 
-    .address-button {
-      margin-top: 15px;
+    .payment-option input[type="radio"] {
+      display: none;
+    }
+
+    .payment-option .switch {
+      display: flex;
+      align-items: center;
+      position: relative;
+      cursor: pointer;
+      padding: 10px;
+      background-color: #f0f0f0;
+      border-radius: 25px;
+      transition: background-color 0.3s;
+    }
+
+    .payment-option .switch .switch-inner {
+      width: 40px;
+      height: 20px;
+      background-color: #ccc;
+      border-radius: 15px;
+      transition: background-color 0.3s;
+    }
+
+    .payment-option .switch .switch-handle {
+      width: 20px;
+      height: 20px;
+      background-color: #fff;
+      border-radius: 50%;
+      position: absolute;
+      left: 0;
+      transition: left 0.3s;
+    }
+
+    .payment-option input[type="radio"]:checked + .switch .switch-inner {
+      background-color: #4caf50;
+    }
+
+    .payment-option input[type="radio"]:checked + .switch .switch-handle {
+      left: 20px;
+    }
+
+    .payment-option .switch i {
+      margin-left: 10px;
     }
   </style>
 </head>
@@ -237,25 +274,33 @@
                         <div class="payment-options">
                           <div class="payment-option">
                             <input type="radio" id="toss" name="paymentMethod" value="toss" required>
-                            <label for="toss">
+                            <label for="toss" class="switch">
+                              <span class="switch-inner"></span>
+                              <span class="switch-handle"></span>
                               <i class="lni lni-credit-cards"></i> 토스
                             </label>
                           </div>
                           <div class="payment-option">
                             <input type="radio" id="general" name="paymentMethod" value="general" required>
-                            <label for="general">
+                            <label for="general" class="switch">
+                              <span class="switch-inner"></span>
+                              <span class="switch-handle"></span>
                               <i class="lni lni-visa"></i> 일반결제
                             </label>
                           </div>
                           <div class="payment-option">
                             <input type="radio" id="kakao" name="paymentMethod" value="kakao" required>
-                            <label for="kakao">
+                            <label for="kakao" class="switch">
+                              <span class="switch-inner"></span>
+                              <span class="switch-handle"></span>
                               <i class="lni lni-kakao-talk"></i> 카카오페이
                             </label>
                           </div>
                           <div class="payment-option">
                             <input type="radio" id="naver" name="paymentMethod" value="naver" required>
-                            <label for="naver">
+                            <label for="naver" class="switch">
+                              <span class="switch-inner"></span>
+                              <span class="switch-handle"></span>
                               <i class="lni lni-naver"></i> 네이버페이
                             </label>
                           </div>

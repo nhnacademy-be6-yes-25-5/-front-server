@@ -38,9 +38,9 @@
                                             </thead>
                                             <tbody>
                                             <tr th:each="book : ${bookList}">
-                                                <td>
-                                                    <img width="200" height="300"  th:if="${book.bookImage() != null}" th:src="@{${book.bookImage()}}">
-                                                    <img width="200" height="300"  th:if="${book.bookImage() == null || book.bookImage().isEmpty()}" src="/images/logo/logo.png" alt="Default Book Image">
+                                                <td style="width: 240px">
+                                                    <img th:if="${book.bookImage() != null}" th:src="@{${book.bookImage()}}">
+                                                    <img th:if="${book.bookImage() == null || book.bookImage().isEmpty()}" src="/images/logo/logo.png" alt="Default Book Image">
                                                 </td>
                                                 <td>
                                                     <a th:href="@{'/detail/' + ${book.bookId()}}" th:text="${book.bookName()}"></a>

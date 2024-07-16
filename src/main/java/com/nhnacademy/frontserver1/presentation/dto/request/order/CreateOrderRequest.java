@@ -27,6 +27,6 @@ public record CreateOrderRequest(String orderId,
                                  List<Long> productIds,
                                  List<Integer> quantities,
                                  List<BigDecimal> prices,
-                                 List<Long> cartBookIds,
-                                 String role) {
+                                 String role,
+                                 String cartId) {
 }

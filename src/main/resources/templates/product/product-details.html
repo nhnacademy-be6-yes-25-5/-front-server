@@ -2,9 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
 <body>
 <div th:fragment="content">
-    <!-- Start Breadcrumbs Component -->
-    <div th:replace="~{fragments/breadcrumbs :: breadcrumbs}"></div>
-    <!-- End Breadcrumbs Component -->
 
     <!-- Start Item Details -->
     <section class="item-details section">
@@ -34,9 +31,17 @@
                             <h2 th:text="${book.bookName()}" class="title">GoPro Karma Camera Drone</h2>
                             <p th:text="${book.bookAuthor()}" class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">Action cameras</a></p>
                             <h3 class="price">
-                                <span th:text = "${'정가 : ' + #numbers.formatInteger(book.bookPrice(),3,'COMMA')} + '원'">$945</span>
-                                <h5 th:if="${book.bookPrice() > 0}" th:text="${(1 - book.bookSellingPrice() / book.bookPrice()) * 100 + '% 할인'}"></h5>
-                                <h3 th:text = "${'판매가 : ' + #numbers.formatInteger(book.bookSellingPrice(),3,'COMMA')} + '원'">$850</h3>
+                                <div class="price-detail">
+                                    <em>정가: </em>
+                                    <span th:text = "${#numbers.formatInteger(book.bookPrice(),3,'COMMA')} + '원'">$945</span>
+                                </div>
+                                <div class="price-detail">
+                                    <em>판매가: </em>
+                                    <h3
+                                        th:text = "${#numbers.formatInteger(book.bookSellingPrice(),3,'COMMA')} + '원'"></h3>
+                                    <em class="sale"
+                                        th:if="${book.bookPrice() > 0}" th:text="${'(' + (1 - book.bookSellingPrice() / book.bookPrice()) * 100 + ')% 할인'}"></em>
+                                </div>
                             </h3>
                             <div class="row">
                                 <div class="col-lg-4 col-md-4 col-12">
@@ -111,10 +116,10 @@
             <div class="product-details-info">
                 <div class="single-block">
                     <div class="row">
-                        <div class="col-lg-6 col-12">
+                        <div class="col-12">
                             <div class="info-body custom-responsive-margin">
                                 <h4>Details</h4>
-                                <p th:text="${book.bookDescription()}">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.</p>
+                                <p th:utext="${#strings.replace(book.bookDescription(), '\n', '<br/>')}"></p>
 <!--                                <h4>Features</h4>-->
 <!--                                <ul class="features">-->
 <!--                                    <li>Capture 4K30 Video and 12MP Photos</li>-->

@@ -1,10 +1,8 @@
 package com.nhnacademy.frontserver1.application.service.impl;
 
 import com.nhnacademy.frontserver1.application.service.OrderService;
-import com.nhnacademy.frontserver1.application.service.dto.request.ReadMaximumDiscountCouponRequest;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.AddressAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.OrderAdaptor;
-import com.nhnacademy.frontserver1.infrastructure.adaptor.OrderBookAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.PolicyAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.UserAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.UserCouponAdaptor;
@@ -12,10 +10,8 @@ import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderReq
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadOrderNoneMemberRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMaximumDiscountCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMyOrderHistoryResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderBookInfoResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDeliveryInfoResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDetailResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderStatusResponse;
@@ -26,7 +22,8 @@ import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingP
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadUserCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.UpdateOrderResponse;
-import java.util.ArrayList;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +40,6 @@ public class OrderServiceImpl implements OrderService {
     private final AddressAdaptor addressAdaptor;
     private final UserAdaptor userAdaptor;
     private final UserCouponAdaptor userCouponAdaptor;
-    private final OrderBookAdaptor orderBookAdaptor;
 
     @Override
     public CreateOrderResponse createPreOrder(CreateOrderRequest request) {
@@ -72,23 +68,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<ReadCartBookResponse> getOrderBook(List<Long> bookIdList, List<Integer> quantities) {
-        List<ReadOrderBookInfoResponse> orderBookInfoResponses = orderBookAdaptor.getBooksByBookIdList(bookIdList).getBody();
-
-        List<ReadCartBookResponse> cartBookResponses = new ArrayList<>();
-        for (ReadOrderBookInfoResponse orderBookInfoResponse : orderBookInfoResponses) {
-            Long bookId = orderBookInfoResponse.bookId();
-            Integer quantity = quantities.get(bookIdList.indexOf(bookId));
-
-            ReadCartBookResponse cartBookResponse = ReadCartBookResponse.of(orderBookInfoResponse,
-                quantity);
-            cartBookResponses.add(cartBookResponse);
-        }
-
-        return cartBookResponses;
-    }
-
-    @Override
     public ReadOrderStatusResponse getOrderStatusByOrderId(String orderId) {
         return orderAdaptor.findOrderStatusByOrderId(orderId).getBody();
     }
@@ -99,15 +78,31 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ReadOrderUserInfoResponse getUserInfo() {
-        return userAdaptor.getUserInfo();
+    public ReadOrderUserInfoResponse getUserInfo(HttpServletRequest request) {
+        if (hasTokenCookie(request)) {
+            return userAdaptor.getUserInfo();
+        }
+
+        return ReadOrderUserInfoResponse.fromNoneMember();
+    }
+
+    private boolean hasTokenCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("AccessToken") || cookie.getName()
+                    .equals("RefreshToken")) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override
     public ReadMaximumDiscountCouponResponse getMaxDiscountCoupon(Integer totalAmount) {
         return userCouponAdaptor.getMaxDiscountCouponByTotalAmount(totalAmount);
-
-//        return ReadMaximumDiscountCouponResponse.fromTest();
     }
 
     @Override

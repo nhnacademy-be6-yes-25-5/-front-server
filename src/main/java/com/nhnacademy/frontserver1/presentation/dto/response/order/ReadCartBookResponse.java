@@ -5,12 +5,10 @@ import java.math.BigDecimal;
 import lombok.Builder;
 
 @Builder
-public record ReadCartBookResponse(Long cartBookId,
-                                   Long bookId,
+public record ReadCartBookResponse(Long bookId,
                                    String bookName,
                                    BigDecimal bookPrice,
                                    int cartBookQuantity,
-                                   Long userId,
                                    Boolean bookIsPackable,
                                    String bookImage) {
 

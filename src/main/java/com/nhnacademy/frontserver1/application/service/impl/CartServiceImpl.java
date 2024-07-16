@@ -8,7 +8,9 @@ import com.nhnacademy.frontserver1.presentation.dto.response.cart.CreateCartResp
 import com.nhnacademy.frontserver1.presentation.dto.response.cart.DeleteCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.cart.UpdateCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadCartBookResponse;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,22 +21,26 @@ public class CartServiceImpl implements CartService {
     private final CartAdaptor cartAdaptor;
 
     @Override
-    public CreateCartResponse createCart(CreateCartRequest createCartRequest) {
-        return cartAdaptor.createCart(createCartRequest).getBody();
+    public CreateCartResponse createCart(String cartId, CreateCartRequest createCartRequest) {
+        return cartAdaptor.createCart(createCartRequest, cartId).getBody();
     }
 
     @Override
-    public List<ReadCartBookResponse> getCarts() {
-        return cartAdaptor.getCartBooks().getBody();
+    public List<ReadCartBookResponse> getCarts(String cartId) {
+        if (Objects.isNull(cartId)) {
+            return Collections.emptyList();
+        }
+
+        return cartAdaptor.getCartBooks(cartId).getBody();
     }
 
     @Override
-    public UpdateCartBookResponse updateCart(Long bookId, UpdateCartBookRequest request) {
-        return cartAdaptor.updateCartBook(bookId, request);
+    public UpdateCartBookResponse updateCart(String cartId, Long bookId, UpdateCartBookRequest request) {
+        return cartAdaptor.updateCartBook(cartId, bookId, request);
     }
 
     @Override
-    public DeleteCartBookResponse deleteCartBook(Long bookId) {
-        return cartAdaptor.deleteCartBookByBookId(bookId);
+    public DeleteCartBookResponse deleteCartBook(String cartId, Long bookId) {
+        return cartAdaptor.deleteCartBookByBookId(cartId, bookId);
     }
 }

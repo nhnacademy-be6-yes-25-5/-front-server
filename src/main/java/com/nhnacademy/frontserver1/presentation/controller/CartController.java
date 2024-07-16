@@ -9,14 +9,14 @@ import com.nhnacademy.frontserver1.presentation.dto.response.cart.DeleteCartBook
 import com.nhnacademy.frontserver1.presentation.dto.response.cart.UpdateCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpCookie;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.nhnacademy.frontserver1.common.context.TokenContext;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,35 +37,55 @@ public class CartController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<CreateCartResponse> createCart(@RequestBody CreateCartRequest createCartRequest) {
-        CreateCartResponse response = cartService.createCart(createCartRequest);
+    public ResponseEntity<CreateCartResponse> createCart(@RequestBody CreateCartRequest createCartRequest,
+        HttpServletRequest request, HttpServletResponse response) {
+        String cartId = generateCartIdWhenCartCookieNotFound(request);
+        CreateCartResponse cartResponse = cartService.createCart(cartId, createCartRequest);
 
-        // 쿠키 생성
-        HttpCookie accessTokenCookie = ResponseCookie.from("AccessToken", TokenContext.getAccessToken())
-                .httpOnly(true)
-                .secure(true) // HTTPS를 사용하는 경우에만 true로 설정
-                .path("/")
-                .maxAge(Duration.ofHours(1)) // 예: 1시간 유효
-                .sameSite("Strict") // 또는 "Lax"
-                .build();
+        addCartCookieWhenCartCookieNotFound(request, response, cartId);
 
-        HttpCookie refreshTokenCookie = ResponseCookie.from("RefreshToken", TokenContext.getRefreshToken())
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(Duration.ofDays(7)) // 예: 7일 유효
-                .sameSite("Strict")
-                .build();
+        return ResponseEntity.ok(cartResponse);
+    }
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString())
-                .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
-                .body(response);
+    private String generateCartIdWhenCartCookieNotFound(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("CART-ID")) {
+                    return cookie.getValue();
+                }
+            }
+        }
+
+        return UUID.randomUUID().toString();
+    }
+
+    private void addCartCookieWhenCartCookieNotFound(HttpServletRequest request, HttpServletResponse response, String cartId) {
+        boolean cartIdCookieFound = false;
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("CART-ID".equals(cookie.getName())) {
+                    cartIdCookieFound = true;
+                    break;
+                }
+            }
+        }
+
+        if (cookies == null || !cartIdCookieFound) {
+            Cookie cartCookie = new Cookie("CART-ID", cartId);
+            cartCookie.setHttpOnly(true);
+            cartCookie.setPath("/");
+            cartCookie.setMaxAge(7 * 24 * 60 * 60);
+            response.addCookie(cartCookie);
+        }
     }
 
     @GetMapping
-    public String getCart(Model model, Pageable pageable) {
-        List<ReadCartBookResponse> response = cartService.getCarts();
+    public String getCart(Model model, Pageable pageable, HttpServletRequest request) {
+        String cartId = getCartIdFromCookie(request);
+        List<ReadCartBookResponse> response = cartService.getCarts(cartId);
 
         BigDecimal totalPrice = response.stream()
             .map(cart -> cart.bookPrice().multiply(BigDecimal.valueOf(cart.cartBookQuantity())))
@@ -76,6 +95,7 @@ public class CartController {
         BigDecimal shippingFee = BigDecimal.valueOf(shippingPolicy.shippingPolicyFee());
         BigDecimal finalTotalPrice = totalPrice.add(shippingFee);
 
+        model.addAttribute("cartId", cartId);
         model.addAttribute("totalPrice", totalPrice.intValue());
         model.addAttribute("carts", response);
         model.addAttribute("finalTotalPrice", finalTotalPrice.intValue());
@@ -85,15 +105,30 @@ public class CartController {
         return "cart/cart";
     }
 
-    @PutMapping("/books/{bookId}")
-    public ResponseEntity<UpdateCartBookResponse> updateCart(@PathVariable Long bookId,
-        @RequestBody UpdateCartBookRequest request) {
-        return ResponseEntity.ok(cartService.updateCart(bookId, request));
+    private String getCartIdFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("CART-ID".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+
+        return null;
     }
 
-    @DeleteMapping("/books/{bookId}")
-    public ResponseEntity<DeleteCartBookResponse> deleteCartBook(@PathVariable Long bookId) {
-        return ResponseEntity.ok(cartService.deleteCartBook(bookId));
+    @PutMapping("/{cartId}/books/{bookId}")
+    public ResponseEntity<UpdateCartBookResponse> updateCart(@PathVariable Long bookId,
+        @PathVariable String cartId,
+        @RequestBody UpdateCartBookRequest request) {
+        return ResponseEntity.ok(cartService.updateCart(cartId, bookId, request));
+    }
+
+    @DeleteMapping("/{cartId}/books/{bookId}")
+    public ResponseEntity<DeleteCartBookResponse> deleteCartBook(@PathVariable Long bookId,
+        @PathVariable String cartId) {
+        return ResponseEntity.ok(cartService.deleteCartBook(cartId, bookId));
     }
 
 }

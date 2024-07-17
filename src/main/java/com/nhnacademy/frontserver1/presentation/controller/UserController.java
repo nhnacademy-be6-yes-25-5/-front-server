@@ -119,14 +119,19 @@ public class UserController {
         return "mypage/mypage-grade";
     }
 
-    // 회원 현재 포인트와 포인트 이력 조회
+    // 회원 현재 포인트 조회
+    @GetMapping("/mypage/points")
+    public ResponseEntity<PointResponse> getUserPoints() {
+        return ResponseEntity.ok(userService.getPoints());
+    }
+
+    // 회원 포인트 이력 조회
     @GetMapping("/mypage/point-logs")
     public String getUserPoints(@PageableDefault(size = 15) Pageable pageable,
                                 Model model) {
 
         Page<PointLogResponse> pointLogs = userService.getPointLogs(pageable);
 
-        model.addAttribute("currentPoint", pointLogs.getContent().isEmpty() ? BigDecimal.ZERO : pointLogs.getContent().getFirst().pointCurrent());
         model.addAttribute("pointLogs", pointLogs);
 
         return "mypage/mypage-pointLogs";
@@ -232,13 +237,12 @@ public class UserController {
     }
 
     @GetMapping("/mypage/coupons")
-    public String getActiveUserCoupons(@RequestParam(defaultValue = "0") int page,
-                                       @RequestParam(defaultValue = "15") int size,
+    public String getActiveUserCoupons(@PageableDefault Pageable pageable,
                                        Model model) {
 
-        Page<CouponBoxResponse> activeCoupons = userService.getStateCouponBox("ACTIVE", PageRequest.of(page, size));
-        Page<CouponBoxResponse> usedCoupons = userService.getStateCouponBox("USED", PageRequest.of(page, size));
-        Page<CouponBoxResponse> expiredCoupons = userService.getStateCouponBox("EXPIRED", PageRequest.of(page, size));
+        Page<CouponBoxResponse> activeCoupons = userService.getStateCouponBox("ACTIVE", pageable);
+        Page<CouponBoxResponse> usedCoupons = userService.getStateCouponBox("USED", pageable);
+        Page<CouponBoxResponse> expiredCoupons = userService.getStateCouponBox("EXPIRED", pageable);
 
         model.addAttribute("activeCoupons", activeCoupons);
         model.addAttribute("usedCoupons", usedCoupons);

@@ -43,7 +43,7 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <tr th:each="coupon : ${activeCoupons}" th:data-coupon-id="${coupon.couponId}">
+                                                    <tr th:each="coupon : ${activeCoupons.content}" th:data-coupon-id="${coupon.couponId}">
                                                         <td th:text="${coupon.couponName}" class="coupon-name" th:data-coupon-name="${coupon.couponName}"
                                                             th:data-coupon-max-amount="${#numbers.formatInteger(coupon.couponMaxAmount, 3, 'COMMA') + '원'}"
                                                             th:data-coupon-expired-at="${#dates.format(coupon.CouponExpiredAt, 'yyyy-MM-dd')}"></td>
@@ -57,14 +57,22 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div class="pagination">
-                                                <ul>
-                                                    <li th:each="i : ${#numbers.sequence(0, activeCoupons.totalPages - 1)}">
-                                                        <a th:href="@{'/mypage/coupons'(page=${i}, size=${activeCoupons.size})}"
-                                                           th:text="${i + 1}"
-                                                           th:classappend="${i == activeCoupons.number} ? 'active'"></a>
-                                                    </li>
-                                                </ul>
+                                            <!-- Pagination -->
+                                            <div class="d-flex justify-content-center">
+                                                <nav aria-label="Page navigation">
+                                                    <ul class="pagination">
+                                                        <li class="page-item" th:class="${activeCoupons.first} ? 'disabled' : ''">
+                                                            <a class="page-link" th:href="@{/mypage/coupons#available(page=0)}">&laquo;</a>
+                                                        </li>
+                                                        <li th:each="page : ${activeCoupons.totalPages > 0 ? #numbers.sequence(0, activeCoupons.totalPages - 1) : #numbers.sequence(0, 0)}"
+                                                            class="page-item" th:class="${activeCoupons.number == page} ? 'active' : ''">
+                                                            <a class="page-link" th:href="@{/mypage/coupons#available(page=${page})}" th:text="${page + 1}"></a>
+                                                        </li>
+                                                        <li class="page-item" th:class="${activeCoupons.last} ? 'disabled' : ''">
+                                                            <a class="page-link" th:href="@{/mypage/coupons#available(page=${activeCoupons.totalPages - 1})}">&raquo;</a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
                                             </div>
                                         </div>
 
@@ -80,7 +88,7 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <tr th:each="coupon : ${usedCoupons}">
+                                                    <tr th:each="coupon : ${usedCoupons.content}">
                                                         <td th:text="${coupon.couponName}"></td>
                                                         <td th:text="${#numbers.formatInteger(coupon.couponMinAmount, 3, 'COMMA') + '원'} + ' / ' + ${#dates.format(coupon.CouponExpiredAt, 'yyyy-MM-dd')}"></td>
                                                         <td th:text="${coupon.couponDiscountRate != null ? #numbers.setFormatInteger(coupon.couponDiscountRate, 0) + '%' : #numbers.formatInteger(coupon.couponDiscountAmount, 3, 'COMMA') + '원'}"></td>
@@ -92,14 +100,22 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div class="pagination">
-                                                <ul>
-                                                    <li th:each="i : ${#numbers.sequence(0, usedCoupons.totalPages - 1)}">
-                                                        <a th:href="@{'/mypage/coupons#used'(page=${i}, size=${usedCoupons.size})}"
-                                                           th:text="${i + 1}"
-                                                           th:classappend="${i == usedCoupons.number} ? 'active'"></a>
-                                                    </li>
-                                                </ul>
+                                            <!-- Pagination -->
+                                            <div class="d-flex justify-content-center">
+                                                <nav aria-label="Page navigation">
+                                                    <ul class="pagination">
+                                                        <li class="page-item" th:class="${usedCoupons.first} ? 'disabled' : ''">
+                                                            <a class="page-link" th:href="@{/mypage/coupons#used(page=0)}">&laquo;</a>
+                                                        </li>
+                                                        <li th:each="page : ${usedCoupons.totalPages > 0 ? #numbers.sequence(0, usedCoupons.totalPages - 1) : #numbers.sequence(0, 0)}"
+                                                            class="page-item" th:class="${usedCoupons.number == page} ? 'active' : ''">
+                                                            <a class="page-link" th:href="@{/mypage/coupons#used(page=${page})}" th:text="${page + 1}"></a>
+                                                        </li>
+                                                        <li class="page-item" th:class="${usedCoupons.last} ? 'disabled' : ''">
+                                                            <a class="page-link" th:href="@{/mypage/coupons#used(page=${usedCoupons.totalPages - 1})}">&raquo;</a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
                                             </div>
                                         </div>
 
@@ -115,7 +131,7 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <tr th:each="coupon : ${expiredCoupons}">
+                                                    <tr th:each="coupon : ${expiredCoupons.content}">
                                                         <td th:text="${coupon.couponName}"></td>
                                                         <td th:text="${#numbers.formatInteger(coupon.couponMinAmount, 3, 'COMMA') + '원'} + ' / ' + ${#dates.format(coupon.CouponExpiredAt, 'yyyy-MM-dd')}"></td>
                                                         <td th:text="${coupon.couponDiscountRate != null ? #numbers.setFormatInteger(coupon.couponDiscountRate, 0) + '%' : #numbers.formatInteger(coupon.couponDiscountAmount, 3, 'COMMA') + '원'}"></td>
@@ -127,14 +143,22 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div class="pagination">
-                                                <ul>
-                                                    <li th:each="i : ${#numbers.sequence(0, expiredCoupons.totalPages - 1)}">
-                                                        <a th:href="@{'/mypage/coupons#history'(page=${i}, size=${expiredCoupons.size})}"
-                                                           th:text="${i + 1}"
-                                                           th:classappend="${i == expiredCoupons.number} ? 'active'"></a>
-                                                    </li>
-                                                </ul>
+                                            <!-- Pagination -->
+                                            <div class="d-flex justify-content-center">
+                                                <nav aria-label="Page navigation">
+                                                    <ul class="pagination">
+                                                        <li class="page-item" th:class="${expiredCoupons.first} ? 'disabled' : ''">
+                                                            <a class="page-link" th:href="@{/mypage/coupons#history(page=0)}">&laquo;</a>
+                                                        </li>
+                                                        <li th:each="page : ${expiredCoupons.totalPages > 0 ? #numbers.sequence(0, expiredCoupons.totalPages - 1) : #numbers.sequence(0, 0)}"
+                                                            class="page-item" th:class="${expiredCoupons.number == page} ? 'active' : ''">
+                                                            <a class="page-link" th:href="@{/mypage/coupons#history(page=${page})}" th:text="${page + 1}"></a>
+                                                        </li>
+                                                        <li class="page-item" th:class="${expiredCoupons.last} ? 'disabled' : ''">
+                                                            <a class="page-link" th:href="@{/mypage/coupons#history(page=${expiredCoupons.totalPages - 1})}">&raquo;</a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
                                             </div>
                                         </div>
                                     </div>

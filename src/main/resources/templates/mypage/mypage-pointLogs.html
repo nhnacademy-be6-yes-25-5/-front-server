@@ -19,37 +19,34 @@
                                         <p>회원님의 포인트 사용 이력을 조회할 수 있습니다.</p>
                                     </div>
                                     <div class="points">
-                                        현재 포인트: <span id="currentPoint" th:text="${currentPoint.intValue()} + 'P'">0</span>
+                                        현재 포인트: <span id="currentPoint">-P</span>
                                     </div>
-<!--                                    <h2>Your Point History</h2>-->
-                                    <div th:if="${not #lists.isEmpty(pointLogs.content)}">
-                                        <table class="table table-striped">
-                                            <thead>
-                                            <tr>
-                                                <th>종류</th>
-                                                <th>갱신 포인트</th>
-                                                <th>처리일</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr th:each="pointLog : ${pointLogs.content}">
-                                                <td th:text="${pointLog.pointLogUpdatedType}">Action</td>
-                                                <td th:text="${pointLog.pointLogAmount}">Points</td>
-                                                <td th:text="${#temporals.format(pointLog.pointLogUpdatedAt, 'yyyy-MM-dd HH:mm:ss')}">Date</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div th:if="${#lists.isEmpty(pointLogs.content)}">
-                                        <p>포인트 이력이 존재하지 않습니다.</p>
-                                    </div>
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>종류</th>
+                                            <th>갱신 포인트</th>
+                                            <th>처리일</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="pointLog : ${pointLogs.content}">
+                                            <td th:text="${pointLog.pointLogUpdatedType}">Action</td>
+                                            <td th:text="${pointLog.pointLogAmount}">Points</td>
+                                            <td th:text="${#temporals.format(pointLog.pointLogUpdatedAt, 'yyyy-MM-dd HH:mm:ss')}">Date</td>
+                                        </tr>
+                                        <tr th:if="${pointLogs.content.size()} == 0">
+                                            <td colspan="6" class="text-center" style="font-size: 1.2em; color: black;">포인트 이력이 존재하지 않습니다.</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                     <div class="d-flex justify-content-center">
                                         <nav aria-label="Page navigation">
                                             <ul class="pagination">
                                                 <li class="page-item" th:class="${pointLogs.first} ? 'disabled' : ''">
                                                     <a class="page-link" th:href="@{/mypage/point-logs(page=0)}">&laquo;</a>
                                                 </li>
-                                                <li th:each="page : ${#numbers.sequence(0, pointLogs.totalPages - 1)}"
+                                                <li th:each="page : ${pointLogs.totalPages > 0 ? #numbers.sequence(0, pointLogs.totalPages - 1) : #numbers.sequence(0, 0)}"
                                                     class="page-item" th:class="${pointLogs.number == page} ? 'active' : ''">
                                                     <a class="page-link" th:href="@{/mypage/point-logs(page=${page})}" th:text="${page + 1}"></a>
                                                 </li>
@@ -58,9 +55,6 @@
                                                 </li>
                                             </ul>
                                         </nav>
-                                    </div>
-                                    <div class="footer">
-                                        <p>Returning to your profile? <a href="/profile">View Profile</a></p>
                                     </div>
                                 </div>
                             </div>
@@ -72,6 +66,20 @@
     </div>
     <!-- End Order History Area -->
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/mypage/points')
+                .then(response => response.json())
+                .then(data => {
+                    const points = Math.floor(data.point); // 정수로 변환
+                    document.getElementById('currentPoint').innerText = `${points}P`;
+                })
+                .catch(error => {
+                    console.error('Error fetching current points:', error);
+                    document.getElementById('currentPoint').innerText = '오류 발생';
+                });
+        });
+    </script>
 </div>
 </body>
 </html>

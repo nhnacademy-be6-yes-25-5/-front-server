@@ -57,5 +57,7 @@ public interface UserService {
 
     void deleteUserAddress(Long userAddressId);
 
+    PointResponse getPoints();
+
     void UpdateUserPasswordByEmail(String email, UpdatePasswordRequest request);
 }

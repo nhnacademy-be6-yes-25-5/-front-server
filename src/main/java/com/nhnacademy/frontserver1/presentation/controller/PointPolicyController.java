@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,13 +20,12 @@ import java.math.BigDecimal;
 @RequestMapping("/admin/point-policies")
 public class PointPolicyController {
 
-    final PointPolicyService pointPolicyService;        // todo : 장바구니 프론트 구현
+    final PointPolicyService pointPolicyService;
 
     @GetMapping
-    public String getPointPolicies(@RequestParam(defaultValue = "0") int page, // todo : @PageableDefault 변경 예정
-                                   @RequestParam(defaultValue = "5") int size,
+    public String getPointPolicies(@PageableDefault(size = 5) Pageable pageable,
                                    Model model) {
-        Page<PointPolicyResponse> pointPolicies = pointPolicyService.getPointPolicies(PageRequest.of(page, size));
+        Page<PointPolicyResponse> pointPolicies = pointPolicyService.getPointPolicies(pageable);
 
         model.addAttribute("pointPolicies", pointPolicies);
 

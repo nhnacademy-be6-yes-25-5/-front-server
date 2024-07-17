@@ -83,6 +83,9 @@ public interface UserAdaptor {
     @DeleteMapping("/user-addresses/{userAddressId}")
     void deleteUserAddress(@PathVariable Long userAddressId);
 
+    @GetMapping("/points")
+    PointResponse getPoints();
+
 //    @PutMapping("/update-password")
 //    UpdatePasswordResponse updatePassword(UpdatePasswordRequest request);
     //@PutMapping("/update-password/{email}")

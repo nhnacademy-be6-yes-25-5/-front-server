@@ -17,10 +17,10 @@
       <input type="hidden" id="cartId" name="cartId" th:value="${cartId}">
       <div class="row">
         <div class="col-lg-8 col-md-12 col-12">
-          <h5>상품 목록</h5>
+          <h5 style="margin: 10px 0 20px 0">상품 목록</h5>
           <div class="cart-items">
             <div th:each="cart, iter : ${carts}" class="cart-item-container" th:data-book-id="${cart.bookId}">
-              <a href="#" class="remove-item" onclick="removeItem(this)">삭제</a>
+              <a href="#" class="remove-item" onclick="removeItem(this)">X</a>
               <div class="cart-item row align-items-center">
                 <div class="col-lg-2 col-md-3 col-12">
                   <div class="cart-image">
@@ -29,11 +29,7 @@
                 </div>
                 <div class="col-lg-4 col-md-3 col-12">
                   <h5 th:text="${cart.bookName}">Book Name</h5>
-                </div>
-                <div class="col-lg-2 col-md-3 col-12">
-                  <div class="cart-price">
-                    <p class="mb-0" th:text="${#numbers.formatDecimal(cart.bookPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">Price</p>
-                  </div>
+                  <p class="mb-0" th:text="${#numbers.formatDecimal(cart.bookPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">Price</p>
                 </div>
                 <div class="col-lg-2 col-md-3 col-12">
                   <div class="cart-quantity d-flex align-items-center">

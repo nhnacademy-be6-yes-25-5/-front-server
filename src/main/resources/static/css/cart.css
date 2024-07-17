@@ -5,7 +5,7 @@
   padding: 20px;
   border-radius: 5px;
   margin-bottom: 15px;
-  border: 1px solid #000;
+  border: 1px solid #ddd;
   position: relative;
 }
 
@@ -21,6 +21,7 @@
 }
 
 .cart-summary {
+  margin: 54px 0 0 0;
   border: 1px solid #ddd;
   padding: 20px;
   background: #fff;
@@ -45,7 +46,7 @@
 .remove-item {
   position: absolute;
   top: 10px;
-  right: 10px;
+  right: 11px;
   font-size: 12px;
   color: #808080;
   text-decoration: none;
@@ -133,6 +134,7 @@ section.cart-details {
 
 .cart-details div {
   margin-bottom: 5px;
+  min-height: 157px;
 }
 
 .header .navbar-cart .cart-items .shopping-item .cart-preview-name,

@@ -435,10 +435,12 @@
               </div>
               <div class="total-price points">
                 <p class="value">포인트 사용:</p>
-                <input type="number" id="points" value="0" min="0" th:max="${points}"
-                       th:disabled="${userInfo.role == 'NONE_MEMBER'}" oninput="validatePointsUsage()">
+                <div class="input-group input-group-sm" style="max-width: 150px;">
+                  <input type="number" class="form-control" id="points" value="0" min="0" th:max="${points}"
+                         th:disabled="${userInfo.role == 'NONE_MEMBER'}" oninput="validatePointsUsage()">
+                </div>
+                <input type="hidden" class="price" id="pointsDiscount"/>
               </div>
-              <p class="price" id="pointsDiscount" style="display: block">0원</p>
               <div class="additional-info mt-30" th:if="${freeShippingAmount != null}">
                 <p th:if="${freeShippingAmount > 0}"
                    th:text="'무료 배송까지 ' + ${freeShippingAmount} + '원'"></p>

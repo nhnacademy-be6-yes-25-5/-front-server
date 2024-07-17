@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "authAdaptor", url = "${eureka.gateway}/auth")
 public interface AuthAdaptor {
 
-    @SkipTokenInjection
     @PostMapping("/login")
     ResponseEntity<AuthResponse> findLoginUserByEmail(@RequestBody LoginUserRequest loginUserRequest);
 

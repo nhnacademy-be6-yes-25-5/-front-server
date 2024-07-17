@@ -3156,6 +3156,7 @@ fieldset:disabled .btn {
 }
 
 .btn-secondary {
+    padding: 5px 13px !important;
     color: #fff;
     background-color: #6c757d;
     border-color: #6c757d

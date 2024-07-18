@@ -163,6 +163,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public PointResponse getPoints() {
+        return userAdaptor.getPoints();
+    }
+
+    @Override
     public boolean findUserPasswordByEmailByName(FindPasswordRequest request) {
         return userAdaptor.findUserPasswordByEmailByName(request);
     }

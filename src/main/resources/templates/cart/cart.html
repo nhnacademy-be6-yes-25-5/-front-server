@@ -135,6 +135,7 @@
 
     async function removeItem(button) {
       var container = button.closest('.cart-item-container');
+      const cartId = document.getElementById('cartId').value;
       var bookId = container.getAttribute('data-book-id');
       var loading = document.getElementById('loading');
       var checkoutButton = document.getElementById('checkout-button');
@@ -143,7 +144,7 @@
       setButtonsDisabled(true);
 
       try {
-        let response = await fetch(`/carts/books/${bookId}`, {
+        let response = await fetch(`/carts/${cartId}/books/${bookId}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json'

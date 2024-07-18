@@ -6,6 +6,7 @@ import com.nhnacademy.frontserver1.domain.TakeoutType;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadOrderNoneMemberRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderRequest;
+import com.nhnacademy.frontserver1.presentation.dto.response.coupon.ReadAvailableUserCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDetailResponse;
@@ -36,6 +37,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/orders")
@@ -85,7 +87,7 @@ public class OrderController {
             model.addAttribute("orderUserEmail", orderUserInfoResponse.email());
             model.addAttribute("orderUserPhoneNumber", orderUserInfoResponse.phoneNumber());
             model.addAttribute("points", orderUserInfoResponse.points());
-            model.addAttribute("maxDiscountCoupon", orderService.getMaxDiscountCoupon(totalAmount));
+//            model.addAttribute("maxDiscountCoupon", orderService.getMaxDiscountCoupon(totalAmount));
         } else {
             model.addAttribute("orderUserName", "");
             model.addAttribute("orderUserEmail", "");
@@ -160,12 +162,11 @@ public class OrderController {
     }
 
     @GetMapping("/coupons")
-    public String getCouponPopup(Model model) {
-        List<ReadUserCouponResponse> coupons = orderService.getUserCoupons();
+    public String getCoupons(@RequestParam("bookId") Long bookId, @RequestParam("categoryIds") List<Long> categoryIds, Model model) {
+        List<ReadAvailableUserCouponResponse> coupons = orderService.getUserCoupons(bookId, categoryIds);
         model.addAttribute("coupons", coupons);
         return "coupon/popup";
     }
-
 
     @PutMapping("/{orderId}")
     public ResponseEntity<UpdateOrderResponse> updateOrder(@PathVariable String orderId,

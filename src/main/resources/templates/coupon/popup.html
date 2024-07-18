@@ -18,6 +18,9 @@
       border-color: #cccccc;
       cursor: not-allowed;
     }
+    .disabled-text {
+      color: #cccccc;
+    }
   </style>
   <script>
     function selectCoupon(button) {
@@ -28,26 +31,72 @@
       const couponId = button.getAttribute('data-coupon-id');
       const discountAmount = button.getAttribute('data-discount-amount');
       const discountRate = button.getAttribute('data-discount-rate');
+      const urlParams = new URLSearchParams(window.location.search);
+      const bookId = urlParams.get('bookId');
 
-      window.opener.document.getElementById('selectedCoupon').value = button.getAttribute('data-coupon-name');
-      window.opener.document.getElementById('couponDiscount').value = discountAmount !== "null" ? discountAmount : 0;
-      window.opener.document.getElementById('couponDiscountRate').value = discountRate !== "null" ? discountRate : 0;
-      window.opener.document.getElementById('couponId').value = couponId;
-      window.opener.updateTotalPrice();
+      const openerDocument = window.opener.document;
+
+      const selectedCouponElement = openerDocument.getElementById(`selectedCoupon-${bookId}`);
+      const couponDiscountElement = openerDocument.getElementById(`couponDiscount-${bookId}`);
+      const couponDiscountRateElement = openerDocument.getElementById(`couponDiscountRate-${bookId}`);
+      const couponIdElement = openerDocument.getElementById(`couponId-${bookId}`);
+      const bookPriceElement = openerDocument.getElementById(`bookPrice-${bookId}`);
+
+      console.log('selectedCouponElement:', selectedCouponElement);
+      console.log('couponDiscountElement:', couponDiscountElement);
+      console.log('couponDiscountRateElement:', couponDiscountRateElement);
+      console.log('couponIdElement:', couponIdElement);
+      console.log('bookPriceElement:', bookPriceElement);
+
+      if (selectedCouponElement && couponDiscountElement && couponDiscountRateElement && couponIdElement && bookPriceElement) {
+        selectedCouponElement.value = button.getAttribute('data-coupon-name');
+        couponDiscountRateElement.value = discountRate !== "null" ? discountRate : 0;
+
+        if (discountRate !== "null") {
+          const bookPrice = parseFloat(bookPriceElement.innerText.replace('원', '').replace(/,/g, '')) || 0;
+          const calculatedDiscount = (bookPrice * (parseFloat(discountRate) / 100)).toFixed(0);
+
+          console.log('도서 가격 : ', bookPrice);
+          console.log('할인율 계산 : ', calculatedDiscount);
+
+          couponDiscountElement.value = calculatedDiscount;
+        } else {
+          couponDiscountElement.value = discountAmount !== "null" ? discountAmount : 0;
+        }
+
+        couponIdElement.value = couponId;
+        window.opener.updateTotalPrice();
+      } else {
+        console.error(`One or more elements for bookId ${bookId} not found.`);
+      }
+
+      button.classList.add('disabled-button');
+      button.disabled = true;
+      button.closest('tr').classList.add('disabled-text');
+
       window.close();
     }
 
     document.addEventListener('DOMContentLoaded', function () {
       const totalAmount = parseInt(window.opener.document.getElementById('totalAmount').innerText.replace('원', '').trim());
+      const urlParams = new URLSearchParams(window.location.search);
+      const bookId = urlParams.get('bookId');
+      const categoryIds = urlParams.get('categoryIds').split(',');
 
       document.querySelectorAll('button[data-coupon-min-amount]').forEach(button => {
         const minAmount = parseInt(button.getAttribute('data-coupon-min-amount'));
-        if (totalAmount < minAmount) {
+        const isAvailable = button.getAttribute('data-coupon-available') === 'true';
+        const isSelected = window.opener.document.querySelector(`input[value="${button.getAttribute('data-coupon-id')}"]`);
+
+        if (totalAmount < minAmount || !isAvailable || isSelected) {
           button.classList.add('disabled-button');
           button.disabled = true;
+
+          button.closest('tr').classList.add('disabled-text');
         }
       });
     });
+
   </script>
 </head>
 <body>
@@ -70,7 +119,7 @@
       </thead>
       <tbody>
       <th:block th:each="coupon : ${coupons}">
-        <tr>
+        <tr th:classappend="${!coupon.isAvailable} ? 'disabled-text'">
           <td th:text="${coupon.couponName}"></td>
           <td th:text="${coupon.couponDiscountAmount != null ? coupon.couponDiscountAmount.intValue() : '-'}"></td>
           <td th:text="${coupon.couponDiscountRate != null ? coupon.couponDiscountRate + '%' : '-'}"></td>
@@ -79,11 +128,14 @@
           <td>
             <button type="button" class="btn btn-primary"
                     th:attr="data-coupon-id=${coupon.userCouponId},
-                            data-coupon-name=${coupon.couponName},
-                            data-discount-amount=${coupon.couponDiscountAmount != null ? coupon.couponDiscountAmount.intValue() : 'null'},
-                            data-discount-rate=${coupon.couponDiscountRate != null ? coupon.couponDiscountRate : 'null'},
-                            data-coupon-min-amount=${coupon.couponMinAmount.intValue()}"
+                data-coupon-name=${coupon.couponName},
+                data-discount-amount=${coupon.couponDiscountAmount != null ? coupon.couponDiscountAmount.intValue() : 'null'},
+                data-discount-rate=${coupon.couponDiscountRate != null ? coupon.couponDiscountRate : 'null'},
+                data-coupon-min-amount=${coupon.couponMinAmount.intValue()},
+                data-coupon-available=${coupon.isAvailable},
+                data-apply-to-all-books=${coupon.applyCouponToAllBooks}"
                     onclick="selectCoupon(this)">선택</button>
+
           </td>
         </tr>
       </th:block>

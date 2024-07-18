@@ -109,9 +109,64 @@
         <div class="checkout-steps-form-style-1">
           <ul id="accordionExample">
             <li>
-              <h6 class="title" data-bs-toggle="collapse" data-bs-target="#collapseThree"
-                  aria-expanded="true" aria-controls="collapseThree">주문자 정보</h6>
-              <section class="checkout-steps-form-content collapse show" id="collapseThree"
+              <h6 class="title" data-bs-toggle="collapse" data-bs-target="#collapseProductInfo"
+                  aria-expanded="true" aria-controls="collapseProductInfo">상품 정보</h6>
+              <section class="checkout-steps-form-content collapse show" id="collapseProductInfo"
+                       aria-labelledby="headingProductInfo" data-bs-parent="#accordionExample">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="single-form form-default">
+                      <label>상품 정보</label>
+                      <div class="table-responsive">
+                        <table class="table table-bordered">
+                          <thead class="thead-dark">
+                          <tr>
+                            <th>이미지</th>
+                            <th>상품명</th>
+                            <th>가격</th>
+                            <th>수량</th>
+                            <th>쿠폰 적용</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          <th:block th:each="cartBook, index : ${cartBooks}">
+                            <tr>
+                              <td>
+                                <img th:src="${cartBook.bookImage}" alt="Product Image" style="width: 50px; height: auto;">
+                              </td>
+                              <td th:text="${cartBook.bookName}"></td>
+                              <td th:attr="id='bookPrice-' + ${cartBook.bookId}" th:text="${cartBook.bookPrice + '원'}"></td>
+                              <td th:text="${cartBook.cartBookQuantity}"></td>
+                              <td>
+                                <button type="button" class="btn btn-primary"
+                                        th:attr="data-book-id=${cartBook.bookId}, data-category-ids=${#strings.arrayJoin(cartBook.categoryIds, ',')}"
+                                        onclick="openCouponPopupForBook(this)">쿠폰 적용</button>
+                                <input type="hidden" th:attr="id='selectedCoupon-' + ${cartBook.bookId}" readonly>
+                                <input type="hidden" th:attr="id='couponDiscount-' + ${cartBook.bookId}" value="0">
+                                <input type="hidden" th:attr="id='couponDiscountRate-' + ${cartBook.bookId}" value="0">
+                                <input type="hidden" th:attr="id='couponId-' + ${cartBook.bookId}">
+                              </td>
+                            </tr>
+                          </th:block>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="single-form button">
+                        <button class="btn" data-bs-toggle="collapse" data-bs-target="#collapseThree"
+                                aria-expanded="false" aria-controls="collapseThree">다음 단계
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </li>
+            <li>
+              <h6 class="title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree"
+                  aria-expanded="false" aria-controls="collapseThree">주문자 정보</h6>
+              <section class="checkout-steps-form-content collapse" id="collapseThree"
                        aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                 <div class="row">
                   <div class="row">
@@ -328,7 +383,7 @@
                       <div class="single-form form-default">
                         <label>카드 소유자 이름</label>
                         <div class="form-input form">
-                          <input type="text" id="cardHolderName" placeholder="Cardholder Name">
+                          <input type="text" id="cardHolderName" placeholder="Cardholder Name"/>
                         </div>
                       </div>
                       <div class="single-form form-default">
@@ -366,20 +421,20 @@
       </div>
       <div class="col-lg-4">
         <div class="checkout-sidebar">
-          <button class="btn btn-primary" onclick="openCouponPopup()" th:disabled="${userInfo.role == 'NONE_MEMBER'}">쿠폰 목록 보기</button>
-          <input type="text" id="selectedCoupon" readonly
-                 th:disabled="${userInfo.role == 'NONE_MEMBER'}"
-                 th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.couponName : ''}"
-                 style="height: 37px;
-                        border: 1px solid #DDD;
-                        padding: 1px 0 4px 0;
-                        width: 285px;
-                        margin: 0 0 0 12px;">
-          <input type="hidden" id="couponDiscount" value="0"
-                 th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.discountAmount : 0}">
-          <input type="hidden" id="couponDiscountRate" value="0">
-          <input type="hidden" id="couponId"
-                 th:value="${maxDiscountCoupon != null and maxDiscountCoupon.couponId != null ? maxDiscountCoupon.couponId : ''}">
+<!--          <button class="btn btn-primary" onclick="openCouponPopup()" th:disabled="${userInfo.role == 'NONE_MEMBER'}">쿠폰 목록 보기</button>-->
+<!--          <input type="text" id="selectedCoupon" readonly-->
+<!--                 th:disabled="${userInfo.role == 'NONE_MEMBER'}"-->
+<!--                 th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.couponName : ''}"-->
+<!--                 style="height: 37px;-->
+<!--                        border: 1px solid #DDD;-->
+<!--                        padding: 1px 0 4px 0;-->
+<!--                        width: 285px;-->
+<!--                        margin: 0 0 0 12px;">-->
+<!--          <input type="hidden" id="couponDiscount" value="0"-->
+<!--                 th:value="${maxDiscountCoupon != null ? maxDiscountCoupon.discountAmount : 0}">-->
+<!--          <input type="hidden" id="couponDiscountRate" value="0">-->
+<!--          <input type="hidden" id="couponId"-->
+<!--                 th:value="${maxDiscountCoupon != null and maxDiscountCoupon.couponId != null ? maxDiscountCoupon.couponId : ''}">-->
           <input type="hidden" name="userId" id="userId" th:value="${userInfo.userId}">
           <input type="hidden" name="role" id="role" th:value="${userInfo.role}">
           <div th:each="cartBook, index : ${cartBooks}">
@@ -407,6 +462,7 @@
           <input type="hidden" name="receiveEmail" id="hiddenReceiveOrderEmail">
           <input type="hidden" name="receivePhoneNumber"
                  id="hiddenReceiveOrderPhoneNumber">
+          <input type="hidden" id="applyCouponToAllBooks" value="false">
 
           <input type="hidden" name="orderTotalAmount" id="hiddenTotalPrice">
           <div class="checkout-sidebar-price-table mt-30">
@@ -510,6 +566,40 @@
     deliveryDateInput.setAttribute('min', minDateString);
   }
 
+  function updateTotalPrice() {
+    const totalAmountElement = document.getElementById('totalAmount');
+    const totalAmount = parseInt(totalAmountElement.innerText.replace('원', '')) || 0;
+    const shippingFee = parseInt(document.getElementById('shippingFee').innerText.replace('원', '')) || 0;
+    let totalDiscount = 0;
+    let takeoutPrice = 0;
+    let pointsDiscount = parseInt(document.getElementById('points').value, 10) || 0;
+
+    document.querySelectorAll('input[id^="couponDiscount-"]').forEach(input => {
+      totalDiscount += parseInt(input.value) || 0;
+    });
+
+    document.querySelectorAll('input[id^="takeoutPrice-"]').forEach(input => {
+      takeoutPrice += parseInt(input.value) || 0;
+    });
+
+    const totalPriceBeforePoints = totalAmount - totalDiscount + shippingFee + takeoutPrice;
+
+    if (pointsDiscount > totalPriceBeforePoints) {
+      pointsDiscount = totalPriceBeforePoints;
+      document.getElementById('points').value = totalPriceBeforePoints;
+    }
+
+    const totalPrice = totalPriceBeforePoints - pointsDiscount;
+
+    document.getElementById('totalPriceValue').innerText = totalPrice.toFixed(0) + '원';
+    document.getElementById('discountAmount').innerText = totalDiscount.toFixed(0) + '원';
+    document.getElementById('takeoutPrice').innerText = takeoutPrice.toFixed(0) + '원';
+    document.getElementById('pointsDiscount').innerText = pointsDiscount.toFixed(0) + '원';
+  }
+
+  // Attach updateTotalPrice to window object
+  window.updateTotalPrice = updateTotalPrice;
+
   document.addEventListener('DOMContentLoaded', function () {
     setMinDeliveryDate();
     const firstShippingOption = document.querySelector('input[name="shipping"]:checked');
@@ -520,43 +610,6 @@
     }
   });
 
-  function updateTotalPrice() {
-    const totalAmountElement = document.getElementById('totalAmount');
-    const totalAmount = parseInt(totalAmountElement.innerText.replace('원', '')) || 0;
-    const shippingFee = parseInt(document.getElementById('shippingFee').innerText.replace('원', '')) || 0;
-    const discountAmountElement = document.getElementById('couponDiscount');
-    const discountRateElement = document.getElementById('couponDiscountRate');
-    const discountAmount = parseInt(discountAmountElement.value) || 0;
-    const discountRate = parseFloat(discountRateElement.value) || 0;
-    const takeoutSelect = document.querySelector('input[name="takeoutType"]:checked');
-
-    let takeoutPrice = 0;
-    if (takeoutSelect) {
-      takeoutPrice = parseInt(takeoutSelect.getAttribute('data-price'), 10) || 0;
-    }
-
-    let pointsDiscount = parseInt(document.getElementById('points').value, 10) || 0;
-
-    let calculatedDiscount = discountAmount;
-    if (discountAmount === 0 && discountRate > 0) {
-      calculatedDiscount = totalAmount * (discountRate / 100);
-    }
-
-    const totalPriceBeforePoints = totalAmount - calculatedDiscount + shippingFee + takeoutPrice;
-
-    if (pointsDiscount > totalPriceBeforePoints) {
-      pointsDiscount = totalPriceBeforePoints;
-      document.getElementById('points').value = totalPriceBeforePoints;
-    }
-
-    document.getElementById('takeoutPrice').textContent = takeoutPrice + '원';
-    document.getElementById('pointsDiscount').textContent = pointsDiscount + '원';
-
-    const totalPrice = totalPriceBeforePoints - pointsDiscount;
-
-    document.getElementById('discountAmount').innerText = calculatedDiscount.toFixed(0) + '원';
-    document.getElementById('totalPriceValue').innerText = totalPrice.toFixed(0) + '원';
-  }
 
   function daumPost() {
     new daum.Postcode({
@@ -623,7 +676,6 @@
     }
     const paymentMethod = paymentMethodElement.value;
 
-    console.log(paymentMethod);
     if (!ALLOWED_PAYMENT_METHODS.includes(paymentMethod)) {
       alert('현재 개발중인 결제 수단입니다. 다른 결제수단을 사용해주세요.');
       return;
@@ -647,13 +699,12 @@
     const postcodeElement = document.getElementById('postcode');
     const pointsElement = document.getElementById('points');
     const roleElement = document.getElementById('role');
-    const couponIdElement = document.getElementById('couponId');
 
     const requiredElements = [
       deliveryDateElement, totalPriceElement, takeoutPriceElement, shippingFeeElement,
       orderIdElement, cartIdElement, orderNameElement, orderEmailElement, orderPhoneNumberElement,
       receiveNameElement, receiveEmailElement, receivePhoneNumberElement, addressRawElement,
-      referenceElement, addressDetailElement, postcodeElement, pointsElement, roleElement, couponIdElement
+      referenceElement, addressDetailElement, postcodeElement, pointsElement, roleElement
     ];
 
     for (const element of requiredElements) {
@@ -695,7 +746,13 @@
         input => input.value);
     const prices = Array.from(document.querySelectorAll('input[name="prices"]')).map(
         input => input.value);
-    const couponId = couponIdElement.value;
+    const couponIds = Array.from(document.querySelectorAll('input[id^="couponId-"]')).map(
+        input => input.value
+    ).filter(value => value !== "");
+
+    console.log(couponIds);
+
+    console.log('Collected couponIds:', couponIds);
 
     const orderData = {
       orderId: orderId,
@@ -720,9 +777,11 @@
       quantities: quantities,
       prices: prices,
       role: role,
-      couponId: couponId,
+      couponIds: couponIds,
       cartId: cartId
     };
+
+    console.log('orderData:', orderData);
 
     fetch('/orders', {
       method: 'POST',
@@ -787,13 +846,23 @@
     });
   }
 
-  function openCouponPopup() {
-    const popup = window.open('/orders/coupons', '쿠폰 목록', 'width=600,height=400');
+  function openCouponPopupForBook(button) {
+    const bookId = button.getAttribute('data-book-id');
+    const categoryIdsString = button.getAttribute('data-category-ids');
+
+    const params = {
+      bookId: bookId,
+      categoryIds: categoryIdsString
+    };
+
+    const queryString = new URLSearchParams(params).toString();
+    const popup = window.open(`/orders/coupons?${queryString}`, '쿠폰 목록', 'width=600,height=400');
+
     popup.onunload = function() {
       if (popup.selectedCoupon) {
-        document.getElementById('selectedCoupon').value = popup.selectedCoupon;
-        document.getElementById('couponDiscount').value = popup.selectedCouponDiscount;
-        document.getElementById('couponId').value = popup.selectedCouponId;
+        document.getElementById(`selectedCoupon-${bookId}`).value = popup.selectedCoupon;
+        document.getElementById(`couponDiscount-${bookId}`).value = popup.selectedCouponDiscount;
+        document.getElementById(`couponId-${bookId}`).value = popup.selectedCouponId;
         updateTotalPrice();
       }
     }

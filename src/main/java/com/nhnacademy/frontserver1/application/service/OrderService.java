@@ -3,6 +3,7 @@ package com.nhnacademy.frontserver1.application.service;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadOrderNoneMemberRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderRequest;
+import com.nhnacademy.frontserver1.presentation.dto.response.coupon.ReadAvailableUserCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMaximumDiscountCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMyOrderHistoryResponse;
@@ -14,7 +15,6 @@ import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderUser
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadPurePriceResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadShippingPolicyResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadTakeoutResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadUserCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.UpdateOrderResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -51,5 +51,5 @@ public interface OrderService {
 
     ReadOrderDetailResponse findOrderNoneMemberByOrderIdAndEmail(ReadOrderNoneMemberRequest request);
 
-    List<ReadUserCouponResponse> getUserCoupons();
+    List<ReadAvailableUserCouponResponse> getUserCoupons(Long bookId, List<Long> categoryIds);
 }

@@ -1,5 +1,8 @@
 package com.nhnacademy.frontserver1.application.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.frontserver1.application.service.OrderService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.AddressAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.OrderAdaptor;
@@ -9,7 +12,9 @@ import com.nhnacademy.frontserver1.infrastructure.adaptor.UserCouponAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.CreateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadOrderNoneMemberRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderRequest;
+import com.nhnacademy.frontserver1.presentation.dto.response.coupon.ReadAvailableUserCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
+import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMaximumDiscountCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMyOrderHistoryResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDeliveryInfoResponse;
@@ -49,7 +54,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ReadShippingPolicyResponse findAllOrderPolicy(Pageable pageable,
         Integer totalAmount) {
-        Page<ReadShippingPolicyResponse> policyResponses = policyAdaptor.findAllDeliveryPolicy(pageable).getBody();
+        Page<ReadShippingPolicyResponse> policyResponses = policyAdaptor.findAllDeliveryPolicy(
+            pageable).getBody();
 
         return policyResponses.getContent().stream()
             .filter(policy -> totalAmount >= policy.shippingPolicyMinAmount())
@@ -131,12 +137,28 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ReadOrderDetailResponse findOrderNoneMemberByOrderIdAndEmail(ReadOrderNoneMemberRequest request) {
-        return orderAdaptor.findOrderNoneMemberByOrderIdAndEmail(request.orderId(), request.email()).getBody();
+    public ReadOrderDetailResponse findOrderNoneMemberByOrderIdAndEmail(
+        ReadOrderNoneMemberRequest request) {
+        return orderAdaptor.findOrderNoneMemberByOrderIdAndEmail(request.orderId(), request.email())
+            .getBody();
     }
 
     @Override
-    public List<ReadUserCouponResponse> getUserCoupons() {
-        return userCouponAdaptor.getAllUserCoupons();
+    public List<ReadAvailableUserCouponResponse> getUserCoupons(Long bookId,
+        List<Long> categoryIds) {
+        List<ReadUserCouponResponse> userCoupons = userCouponAdaptor.getAllUserCoupons();
+
+        return userCoupons.stream()
+            .map(coupon -> {
+                boolean isAvailable = coupon.applyCouponToAllBooks();
+
+                if (!isAvailable) {
+                    isAvailable = (coupon.bookId() != null && coupon.bookId().equals(bookId)) ||
+                            (coupon.categoryIds() != null && coupon.categoryIds().stream()
+                                .anyMatch(categoryIds::contains));
+                }
+
+                return ReadAvailableUserCouponResponse.of(coupon, isAvailable);
+            }).toList();
     }
 }

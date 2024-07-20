@@ -5,7 +5,7 @@ class TossPaymentService extends PaymentService {
   }
 
   requestPayment(orderData) {
-    const { orderId, totalAmount } = orderData;
+    const { orderId, totalAmount, paymentProvider } = orderData;
     const customerKey = generateUUID();
 
     return this.tossPayments.requestPayment('카드', {
@@ -13,7 +13,8 @@ class TossPaymentService extends PaymentService {
       orderId: orderId,
       orderName: orderId,
       customerName: customerKey,
-      successUrl: window.location.origin + "/payments/success",
+      paymentProvider : paymentProvider,
+      successUrl: window.location.origin + "/payments/success?paymentProvider=" + paymentProvider,
       failUrl: window.location.origin + "/payments/fail",
     });
   }

@@ -778,7 +778,8 @@
       prices: prices,
       role: role,
       couponIds: couponIds,
-      cartId: cartId
+      cartId: cartId,
+      paymentProvider: paymentMethod
     };
 
     console.log('orderData:', orderData);
@@ -792,12 +793,12 @@
     })
     .then(response => response.json())
     .then(data => {
-      const {orderId, totalAmount} = data;
+      const {orderId, totalAmount, paymentProvider} = data;
       const paymentService = createPaymentService(paymentMethod);
       if (parseInt(totalAmount, 10) === 0) {
         completeZeroAmountPayment(orderData);
       } else {
-        paymentService.requestPayment({orderId, totalAmount})
+        paymentService.requestPayment({orderId, totalAmount, paymentProvider})
         .catch(error => {
           console.error('결제 요청 중 오류 발생:', error);
           window.location.href = '/payments/fail';

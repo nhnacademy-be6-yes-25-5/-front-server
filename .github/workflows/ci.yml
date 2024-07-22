@@ -20,6 +20,35 @@ jobs:
             exit 1
           fi
 
+      - name: Set up SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "${SSH_PRIVATE_KEY}" > ~/.ssh/github_rsa
+          chmod 400 ~/.ssh/github_rsa
+          ssh-keyscan ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Clean Remote Directory
+        env:
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
+        run: |
+          ssh -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "rm -rf ${REMOTE_DIR}/*"
+
+      - name: Copy project files to Remote Server
+        env:
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
+        run: |
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no Dockerfile-8040 ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/Dockerfile-8040
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no Dockerfile-8041 ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/Dockerfile-8041
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no build_and_run.sh ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/build_and_run.sh
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no pom.xml ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/pom.xml
+          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no -r src ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/src
+
       - name: Build Docker image
         run: |
           docker build -f Dockerfile-8040 --no-cache -t front1-app-8040 .
@@ -27,8 +56,8 @@ jobs:
       - name: Run Maven tests in Docker
         run: |
           docker run --rm front1-app-8040 mvn clean verify sonar:sonar \
-          -Dsonar.projectKey=yes-25-5-order-front-server \
-          -Dsonar.projectName='yes-25-5-order-front-server' \
+          -Dsonar.projectKey=yes25-5-front \
+          -Dsonar.projectName='yes25-5-front' \
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
           -Dsonar.token=${{ secrets.SONAR_TOKEN }}
 
@@ -49,19 +78,6 @@ jobs:
         with:
           check_name: 'Maven Test Results'
           junit_files: target/surefire-reports/**/*.xml
-
-      - name: Upload JAR to Remote Server
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_USER: ${{ secrets.SSH_USER }}
-          REMOTE_HOST: ${{ secrets.SSH_HOST }}
-          REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
-        run: |
-          mkdir -p ~/.ssh
-          echo "${SSH_PRIVATE_KEY}" > ~/.ssh/github_rsa
-          chmod 400 ~/.ssh/github_rsa
-          ssh-keyscan ${REMOTE_HOST} >> ~/.ssh/known_hosts
-          scp -i ~/.ssh/github_rsa -o StrictHostKeyChecking=no target/*.jar ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}
 
       - name: Send Dooray Webhook on Success
         if: success()

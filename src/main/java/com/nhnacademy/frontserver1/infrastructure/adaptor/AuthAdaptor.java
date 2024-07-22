@@ -1,6 +1,5 @@
 package com.nhnacademy.frontserver1.infrastructure.adaptor;
 
-import com.nhnacademy.frontserver1.common.jwt.annotation.SkipTokenInjection;
 import com.nhnacademy.frontserver1.presentation.dto.request.auth.CreateAccessTokenRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.dormant.CreateAuthNumberRequest;
 import com.nhnacademy.frontserver1.presentation.dto.request.dormant.SubmitAuthNumberRequest;

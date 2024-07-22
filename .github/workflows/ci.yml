@@ -27,8 +27,8 @@ jobs:
       - name: Run Maven tests in Docker
         run: |
           docker run --rm front1-app-8040 mvn clean verify sonar:sonar \
-          -Dsonar.projectKey=yes-25-5-order-front-server \
-          -Dsonar.projectName='yes-25-5-order-front-server' \
+          -Dsonar.projectKey=yes25-5-front \
+          -Dsonar.projectName='yes25-5-front' \
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
           -Dsonar.token=${{ secrets.SONAR_TOKEN }}
 

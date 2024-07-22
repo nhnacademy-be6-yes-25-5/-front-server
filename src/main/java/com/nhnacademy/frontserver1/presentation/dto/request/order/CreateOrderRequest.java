@@ -1,5 +1,6 @@
 package com.nhnacademy.frontserver1.presentation.dto.request.order;
 
+import com.nhnacademy.frontserver1.domain.PaymentProvider;
 import com.nhnacademy.frontserver1.domain.TakeoutType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -28,5 +29,6 @@ public record CreateOrderRequest(String orderId,
                                  List<Integer> quantities,
                                  List<BigDecimal> prices,
                                  String role,
-                                 String cartId) {
+                                 String cartId,
+                                 PaymentProvider paymentProvider) {
 }

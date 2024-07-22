@@ -27,6 +27,7 @@
   const paymentKey = urlParams.get("paymentKey");
   const orderId = urlParams.get("orderId");
   const amount = urlParams.get("amount");
+  const paymentProvider = urlParams.get("paymentProvider");
 
   const MAX_RETRIES = 10;
   let retryCount = 0;
@@ -36,6 +37,7 @@
       paymentKey: paymentKey,
       orderId: orderId,
       amount: amount,
+      paymentProvider: paymentProvider,
     };
 
     if (amount === "0") {

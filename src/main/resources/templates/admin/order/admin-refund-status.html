@@ -40,12 +40,13 @@
                         <td th:text="${order.amount.intValue()}">80,000원</td>
                         <td th:text="${order.canceledAt}">2023-06-05</td>
                         <td>
+                            <input type="hidden" th:id="'paymentProvider-' + ${order.orderId}" th:value="${order.paymentProvider}">
                             <select class="form-select" aria-label="Default select example" th:id="'select-' + ${order.orderId}">
                                 <option value="ACCESS" selected>환불 승인</option>
                                 <option value="DENIED">환불 거절</option>
                             </select>
                             <button type="button" class="btn btn-primary btn-sm mt-2"
-                                    th:attr="onclick=|handleRefund('${order.orderId}', document.getElementById('select-${order.orderId}'))|">
+                                    th:attr="onclick=|handleRefund('${order.orderId}', document.getElementById('select-${order.orderId}'), document.getElementById('paymentProvider-${order.orderId}').value)|">
                                 저장
                             </button>
                         </td>
@@ -57,13 +58,13 @@
     </div>
 
     <script>
-        function sendRefundRequest(orderId, status) {
+        function sendRefundRequest(orderId, status, paymentProvider) {
             fetch('/admin/orders/' + orderId + '/refund', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ status: status })
+                body: JSON.stringify({ status: status, paymentProvider: paymentProvider })
             })
             .then(response => response.json())
             .then(data => {
@@ -80,9 +81,9 @@
             });
         }
 
-        function handleRefund(orderId, selectElement) {
+        function handleRefund(orderId, selectElement, paymentProvider) {
             const status = selectElement.value;
-            sendRefundRequest(orderId, status);
+            sendRefundRequest(orderId, status, paymentProvider);
         }
     </script>
 </div>

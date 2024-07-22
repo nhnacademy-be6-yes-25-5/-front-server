@@ -87,6 +87,8 @@ public class OrderController {
             model.addAttribute("orderUserEmail", orderUserInfoResponse.email());
             model.addAttribute("orderUserPhoneNumber", orderUserInfoResponse.phoneNumber());
             model.addAttribute("points", orderUserInfoResponse.points());
+
+            // fixme. 추후 수정할 예정입니다.
 //            model.addAttribute("maxDiscountCoupon", orderService.getMaxDiscountCoupon(totalAmount));
         } else {
             model.addAttribute("orderUserName", "");

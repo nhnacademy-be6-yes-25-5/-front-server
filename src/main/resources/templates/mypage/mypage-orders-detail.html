@@ -13,6 +13,7 @@
     </div>
     <div class="col-md-9 order-details">
       <input type="hidden" id="orderId" th:value="${order.orderId}">
+      <input type="hidden" id="paymentProvider" th:value="${order.paymentProvider}">
       <h2>주문 상세</h2>
       <div>
         <p><strong><span th:text="${#temporals.format(order.orderCreatedAt, 'yyyy. M. d')}"></span> 주문</strong> : 주문번호 <span th:text="${order.orderId}">11100055733606</span></p>
@@ -79,13 +80,18 @@
   <script>
     function changeOrderStatus(status) {
       const orderId = document.getElementById('orderId').value;
-      console.log(orderId);
+      const paymentProvider = document.getElementById('paymentProvider').value;
+
+
       fetch('/orders/' + orderId, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ orderStatusType: status })
+        body: JSON.stringify({
+          orderStatusType: status,
+          paymentProvider: paymentProvider
+        })
       })
       .then(response => {
         if (response.ok) {

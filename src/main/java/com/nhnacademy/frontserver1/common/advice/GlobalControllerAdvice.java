@@ -1,28 +1,26 @@
 package com.nhnacademy.frontserver1.common.advice;
 
-import com.nhnacademy.frontserver1.common.exception.AccessDeniedException;
-import com.nhnacademy.frontserver1.common.exception.UnauthorizedAccessException;
-import com.nhnacademy.frontserver1.common.exception.ConnectionException;
-import com.nhnacademy.frontserver1.common.exception.DormantAccountException;
-import com.nhnacademy.frontserver1.common.exception.FeignClientException;
-import com.nhnacademy.frontserver1.common.exception.OrderWaitingException;
-import com.nhnacademy.frontserver1.common.exception.RefreshTokenFailedException;
-import com.nhnacademy.frontserver1.common.exception.TokenCookieMissingException;
+import com.nhnacademy.frontserver1.common.exception.*;
 import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 @ControllerAdvice
 @RequiredArgsConstructor
 @Slf4j
 public class GlobalControllerAdvice {
+
+    private final MessageSource messageSource;
 
     @ExceptionHandler(FeignClientException.class)
     public ResponseEntity<ErrorStatus> handleFeignClientException(FeignClientException e, Model model) {
@@ -92,5 +90,14 @@ public class GlobalControllerAdvice {
         mav.addObject("errorMessage", e.getErrorStatus().message());
         mav.setViewName("error/server-fail");
         return mav;
+    }
+
+    @ExceptionHandler(LoginException.class)
+    public String handleLoginException(LoginException e, RedirectAttributes redirectAttributes) {
+
+        redirectAttributes.addFlashAttribute("errorMessage",
+                messageSource.getMessage("login.fail", null, LocaleContextHolder.getLocale()));
+
+        return "redirect:/auth/login";
     }
 }

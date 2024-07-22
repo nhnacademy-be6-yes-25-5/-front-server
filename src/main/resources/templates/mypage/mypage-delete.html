@@ -15,17 +15,17 @@
                             <div class="col-lg-12">
                                 <div class="user-info-wrapper">
                                     <div class="title">
-                                        <h3>회원 탈퇴</h3>
+                                        <h3 th:text="#{user.deleteTitle}">Account Deletion</h3>
                                     </div>
                                     <form id="delete-form" class="card login-form">
                                         <div class="card-body">
                                             <div class="form-group input-group">
-                                                <label for="userPassword">비밀번호 입력</label>
+                                                <label for="userPassword" th:text="#{user.passwordPrompt}">Enter Password</label>
                                                 <input class="form-control" type="password" id="userPassword" name="userPassword" required>
                                             </div>
                                             <div id="pwConfirm"></div>
                                             <div class="button-group">
-                                                <button class="btn btn-danger ml-2" type="submit" id="delete-btn">회원 탈퇴</button>
+                                                <button class="btn btn-danger ml-2" type="submit" id="delete-btn" th:text="#{user.delete}">Delete Account</button>
                                             </div>
                                         </div>
                                     </form>
@@ -40,6 +40,15 @@
     <!-- End 회원 탈퇴 영역 -->
 <!--</div>-->
 
+    <script th:inline="javascript">
+        var messages = {
+            confirmDeletion: [[#{user.confirmDeletion}]],
+            deleteSuccess: [[#{user.deleteSuccess}]],
+            deleteFail: [[#{user.deleteFail}]],
+            authFail: [[#{user.authFail}]],
+            logoutFail: [[#{user.logoutFail}]]
+        };
+    </script>
 
 
 <script>
@@ -48,7 +57,7 @@
 
         const password = document.getElementById('userPassword').value;
 
-        if (confirm('정말로 회원 탈퇴를 하시겠습니까?')) {
+        if (confirm(messages.confirmDeletion)) {
             fetch('/mypage/delete', {
                 method: 'DELETE',
                 headers: {
@@ -57,26 +66,26 @@
                 body: JSON.stringify({ userPassword: password })
             }).then(response => {
                 if (response.ok) {
-                    alert('회원 탈퇴가 완료되었습니다.');
+                    alert(messages.deleteSuccess);
                     // 로그아웃 처리를 위해 /logout으로 요청
                     return fetch('/logout', { method: 'GET' });
                 } else if (response.status === 403) {
-                    throw new Error('인증에 실패했습니다. 다시 로그인해주세요.');
+                    throw new Error(messages.authFail);
                 } else {
-                    alert('회원 탈퇴에 실패했습니다.');
-                    throw new Error('회원 탈퇴에 실패했습니다.');
+                    alert(messages.deleteFail);
+                    throw new Error(messages.deleteFail);
                 }
             }).then(logoutResponse => {
                 if (logoutResponse.ok) {
                     // 로그아웃 성공 시 홈페이지로 리다이렉트
                     window.location.href = '/';
                 } else {
-                    throw new Error('로그아웃 처리에 실패했습니다.');
+                    throw new Error(messages.logoutFail);
                 }
             }).catch(error => {
                 console.error('Error:', error);
-                if (error.message === '인증에 실패했습니다. 다시 로그인해주세요.' ||
-                    error.message === '로그아웃 처리에 실패했습니다.') {
+                if (error.message === messages.authFail ||
+                    error.message === messages.logoutFail) {
                     window.location.href = '/auth/error?cause=' + encodeURIComponent(error.message);
                 }
             });

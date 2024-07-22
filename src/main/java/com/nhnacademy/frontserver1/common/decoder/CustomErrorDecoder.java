@@ -62,6 +62,10 @@ public class CustomErrorDecoder implements ErrorDecoder {
                             ErrorStatus.toErrorStatus("접근 권한이 없습니다. 로그아웃 후 관리자 계정으로 로그인해 주세요.", 403, LocalDateTime.now())
                     );
                 }
+                if (responseBody.contains("비밀번호가 일치하지 않습니다.") || responseBody.contains("회원이 존재 하지 않습니다.") || responseBody.contains("탈퇴한 회원입니다.")) {
+                    return new LoginException(
+                            ErrorStatus.toErrorStatus("이메일 또는 비밀번호가 일치하지 않습니다.", 403, LocalDateTime.now()));
+                }
             case 404:
                 if (methodKey.contains("findOrderStatusByOrderId")) {
                     return new OrderWaitingException(

@@ -1,7 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/admin-layout :: admin-layout(~{::content})}">
 <body>
 <div th:fragment="content">
-    <h1 class="mt-4">포인트 정책</h1>
+    <h1 class="mt-4" th:text="#{admin.point.policies}">포인트 정책</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active">Point Policies</li>
     </ol>
@@ -11,21 +11,21 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-3">
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPointPolicyModal">
-                            Add Point Policy
+                            <span th:text="#{admin.point.addPolicy}">Add Point Policy</span>
                         </button>
                     </div>
 
                     <table class="table table-striped table-hover">
                         <thead>
                         <tr>
-                            <th>번호</th>
-                            <th>정책 이름</th>
-                            <th>정책 비율/금액</th>
-                            <th>적용 타입</th>
-                            <th>조건</th>
-                            <th>생성일</th>
-                            <th>수정일</th>
-                            <th>상태</th>
+                            <th th:text="#{admin.point.number}">번호</th>
+                            <th th:text="#{admin.point.policyName}">정책 이름</th>
+                            <th th:text="#{admin.point.policyApplyAmount}">정책 비율/금액</th>
+                            <th th:text="#{admin.point.applyType}">적용 타입</th>
+                            <th th:text="#{admin.point.condition}">조건</th>
+                            <th th:text="#{admin.point.createdAt}">생성일</th>
+                            <th th:text="#{admin.point.updatedAt}">수정일</th>
+                            <th th:text="#{admin.point.status}">상태</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -34,33 +34,38 @@
                             th:classappend="${pointPolicy.pointPolicyState} ? '' : 'text-muted'">
                             <td th:text="${rowStat.index + 1}">1</td>
                             <td th:text="${pointPolicy.pointPolicyName}">Policy A</td>
-                            <td th:text="${pointPolicy.pointPolicyApply}">100.00</td>
-                            <td th:text="${pointPolicy.pointPolicyApplyType} ? '적립 금액' : '적립률'">Amount</td>
+                            <td th:if="${pointPolicy.pointPolicyApplyType}">
+                                <span th:text="${#numbers.formatInteger(pointPolicy.pointPolicyApply, 3, 'COMMA')} + '원'">100 원</span>
+                            </td>
+                            <td th:unless="${pointPolicy.pointPolicyApplyType}">
+                                <span th:text="${pointPolicy.pointPolicyApply + '%'}">10 %</span>
+                            </td>
+                            <td th:text="${pointPolicy.pointPolicyApplyType} ? #{admin.point.applyAmount} : #{admin.point.applyRate}">Amount</td>
                             <td th:text="${pointPolicy.pointPolicyCondition}">Condition 1</td>
                             <td th:text="${pointPolicy.pointPolicyCreatedAt}">2024-07-01</td>
                             <td th:text="${pointPolicy.pointPolicyUpdatedAt}">2024-07-01</td>
-                            <td th:text="${pointPolicy.pointPolicyState} ? '사용' : '삭제'">사용</td>
+                            <td th:text="${pointPolicy.pointPolicyState} ? #{admin.point.active} : #{admin.point.deleted}">사용</td>
                             <td>
                                 <button class="btn btn-primary btn-sm"
                                         data-bs-toggle="modal"
                                         data-bs-target="#editPointPolicyModal"
                                         th:attr="data-id=${pointPolicy.pointPolicyId}"
                                         th:disabled="${!pointPolicy.pointPolicyState}">
-                                    Edit
+                                    <span th:text="#{admin.point.edit}">Edit</span>
                                 </button>
                                 <button class="btn btn-danger btn-sm"
                                         data-bs-toggle="modal"
                                         data-bs-target="#deletePointPolicyModal"
                                         th:attr="data-id=${pointPolicy.pointPolicyId}"
                                         th:disabled="${!pointPolicy.pointPolicyState}">
-                                    Delete
+                                    <span th:text="#{admin.point.delete}">Delete</span>
                                 </button>
                             </td>
                         </tr>
                         </tbody>
                     </table>
                     <div th:if="${#lists.isEmpty(pointPolicies.content)}">
-                        <p>포인트 정책이 존재하지 않습니다.</p>
+                        <p th:text="#{admin.point.noPolicies}">포인트 정책이 존재하지 않습니다.</p>
                     </div>
                     <!-- Pagination -->
                     <div class="d-flex justify-content-center">
@@ -89,89 +94,87 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addPointPolicyModalLabel">포인트 정책 추가</h5>
+                    <h5 class="modal-title" id="addPointPolicyModalLabel" th:text="#{admin.point.addPolicyTitle}">포인트 정책 추가</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="/admin/point-policies" method="post">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="pointPolicyName" class="form-label">정책 이름</label>
+                            <label for="pointPolicyName" class="form-label" th:text="#{admin.point.policyName}">정책 이름</label>
                             <input type="text" class="form-control" id="pointPolicyName" name="pointPolicyName" required>
                         </div>
                         <div class="mb-3">
-                            <label for="pointPolicyApplyType" class="form-label">적용 타입</label>
+                            <label for="pointPolicyApplyType" class="form-label" th:text="#{admin.point.applyType}">적용 타입</label>
                             <select class="form-select" id="pointPolicyApplyType" name="pointPolicyApplyType" required>
-                                <option value="true">적립 금액</option>
-                                <option value="false">적립률</option>
+                                <option value="true" th:text="#{admin.point.applyAmount}">적립 금액</option>
+                                <option value="false" th:text="#{admin.point.applyRate}">적립률</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="pointPolicyConditionAmount" class="form-label">조건 최소 금액</label>
+                            <label for="pointPolicyConditionAmount" class="form-label" th:text="#{admin.point.minConditionAmount}">조건 최소 금액</label>
                             <input type="number" class="form-control" id="pointPolicyConditionAmount" name="pointPolicyConditionAmount" step="1" min="0" required>
                         </div>
                         <div class="mb-3">
-                            <label for="pointPolicyApply" class="form-label">정책 비율/금액</label>
+                            <label for="pointPolicyApply" class="form-label" th:text="#{admin.point.policyApplyAmount}">정책 비율/금액</label>
                             <input type="number" class="form-control" id="pointPolicyApply" name="pointPolicyApply" step="0.01" min="0" required pattern="^\d+(\.\d{1,2})?$" inputmode="numeric">
-                            <small id="pointPolicyApplyHelp" class="form-text text-muted">% 또는 금액 입력 (%는 소수점 두 자리까지 입력 가능)</small>
+                            <small id="pointPolicyApplyHelp" class="form-text text-muted" th:text="#{admin.point.policyApplyHelp}">% 또는 금액 입력 (%는 소수점 두 자리까지 입력 가능)</small>
                         </div>
                         <div class="mb-3">
-                            <label for="pointPolicyCondition" class="form-label">조건</label>
+                            <label for="pointPolicyCondition" class="form-label" th:text="#{admin.point.condition}">조건</label>
                             <input type="text" class="form-control" id="pointPolicyCondition" name="pointPolicyCondition" required>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                        <button type="submit" class="btn btn-primary">추가</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{admin.point.cancel}">취소</button>
+                        <button type="submit" class="btn btn-primary" th:text="#{admin.point.add}">추가</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-
     <!-- Edit Point Policy Modal -->
     <div class="modal fade" id="editPointPolicyModal" tabindex="-1" aria-labelledby="editPointPolicyModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editPointPolicyModalLabel">포인트 정책 수정</h5>
+                    <h5 class="modal-title" id="editPointPolicyModalLabel" th:text="#{admin.point.editPolicyTitle}">포인트 정책 수정</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="editPointPolicyId" name="pointPolicyId">
                     <div class="mb-3">
-                        <label for="editPointPolicyName" class="form-label">정책 이름</label>
+                        <label for="editPointPolicyName" class="form-label" th:text="#{admin.point.policyName}">정책 이름</label>
                         <input type="text" class="form-control" id="editPointPolicyName" name="pointPolicyName" required>
                     </div>
                     <div class="mb-3">
-                        <label for="editPointPolicyApplyType" class="form-label">적용 타입</label>
+                        <label for="editPointPolicyApplyType" class="form-label" th:text="#{admin.point.applyType}">적용 타입</label>
                         <select class="form-select" id="editPointPolicyApplyType" name="pointPolicyApplyType" required>
-                            <option value="true">적립 금액</option>
-                            <option value="false">적립률</option>
+                            <option value="true" th:text="#{admin.point.applyAmount}">적립 금액</option>
+                            <option value="false" th:text="#{admin.point.applyRate}">적립률</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="editPointPolicyConditionAmount" class="form-label">조건 최소 금액</label>
+                        <label for="editPointPolicyConditionAmount" class="form-label" th:text="#{admin.point.minConditionAmount}">조건 최소 금액</label>
                         <input type="number" class="form-control" id="editPointPolicyConditionAmount" name="pointPolicyConditionAmount" step="1" min="0" required>
                     </div>
                     <div class="mb-3">
-                        <label for="editPointPolicyApply" class="form-label">정책 비율/금액</label>
+                        <label for="editPointPolicyApply" class="form-label" th:text="#{admin.point.policyApplyAmount}">정책 비율/금액</label>
                         <input type="number" class="form-control" id="editPointPolicyApply" name="pointPolicyApply" step="0.01" min="0" required pattern="^\d+(\.\d{1,2})?$" inputmode="numeric">
-                        <small id="editPointPolicyApplyHelp" class="form-text text-muted">% 또는 금액 입력 (%는 소수점 두 자리까지 입력 가능)</small>
+                        <small id="editPointPolicyApplyHelp" class="form-text text-muted" th:text="#{admin.point.policyApplyHelp}">% 또는 금액 입력 (%는 소수점 두 자리까지 입력 가능)</small>
                     </div>
                     <div class="mb-3">
-                        <label for="editPointPolicyCondition" class="form-label">조건</label>
+                        <label for="editPointPolicyCondition" class="form-label" th:text="#{admin.point.condition}">조건</label>
                         <input type="text" class="form-control" id="editPointPolicyCondition" name="pointPolicyCondition" required>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                    <button type="button" class="btn btn-primary" id="editPointPolicyBtn">수정</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{admin.point.cancel}">취소</button>
+                    <button type="button" class="btn btn-primary" id="editPointPolicyBtn" th:text="#{admin.point.update}">수정</button>
                 </div>
             </div>
         </div>
     </div>
-
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -180,19 +183,29 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deletePointPolicyModalLabel">포인트 정책 삭제</h5>
+                    <h5 class="modal-title" id="deletePointPolicyModalLabel" th:text="#{admin.point.deletePolicyTitle}">포인트 정책 삭제</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <p>정말로 이 포인트 정책을 삭제하시겠습니까?</p>
-                </div>
+                <div class="modal-body"
+                     th:text="#{admin.point.deleteConfirmation}">정말로 이 포인트 정책을 삭제하시겠습니까?</div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                    <button type="button" class="btn btn-danger">삭제</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{admin.point.cancel}">취소</button>
+                    <button type="button" class="btn btn-danger" th:text="#{admin.point.delete}">삭제</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <script th:inline="javascript">
+
+        var messages = {
+            fetchGetError: [[#{admin.point.get.error}]],
+            validationErrorPointPolicyApply: [[#{admin.point.validation}]],
+            pointPolicyUpdateError: [[#{admin.point.put.error}]],
+            pointPolicyDeleteError: [[#{admin.point.delete.error}]]
+        };
+
+    </script>
 
     <script>
         document.getElementById('pointPolicyApplyType').addEventListener('change', function() {
@@ -243,7 +256,7 @@
                     })
                     .catch(error => {
                         console.error('Failed to fetch point policy:', error);
-                        alert('포인트 정책 정보를 불러오지 못했습니다. 다시 시도해주세요.');
+                        alert(messages.fetchGetError);
                     });
             });
         });
@@ -262,7 +275,7 @@
 
                 const decimalPattern = /^\d{1,8}(\.\d{1,2})?$/;
                 if (!decimalPattern.test(pointPolicyApply)) {
-                    alert('정책 비율/금액은 최대 8자리 정수와 최대 2자리 소수로 입력해야 합니다.');
+                    alert(messages.validationErrorPointPolicyApply);
                     return;
                 }
 
@@ -296,7 +309,7 @@
                     })
                     .catch(error => {
                         console.error('Failed to update point policy:', error);
-                        alert('포인트 정책 수정에 실패했습니다. 다시 시도해주세요.');
+                        alert(messages.pointPolicyUpdateError);
                     });
             });
     </script>
@@ -325,7 +338,8 @@
                         error: function (err) {
                             // Handle error if deletion fails
                             console.error('Failed to delete point policy:', err);
-                            alert('포인트 정책 삭제에 실패했습니다. 다시 시도해주세요.');
+                            // alert('포인트 정책 삭제에 실패했습니다. 다시 시도해주세요.');
+                            alert(messages.pointPolicyDeleteError);
                         }
                     });
                 });

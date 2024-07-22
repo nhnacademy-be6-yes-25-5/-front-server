@@ -105,7 +105,7 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
     private boolean isServletPathAndFeignExclude(String servletPath, String feignPath) {
         return (servletPath.equals("/") || servletPath.startsWith("/orders/none") || servletPath.startsWith("/category") || servletPath.startsWith("/search")
             || servletPath.startsWith("/sign-up") || servletPath.startsWith("/books") || servletPath.matches("/coupons") || servletPath.startsWith("/check-email")
-            || servletPath.startsWith("/auth/dormant")|| servletPath.startsWith("/users/sign-up") || servletPath.equals("/callback") || servletPath.startsWith("/users/find/password")
+            || servletPath.startsWith("/dormant")|| servletPath.startsWith("/users/sign-up") || servletPath.equals("/callback") || servletPath.startsWith("/users/find/password")
             || servletPath.startsWith("/detail") || servletPath.startsWith("/carts") || servletPath.startsWith("/auth/login")
         || feignPath.startsWith("/cart-books") || feignPath.startsWith("/shipping") || feignPath.startsWith("/takeout"));
     }

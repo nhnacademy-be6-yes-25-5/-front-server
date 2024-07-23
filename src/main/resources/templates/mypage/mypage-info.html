@@ -35,7 +35,7 @@
                                             </div>
                                             <div class="form-group input-group">
                                                 <label for="userBirth" th:text="#{user.birthDate}">생일</label>
-                                                <input class="form-control" type="date" id="userBirth" name="userBirth" th:value="${#temporals.format(user.userBirth, 'yyyy-MM-dd')}">
+                                                <input class="form-control" type="date" id="userBirth" name="userBirth" th:value="${#temporals.format(user.userBirth, 'yyyy-MM-dd')}" required>
                                             </div>
                                             <div class="form-group input-group">
                                                 <label for="userPassword" th:text="#{user.currentPassword}">현재 비밀번호</label>
@@ -70,6 +70,7 @@
         var messages = {
             passwordMatch: [[#{register.message.passwordMatch}]],
             passwordMismatch: [[#{register.message.passwordMismatch}]],
+            passwordInvalid: [[#{register.message.passwordInvalid}]],
             userInfoUpdateSuccess: [[#{user.put.success}]],
             userInfoUpdateError: [[#{user.put.error}]]
         };
@@ -97,6 +98,18 @@
             }).catch(error => {
                 console.error('Error:', error);
             });
+        });
+
+        const birthInput = document.getElementById('userBirth');
+
+        birthInput.addEventListener('input', function(e) {
+            let inputDate = new Date(e.target.value);
+            let inputYear = inputDate.getFullYear();
+
+            // 생년월일 년도가 10000 단위면 초기화
+            if (inputYear >= 10000) {
+                e.target.value = '';
+            }
         });
 
         // 전화번호 입력 필드 포맷팅 함수
@@ -127,7 +140,22 @@
         const pwConfirmElement = document.getElementById('pwConfirm');
         const setPasswordBtn = document.getElementById('update-btn');
 
+        const regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+
         function pwCheck() {
+            if (newPasswordInput.value === '' && confirmPasswordInput.value === '') {
+                setPasswordBtn.disabled = false;
+                pwConfirmElement.textContent = '';
+                return;
+            }
+
+            if (!regex.test(newPasswordInput.value)) {
+                pwConfirmElement.textContent = messages.passwordInvalid;
+                pwConfirmElement.style.color = 'red';
+                setPasswordBtn.disabled = true;
+                return;
+            }
+
             if (newPasswordInput.value === confirmPasswordInput.value) {
                 pwConfirmElement.textContent = messages.passwordMatch;
                 pwConfirmElement.style.color = 'green';

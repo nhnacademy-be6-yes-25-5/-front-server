@@ -43,17 +43,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse signUp(CreateUserRequest userRequest) {
 
-        return userAdaptor.signUp(userRequest);
+        return userAdaptor.signUp(userRequest).getBody();
     }
 
     @Override
     public UserResponse findByUser() {
-        return userAdaptor.findByUserId();
+        return userAdaptor.findByUserId().getBody();
     }
 
     @Override
     public UpdateUserResponse updateUser(UpdateUserRequest userRequest) {
-        return userAdaptor.updateUser(userRequest);
+        return userAdaptor.updateUser(userRequest).getBody();
     }
 
     @Override
@@ -68,12 +68,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserGradeResponse getUserGrade() {
-        return userAdaptor.getUserGrade();
+        return userAdaptor.getUserGrade().getBody();
     }
 
     @Override
     public Page<PointLogResponse> getPointLogs(Pageable pageable) {
-        return userAdaptor.getUserPointLogs(pageable);
+        return userAdaptor.getUserPointLogs(pageable).getBody();
     }
 
     public ReadUserInfoResponse getUserPointsAndGrade() {
@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean isEmailDuplicate(String email) {
-        return userAdaptor.checkEmail(email);
+        return userAdaptor.checkEmail(email).getBody();
     }
 
     @Override
@@ -113,13 +113,13 @@ public class UserServiceImpl implements UserService {
         return new PageImpl<>(pagedAddresses, pageable, addresses.size());
     }
 
-    public List<FindUserResponse> findAllUserEmailByUserNameByUserPhone(String name, String phone, Pageable pageable) {
+    public List<FindUserResponse> findAllUserEmailByUserNameByUserPhone(String name, String phone) {
         try {
             FindEmailRequest request = FindEmailRequest.builder()
                     .name(name)
                     .phone(phone)
                     .build();
-            return userAdaptor.findByEmail(request, pageable);
+            return userAdaptor.findByEmail(request).getBody();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -129,12 +129,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<CouponBoxResponse> getStateCouponBox(String couponState, Pageable pageable) {
-        return userAdaptor.getStateCouponBox(couponState, pageable);
+        return userAdaptor.getStateCouponBox(couponState, pageable).getBody();
     }
 
     @Override
     public Page<UserAddressResponse> getAllUserAddresses(Pageable pageable) {
-        return userAdaptor.findAllUserAddresses(pageable);
+        return userAdaptor.findAllUserAddresses(pageable).getBody();
     }
 
     @Override
@@ -144,17 +144,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CreateUserAddressResponse createUserAddresses(CreateUserAddressRequest userRequest) {
-        return userAdaptor.createUserAddress(userRequest);
+        return userAdaptor.createUserAddress(userRequest).getBody();
     }
 
     @Override
     public UpdateUserAddressResponse updateUserAddress(Long userAddressId, UpdateUserAddressRequest userRequest) {
-        return userAdaptor.updateUserAddress(userAddressId, userRequest);
+        return userAdaptor.updateUserAddress(userAddressId, userRequest).getBody();
     }
 
     @Override
     public UserAddressResponse findUserAddressById(Long userAddressId) {
-        return userAdaptor.findUserAddressById(userAddressId);
+        return userAdaptor.findUserAddressById(userAddressId).getBody();
     }
 
     @Override
@@ -164,12 +164,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PointResponse getPoints() {
-        return userAdaptor.getPoints();
+        return userAdaptor.getPoints().getBody();
     }
 
     @Override
-    public boolean findUserPasswordByEmailByName(FindPasswordRequest request) {
-        return userAdaptor.findUserPasswordByEmailByName(request);
+    public Boolean findUserPasswordByEmailByName(FindPasswordRequest request) {
+        return userAdaptor.findUserPasswordByEmailByName(request).getBody();
     }
 
 //    @Override

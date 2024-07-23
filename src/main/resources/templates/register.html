@@ -98,6 +98,9 @@
             emailCheckError: [[#{register.message.emailCheckError}]],
             passwordMatch: [[#{register.message.passwordMatch}]],
             passwordMismatch: [[#{register.message.passwordMismatch}]],
+            phoneInvalid: [[#{register.message.phoneInvalid}]],
+            phoneFormat: [[#{register.message.phoneFormat}]],
+            passwordInvalid : [[#{register.message.passwordInvalid}]],
             registrationSuccess: [[#{register.modal.registrationSuccess}]],
             registrationSuccessMessage: [[#{register.modal.registrationSuccessMessage}]],
             goToCoupons: [[#{register.button.goToCoupons}]],
@@ -161,6 +164,18 @@
 
     <!-- 인라인 JavaScript -->
     <script>
+        const birthInput = document.getElementById('userBirth');
+
+        birthInput.addEventListener('input', function(e) {
+            let inputDate = new Date(e.target.value);
+            let inputYear = inputDate.getFullYear();
+
+            // 생년월일 년도가 10000 단위면 초기화
+            if (inputYear >= 10000) {
+                e.target.value = '';
+            }
+        });
+
         const phoneInput = document.getElementById('userPhone');
 
         phoneInput.addEventListener('input', function(e) {
@@ -180,6 +195,16 @@
             e.target.value = formatted;
         });
 
+        phoneInput.addEventListener('change', function(e) {
+            let input = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+
+            if (!input.startsWith('010') || input.length !== 11) {
+                alert(messages.phoneInvalid + '\n' + messages.phoneFormat);
+                e.target.value = '';
+                phoneInput.focus();
+            }
+        });
+
         // 비밀번호 확인하는 JS
         const userPasswordInput = document.getElementById('userPassword');
         const userConfirmPasswordInput = document.getElementById('userConfirmPassword');
@@ -187,7 +212,16 @@
         const registerButton = document.getElementById('register-btn');
         const registerForm = document.getElementById('registerForm');
 
+        const regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+
+
         function checkPassword() {
+            if (!regex.test(userPasswordInput.value)) {
+                pwConfirmElement.textContent = messages.passwordInvalid;
+                pwConfirmElement.style.color = 'red';
+                return;
+            }
+
             if (userPasswordInput.value === userConfirmPasswordInput.value) {
                 pwConfirmElement.textContent = messages.passwordMatch;
                 pwConfirmElement.style.color = 'green';
@@ -198,6 +232,12 @@
                 registerButton.disabled = true;
             }
         }
+
+        document.getElementById('userPassword').addEventListener('input', function() {
+            if (userConfirmPasswordInput !== null) {
+                registerButton.disabled = true;
+        }
+        });
 
         userConfirmPasswordInput.addEventListener('keyup', checkPassword);
 

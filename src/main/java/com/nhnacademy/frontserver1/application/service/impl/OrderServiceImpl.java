@@ -1,8 +1,5 @@
 package com.nhnacademy.frontserver1.application.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.frontserver1.application.service.OrderService;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.AddressAdaptor;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.OrderAdaptor;
@@ -14,7 +11,6 @@ import com.nhnacademy.frontserver1.presentation.dto.request.order.ReadOrderNoneM
 import com.nhnacademy.frontserver1.presentation.dto.request.order.UpdateOrderRequest;
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.ReadAvailableUserCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.CreateOrderResponse;
-import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadCartBookResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMaximumDiscountCouponResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadMyOrderHistoryResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.order.ReadOrderDeliveryInfoResponse;
@@ -146,8 +142,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<ReadAvailableUserCouponResponse> getUserCoupons(Long bookId,
         List<Long> categoryIds) {
-        List<ReadUserCouponResponse> userCoupons = userCouponAdaptor.getAllUserCoupons();
+        List<ReadUserCouponResponse> userCoupons = userCouponAdaptor.getAllUserCoupons().getBody();
 
+        assert userCoupons != null;
         return userCoupons.stream()
             .map(coupon -> {
                 boolean isAvailable = coupon.applyCouponToAllBooks();

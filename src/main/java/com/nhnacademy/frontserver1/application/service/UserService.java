@@ -33,13 +33,13 @@ public interface UserService {
 
     ReadUserInfoResponse getUserPointsAndGrade();
 
-    List<FindUserResponse> findAllUserEmailByUserNameByUserPhone(String name, String phone, Pageable pageable);
+    List<FindUserResponse> findAllUserEmailByUserNameByUserPhone(String name, String phone);
 
     Boolean isEmailDuplicate(String email);
 
     Page<CouponBoxResponse> getStateCouponBox(String couponState, Pageable pageable);
 
-    boolean findUserPasswordByEmailByName(FindPasswordRequest request);
+    Boolean findUserPasswordByEmailByName(FindPasswordRequest request);
 
    // boolean setUserPasswordByEmail(String email, UpdatePasswordRequest request);
 

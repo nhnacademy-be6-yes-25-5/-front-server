@@ -207,15 +207,13 @@ public class UserController {
     }
 
     @PostMapping("/users/find-email")
-    public String findEmail(@RequestParam String name, @RequestParam String phone, Pageable pageable, Model model) {
+    public String findEmail(@RequestParam String name, @RequestParam String phone, Model model) {
         try{
-            List<FindUserResponse> emails = userService.findAllUserEmailByUserNameByUserPhone(name, phone, pageable);
+            List<FindUserResponse> emails = userService.findAllUserEmailByUserNameByUserPhone(name, phone);
 
 
             model.addAttribute("name", name);
             model.addAttribute("phone", phone);
-            model.addAttribute("pageable", pageable);  // 추가된 부분
-            //model.addAttribute("pageable" pageable);
 
             if (emails.isEmpty()) {
                 return "findMail/find-mail-fail";

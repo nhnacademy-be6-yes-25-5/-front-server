@@ -7,11 +7,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-12">
+                    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
                     <form class="card login-form" method="post">
                         <div class="card-body">
                             <div class="title">
-                                <h3>Login Now</h3>
-                                <p>You can login using your social media account or email address.</p>
+                                <h3 th:text="#{login.title}">Login Now</h3>
+                                <p th:text="#{login.subtitle}">You can login using your social media account or email address.</p>
                             </div>
                             <div class="social-login">
                                 <div class="row">
@@ -27,28 +28,30 @@
                             </div>
                             <form action="/auth/login" method="post">
                                 <div class="form-group input-group">
-                                    <label for="reg-fn">Email</label>
+                                    <label for="reg-fn" th:text="#{login.email}">Email</label>
                                     <input class="form-control" type="email" id="reg-email" name="email" required>
                                 </div>
                                 <div class="form-group input-group">
-                                    <label for="reg-fn">Password</label>
+                                    <label for="reg-fn" th:text="#{login.password}">Password</label>
                                     <input class="form-control" type="password" id="reg-pass" name="password" required>
                                 </div>
                                 <div class="d-flex flex-wrap justify-content-between bottom-content">
                                     <div class="form-check">
                                         <input type="checkbox" class="form-check-input width-auto" id="exampleCheck1">
-                                        <label class="form-check-label">Remember me</label>
+                                        <label class="form-check-label" th:text="#{login.rememberMe}">Remember me</label>
                                     </div>
                                     <div class="justify-content-end">
-                                        <a class="lost-pass" th:href="@{/find-mail}">Forgot email?</a>
-                                        <a class="lost-pass" th:href="@{/find-password}">Forgot password?</a>
+                                        <a class="lost-pass" th:href="@{/find-mail}" th:text="#{login.forgotEmail}">Forgot email?</a>
+                                        <a class="lost-pass" th:href="@{/find-password}" th:text="#{login.forgotPassword}">Forgot password?</a>
                                     </div>
                                 </div>
                                 <div class="button">
-                                    <button class="btn" type="submit">Login</button>
+                                    <button class="btn" type="submit" th:text="#{login.loginButton}">Login</button>
                                 </div>
                             </form>
-                            <p class="outer-link">Don't have an account? <a href="register.html">Register here </a>
+                            <p class="outer-link">
+                                <span th:text="#{login.noAccount}">Don't have an account?</span>
+                                <a href="/sign-up" th:text="#{login.registerHere}">Register here </a>
                             </p>
                         </div>
                     </form>

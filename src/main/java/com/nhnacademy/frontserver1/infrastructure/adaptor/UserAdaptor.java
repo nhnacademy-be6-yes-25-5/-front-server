@@ -23,13 +23,13 @@ import java.util.List;
 public interface UserAdaptor {
 
     @PostMapping("/sign-up")
-    UserResponse signUp(@RequestBody CreateUserRequest userRequest);
+    ResponseEntity<UserResponse> signUp(@RequestBody CreateUserRequest userRequest);
 
     @GetMapping("/info")
-    UserResponse findByUserId();
+    ResponseEntity<UserResponse> findByUserId();
 
     @PutMapping("/info")
-    UpdateUserResponse updateUser(@RequestBody UpdateUserRequest userRequest);
+    ResponseEntity<UpdateUserResponse> updateUser(@RequestBody UpdateUserRequest userRequest);
 
     @DeleteMapping("/delete")
     void deleteUser(@RequestBody DeleteUserRequest userRequest);
@@ -47,44 +47,44 @@ public interface UserAdaptor {
     ResponseEntity<ReadUserInfoResponse> getUserPointsAndGrade();
 
     @GetMapping("/grades")
-    UserGradeResponse getUserGrade();
+    ResponseEntity<UserGradeResponse> getUserGrade();
 
     @GetMapping("/point-logs")
-    Page<PointLogResponse> getUserPointLogs(Pageable pageable);
+    ResponseEntity<Page<PointLogResponse>> getUserPointLogs(Pageable pageable);
 
 
-    @PostMapping("find/email")
-    List<FindUserResponse> findByEmail(@RequestBody FindEmailRequest emailRequest, @RequestParam Pageable pageable);
+    @PostMapping("/find/email")
+    ResponseEntity<List<FindUserResponse>> findByEmail(@RequestBody FindEmailRequest emailRequest);
 
     @GetMapping("/check-email")
-    Boolean checkEmail(@RequestParam String email);
+    ResponseEntity<Boolean> checkEmail(@RequestParam String email);
 
     @GetMapping("/coupons/state")
-    Page<CouponBoxResponse> getStateCouponBox(@RequestParam String couponState, Pageable pageable);
+    ResponseEntity<Page<CouponBoxResponse>> getStateCouponBox(@RequestParam String couponState, Pageable pageable);
 
     @PostMapping("/find/password")
-    boolean findUserPasswordByEmailByName(@RequestBody FindPasswordRequest request);
+    ResponseEntity<Boolean> findUserPasswordByEmailByName(@RequestBody FindPasswordRequest request);
 
     @GetMapping("/user-addresses")
-    Page<UserAddressResponse> findAllUserAddresses(Pageable pageable);
+    ResponseEntity<Page<UserAddressResponse>> findAllUserAddresses(Pageable pageable);
 
     @PutMapping("/user-addresses/{userAddressId}/based")
     void updateAddressBased(@PathVariable Long userAddressId, @RequestBody UpdateAddressBasedRequest request);
 
     @PostMapping("/user-addresses")
-    CreateUserAddressResponse createUserAddress(@RequestBody CreateUserAddressRequest userAddressRequest);
+    ResponseEntity<CreateUserAddressResponse> createUserAddress(@RequestBody CreateUserAddressRequest userAddressRequest);
 
     @PutMapping("/user-addresses/{userAddressId}")
-    UpdateUserAddressResponse updateUserAddress(@PathVariable Long userAddressId, @RequestBody UpdateUserAddressRequest userAddressRequest);
+    ResponseEntity<UpdateUserAddressResponse> updateUserAddress(@PathVariable Long userAddressId, @RequestBody UpdateUserAddressRequest userAddressRequest);
 
     @GetMapping("/user-addresses/{userAddressId}")
-    UserAddressResponse findUserAddressById(@PathVariable Long userAddressId);
+    ResponseEntity<UserAddressResponse> findUserAddressById(@PathVariable Long userAddressId);
 
     @DeleteMapping("/user-addresses/{userAddressId}")
     void deleteUserAddress(@PathVariable Long userAddressId);
 
     @GetMapping("/points")
-    PointResponse getPoints();
+    ResponseEntity<PointResponse> getPoints();
 
 //    @PutMapping("/update-password")
 //    UpdatePasswordResponse updatePassword(UpdatePasswordRequest request);
@@ -94,5 +94,5 @@ public interface UserAdaptor {
 //    @PutMapping("/update-password/{email}")
 //    void updatePassword(@PathVariable("email") String email, @RequestBody UpdatePasswordRequest request);
     @PutMapping("/update-password/{email}")
-    UpdatePasswordResponse updatePassword(@PathVariable("email") String email, @RequestBody UpdatePasswordRequest request);
+    ResponseEntity<UpdatePasswordResponse> updatePassword(@PathVariable("email") String email, @RequestBody UpdatePasswordRequest request);
 }

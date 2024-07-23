@@ -20,7 +20,7 @@
 <body class="sb-nav-fixed">
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <!-- Navbar Brand-->
-    <a class="navbar-brand ps-3" href="#">
+    <a class="navbar-brand ps-3" href="/admin/orders">
         <img src="/images/logo/white-logo.svg" alt="#">
     </a>
     <!-- Sidebar Toggle-->
@@ -28,10 +28,14 @@
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#!">Settings</a></li>
-                <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                <li><a class="dropdown-item" href="/" th:text="#{sidebar.admin.home}">Home</a></li>
+<!--                <li><a class="dropdown-item" href="#!">Settings</a></li>-->
+<!--                <li><a class="dropdown-item" href="#!">Activity Log</a></li>-->
                 <li><hr class="dropdown-divider" /></li>
-                <li><a class="dropdown-item" href="#!">Logout</a></li>
+                <li><a class="dropdown-item" href="?lang=ko">한국어</a></li>
+                <li><a class="dropdown-item" href="?lang=en">English</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item" href="/logout" th:text="#{sidebar.admin.logout}">Logout</a></li>
             </ul>
         </li>
     </ul>
@@ -41,27 +45,27 @@
         <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
             <div class="sb-sidenav-menu">
                 <div class="nav">
-                    <div class="sb-sidenav-menu-heading">Home</div>
+                    <div class="sb-sidenav-menu-heading" th:text="#{sidebar.admin.home}">Home</div>
                     <a class="nav-link" href="#">
                         <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                        Dashboard
+                        <span th:text="#{sidebar.admin.dashboard}">Dashboard</span>
                     </a>
-                    <div class="sb-sidenav-menu-heading">Menu</div>
+                    <div class="sb-sidenav-menu-heading" th:text="#{sidebar.admin.menu}">Menu</div>
 
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#productManagementMenu" aria-expanded="false" aria-controls="productManagementMenu">
                         <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                        상품 관리
+                        <span th:text="#{sidebar.admin.productManagement}">상품 관리</span>
                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                     </a>
                     <div class="collapse" id="productManagementMenu" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages3">
-                            <a class="nav-link" href="/admin/product">
+                            <a class="nav-link" href="/admin/product" th:text="#{sidebar.admin.bookManagement}">
                                 도서 관리
                             </a>
-                            <a class="nav-link" href="/admin/category">
+                            <a class="nav-link" href="/admin/category" th:text="#{sidebar.admin.categoryManagement}">
                                 카테고리 관리
                             </a>
-                            <a class="nav-link" href="/admin/tag">
+                            <a class="nav-link" href="/admin/tag" th:text="#{sidebar.admin.tagManagement}">
                                 태그 관리
                             </a>
                         </nav>
@@ -69,30 +73,30 @@
 
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                         <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                        정책 변경
+                        <span th:text="#{sidebar.admin.policyChanges}">정책 변경</span>
                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                     </a>
                     <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages2">
-                            <a class="nav-link collapsed" href="/admin/point-policies">
+                            <a class="nav-link collapsed" href="/admin/point-policies" th:text="#{sidebar.admin.pointPolicies}">
                                 포인트 정책
                             </a>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError" th:text="#{sidebar.admin.shippingPolicies}">
                                 배송비 정책
                             </a>
                             <a class="nav-link collapsed" href="#" id="policyLink" data-bs-toggle="collapse"
                                data-bs-target="#pagesCollapseAuth2" aria-expanded="false" aria-controls="pagesCollapseAuth2">
-                                쿠폰 정책
+                                <span th:text="#{sidebar.admin.couponPolicies}">쿠폰 정책</span>
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="pagesCollapseAuth2" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordionPages2">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="/coupons/policy">쿠폰 정책</a>
-                                    <a class="nav-link" href="/coupons/policy/categories">카테고리 쿠폰 정책</a>
-                                    <a class="nav-link" href="/coupons/policy/books">도서 쿠폰 정책</a>
+                                    <a class="nav-link" href="/coupons/policy" th:text="#{sidebar.admin.couponPolicy}">쿠폰 정책</a>
+                                    <a class="nav-link" href="/coupons/policy/categories" th:text="#{sidebar.admin.categoryCouponPolicy}">카테고리 쿠폰 정책</a>
+                                    <a class="nav-link" href="/coupons/policy/books" th:text="#{sidebar.admin.bookCouponPolicy}">도서 쿠폰 정책</a>
                                 </nav>
                             </div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError" th:text="#{sidebar.admin.memberPolicies}">
                                 회원 정책
                             </a>
                         </nav>
@@ -100,18 +104,18 @@
 
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#orderManagementMenu" aria-expanded="false" aria-controls="orderManagementMenu">
                         <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                        회원 주문 관리
+                        <span th:text="#{sidebar.admin.memberOrderManagement}">회원 주문 관리</span>
                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                     </a>
                     <div class="collapse" id="orderManagementMenu" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                            <a class="nav-link" href="/admin/orders">
+                            <a class="nav-link" href="/admin/orders" th:text="#{sidebar.admin.orderStatusManagement}">
                                 주문 상태 관리
                             </a>
-                            <a class="nav-link" href="/admin/orders/cancel">
+                            <a class="nav-link" href="/admin/orders/cancel" th:text="#{sidebar.admin.cancelStatusManagement}">
                                 취소 상태 관리
                             </a>
-                            <a class="nav-link" href="/admin/orders/refund">
+                            <a class="nav-link" href="/admin/orders/refund" th:text="#{sidebar.admin.refundStatusManagement}">
                                 환불 상태 관리
                             </a>
                         </nav>

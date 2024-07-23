@@ -35,13 +35,13 @@ public interface UserAdaptor {
     void deleteUser(@RequestBody DeleteUserRequest userRequest);
 
     @GetMapping("/orders/info")
-    ReadOrderUserInfoResponse getUserInfo();
+    ResponseEntity<ReadOrderUserInfoResponse> getUserInfo();
 
     @PostMapping("/coupons/claim")
     ResponseEntity<Void> claimCoupon(@RequestParam Long couponId);
 
     @GetMapping("/pure-price")
-    ReadPurePriceResponse getPurePrice();
+    ResponseEntity<ReadPurePriceResponse> getPurePrice();
 
     @GetMapping("/grade")
     ResponseEntity<ReadUserInfoResponse> getUserPointsAndGrade();

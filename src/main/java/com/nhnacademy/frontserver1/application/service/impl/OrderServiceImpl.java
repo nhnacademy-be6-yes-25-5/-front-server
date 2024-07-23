@@ -86,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ReadOrderUserInfoResponse getUserInfo(HttpServletRequest request) {
         if (hasTokenCookie(request)) {
-            return userAdaptor.getUserInfo();
+            return userAdaptor.getUserInfo().getBody();
         }
 
         return ReadOrderUserInfoResponse.fromNoneMember();
@@ -118,7 +118,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public ReadPurePriceResponse getPurePrice() {
-        return userAdaptor.getPurePrice();
+        return userAdaptor.getPurePrice().getBody();
     }
 
     @Override

@@ -70,7 +70,7 @@ public class GlobalControllerAdvice {
 
         // 로그아웃 후 리다이렉트
         RedirectView redirectView = new RedirectView("/auth/error");
-        redirectView.addStaticAttribute("cause", e.getErrorStatus().message());
+        redirectView.addStaticAttribute("cause", "인증 정보가 만료되었습니다.");
         return new ModelAndView(redirectView);
     }
 

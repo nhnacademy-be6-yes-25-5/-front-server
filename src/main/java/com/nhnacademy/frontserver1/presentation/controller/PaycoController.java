@@ -43,9 +43,6 @@ public class PaycoController {
     @Value("${provider.payco.authorization-uri}")
     private String authorizationUri;
 
-    @Value("${main.host}")
-    private String mainHost;
-
     @GetMapping("auth/login/payco")
     public RedirectView requestPaycoAuth() throws UnsupportedEncodingException {
 
@@ -101,7 +98,7 @@ public class PaycoController {
 
         request.getSession().removeAttribute("paycoInfo");
 
-        return "redirect:"+mainHost+"/";
+        return "redirect:"+"/";
     }
 
 

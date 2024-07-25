@@ -32,7 +32,7 @@
             </ul>
           </div>
           <div class="btn-group">
-            <button class="btn btn-secondary btn-custom" th:data-order-id="${order.orderId}" onclick="location.href='/orders/' + this.getAttribute('data-order-id') + '/delivery'">배송조회</button>
+            <button class="btn btn-secondary btn-custom" th:data-order-id="${order.orderId}" onclick="location.href='/mypage/orders/' + this.getAttribute('data-order-id') + '/delivery'">배송조회</button>
             <button class="btn btn-outline-secondary btn-custom" onclick="location.href='/reviews'">리뷰 작성하기</button>
             <button class="btn btn-warning btn-custom" th:if="${order.orderStatusType.name == 'DONE'}" th:disabled="${noneMember != null}" onclick="changeOrderStatus('RETURN')">반품</button>
             <button class="btn btn-danger btn-custom" th:if="${order.orderStatusType.name == 'WAIT'}" th:disabled="${noneMember != null}" onclick="changeOrderStatus('CANCEL')">결제취소</button>

@@ -26,14 +26,16 @@
                 <p>
                   <strong>물품 이름:</strong> <span th:text="${book}">도서 이름</span><br>
                   <strong>개수:</strong> <span th:text="${order.quantities.get(iterStat.index)}">개수</span><br>
-                  <strong>가격:</strong> <span th:text="${order.bookPrices.get(iterStat.index)}">가격</span>
+                  <strong>가격:</strong> <span th:text="${order.bookPrices.get(iterStat.index)}">가격</span><br>
+                  <br/>
+                  <button class="btn btn-outline-secondary btn-custom" th:data-book-id="${order.bookIds.get(iterStat.index)}" onclick="location.href='/detail/' + this.getAttribute('data-book-id') + '#review-section'">리뷰 작성하기</button>
                 </p>
               </li>
             </ul>
           </div>
+          <br/>
           <div class="btn-group">
             <button class="btn btn-secondary btn-custom" th:data-order-id="${order.orderId}" onclick="location.href='/mypage/orders/' + this.getAttribute('data-order-id') + '/delivery'">배송조회</button>
-            <button class="btn btn-outline-secondary btn-custom" onclick="location.href='/reviews'">리뷰 작성하기</button>
             <button class="btn btn-warning btn-custom" th:if="${order.orderStatusType.name == 'DONE'}" th:disabled="${noneMember != null}" onclick="changeOrderStatus('RETURN')">반품</button>
             <button class="btn btn-danger btn-custom" th:if="${order.orderStatusType.name == 'WAIT'}" th:disabled="${noneMember != null}" onclick="changeOrderStatus('CANCEL')">결제취소</button>
             <button class="btn btn-info btn-custom" th:if="${order.orderStatusType.name == 'RETURN' }" th:disabled="${noneMember != null} or ${order.cancelStatus.name != 'NONE'}" onclick="changeOrderStatus('REFUND')">환불 요청</button>
@@ -81,7 +83,6 @@
     function changeOrderStatus(status) {
       const orderId = document.getElementById('orderId').value;
       const paymentProvider = document.getElementById('paymentProvider').value;
-
 
       fetch('/orders/' + orderId, {
         method: 'PUT',

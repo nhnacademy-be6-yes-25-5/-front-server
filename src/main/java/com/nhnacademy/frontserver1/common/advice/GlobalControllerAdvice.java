@@ -84,8 +84,7 @@ public class GlobalControllerAdvice {
     @ExceptionHandler({TokenCookieMissingException.class})
     public ModelAndView handleTokenCookieMissingException(TokenCookieMissingException e) {
 
-        RedirectView redirectView = new RedirectView("/auth/error");
-        redirectView.addStaticAttribute("cause", e.getErrorStatus().message());
+        RedirectView redirectView = new RedirectView("/auth/login");
         return new ModelAndView(redirectView);
     }
 

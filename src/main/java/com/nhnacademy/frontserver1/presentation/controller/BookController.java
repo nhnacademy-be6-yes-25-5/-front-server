@@ -3,7 +3,6 @@ package com.nhnacademy.frontserver1.presentation.controller;
 import com.nhnacademy.frontserver1.application.service.BookService;
 import com.nhnacademy.frontserver1.application.service.CategoryService;
 import com.nhnacademy.frontserver1.application.service.CouponService;
-import com.nhnacademy.frontserver1.common.exception.BookException;
 import com.nhnacademy.frontserver1.common.exception.LikesNotLoginException;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.CategoryResponse;
 import com.nhnacademy.frontserver1.infrastructure.adaptor.LikesAdapter;

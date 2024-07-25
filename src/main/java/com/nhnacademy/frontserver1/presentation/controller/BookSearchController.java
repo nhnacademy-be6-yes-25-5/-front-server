@@ -5,6 +5,7 @@ import com.nhnacademy.frontserver1.infrastructure.adaptor.BookSearchAdaptor;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.BookIndexResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.book.CategoryResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class BookSearchController {
 
     private final BookSearchAdaptor bookSearchAdaptor;
@@ -29,6 +31,7 @@ public class BookSearchController {
         List<CategoryResponse> rootCategories = categoryService.findRootCategories();
 
         Page<BookIndexResponse> bookIndexList = getBookIndexPage(pageable, option, keyword, sortString);
+        log.info("bookIndexList : {}", bookIndexList.stream().toList());
 
         int nowPage = bookIndexList.getNumber();
         int startPage = Math.max(nowPage - 4, 0);

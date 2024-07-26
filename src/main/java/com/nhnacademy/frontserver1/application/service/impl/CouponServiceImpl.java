@@ -125,7 +125,7 @@ public class CouponServiceImpl implements CouponService {
     }
 
     public List<BookDetailCouponResponseDTO> getCoupons(Long bookId, List<Long> categoryIds) {
-        return couponAdaptor.getCouponsByBookIdAndCategoryIds(bookId, categoryIds);
+        return couponAdaptor.getCouponsByBookIdAndCategoryIds(bookId, categoryIds).getBody();
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicy
 import com.nhnacademy.frontserver1.presentation.dto.response.coupon.CouponPolicyResponseDTO;
 import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +37,7 @@ public interface CouponAdaptor {
     CouponPolicyCategoryResponseDTO create(@RequestBody CouponPolicyCategoryRequestDTO requestDTO);
 
     @GetMapping
-    List<BookDetailCouponResponseDTO> getCouponsByBookIdAndCategoryIds(@RequestParam("bookId") Long bookId, @RequestParam("categoryIds") List<Long> categoryIds);
+    ResponseEntity<List<BookDetailCouponResponseDTO>> getCouponsByBookIdAndCategoryIds(@RequestParam("bookId") Long bookId, @RequestParam("categoryIds") List<Long> categoryIds);
 
 //    @GetMapping("/user-coupons/user")
 //    List<CouponUserListResponseDTO> findUserCoupons(@RequestParam("userId") Long userId);

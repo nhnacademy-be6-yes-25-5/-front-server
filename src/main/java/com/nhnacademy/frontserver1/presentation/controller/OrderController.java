@@ -52,7 +52,7 @@ public class OrderController {
     public String findAllCheckout(Model model, Pageable pageable, HttpServletRequest request) {
         String cartId = getCartIdFromCookie(request);
         String orderId = UUID.randomUUID().toString();
-        List<ReadCartBookResponse> cartBookResponses = cartService.getCarts(cartId);
+        List<ReadCartBookResponse> cartBookResponses = cartService.getCartsWithOrder(cartId);
         ReadOrderUserInfoResponse orderUserInfoResponse = orderService.getUserInfo(request);
         Integer totalAmount = getTotalAmount(cartBookResponses);
 

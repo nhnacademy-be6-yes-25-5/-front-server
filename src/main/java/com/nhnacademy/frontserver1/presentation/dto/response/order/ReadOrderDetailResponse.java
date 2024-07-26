@@ -34,6 +34,7 @@ public record ReadOrderDetailResponse(String orderId,
                                       List<Integer> quantities,
                                       List<BigDecimal> bookPrices,
                                       CancelStatus cancelStatus,
-                                      PaymentProvider paymentProvider) {
+                                      PaymentProvider paymentProvider,
+                                      List<Long> bookIds) {
 
 }

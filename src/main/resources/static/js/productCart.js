@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
       })
       .then(data => {
         alert('장바구니에 성공적으로 추가되었습니다.');
+        location.reload();
       })
       .catch(error => {
         handleError(error);

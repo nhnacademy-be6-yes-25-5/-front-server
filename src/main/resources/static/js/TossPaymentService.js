@@ -13,13 +13,12 @@ class TossPaymentService extends PaymentService {
       orderId: orderId,
       orderName: orderId,
       customerName: customerKey,
-      paymentProvider : paymentProvider,
       successUrl: window.location.origin + "/payments/success?paymentProvider=" + paymentProvider,
       failUrl: window.location.origin + "/payments/fail",
     });
   }
 
-  confirmPayment(paymentKey, orderId, amount) {
+confirmPayment(paymentKey, orderId, amount) {
     return fetch("/payments/confirm", {
       method: "POST",
       headers: {

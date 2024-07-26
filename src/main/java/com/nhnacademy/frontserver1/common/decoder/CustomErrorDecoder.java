@@ -1,6 +1,15 @@
 package com.nhnacademy.frontserver1.common.decoder;
 
-import com.nhnacademy.frontserver1.common.exception.*;
+import com.nhnacademy.frontserver1.common.exception.BookException;
+import com.nhnacademy.frontserver1.common.exception.ConnectionException;
+import com.nhnacademy.frontserver1.common.exception.DormantAccountException;
+import com.nhnacademy.frontserver1.common.exception.ExpireRefreshJwtException;
+import com.nhnacademy.frontserver1.common.exception.FeignClientException;
+import com.nhnacademy.frontserver1.common.exception.LikesNotLoginException;
+import com.nhnacademy.frontserver1.common.exception.LoginException;
+import com.nhnacademy.frontserver1.common.exception.OrderWaitingException;
+import com.nhnacademy.frontserver1.common.exception.RefreshTokenFailedException;
+import com.nhnacademy.frontserver1.common.exception.UnauthorizedAccessException;
 import com.nhnacademy.frontserver1.common.exception.payload.ErrorStatus;
 import feign.Response;
 import feign.codec.ErrorDecoder;

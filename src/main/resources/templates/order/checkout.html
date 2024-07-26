@@ -83,6 +83,37 @@
     .payment-option .switch i {
       margin-left: 10px;
     }
+
+    .loader-wrapper {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loader {
+      border: 8px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 8px solid #3498db;
+      width: 60px;
+      height: 60px;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
   </style>
 </head>
 
@@ -530,6 +561,9 @@
         </div>
       </div>
     </div>
+    <div class="loader-wrapper" id="loaderWrapper">
+      <div class="loader"></div>
+    </div>
   </div>
 </section>
 <!--====== Checkout Form Steps Part Ends ======-->
@@ -554,6 +588,15 @@
 <script src="/js/GeneralPaymentService.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
+
+  function showLoader() {
+    document.getElementById('loaderWrapper').style.display = 'flex';
+  }
+
+  function hideLoader() {
+    document.getElementById('loaderWrapper').style.display = 'none';
+  }
+
   function setMinDeliveryDate() {
     const deliveryDateInput = document.getElementById('deliveryDate');
     const today = new Date();
@@ -750,10 +793,6 @@
         input => input.value
     ).filter(value => value !== "");
 
-    console.log(couponIds);
-
-    console.log('Collected couponIds:', couponIds);
-
     const orderData = {
       orderId: orderId,
       deliveryDate: deliveryDateValue,
@@ -782,8 +821,6 @@
       paymentProvider: paymentMethod
     };
 
-    console.log('orderData:', orderData);
-
     fetch('/orders', {
       method: 'POST',
       headers: {
@@ -793,26 +830,20 @@
     })
     .then(response => response.json())
     .then(data => {
-      const {orderId, totalAmount, paymentProvider} = data;
+      const { orderId, totalAmount, paymentProvider } = data;
       const paymentService = createPaymentService(paymentMethod);
       if (parseInt(totalAmount, 10) === 0) {
         completeZeroAmountPayment(orderData);
       } else {
-        paymentService.requestPayment({orderId, totalAmount, paymentProvider})
-        .catch(error => {
-          console.error('결제 요청 중 오류 발생:', error);
-          window.location.href = '/payments/fail';
-        });
+        paymentService.requestPayment({ orderId, totalAmount, paymentProvider });
       }
     })
     .catch(error => {
-      console.error('주문 생성 중 오류 발생:', error);
-      window.location.href = '/orders/fail';
+      alert('예상치 못한 에러가 발생했습니다. 다시 시도해주세요.');
     });
   }
 
   function completeZeroAmountPayment(orderData) {
-    console.log("completeZeroAmountPayment 호출됨");
     const paymentKey = generateUUID();
 
     const paymentData = {
@@ -837,13 +868,11 @@
         });
         window.location.href = `/payments/success?${urlParams.toString()}`;
       } else {
-        console.log("결제 완료 처리 실패");
-        window.location.href = '/payments/fail';
+        alert("결제 완료 처리 실패");
       }
     })
     .catch(error => {
-      console.error('결제 완료 처리 중 오류 발생:', error);
-      window.location.href = '/payments/fail';
+      alert('결제 완료 처리 중 오류 발생:', error);
     });
   }
 

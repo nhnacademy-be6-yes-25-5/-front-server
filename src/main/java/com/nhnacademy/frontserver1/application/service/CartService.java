@@ -17,4 +17,6 @@ public interface CartService {
     UpdateCartBookResponse updateCart(String cartId, Long bookId, UpdateCartBookRequest request);
 
     DeleteCartBookResponse deleteCartBook(String cartId, Long bookId);
+
+    List<ReadCartBookResponse> getCartsWithOrder(String cartId);
 }

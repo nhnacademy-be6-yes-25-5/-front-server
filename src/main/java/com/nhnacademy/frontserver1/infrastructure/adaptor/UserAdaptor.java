@@ -86,6 +86,9 @@ public interface UserAdaptor {
     @GetMapping("/points")
     ResponseEntity<PointResponse> getPoints();
 
+    @PostMapping("/verify/password")
+    ResponseEntity<Boolean> checkPassword(@RequestBody CheckPasswordRequest passwordRequest);
+
 //    @PutMapping("/update-password")
 //    UpdatePasswordResponse updatePassword(UpdatePasswordRequest request);
     //@PutMapping("/update-password/{email}")

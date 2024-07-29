@@ -59,5 +59,7 @@ public interface UserService {
 
     PointResponse getPoints();
 
+    Boolean checkPassword(CheckPasswordRequest passwordRequest);
+
     void UpdateUserPasswordByEmail(String email, UpdatePasswordRequest request);
 }

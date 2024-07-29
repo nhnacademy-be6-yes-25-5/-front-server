@@ -7,9 +7,9 @@ import com.nhnacademy.frontserver1.presentation.dto.request.user.*;
 import com.nhnacademy.frontserver1.presentation.dto.response.point.PointLogResponse;
 import com.nhnacademy.frontserver1.presentation.dto.response.user.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.*;
 import com.nhnacademy.frontserver1.presentation.dto.request.user.UpdatePasswordRequest;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -69,12 +68,40 @@ public class UserController {
     }
 
     // 회원 정보 수정 페이지
+    @GetMapping("/mypage/info/verify")
+    public String userInfo() {
+        return "mypage/mypage-info-verify";
+    }
+
+    @PostMapping("/mypage/info/verify")
+    public ResponseEntity<Boolean> userInfoCheck(@RequestBody CheckPasswordRequest passwordRequest,
+                                                 HttpSession session) {
+        Boolean isPasswordValid = userService.checkPassword(passwordRequest);
+
+        if (isPasswordValid) {
+            session.setAttribute("checkPassword", true);
+            return ResponseEntity.ok(true);
+        }
+        else {
+            return ResponseEntity.badRequest().body(false);
+        }
+    }
+
+    // 회원 정보 수정 페이지
     @GetMapping("/mypage/info")
-    public String userInfo(Model model) {
+    public String userInfo(Model model, HttpSession session) {
+
+        Boolean isPasswordValid = (Boolean) session.getAttribute("checkPassword");
+
+        if (isPasswordValid == null || !isPasswordValid) {
+            return "redirect:/mypage/info/verify";
+        }
 
         UserResponse user = userService.findByUser();
 
         model.addAttribute("user", user);
+
+        session.removeAttribute("checkPassword");
 
         return "mypage/mypage-info";
     }

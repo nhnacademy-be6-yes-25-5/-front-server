@@ -5,26 +5,27 @@ import com.nhnacademy.frontserver1.presentation.dto.response.point.PointPolicyRe
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @FeignClient(name = "pointPolicyAdaptor", url = "${eureka.gateway}/users")
 public interface PointPolicyAdaptor {
 
     @GetMapping("/admin/point-policies/{pointPolicyId}")
-    PointPolicyResponse getPointPolicy(@PathVariable Long pointPolicyId);
+    ResponseEntity<PointPolicyResponse> getPointPolicy(@PathVariable Long pointPolicyId);
 
     @GetMapping("/admin/point-policies")
-    Page<PointPolicyResponse> getPointPolicies(Pageable pageable);
+    ResponseEntity<Page<PointPolicyResponse>> getPointPolicies(Pageable pageable);
 
     @PostMapping("/admin/point-policies")
-    PointPolicyResponse createPointPolicy(@RequestBody PointPolicyRequest pointPolicyRequest);
+    ResponseEntity<PointPolicyResponse> createPointPolicy(@RequestBody PointPolicyRequest pointPolicyRequest);
 
     @PutMapping("/admin/point-policies/{pointPolicyId}")
-    PointPolicyResponse updatePointPolicy(@PathVariable Long pointPolicyId, @RequestBody PointPolicyRequest pointPolicyRequest);
+    ResponseEntity<PointPolicyResponse> updatePointPolicy(@PathVariable Long pointPolicyId, @RequestBody PointPolicyRequest pointPolicyRequest);
 
     @DeleteMapping("/admin/point-policies/{pointPolicyId}")
     void deletePointPolicy(@PathVariable Long pointPolicyId);
 
     @GetMapping("/admin/point-policies/{pointPolicyId}")
-    PointPolicyResponse findPointPolicyById(@PathVariable Long pointPolicyId);
+    ResponseEntity<PointPolicyResponse> findPointPolicyById(@PathVariable Long pointPolicyId);
 }

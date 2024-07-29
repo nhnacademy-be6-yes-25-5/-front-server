@@ -18,17 +18,17 @@ public class PointPolicyServiceImpl implements PointPolicyService {
 
     @Override
     public Page<PointPolicyResponse> getPointPolicies(Pageable pageable) {
-        return pointPolicyAdaptor.getPointPolicies(pageable);
+        return pointPolicyAdaptor.getPointPolicies(pageable).getBody();
     }
 
     @Override
     public PointPolicyResponse createPointPolicy(PointPolicyRequest pointPolicyRequest) {
-        return pointPolicyAdaptor.createPointPolicy(pointPolicyRequest);
+        return pointPolicyAdaptor.createPointPolicy(pointPolicyRequest).getBody();
     }
 
     @Override
     public PointPolicyResponse updatePointPolicy(Long pointPolicyId, PointPolicyRequest pointPolicyRequest) {
-        return pointPolicyAdaptor.updatePointPolicy(pointPolicyId, pointPolicyRequest);
+        return pointPolicyAdaptor.updatePointPolicy(pointPolicyId, pointPolicyRequest).getBody();
     }
 
     @Override
@@ -38,6 +38,6 @@ public class PointPolicyServiceImpl implements PointPolicyService {
 
     @Override
     public PointPolicyResponse getPointPolicyById(Long pointPolicyId) {
-        return pointPolicyAdaptor.getPointPolicy(pointPolicyId);
+        return pointPolicyAdaptor.getPointPolicy(pointPolicyId).getBody();
     }
 }

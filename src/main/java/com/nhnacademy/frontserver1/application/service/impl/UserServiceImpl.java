@@ -168,6 +168,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Boolean checkPassword(CheckPasswordRequest passwordRequest) {
+        return userAdaptor.checkPassword(passwordRequest).getBody();
+    }
+
+    @Override
     public Boolean findUserPasswordByEmailByName(FindPasswordRequest request) {
         return userAdaptor.findUserPasswordByEmailByName(request).getBody();
     }

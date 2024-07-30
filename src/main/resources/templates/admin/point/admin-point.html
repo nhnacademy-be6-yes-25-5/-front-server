@@ -32,7 +32,7 @@
                         <tbody>
                         <tr th:each="pointPolicy, rowStat : ${pointPolicies.content}"
                             th:classappend="${pointPolicy.pointPolicyState} ? '' : 'text-muted'">
-                            <td th:text="${rowStat.index + 1}">1</td>
+                            <td th:text="${(pointPolicies.number * pointPolicies.size) + rowStat.index + 1}">1</td>
                             <td th:text="${pointPolicy.pointPolicyName}">Policy A</td>
                             <td th:if="${pointPolicy.pointPolicyApplyType}">
                                 <span th:text="${#numbers.formatInteger(pointPolicy.pointPolicyApply, 3, 'COMMA')} + '원'">100 원</span>

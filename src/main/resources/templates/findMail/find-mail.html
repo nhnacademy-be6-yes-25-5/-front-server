@@ -10,26 +10,29 @@
                 <div class="col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-12">
                     <div class="register-form">
                         <div class="title">
-                            <h3>Find Your Email</h3>
-                            <p>Enter your name and phone number associated with your account, and we'll help you find your registered email.</p>
+                            <h3 th:text="#{findEmail.title}">Find Your Email</h3>
+                            <p th:text="#{findEmail.description}">Enter your name and phone number associated with your account, and we'll help you find your registered email.</p>
                         </div>
-                        <form class="row" method="post" action="/users/find-email">
+                        <form class="row" method="post" action="/find-email">
                             <div class="col-12">
                                 <div class="form-group">
-                                    <label for="name">Name</label>
+                                    <label for="name" th:text="#{findEmail.name}">Name</label>
                                     <input class="form-control" type="text" id="name" name="name" th:value="${name}" required>
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="form-group">
-                                    <label for="phone">Phone Number</label>
+                                    <label for="phone" th:text="#{findEmail.phone}">Phone Number</label>
                                     <input class="form-control" type="tel" id="phone" name="phone" th:value="${phone}" required>
                                 </div>
                             </div>
                             <div class="button">
-                                <button class="btn" type="submit">Find Email</button>
+                                <button class="btn" type="submit" th:text="#{findEmail.button.findEmail}">Find Email</button>
                             </div>
-                            <p class="outer-link">Remember your email? <a href="/login">Login Now</a></p>
+                            <p class="outer-link">
+                                <span th:text="#{findEmail.rememberEmail}">Remember your email?</span>
+                                <a href="/login" th:text="#{register.loginNow}">Login Now</a>
+                            </p>
                         </form>
                     </div>
                 </div>
@@ -37,6 +40,44 @@
         </div>
     </div>
     <!-- End Find Email Area -->
+
+    <script th:inline="javascript">
+        var messages = {
+            phoneInvalid: [[#{register.message.phoneInvalid}]],
+            phoneFormat: [[#{register.message.phoneFormat}]]
+        };
+    </script>
+
+    <script>
+        const phoneInput = document.getElementById('phone');
+
+        phoneInput.addEventListener('input', function(e) {
+            let formatted = '';
+            const input = e.target.value.replace(/\D/g, ''); // 숫자 이외의 문자 제거
+
+            if (input.length > 0) {
+                formatted = input.substring(0, 3);
+                if (input.length > 3) {
+                    formatted += '-' + input.substring(3, 7);
+                }
+                if (input.length > 7) {
+                    formatted += '-' + input.substring(7, 11);
+                }
+            }
+
+            e.target.value = formatted;
+        });
+
+        phoneInput.addEventListener('change', function(e) {
+            let input = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+
+            if (!input.startsWith('010') || input.length !== 11) {
+                alert(messages.phoneInvalid + '\n' + messages.phoneFormat);
+                e.target.value = '';
+                phoneInput.focus();
+            }
+        });
+    </script>
 </div>
 </body>
 </html>

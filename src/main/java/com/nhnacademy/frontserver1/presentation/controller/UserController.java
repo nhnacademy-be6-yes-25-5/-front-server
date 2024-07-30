@@ -228,37 +228,25 @@ public class UserController {
 
     private static final Logger logger = Logger.getLogger(UserController.class.getName());
 
-    @GetMapping("/users/find-email")
+    @GetMapping("/find-email")
     public String showFindEmailForm() {
         return "findMail/find-mail";
     }
 
-    @PostMapping("/users/find-email")
+    @PostMapping("/find-email")
     public String findEmail(@RequestParam String name, @RequestParam String phone, Model model) {
-        try{
-            List<FindUserResponse> emails = userService.findAllUserEmailByUserNameByUserPhone(name, phone);
 
+        List<FindUserResponse> emails = userService.findAllUserEmailByUserNameByUserPhone(name, phone);
 
-            model.addAttribute("name", name);
-            model.addAttribute("phone", phone);
+        model.addAttribute("name", name);
+        model.addAttribute("phone", phone);
 
-            if (emails.isEmpty()) {
-                return "findMail/find-mail-fail";
-            } else {
-                model.addAttribute("emails", emails);
-                return "findMail/find-mail-success";
-            }
-
-        } catch (FeignClientException ex) {
-            // 사용자 친화적인 에러 메시지와 함께 실패 페이지로 이동
-            model.addAttribute("errorMessage", "회원이 존재하지 않습니다.");
+        if (emails.isEmpty()) {
             return "findMail/find-mail-fail";
-        } catch (Exception ex) {
-            // 기타 예외 처리
-            model.addAttribute("errorMessage", "예상치 못한 오류가 발생했습니다.");
-            return "error/500";
+        } else {
+            model.addAttribute("emails", emails);
+            return "findMail/find-mail-success";
         }
-
     }
 
     @GetMapping("/mypage/coupons")

@@ -14,18 +14,18 @@ public class ViewController {
     private String port;
 
 
-    @GetMapping("view")
-    public String index(Model model){
-        return "admin/policy/admin-policy-coupon";
-    }
-
-    @GetMapping("/find-mail")
-    public String findMail() {
-        return "findMail/find-mail";
-    }
-
-    @GetMapping("/find-password")
-    public String findPassword() {
-        return "findPassword/find-password";
-    }
+//    @GetMapping("view")
+//    public String index(Model model){
+//        return "admin/policy/admin-policy-coupon";
+//    }
+//
+//    @GetMapping("/find-mail")
+//    public String findMail() {
+//        return "findMail/find-mail";
+//    }
+//
+//    @GetMapping("/find-password")
+//    public String findPassword() {
+//        return "findPassword/find-password";
+//    }
 }

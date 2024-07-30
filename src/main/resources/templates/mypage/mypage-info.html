@@ -71,6 +71,8 @@
             passwordMatch: [[#{register.message.passwordMatch}]],
             passwordMismatch: [[#{register.message.passwordMismatch}]],
             passwordInvalid: [[#{register.message.passwordInvalid}]],
+            phoneInvalid: [[#{register.message.phoneInvalid}]],
+            phoneFormat: [[#{register.message.phoneFormat}]],
             userInfoUpdateSuccess: [[#{user.put.success}]],
             userInfoUpdateError: [[#{user.put.error}]]
         };
@@ -113,9 +115,11 @@
         });
 
         // 전화번호 입력 필드 포맷팅 함수
-        function formatPhoneNumber(event) {
-            let input = event.target.value.replace(/\D/g, ''); // 숫자 이외의 문자 제거
+        const phoneInput = document.getElementById('userPhone');
+
+        phoneInput.addEventListener('input', function(e) {
             let formatted = '';
+            const input = e.target.value.replace(/\D/g, ''); // 숫자 이외의 문자 제거
 
             if (input.length > 0) {
                 formatted = input.substring(0, 3);
@@ -127,8 +131,18 @@
                 }
             }
 
-            event.target.value = formatted;
-        }
+            e.target.value = formatted;
+        });
+
+        phoneInput.addEventListener('change', function(e) {
+            let input = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+
+            if (!input.startsWith('010') || input.length !== 11) {
+                alert(messages.phoneInvalid + '\n' + messages.phoneFormat);
+                e.target.value = '';
+                phoneInput.focus();
+            }
+        });
 
         // 전화번호 입력 필드에 이벤트 리스너 추가
         const userPhoneInput = document.getElementById('userPhone');

@@ -1,23 +1,33 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Not Found</title>
-    <link rel="stylesheet" href="/css/main.css">
-</head>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
 <body>
 <div th:fragment="content">
-    <div class="container">
-        <h2>Email Not Found</h2>
-        <p>We couldn't find an email associated with the provided information.</p>
-        <p>Please double-check your name and phone number and try again.</p>
-        <form action="/users/find-email" method="get">
-            <input type="hidden" name="name" th:value="${name}">
-            <input type="hidden" name="phone" th:value="${phone}">
-            <button type="submit" class="btn">Try Again</button>
-        </form>
-        <p>Want to create a new account? <a href="/register">Register Now</a></p>
+
+    <!-- Start Email Not Found Area -->
+    <div class="account-login section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-12">
+                    <div class="register-form">
+                        <div class="title">
+                            <h3 th:text="#{findEmail.notfound.title}">Email Not Found</h3><br>
+                            <p style="font-size: 1.2em; color: black;" th:text="#{findEmail.notfound.description1}">We couldn't find an email associated with the provided information.</p>
+                            <p style="font-size: 1.2em; color: black;" th:text="#{findEmail.notfound.description2}">Please double-check your name and phone number and try again.</p>
+                        </div>
+                        <form action="/find-email" method="get">
+                            <input type="hidden" name="name" th:value="${name}">
+                            <input type="hidden" name="phone" th:value="${phone}">
+                            <button type="submit" class="btn btn-primary" th:text="#{findEmail.notfound.tryAgainButton}">Try Again</button>
+                        </form>
+                        <p class="outer-link mt-3">
+                            <span th:text="#{findEmail.notfound.registerPrompt}">Want to create a new account?</span>
+                            <a href="/register" class="link-btn" th:text="#{findEmail.notfound.registerLink}">Register Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <!-- End Email Not Found Area -->
+
+</div>
 </body>
 </html>

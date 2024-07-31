@@ -118,7 +118,8 @@ public class FeignJwtTokenInterceptor implements RequestInterceptor {
     private boolean isServletPathAndFeignExclude(String servletPath, String feignPath) {
         return (servletPath.equals("/") || servletPath.startsWith("/orders/none") || servletPath.startsWith("/category") || servletPath.startsWith("/search")
             || servletPath.startsWith("/sign-up") || servletPath.startsWith("/books") || servletPath.matches("/coupons") || servletPath.startsWith("/check-email")
-            || servletPath.startsWith("/dormant")|| servletPath.startsWith("/users/sign-up") || servletPath.equals("/callback") || servletPath.startsWith("/users/find/password") || servletPath.startsWith("/carts") || servletPath.startsWith("/auth/login") || servletPath.startsWith("/find-email")
+            || servletPath.startsWith("/orders/status")
+            || servletPath.startsWith("/dormant")|| servletPath.startsWith("/users/sign-up") || servletPath.equals("/callback") || servletPath.startsWith("/users/find/password") || servletPath.startsWith("/carts") || servletPath.startsWith("/auth/login") || servletPath.startsWith("/users/find-email")
         || feignPath.startsWith("/cart-books") || feignPath.startsWith("/shipping") || feignPath.startsWith("/takeout")) || feignPath.startsWith("/sign-up") || feignPath.startsWith("/login");
     }
 

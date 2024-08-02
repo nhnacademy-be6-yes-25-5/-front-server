@@ -56,6 +56,7 @@
         event.preventDefault();
 
         const password = document.getElementById('userPassword').value;
+        const baseUrl = `${window.location.protocol}//${window.location.host}`;
 
         if (confirm(messages.confirmDeletion)) {
             fetch('/mypage/delete', {
@@ -68,7 +69,7 @@
                 if (response.ok) {
                     alert(messages.deleteSuccess);
                     // 로그아웃 처리를 위해 /logout으로 요청
-                    return fetch('/logout', { method: 'GET' });
+                    return fetch(`${baseUrl}/logout`, { method: 'GET' });
                 } else if (response.status === 403) {
                     throw new Error(messages.authFail);
                 } else {
@@ -78,7 +79,8 @@
             }).then(logoutResponse => {
                 if (logoutResponse.ok) {
                     // 로그아웃 성공 시 홈페이지로 리다이렉트
-                    window.location.href = '/';
+
+                    window.location.href = `${baseUrl}/`;
                 } else {
                     throw new Error(messages.logoutFail);
                 }
